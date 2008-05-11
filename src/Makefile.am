@@ -28,5 +28,6 @@ lib_LTLIBRARIES = \
 	libosmgpsmap.la
 
 libosmgpsmap_la_SOURCES = \
+	converter.c \
 	osm-gps-map.c
 

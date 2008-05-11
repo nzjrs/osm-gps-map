@@ -18,8 +18,11 @@
  */
 
 #include <gdk/gdk.h>
+#include <glib/gprintf.h>
 #include <libsoup/soup.h>
 
+#include "converter.h"
+#include "osm-gps-map-types.h"
 #include "osm-gps-map.h"
 
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
@@ -50,6 +53,8 @@ struct _OsmGpsMapPrivate
 	int mouse_dy;
 	int	mouse_x;
 	int	mouse_y;
+	int local_x;
+	int local_y;
 
 };
 
@@ -109,13 +114,95 @@ osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 gboolean
 osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 {
-	/* TODO: Add private function implementation here */
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+
+	priv->wtfcounter = 0;
+	if ( (event->type==GDK_BUTTON_PRESS || event->type==GDK_2BUTTON_PRESS) )
+	{
+		printf("%s clicked with button %d\n",event->type==GDK_BUTTON_PRESS ? "single" : "double", event->button);
+		//TODO:needs timer or kill popup
+		//if(event->type==GDK_2BUTTON_PRESS)
+		//	on_button4_clicked(NULL,NULL);
+			
+	}
+
+	priv->mouse_x = (int) event->x;
+	priv->mouse_y = (int) event->y;
+	priv->local_x = priv->global_x;
+	priv->local_y = priv->global_y;
+	/*
+	global_x += (int)event->x;
+	global_y += (int)event->y;
+
+	fill_tiles_pixel(global_x, global_y, global_zoom);
+	*/
+	//if (event->button == 1 && pixmap != NULL)
+		//draw_circle (widget, event->x, event->y);
+
+	//printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, global_x, local_x);
+	
+	return FALSE;
 }
 
 gboolean
 osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
-	/* TODO: Add private function implementation here */
+	GtkMenu *menu;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+
+	//printf("*** %s() %d %d: \n",__PRETTY_FUNCTION__, global_x, local_x);
+	
+	//if(global_mapmode)
+	if(priv->wtfcounter >= 6)
+	{
+		printf("* mouse drag +8events\n");
+		//int mouse_dx, mouse_dy;
+		
+		priv->global_x = priv->local_x;//FIXME unnecessary oder auch nicht: kein redraw, wenn nicht bewegt
+		priv->global_y = priv->local_y;
+		
+		//mouse_dx = mouse_x - (int) event->x;//FIXME entweder dx oder mouse_dx
+		//mouse_dy = mouse_y - (int) event->y;
+		
+		priv->global_x += (priv->mouse_x - (int) event->x);
+		priv->global_y += (priv->mouse_y - (int) event->y);
+	
+		gdk_draw_rectangle (
+			priv->pixmap,
+			widget->style->white_gc,
+			TRUE,
+			0, 0,
+			widget->allocation.width+260,
+			widget->allocation.height+260);
+					
+		gtk_widget_queue_draw_area (
+			widget, 
+			0,0,widget->allocation.width+260,widget->allocation.height+260);
+		
+		osm_gps_map_fill_tiles_pixel(OSM_GPS_MAP(widget),priv->global_x, priv->global_y, priv->global_zoom);	//FIXME zoom
+		priv->wtfcounter = 0;
+	
+		//print_track();
+		//paint_friends();
+		//paint_photos();
+		//paint_pois();
+		//printf("mouse delta: %d %d\n", mouse_dx, mouse_dy);
+	}
+	else
+	{
+		//menu = GTK_MENU(create_menu1()); //GTK_MENU(lookup_widget(window1,"menu1"));
+		//gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
+		g_printf("Popup menu\n");
+		priv->wtfcounter = 0;
+	}
+
+	/* ambiguity: this is global mouse dx,y */	
+	priv->mouse_dx = 0;
+	priv->mouse_dy = 0;
+
+    //printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, global_x, local_x);
+	return FALSE;
+
 }
 
 gboolean
@@ -231,7 +318,35 @@ osm_gps_map_tile_download_complete (SoupMessage *req, gpointer user_data)
 static void
 osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int zoom)
 {
-	/* TODO: Add private function implementation here */
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	tile_t tile_11, tile_22;
+	int i,j,k=0;
+	
+	g_printf("*** %s(): \n",__PRETTY_FUNCTION__);
+
+	tile_11 = osm_gps_map_get_tile(map, bbox_pixel.x1, bbox_pixel.y1, zoom);
+	tile_22 = osm_gps_map_get_tile(map, bbox_pixel.x2, bbox_pixel.y2, zoom);
+	
+	// loop x1-x2
+	for(i=tile_11.x; i<=tile_22.x; i++)
+	{
+		// loop y1 - y2
+		for(j=tile_11.y; j<=tile_22.y; j++)
+		{
+			tile_t *tile = g_new0(tile_t,1);
+			printf("### DEBUG queue: %d %d - %d\n",i,j,k);
+			// TODO INTO LIST
+			k++;
+			tile->x = i;
+			tile->y = j;
+			tile->zoom = zoom;
+			//TODO: Repo URI
+			//tile->repo = global_curr_repo->data;
+			// g_new pointer to tile_t
+			// 2 list
+			priv->tile_download_list = g_slist_prepend(priv->tile_download_list, tile);
+		}
+	}
 }
 
 static bbox_pixel_t
@@ -474,9 +589,15 @@ osm_gps_map_paint_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image,
 tile_t
 osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom)
 {
-	/* TODO: Add public function implementation here */
-	tile_t t;
-	return t;
+	tile_t tile;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	
+	tile.x =  (int)floor((float)pixel_x / (float)TILESIZE);
+	tile.y =  (int)floor((float)pixel_y / (float)TILESIZE);
+	tile.zoom = zoom;
+	//tile.repo = global_curr_repo->data;
+	
+	return tile;
 }
 
 void
