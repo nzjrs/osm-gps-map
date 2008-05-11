@@ -34,8 +34,14 @@ main (int argc, char **argv)
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
 #if USE_GOOGLE	
+	//According to 
+	//http://www.mgmaps.com/cache/MapTileCacher.perl
+	//the v string means:
+	//  w2.99		Maps
+	//  w2t.99		Hybrid
+	//  w2p.99		Photo
 	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://mt0.google.com/mt?n=404&x=%d&y=%d&zoom=%d",
+						"repo-uri","http://mt.google.com/mt?n=404&v=w2.99&x=%d&y=%d&zoom=%d",
 						"tile-cache","/tmp/Maps/Google",
 						"invert-zoom",TRUE,
 						NULL);
