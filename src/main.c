@@ -17,12 +17,28 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 
+#include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
-int main()
+int
+main (int argc, char **argv)
 {
-	printf("Hello world\n");
-	return (0);
+	GtkWidget *window;
+	GtkWidget *map;
+
+	gtk_init (&argc, &argv);
+
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	
+	map = osm_gps_map_new ();
+	gtk_container_add (GTK_CONTAINER (window), map);
+
+	g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_main_quit), NULL);
+
+	gtk_widget_show_all (window);
+
+	gtk_main ();
+	return 0;
 }

@@ -3,4 +3,17 @@
 
 #define TILESIZE 256
 
+typedef struct {
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+} bbox_pixel_t;
+
+typedef struct {
+	char *uri;
+	char *folder;
+	char *filename;
+} tile_download_t;
+
 #endif /* _OSM_GPS_MAP_TYPES_H_ */
