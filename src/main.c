@@ -17,11 +17,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <glib.h>
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
 #define USE_GOOGLE 0
+
+gboolean
+on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+g_debug("PRESS");
+  return FALSE;
+}
+
+gboolean
+on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	g_debug("RELEASE");
+  return FALSE;
+}
+
 
 int
 main (int argc, char **argv)
@@ -29,6 +44,7 @@ main (int argc, char **argv)
 	GtkWidget *window;
 	GtkWidget *map;
 
+	g_thread_init(NULL);
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -48,7 +64,11 @@ main (int argc, char **argv)
 #else
 	map = osm_gps_map_new ();
 #endif
-	
+  	g_signal_connect (map, "button-press-event",
+    		G_CALLBACK (on_button_press_event),NULL);
+	g_signal_connect (map, "button_release_event",
+            G_CALLBACK (on_button_release_event),NULL);
+
 	gtk_container_add (GTK_CONTAINER (window), map);
 
 	g_signal_connect (window, "destroy",

@@ -186,7 +186,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 			0,0,widget->allocation.width+260,widget->allocation.height+260);
 		
 		osm_gps_map_fill_tiles_pixel(OSM_GPS_MAP(widget),priv->global_x, priv->global_y, priv->global_zoom);	//FIXME zoom
-		priv->wtfcounter = 0;
+		
 	
 		//print_track();
 		//paint_friends();
@@ -199,12 +199,12 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 		//menu = GTK_MENU(create_menu1()); //GTK_MENU(lookup_widget(window1,"menu1"));
 		//gtk_menu_popup (menu, NULL, NULL, NULL, NULL, event->button, event->time);
 		g_debug("Popup menu");
-		priv->wtfcounter = 0;
 	}
 
 	/* ambiguity: this is global mouse dx,y */	
 	priv->mouse_dx = 0;
 	priv->mouse_dy = 0;
+	priv->wtfcounter = 0;
 
     //printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, global_x, local_x);
 	return FALSE;
@@ -242,7 +242,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 			priv->mouse_dx,priv->mouse_dy,
 			-1,-1);
 
-		//g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, mouse_x, mouse_y, mouse_dx, mouse_dy,wtfcounter);
+		g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->mouse_x, priv->mouse_y, priv->mouse_dx, priv->mouse_dy, priv->wtfcounter);
 	}	
 	else
 		priv->wtfcounter++;
@@ -254,7 +254,9 @@ gboolean
 osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
-	
+
+	g_debug("CONFIGURE");	
+
 	priv->global_drawingarea_width  = widget->allocation.width;
 	priv->global_drawingarea_height = widget->allocation.height;
 
@@ -300,6 +302,8 @@ gboolean
 osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+
+	g_debug("EXPOSE");
 
 	gdk_draw_drawable (
 		widget->window,
