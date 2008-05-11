@@ -21,6 +21,8 @@
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
+#define USE_GOOGLE 0
+
 int
 main (int argc, char **argv)
 {
@@ -31,7 +33,16 @@ main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
+#if USE_GOOGLE	
+	map = g_object_new (OSM_TYPE_GPS_MAP,
+						"repo-uri","http://mt0.google.com/mt?n=404&x=%d&y=%d&zoom=%d",
+						"tile-cache","/tmp/Maps/Google",
+						"invert-zoom",TRUE,
+						NULL);
+#else
 	map = osm_gps_map_new ();
+#endif
+	
 	gtk_container_add (GTK_CONTAINER (window), map);
 
 	g_signal_connect (window, "destroy",
