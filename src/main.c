@@ -21,9 +21,8 @@
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
-#define USE_GOOGLE 0
-
-static GtkWidget *map;
+//1=google, 2=oam, 3=osm
+#define MAP_PROVIDER 3
 
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -40,30 +39,47 @@ on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user
 }
 
 gboolean 
-on_zoom_in_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_zoom_in_clicked_event (GtkWidget *widget, gpointer user_data)
 {
 	int zoom;
+	OsmGpsMap *map = OSM_GPS_MAP(user_data);
 	g_object_get(map, "zoom", &zoom, NULL);
-	osm_gps_map_set_zoom(OSM_GPS_MAP(map), zoom+1);
+	osm_gps_map_set_zoom(map, zoom+1);
 	return FALSE;
 }
 
 gboolean 
-on_zoom_out_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_zoom_out_clicked_event (GtkWidget *widget, gpointer user_data)
 {
 	int zoom;
+	OsmGpsMap *map = OSM_GPS_MAP(user_data);
 	g_object_get(map, "zoom", &zoom, NULL);
-	osm_gps_map_set_zoom(OSM_GPS_MAP(map), zoom-1);
+	osm_gps_map_set_zoom(map, zoom-1);
 	return FALSE;
 }
 
 gboolean 
-on_home_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
-	osm_gps_map_set_mapcenter(OSM_GPS_MAP(map), -43.5326,172.6362,12);
+	OsmGpsMap *map = OSM_GPS_MAP(user_data);
+	osm_gps_map_set_mapcenter(map, -43.5326,172.6362,12);
 	return FALSE;
 }
 
+gboolean
+on_map_double_clicked (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	GtkEntry *entry = GTK_ENTRY(user_data);
+	OsmGpsMap *map = OSM_GPS_MAP(widget);
+
+	if ( (event->button == 1) && (event->type == GDK_2BUTTON_PRESS) )
+	{
+		gchar *msg = g_strdup_printf("%f,%f",-12.334,34.124);
+		gtk_entry_set_text(entry, msg);
+		g_free(msg);
+	}
+	return FALSE;
+}
 
 
 int
@@ -71,10 +87,13 @@ main (int argc, char **argv)
 {
 	GtkWidget *vbox;
 	GtkWidget *bbox;
+	GtkWidget *entry;
 	GtkWidget *window;
 	GtkWidget *zoomInbutton;
 	GtkWidget *zoomOutbutton;
 	GtkWidget *homeButton;
+
+	GtkWidget *map;
 
 	g_thread_init(NULL);
 	gtk_init (&argc, &argv);
@@ -82,7 +101,7 @@ main (int argc, char **argv)
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 	
-#if USE_GOOGLE	
+#if MAP_PROVIDER == 1
 	//According to 
 	//http://www.mgmaps.com/cache/MapTileCacher.perl
 	//the v string means:
@@ -94,8 +113,15 @@ main (int argc, char **argv)
 						"tile-cache","/tmp/Maps/Google",
 						"invert-zoom",TRUE,
 						NULL);
-#else
+#elif MAP_PROVIDER == 2
+	map = g_object_new (OSM_TYPE_GPS_MAP,
+						"repo-uri","http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/%d/%d/%d.jpg",
+						"tile-cache","/tmp/Maps/OAM",
+						NULL);
+#elif MAP_PROVIDER == 3
 	map = osm_gps_map_new ();
+#else
+	#error select map provider
 #endif
   	g_signal_connect (map, "button-press-event",
     		G_CALLBACK (on_button_press_event),NULL);
@@ -104,14 +130,17 @@ main (int argc, char **argv)
 
 
 
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_vbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
 	//Add the map to the box
 	gtk_box_pack_start (GTK_BOX(vbox), map, TRUE, TRUE, 0);
-	//And add a hbox
+	//And add a box for the buttons
     bbox = gtk_hbox_new (TRUE, 0);
 	gtk_box_pack_start (GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
+	//And add the lat/long entry
+	entry = gtk_entry_new();
+	gtk_box_pack_start (GTK_BOX(vbox), entry, FALSE, TRUE, 0);	
 
 	//Add buttons to the bbox
 	zoomInbutton = gtk_button_new_from_stock (GTK_STOCK_ZOOM_IN);
@@ -129,6 +158,9 @@ main (int argc, char **argv)
 		      G_CALLBACK (on_home_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);
 
+	//Connect to double click event
+ 	g_signal_connect (G_OBJECT (map), "button-press-event",
+		      G_CALLBACK (on_map_double_clicked), (gpointer) entry);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
