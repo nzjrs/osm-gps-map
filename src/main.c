@@ -44,7 +44,8 @@ on_zoom_in_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer use
 {
 	int zoom;
 	g_object_get(map, "zoom", &zoom, NULL);
-	osm_gps_map_set_zoom(map, zoom+1);
+	osm_gps_map_set_zoom(OSM_GPS_MAP(map), zoom+1);
+	return FALSE;
 }
 
 gboolean 
@@ -52,13 +53,15 @@ on_zoom_out_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer us
 {
 	int zoom;
 	g_object_get(map, "zoom", &zoom, NULL);
-	osm_gps_map_set_zoom(map, zoom-1);
+	osm_gps_map_set_zoom(OSM_GPS_MAP(map), zoom-1);
+	return FALSE;
 }
 
 gboolean 
 on_home_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	osm_gps_map_set_mapcenter(map, -43.5326,172.6362,12);
+	osm_gps_map_set_mapcenter(OSM_GPS_MAP(map), -43.5326,172.6362,12);
+	return FALSE;
 }
 
 

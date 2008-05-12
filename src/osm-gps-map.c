@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+//#include <stdlib.h>
 //#include <stdio.h>
 #include <fcntl.h>
 #include <math.h>
+#include <unistd.h>
 
 #include <gdk/gdk.h>
 #include <glib/gprintf.h>
@@ -44,8 +46,6 @@ struct _OsmGpsMapPrivate
 	GdkPixmap *pixmap;
 	GdkGC *gc_map;
 	
-	int global_drawingarea_width;
-	int global_drawingarea_height;
 	int global_x;
 	int global_y;
 
@@ -158,7 +158,6 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 gboolean
 osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
-	GtkMenu *menu;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
 	//printf("*** %s() %d %d: \n",__PRETTY_FUNCTION__, global_x, local_x);
@@ -362,7 +361,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 		return;
 	}
 
-	fd = g_open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd != -1) {
 		write (fd, msg->response_body->data, msg->response_body->length);
 		g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
@@ -388,9 +387,8 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 static void
 osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int zoom)
 {
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	tile_t tile_11, tile_22;
-	int i,j,k=0;
+	int i,j=0;
 	
 	g_debug("Queuing tile/s for download");
 
@@ -422,13 +420,6 @@ osm_gps_map_get_bbox_pixel (OsmGpsMap *map, bbox_t bbox, int zoom)
 	g_debug("1:%d,%d 2:%d,%d",bbox_pixel.x1,bbox_pixel.y1,bbox_pixel.x2,bbox_pixel.y2);
 	
 	return	bbox_pixel;
-}
-
-static gboolean
-osm_gps_map_timer_tile_download (gpointer data)
-{
-	/* TODO: Add private function implementation here */
-	//TODO: NO LONGER NEEDED IF SOUP LIMITS THE NUMBER OF DL THREADS ANYWAY
 }
 
 static void
@@ -536,7 +527,6 @@ static void
 osm_gps_map_fill_tiles_latlon (OsmGpsMap *map, float lat, float lon, int zoom)
 {
 	int pixel_x, pixel_y;
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	// pixel_x,y, offsets
 	pixel_x = lon2pixel(zoom, lon);
@@ -659,7 +649,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-	GtkDrawingAreaClass* parent_class = GTK_DRAWING_AREA_CLASS (klass);
 
 	g_type_class_add_private (klass, sizeof (OsmGpsMapPrivate));
 
@@ -731,7 +720,6 @@ osm_gps_map_download_maps (OsmGpsMap *map, bbox_t bbox, int zoom_start, int zoom
 {
 	bbox_pixel_t bbox_pixel;
 	int zoom;
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
 	zoom_end = (zoom_end > 17) ? 17 : zoom_end;
 	g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
@@ -814,7 +802,6 @@ void
 osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 {
 	int pixel_x, pixel_y;
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	lat = deg2rad(lat);
 	lon = deg2rad(lon);
@@ -890,7 +877,6 @@ tile_t
 osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom)
 {
 	tile_t tile;
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	tile.x =  (int)floor((float)pixel_x / (float)TILESIZE);
 	tile.y =  (int)floor((float)pixel_y / (float)TILESIZE);
