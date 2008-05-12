@@ -73,8 +73,11 @@ typedef struct {
 	int offset_y;
 } tile_download_t;
 
-static void
-osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
+typedef struct {
+	int x;
+	int y;
+	int zoom;
+} tile_t;
 
 enum
 {
@@ -87,6 +90,9 @@ enum
 	PROP_ZOOM,
 	PROP_INVERT_ZOOM
 };
+
+static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
+static tile_t osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
 
 gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
@@ -256,9 +262,6 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
 	g_debug("CONFIGURE");	
-
-	priv->global_drawingarea_width  = widget->allocation.width;
-	priv->global_drawingarea_height = widget->allocation.height;
 
 	/* create pixmap */
 	if (priv->pixmap)
@@ -559,8 +562,6 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->pixmap = NULL;
 	priv->gc_map = NULL;
 	
-	priv->global_drawingarea_width = 0;
-	priv->global_drawingarea_height = 0;
 	priv->global_x = 890;
 	priv->global_y = 515;
 
@@ -786,8 +787,8 @@ osm_gps_map_get_bbox (OsmGpsMap *map)
 
 	bbox.lat1 = pixel2lat(priv->global_zoom, priv->global_y);
 	bbox.lon1 = pixel2lon(priv->global_zoom, priv->global_x);
-	bbox.lat2 = pixel2lat(priv->global_zoom, priv->global_y + priv->global_drawingarea_height);
-	bbox.lon2 = pixel2lon(priv->global_zoom, priv->global_x + priv->global_drawingarea_width);
+	bbox.lat2 = pixel2lat(priv->global_zoom, priv->global_y + GTK_WIDGET(map)->allocation.height);
+	bbox.lon2 = pixel2lon(priv->global_zoom, priv->global_x + GTK_WIDGET(map)->allocation.width);
 
 	g_debug("BBOX: %f %f %f %f", bbox.lat1, bbox.lon1, bbox.lat2, bbox.lon2);
 	
@@ -828,8 +829,8 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 	
 	//osd_speed();
 	osm_gps_map_fill_tiles_pixel (map,
-								  pixel_x - priv->global_drawingarea_width/2,
-								  pixel_y - priv->global_drawingarea_height/2,
+								  pixel_x - GTK_WIDGET(map)->allocation.width/2,
+								  pixel_y - GTK_WIDGET(map)->allocation.height/2,
 								  zoom);
 	//print_track();
 	//paint_friends();
