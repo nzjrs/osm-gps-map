@@ -42,20 +42,23 @@ on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user
 gboolean 
 on_zoom_in_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	g_debug("+");
+	int zoom;
+	g_object_get(map, "zoom", &zoom, NULL);
+	osm_gps_map_set_zoom(map, zoom+1);
 }
 
 gboolean 
 on_zoom_out_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	g_debug("-");
+	int zoom;
+	g_object_get(map, "zoom", &zoom, NULL);
+	osm_gps_map_set_zoom(map, zoom-1);
 }
 
 gboolean 
 on_home_clicked_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	osm_gps_map_set_mapcenter(map, -43.5326,172.6362,12);
-	g_debug("H");
 }
 
 
@@ -108,17 +111,17 @@ main (int argc, char **argv)
 	gtk_box_pack_start (GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
 
 	//Add buttons to the bbox
-	zoomInbutton = gtk_button_new_with_label ("+");
+	zoomInbutton = gtk_button_new_from_stock (GTK_STOCK_ZOOM_IN);
     g_signal_connect (G_OBJECT (zoomInbutton), "clicked",
 		      G_CALLBACK (on_zoom_in_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), zoomInbutton, FALSE, TRUE, 0);
 
-	zoomOutbutton= gtk_button_new_with_label ("-");
+	zoomOutbutton = gtk_button_new_from_stock (GTK_STOCK_ZOOM_OUT);
     g_signal_connect (G_OBJECT (zoomOutbutton), "clicked",
 		      G_CALLBACK (on_zoom_out_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), zoomOutbutton, FALSE, TRUE, 0);
 
-	homeButton = gtk_button_new_with_label ("Home");
+	homeButton = gtk_button_new_from_stock (GTK_STOCK_HOME);
     g_signal_connect (G_OBJECT (homeButton), "clicked",
 		      G_CALLBACK (on_home_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);

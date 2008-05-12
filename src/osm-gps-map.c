@@ -40,8 +40,7 @@ struct _OsmGpsMapPrivate
 	gboolean global_autocenter;
 	gboolean global_auto_download;
 	
-	//TODO: Remove these values which are stored in self, and dont need
-	//and independent reference here
+	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
 	GdkGC *gc_map;
 	
@@ -272,6 +271,13 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 			widget->allocation.width+260, //TODO: this could be cleverer
 			widget->allocation.height+260,
 			-1);
+
+	/* and gc, used for clipping (I think......) */
+	if(priv->gc_map)
+		g_object_unref(priv->gc_map);
+
+	priv->gc_map = gdk_gc_new(priv->pixmap);
+
 //TODOremove or not...
 //#if 0
 //if(pixmap) printf("pixmap NOT NULL");
@@ -325,15 +331,6 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);	
 	
 	g_debug("Queing redraw @ %d,%d (w:%d h:%d)", offset_x,offset_y, TILESIZE,TILESIZE);
-	
-	//TODO: Init all these things on first expose/configure??
-	if(priv->gc_map)
-		g_object_unref(priv->gc_map);
-
-	if(priv->pixmap)
-		priv->gc_map = gdk_gc_new(priv->pixmap);
-	else
-		g_warning("no drawable -> NULL\n");
 	
 	/* draw pixbuf onto pixmap */
 	gdk_draw_pixbuf (priv->pixmap,
@@ -629,6 +626,7 @@ static void
 osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
 	g_return_if_fail (OSM_IS_GPS_MAP (object));
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
 
 	switch (prop_id)
 	{
@@ -645,7 +643,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 		/* TODO: Add getter for "tile-cache" property here */
 		break;
 	case PROP_ZOOM:
-		/* TODO: Add getter for "zoom" property here */
+		g_value_set_int(value, priv->global_zoom);
 		break;
 	case PROP_INVERT_ZOOM:
 		/* TODO: Add getter for "invert-zoom" property here */
@@ -839,19 +837,21 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 	//osd_speed(); //TODO add missing queue or soemthing...
 }
 
-void osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
+int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
 	int zoom_old;
 	double factor;
 	int width_center, height_center;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	
-	if(priv->global_zoom<17)
+
+	if (zoom != priv->global_zoom)
 	{	
 		width_center  = GTK_WIDGET(map)->allocation.width / 2;
 		height_center = GTK_WIDGET(map)->allocation.height / 2;
 		
-		zoom_old = priv->global_zoom++;
+		zoom_old = priv->global_zoom;
+		//constrain zoom 1 -> 17
+		priv->global_zoom = (zoom > 1 ? (zoom <= 17 ? zoom : 17) : 1); 
 		factor = exp(priv->global_zoom * M_LN2)/exp(zoom_old * M_LN2);
 		
 		g_debug("zoom changed from %d to %d factor:%f x:%d", zoom_old,priv->global_zoom, factor, priv->global_x);
@@ -871,6 +871,7 @@ void osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		//paint_photos();
 		//paint_pois();
 	}
+	return priv->global_zoom;
 }
 
 void

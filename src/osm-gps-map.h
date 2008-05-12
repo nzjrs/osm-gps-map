@@ -60,7 +60,7 @@ void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offs
 bbox_t osm_gps_map_get_bbox (OsmGpsMap *map);
 void osm_gps_map_map_redraw (OsmGpsMap *map);
 void osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom);
-void osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
+int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
 void osm_gps_map_print_track (OsmGpsMap *map, GList *trackpoint_list);
 void osm_gps_map_paint_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image, int w, int h);
 void osm_gps_map_osd_speed (OsmGpsMap *map, float speed);
