@@ -27,6 +27,12 @@
 
 G_BEGIN_DECLS
 
+#define OSM_GPS_MAP_DEFAULT_LATITUDE	23.12	
+#define OSM_GPS_MAP_DEFAULT_LONGITUDE   23.12
+#define OSM_GPS_MAP_TILE_SIZE			256
+#define OSM_GPS_MAP_MAX_ZOOM			17
+#define OSM_GPS_MAP_MIN_ZOOM			1
+
 #define OSM_TYPE_GPS_MAP             (osm_gps_map_get_type ())
 #define OSM_GPS_MAP(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP, OsmGpsMap))
 #define OSM_GPS_MAP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
@@ -48,6 +54,11 @@ struct _OsmGpsMap
 };
 
 typedef struct {
+	float lat;
+	float lon;
+} coord_t;
+
+typedef struct {
 	double lat1;
 	double lon1;
 	double lat2;
@@ -64,7 +75,8 @@ int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
 void osm_gps_map_print_track (OsmGpsMap *map, GList *trackpoint_list);
 void osm_gps_map_paint_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image, int w, int h);
 void osm_gps_map_osd_speed (OsmGpsMap *map, float speed);
-void osm_gps_map_draw_gps (OsmGpsMap *map, float lat, float lon);
+void osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading);
+coord_t osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y);
 GtkWidget * osm_gps_map_new(void);
 
 G_END_DECLS

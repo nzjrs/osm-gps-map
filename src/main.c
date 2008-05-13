@@ -27,14 +27,30 @@
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	g_debug("PRESS");
+	OsmGpsMap *map = OSM_GPS_MAP(widget);
+
+	if ( (event->button == 1) && (event->type == GDK_2BUTTON_PRESS) )
+	{
+		coord_t coord;
+		g_debug("Double clicked %f %f", event->x, event->y);
+		coord = osm_gps_map_get_co_ordinatites(map, (int)event->x, (int)event->y);
+		osm_gps_map_draw_gps (map, coord.lat,coord.lon, 0);
+	}
 	return FALSE;
 }
 
 gboolean
 on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	g_debug("RELEASE");
+	float lat,lon;
+	GtkEntry *entry = GTK_ENTRY(user_data);
+	OsmGpsMap *map = OSM_GPS_MAP(widget);
+
+	g_object_get(map, "latitude", &lat, "longitude", &lon, NULL);
+	gchar *msg = g_strdup_printf("%f,%f",lat,lon);
+	gtk_entry_set_text(entry, msg);
+	g_free(msg);
+
 	return FALSE;
 }
 
@@ -65,22 +81,6 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 	osm_gps_map_set_mapcenter(map, -43.5326,172.6362,12);
 	return FALSE;
 }
-
-gboolean
-on_map_double_clicked (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
-{
-	GtkEntry *entry = GTK_ENTRY(user_data);
-	OsmGpsMap *map = OSM_GPS_MAP(widget);
-
-	if ( (event->button == 1) && (event->type == GDK_2BUTTON_PRESS) )
-	{
-		gchar *msg = g_strdup_printf("%f,%f",-12.334,34.124);
-		gtk_entry_set_text(entry, msg);
-		g_free(msg);
-	}
-	return FALSE;
-}
-
 
 int
 main (int argc, char **argv)
@@ -123,13 +123,6 @@ main (int argc, char **argv)
 #else
 	#error select map provider
 #endif
-  	g_signal_connect (map, "button-press-event",
-    		G_CALLBACK (on_button_press_event),NULL);
-	g_signal_connect (map, "button_release_event",
-            G_CALLBACK (on_button_release_event),NULL);
-
-
-
     vbox = gtk_vbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -158,9 +151,11 @@ main (int argc, char **argv)
 		      G_CALLBACK (on_home_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);
 
-	//Connect to double click event
- 	g_signal_connect (G_OBJECT (map), "button-press-event",
-		      G_CALLBACK (on_map_double_clicked), (gpointer) entry);
+	//Connect to map events
+  	g_signal_connect (map, "button-press-event",
+    		G_CALLBACK (on_button_press_event), (gpointer) entry);
+	g_signal_connect (map, "button-release-event",
+            G_CALLBACK (on_button_release_event), (gpointer) entry);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

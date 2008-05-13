@@ -87,7 +87,9 @@ enum
 	PROP_REPO_URI,
 	PROP_TILE_CACHE,
 	PROP_ZOOM,
-	PROP_INVERT_ZOOM
+	PROP_INVERT_ZOOM,
+	PROP_LATITUDE,
+	PROP_LONGITUDE
 };
 
 static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
@@ -616,27 +618,39 @@ static void
 osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
 	g_return_if_fail (OSM_IS_GPS_MAP (object));
+	float lat,lon;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+	OsmGpsMap *map = OSM_GPS_MAP(object);
 
 	switch (prop_id)
 	{
 	case PROP_AUTO_CENTER:
-		/* TODO: Add getter for "auto-center" property here */
+		g_value_set_boolean(value, priv->global_autocenter);
 		break;
 	case PROP_AUTO_DOWNLOAD:
-		/* TODO: Add getter for "auto-download" property here */
+		g_value_set_boolean(value, priv->global_auto_download);
 		break;
 	case PROP_REPO_URI:
-		/* TODO: Add getter for "repo-uri" property here */
+		g_value_set_string(value, priv->repo_uri);
 		break;
 	case PROP_TILE_CACHE:
-		/* TODO: Add getter for "tile-cache" property here */
+		g_value_set_string(value, priv->cache_dir);
 		break;
 	case PROP_ZOOM:
 		g_value_set_int(value, priv->global_zoom);
 		break;
 	case PROP_INVERT_ZOOM:
-		/* TODO: Add getter for "invert-zoom" property here */
+		g_value_set_boolean(value, priv->invert_zoom);
+		break;
+	case PROP_LATITUDE:
+		lat = pixel2lat(priv->global_zoom,
+						priv->global_y + (GTK_WIDGET(map)->allocation.height / 2));
+		g_value_set_float(value, rad2deg(lat));
+		break;
+	case PROP_LONGITUDE:
+		lon = pixel2lon(priv->global_zoom,
+						priv->global_x + (GTK_WIDGET(map)->allocation.width / 2));
+		g_value_set_float(value, rad2deg(lon));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -712,6 +726,28 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                       "is zoom inverted",
 	                                                       FALSE,
 	                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_LATITUDE,
+	                                 g_param_spec_float ("latitude",
+	                                                    "latitude",
+	                                                    "latitude in degrees",
+	                                                    -90.0, /* minimum property value */
+	                                                    90.0, /* maximum property value */
+	                                                    0,
+	                                                    G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_LONGITUDE,
+	                                 g_param_spec_float ("longitude",
+	                                                    "longitude",
+	                                                    "longitude in degrees",
+	                                                    -180.0, /* minimum property value */
+	                                                    180.0, /* maximum property value */
+	                                                    0,
+	                                                    G_PARAM_READABLE));
+
+
 }
 
 
@@ -802,13 +838,14 @@ void
 osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 {
 	int pixel_x, pixel_y;
+	float rlat, rlon;
 	
-	lat = deg2rad(lat);
-	lon = deg2rad(lon);
+	rlat = deg2rad(lat);
+	rlon = deg2rad(lon);
 	
 	// pixel_x,y, offsets
-	pixel_x = lon2pixel(zoom, lon);
-	pixel_y = lat2pixel(zoom, lat);
+	pixel_x = lon2pixel(zoom, rlon);
+	pixel_y = lat2pixel(zoom, rlat);
 
 	g_debug("fill_tiles_latlon(): lat %f  %i -- lon %f  %i",lat,pixel_y,lon,pixel_x);
 	
@@ -893,9 +930,55 @@ osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
 }
 
 void
-osm_gps_map_draw_gps (OsmGpsMap *map, float lat, float lon)
+osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
-	/* TODO: Add public function implementation here */
+	//In radians
+	float rlat, rlon;
+	int pixel_x, pixel_y, x, y;
+	GdkColor color;
+	GdkGC *marker;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	rlat = deg2rad(latitude);
+	rlon = deg2rad(longitude);
+
+	// pixel_x,y, offsets
+	pixel_x = lon2pixel(priv->global_zoom, rlon);
+	pixel_y = lat2pixel(priv->global_zoom, rlat);
+
+	x = pixel_x - priv->global_x;
+	y = pixel_y - priv->global_y;
+
+	// draw current position as filled arc
+	marker = gdk_gc_new(priv->pixmap);
+	color.red = 5000;
+	color.green = 5000;
+	color.blue = 55000;
+	gdk_gc_set_rgb_fg_color(marker, &color);
+    gdk_gc_set_line_attributes(marker,7, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+	gdk_draw_arc (priv->pixmap,
+				  marker,
+				  FALSE,		//filled
+				  x-15, y-15,	// x,y
+				  30,30,		// width, height
+				  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
+	gtk_widget_queue_draw_area (GTK_WIDGET(map),
+								x-(15+7),y-(15+7),
+								30+7+7,30+7+7);
+	
+	//If trip marker add to list of gps points. Iterate over, and draw them
+	//to the pixmap
+}
+
+coord_t
+osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y)
+{
+	coord_t coord;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	coord.lat = rad2deg(pixel2lat(priv->global_zoom, priv->global_y + pixel_y));
+	coord.lon = rad2deg(pixel2lon(priv->global_zoom, priv->global_x + pixel_x));
+	return coord;
 }
 
 GtkWidget *
