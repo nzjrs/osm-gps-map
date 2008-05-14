@@ -22,7 +22,7 @@
 #include "osm-gps-map.h"
 
 //1=google, 2=oam, 3=osm
-#define MAP_PROVIDER 3
+#define MAP_PROVIDER 1
 
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)

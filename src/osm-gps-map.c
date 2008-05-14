@@ -41,14 +41,13 @@ struct _OsmGpsMapPrivate
 	int global_zoom;
 	gboolean global_autocenter;
 	gboolean global_auto_download;
-	
+	int global_x;
+	int global_y;
+
 	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
 	GdkGC *gc_map;
 	
-	int global_x;
-	int global_y;
-
 	//For tracking click and drag
 	int wtfcounter;
 	int mouse_dx;
@@ -89,7 +88,9 @@ enum
 	PROP_ZOOM,
 	PROP_INVERT_ZOOM,
 	PROP_LATITUDE,
-	PROP_LONGITUDE
+	PROP_LONGITUDE,
+	PROP_MAP_X,
+	PROP_MAP_Y
 };
 
 static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
@@ -543,27 +544,17 @@ G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 static void
 osm_gps_map_init (OsmGpsMap *object)
 {
-	/* TODO: Add initialization code here */
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
-	
-	priv->invert_zoom = FALSE;
-	
+
 	priv->pixmap = NULL;
 	priv->gc_map = NULL;
 	
-	priv->global_x = 890;
-	priv->global_y = 515;
-
 	priv->wtfcounter = 0;
 	priv->mouse_dx = 0;
 	priv->mouse_dy = 0;
 	priv->mouse_x = 0;
 	priv->mouse_y = 0;
 	
-	//TODO: These should get set by gobject props
-	priv->global_autocenter = TRUE;
-	priv->global_auto_download = TRUE;
-	priv->global_zoom = 3;
 	
 	//TODO: Change naumber of concurrent connections option
 	priv->soup_session = soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
@@ -608,6 +599,12 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 	case PROP_INVERT_ZOOM:
 		priv->invert_zoom = g_value_get_boolean (value);
 		break;
+	case PROP_MAP_X:
+		priv->global_x = g_value_get_int (value);
+		break;
+	case PROP_MAP_Y:
+		priv->global_y = g_value_get_int (value);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -651,6 +648,12 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 		lon = pixel2lon(priv->global_zoom,
 						priv->global_x + (GTK_WIDGET(map)->allocation.width / 2));
 		g_value_set_float(value, rad2deg(lon));
+		break;
+	case PROP_MAP_X:
+		g_value_set_int(value, priv->global_x);
+		break;
+	case PROP_MAP_Y:
+		g_value_set_int(value, priv->global_y);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -717,7 +720,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    0, /* minimum property value */
 	                                                    17, /* maximum property value */
 	                                                    3,
-	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_INVERT_ZOOM,
@@ -747,7 +750,25 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    0,
 	                                                    G_PARAM_READABLE));
 
+	g_object_class_install_property (object_class,
+	                                 PROP_MAP_X,
+	                                 g_param_spec_int ("map-x",
+	                                                    "map-x",
+	                                                    "initial map x location",
+	                                                    G_MININT, /* minimum property value */
+	                                                    G_MAXINT, /* maximum property value */
+	                                                    890,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+	g_object_class_install_property (object_class,
+	                                 PROP_MAP_Y,
+	                                 g_param_spec_int ("map-y",
+	                                                    "map-y",
+	                                                    "initial map y location",
+	                                                    G_MININT, /* minimum property value */
+	                                                    G_MAXINT, /* maximum property value */
+	                                                    515,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 
