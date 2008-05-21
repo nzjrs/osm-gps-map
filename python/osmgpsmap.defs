@@ -1,0 +1,134 @@
+;; -*- scheme -*-
+; object definitions ...
+(define-object GpsMap
+  (in-module "Osm")
+  (parent "GtkDrawingArea")
+  (c-name "OsmGpsMap")
+  (gtype-id "OSM_TYPE_GPS_MAP")
+)
+
+;; Enumerations and flags ...
+
+
+;; From osm-gps-map.h
+
+(define-function osm_gps_map_get_type
+  (c-name "osm_gps_map_get_type")
+  (return-type "GType")
+)
+
+(define-method download_maps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_download_maps")
+  (return-type "none")
+  (parameters
+    '("bbox_t" "bbox")
+    '("int" "zoom_start")
+    '("int" "zoom_end")
+  )
+)
+
+(define-method download_tile
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_download_tile")
+  (return-type "none")
+  (parameters
+    '("int" "zoom")
+    '("int" "x")
+    '("int" "y")
+    '("int" "offset_x")
+    '("int" "offset_y")
+  )
+)
+
+(define-method get_bbox
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_bbox")
+  (return-type "bbox_t")
+)
+
+(define-method map_redraw
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_map_redraw")
+  (return-type "none")
+)
+
+(define-method set_mapcenter
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_mapcenter")
+  (return-type "none")
+  (parameters
+    '("float" "lat")
+    '("float" "lon")
+    '("int" "zoom")
+  )
+)
+
+(define-method set_zoom
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_zoom")
+  (return-type "int")
+  (parameters
+    '("int" "zoom")
+  )
+)
+
+(define-method print_track
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_print_track")
+  (return-type "none")
+  (parameters
+    '("GList*" "trackpoint_list")
+  )
+)
+
+(define-method paint_image
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_paint_image")
+  (return-type "none")
+  (parameters
+    '("float" "lat")
+    '("float" "lon")
+    '("GdkPixbuf*" "image")
+    '("int" "w")
+    '("int" "h")
+  )
+)
+
+(define-method osd_speed
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_osd_speed")
+  (return-type "none")
+  (parameters
+    '("float" "speed")
+  )
+)
+
+(define-method draw_gps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_draw_gps")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("float" "heading")
+  )
+)
+
+(define-method get_co_ordinatites
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_co_ordinatites")
+  (return-type "coord_t")
+  (parameters
+    '("int" "pixel_x")
+    '("int" "pixel_y")
+  )
+)
+
+(define-function osm_gps_map_new
+  (c-name "osm_gps_map_new")
+  (is-constructor-of "OsmGpsMap")
+  (return-type "GtkWidget*")
+)
+
+

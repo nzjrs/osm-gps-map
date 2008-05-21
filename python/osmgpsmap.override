@@ -1,0 +1,15 @@
+%%
+headers
+#include <Python.h>
+#include "osm-gps-map.h"
+#include "pygobject.h"
+%%
+modulename osmgpsmap
+%%
+import gobject.GObject as PyGObject_Type
+import gtk.DrawingArea as PyGtkDrawingArea_Type
+%%
+ignore-glob
+	*_get_type
+%%
+// vim: filetype=c
