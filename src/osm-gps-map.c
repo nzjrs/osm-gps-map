@@ -241,6 +241,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 		priv->global_autocenter = FALSE;
 		priv->mouse_dx = x - priv->mouse_x;	
 		priv->mouse_dy = y - priv->mouse_y;
+
 		gdk_draw_drawable (
 			widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -248,6 +249,28 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 			0,0,
 			priv->mouse_dx,priv->mouse_dy,
 			-1,-1);
+
+		//Paint white to the top and left of the map if dragging. Its less
+		//ugly than painting the corrupted map		
+		if(priv->mouse_dx>0) {
+			gdk_draw_rectangle (
+				widget->window,
+				widget->style->white_gc,
+				TRUE,
+				0, 0,
+				priv->mouse_dx,
+				widget->allocation.height);
+		}
+		
+		if (priv->mouse_dy>0) {
+			gdk_draw_rectangle (
+				widget->window,
+				widget->style->white_gc,
+				TRUE,
+				0, 0,
+				widget->allocation.width,
+				priv->mouse_dy);
+		}
 
 		g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->mouse_x, priv->mouse_y, priv->mouse_dx, priv->mouse_dy, priv->wtfcounter);
 	}	
