@@ -95,6 +95,7 @@ enum
 
 static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
 static tile_t osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
+void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 
 gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
@@ -438,10 +439,10 @@ osm_gps_map_get_bbox_pixel (OsmGpsMap *map, bbox_t bbox, int zoom)
 {
 	bbox_pixel_t bbox_pixel;
 	
-	bbox_pixel.x1 = lon2pixel(zoom, bbox.lon1);
-	bbox_pixel.y1 = lat2pixel(zoom, bbox.lat1);
-	bbox_pixel.x2 = lon2pixel(zoom, bbox.lon2);
-	bbox_pixel.y2 = lat2pixel(zoom, bbox.lat2);
+	bbox_pixel.x1 = lon2pixel(zoom, bbox.pt1.lon);
+	bbox_pixel.y1 = lat2pixel(zoom, bbox.pt1.lat);
+	bbox_pixel.x2 = lon2pixel(zoom, bbox.pt2.lon);
+	bbox_pixel.y2 = lat2pixel(zoom, bbox.pt2.lat);
 
 	g_debug("1:%d,%d 2:%d,%d",bbox_pixel.x1,bbox_pixel.y1,bbox_pixel.x2,bbox_pixel.y2);
 	
@@ -851,12 +852,12 @@ osm_gps_map_get_bbox (OsmGpsMap *map)
 	
 	g_debug("Get bbox");
 
-	bbox.lat1 = pixel2lat(priv->global_zoom, priv->global_y);
-	bbox.lon1 = pixel2lon(priv->global_zoom, priv->global_x);
-	bbox.lat2 = pixel2lat(priv->global_zoom, priv->global_y + GTK_WIDGET(map)->allocation.height);
-	bbox.lon2 = pixel2lon(priv->global_zoom, priv->global_x + GTK_WIDGET(map)->allocation.width);
+	bbox.pt1.lat = pixel2lat(priv->global_zoom, priv->global_y);
+	bbox.pt1.lon = pixel2lon(priv->global_zoom, priv->global_x);
+	bbox.pt2.lat = pixel2lat(priv->global_zoom, priv->global_y + GTK_WIDGET(map)->allocation.height);
+	bbox.pt2.lon = pixel2lon(priv->global_zoom, priv->global_x + GTK_WIDGET(map)->allocation.width);
 
-	g_debug("BBOX: %f %f %f %f", bbox.lat1, bbox.lon1, bbox.lat2, bbox.lon2);
+	g_debug("BBOX: %f %f %f %f", bbox.pt1.lat, bbox.pt1.lon, bbox.pt2.lat, bbox.pt2.lon);
 	
 	return bbox;
 }

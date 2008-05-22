@@ -28,29 +28,10 @@
   )
 )
 
-(define-method download_tile
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_download_tile")
-  (return-type "none")
-  (parameters
-    '("int" "zoom")
-    '("int" "x")
-    '("int" "y")
-    '("int" "offset_x")
-    '("int" "offset_y")
-  )
-)
-
 (define-method get_bbox
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_get_bbox")
   (return-type "bbox_t")
-)
-
-(define-method map_redraw
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_map_redraw")
-  (return-type "none")
 )
 
 (define-method set_mapcenter

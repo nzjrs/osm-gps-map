@@ -59,17 +59,13 @@ typedef struct {
 } coord_t;
 
 typedef struct {
-	double lat1;
-	double lon1;
-	double lat2;
-	double lon2;
+	coord_t pt1;
+	coord_t pt2;
 } bbox_t;
 
 GType osm_gps_map_get_type (void) G_GNUC_CONST;
 void osm_gps_map_download_maps (OsmGpsMap *map, bbox_t bbox, int zoom_start, int zoom_end);
-void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 bbox_t osm_gps_map_get_bbox (OsmGpsMap *map);
-void osm_gps_map_map_redraw (OsmGpsMap *map);
 void osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom);
 int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
 void osm_gps_map_print_track (OsmGpsMap *map, GList *trackpoint_list);

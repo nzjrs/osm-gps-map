@@ -12,4 +12,38 @@ import gtk.DrawingArea as PyGtkDrawingArea_Type
 ignore-glob
 	*_get_type
 %%
+override osm_gps_map_get_bbox noargs
+static PyObject *
+_wrap_osm_gps_map_get_bbox(PyGObject *self)
+{
+    bbox_t box;
+
+    box = osm_gps_map_get_bbox(OSM_GPS_MAP(self->obj));
+
+    return Py_BuildValue("(dddd)", box.pt1.lat, box.pt1.lon, box.pt2.lat, box.pt2.lon);
+}
+%%
+override osm_gps_map_get_co_ordinatites kwargs
+static PyObject *
+_wrap_osm_gps_map_get_co_ordinatites(PyGObject *self, PyObject *args, 
+                                     PyObject *kwargs)
+{
+    static char *kwlist[] = { "pixel_x", "pixel_y", NULL };
+    int pixel_x = -1, pixel_y = -1;
+    coord_t coord;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+				     "|ii:GpsMap.get_co_ordinatites",
+				     kwlist, &pixel_x, &pixel_y))
+        return NULL;
+
+    if ( pixel_x < 0 || pixel_y < 0 ) {
+    	PyErr_SetString(PyExc_ValueError, "pixel co-ordinatites must be >= 0");
+    	return NULL;
+	}
+
+    coord = osm_gps_map_get_co_ordinatites(OSM_GPS_MAP(self->obj), pixel_x, pixel_y);
+
+    return Py_BuildValue("(dd)", coord.lat, coord.lon);
+}
 // vim: filetype=c
