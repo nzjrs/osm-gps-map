@@ -1,6 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * osm-gps-map.c
+ * osm-gps-map.h
+ * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
  * Copyright (C) John Stowers 2008 <john.stowers@gmail.com>
  * 
  * osm-gps-map.c is free software: you can redistribute it and/or modify it
