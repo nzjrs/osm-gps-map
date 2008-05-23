@@ -24,6 +24,7 @@ osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 	(cd $(srcdir)\
 	 && pygtk-codegen-2.0 \
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
+	    --register $(PYGTK_DEFSDIR)/gdk-base-types.defs \
 		--override $*.override \
 		--prefix py$* $*.defs) > gen-$*.c \
 	&& cp gen-$*.c $*.c \

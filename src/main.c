@@ -21,20 +21,28 @@
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
+static GdkPixbuf *star_image;
+
 //1=google, 2=oam, 3=osm
 #define MAP_PROVIDER 3
 
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
+	coord_t coord;
 	OsmGpsMap *map = OSM_GPS_MAP(widget);
 
 	if ( (event->button == 1) && (event->type == GDK_2BUTTON_PRESS) )
 	{
-		coord_t coord;
 		g_debug("Double clicked %f %f", event->x, event->y);
 		coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
 		osm_gps_map_draw_gps (map, coord.lat,coord.lon, 0);
+	}
+	
+	if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
+	{
+		coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
+		osm_gps_map_add_image (map, coord.lat, coord.lon, star_image);
 	}
 	return FALSE;
 }
@@ -100,6 +108,10 @@ main (int argc, char **argv)
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
+	
+	star_image = gdk_pixbuf_new_from_file_at_size (
+			"poi.png", 24,24,
+			NULL);
 	
 #if MAP_PROVIDER == 1
 	//According to 

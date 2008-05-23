@@ -59,20 +59,18 @@
   (c-name "osm_gps_map_print_track")
   (return-type "none")
   (parameters
-    '("GList*" "trackpoint_list")
+    '("GSList*" "trackpoint_list")
   )
 )
 
-(define-method paint_image
+(define-method add_image
   (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_paint_image")
+  (c-name "osm_gps_map_add_image")
   (return-type "none")
   (parameters
     '("float" "lat")
     '("float" "lon")
     '("GdkPixbuf*" "image")
-    '("int" "w")
-    '("int" "h")
   )
 )
 
