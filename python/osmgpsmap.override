@@ -23,9 +23,9 @@ _wrap_osm_gps_map_get_bbox(PyGObject *self)
     return Py_BuildValue("(dddd)", box.pt1.lat, box.pt1.lon, box.pt2.lat, box.pt2.lon);
 }
 %%
-override osm_gps_map_get_co_ordinatites kwargs
+override osm_gps_map_get_co_ordinates kwargs
 static PyObject *
-_wrap_osm_gps_map_get_co_ordinatites(PyGObject *self, PyObject *args, 
+_wrap_osm_gps_map_get_co_ordinates(PyGObject *self, PyObject *args, 
                                      PyObject *kwargs)
 {
     static char *kwlist[] = { "pixel_x", "pixel_y", NULL };
@@ -33,7 +33,7 @@ _wrap_osm_gps_map_get_co_ordinatites(PyGObject *self, PyObject *args,
     coord_t coord;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-				     "|ii:GpsMap.get_co_ordinatites",
+				     "|ii:GpsMap.get_co_ordinates",
 				     kwlist, &pixel_x, &pixel_y))
         return NULL;
 
@@ -42,7 +42,7 @@ _wrap_osm_gps_map_get_co_ordinatites(PyGObject *self, PyObject *args,
     	return NULL;
 	}
 
-    coord = osm_gps_map_get_co_ordinatites(OSM_GPS_MAP(self->obj), pixel_x, pixel_y);
+    coord = osm_gps_map_get_co_ordinates(OSM_GPS_MAP(self->obj), pixel_x, pixel_y);
 
     return Py_BuildValue("(dd)", coord.lat, coord.lon);
 }

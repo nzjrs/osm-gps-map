@@ -13,6 +13,5 @@ a.add(m)
 a.show_all()
 
 print "BBOX ",m.get_bbox()
-print "COORDS ", m.get_co_ordinatites(0,0)
 
 gtk.main()'

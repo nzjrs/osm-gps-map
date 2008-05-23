@@ -33,7 +33,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 	{
 		coord_t coord;
 		g_debug("Double clicked %f %f", event->x, event->y);
-		coord = osm_gps_map_get_co_ordinatites(map, (int)event->x, (int)event->y);
+		coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
 		osm_gps_map_draw_gps (map, coord.lat,coord.lon, 0);
 	}
 	return FALSE;

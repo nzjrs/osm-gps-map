@@ -96,21 +96,14 @@
   )
 )
 
-(define-method get_co_ordinatites
+(define-method get_co_ordinates
   (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_get_co_ordinatites")
+  (c-name "osm_gps_map_get_co_ordinates")
   (return-type "coord_t")
   (parameters
     '("int" "pixel_x")
     '("int" "pixel_y")
   )
-)
-
-(define-method get_zoom_level
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_get_zoom_level")
-  (return-type "int")
-
 )
 
 (define-function osm_gps_map_new

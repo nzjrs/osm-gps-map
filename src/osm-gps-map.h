@@ -68,12 +68,11 @@ void osm_gps_map_download_maps (OsmGpsMap *map, bbox_t bbox, int zoom_start, int
 bbox_t osm_gps_map_get_bbox (OsmGpsMap *map);
 void osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom);
 int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
-void osm_gps_map_print_track (OsmGpsMap *map, GList *trackpoint_list);
+void osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list);
 void osm_gps_map_paint_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image, int w, int h);
 void osm_gps_map_osd_speed (OsmGpsMap *map, float speed);
 void osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading);
-coord_t osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y);
-int osm_gps_map_get_zoom_level (OsmGpsMap *map);
+coord_t osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y);
 GtkWidget * osm_gps_map_new(void);
 
 G_END_DECLS

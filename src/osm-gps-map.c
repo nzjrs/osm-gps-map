@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include <gdk/gdk.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 #include <libsoup/soup.h>
 
@@ -43,6 +44,9 @@ struct _OsmGpsMapPrivate
 	gboolean global_auto_download;
 	int global_x;
 	int global_y;
+
+	gboolean trip_counter;
+	GSList *trip;
 
 	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
@@ -195,8 +199,8 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 		
 		osm_gps_map_fill_tiles_pixel(OSM_GPS_MAP(widget),priv->global_x, priv->global_y, priv->global_zoom);	//FIXME zoom
 		
-	
-		//print_track();
+		if (priv->trip_counter)
+			osm_gps_map_print_track (OSM_GPS_MAP(widget), priv->trip);
 		//paint_friends();
 		//paint_photos();
 		//paint_pois();
@@ -572,6 +576,9 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	priv->pixmap = NULL;
 	priv->gc_map = NULL;
+
+	priv->trip_counter = TRUE;
+	priv->trip = NULL;
 	
 	priv->wtfcounter = 0;
 	priv->mouse_dx = 0;
@@ -884,6 +891,7 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 {
 	int pixel_x, pixel_y;
 	float rlat, rlon;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	rlat = deg2rad(lat);
 	rlon = deg2rad(lon);
@@ -899,7 +907,9 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 								  pixel_x - GTK_WIDGET(map)->allocation.width/2,
 								  pixel_y - GTK_WIDGET(map)->allocation.height/2,
 								  zoom);
-	//print_track();
+
+	if (priv->trip_counter)
+		osm_gps_map_print_track (map, priv->trip);
 	//paint_friends();
 	//paint_photos();
 	//paint_pois();
@@ -934,8 +944,8 @@ int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		
 		osm_gps_map_fill_tiles_pixel(map, priv->global_x, priv->global_y, priv->global_zoom);
 	
-		//FIXME TODO: wenn zoom ändert, müssen sich auch globalx y ändern
-		//print_track();
+		if (priv->trip_counter)
+			osm_gps_map_print_track (map, priv->trip);
 		//paint_friends();
 		//paint_photos();
 		//paint_pois();
@@ -944,9 +954,101 @@ int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 }
 
 void
-osm_gps_map_print_track (OsmGpsMap *map, GList *trackpoint_list)
+osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 {
-	/* TODO: Add public function implementation here */
+	GSList *list;
+	int pixel_x, pixel_y, x,y, last_x = 0, last_y = 0;
+	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
+	float lat, lon;
+	GdkColor color;
+	GdkGC *gc;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	
+	gc = gdk_gc_new(priv->pixmap);
+	color.green = 0;
+	color.blue = 0;
+	color.red = 60000;
+	gdk_gc_set_rgb_fg_color(gc, &color);
+	gdk_gc_set_line_attributes(gc,
+		5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+
+	//printf("*** %s(): \n",__PRETTY_FUNCTION__);
+
+	for(list = trackpoint_list; list != NULL; list = list->next)
+	{
+		coord_t *tp = list->data;
+	
+		lat = tp->lat;
+		lon = tp->lon;
+		
+		// pixel_x,y, offsets
+		pixel_x = lon2pixel(priv->global_zoom, lon);
+		pixel_y = lat2pixel(priv->global_zoom, lat);
+		
+		x = pixel_x - priv->global_x;
+		y = pixel_y - priv->global_y;
+		
+		// first time through loop
+		if (list == trackpoint_list) {
+			last_x = x;
+			last_y = y;
+		}
+
+/*		gdk_draw_arc (
+			pixmap,
+			//map_drawable->style->black_gc,
+			gc,
+			TRUE,			//filled
+			x-4, y-4,		// x,y
+			8,8,			// width, height
+			0,23040);		// start-end angle 64th, from 3h, anti clockwise
+*/
+
+		gdk_draw_line (priv->pixmap, gc, x, y, last_x, last_y);
+		last_x = x;
+		last_y = y;
+		
+		max_x = MAX(x,max_x);
+		min_x = MIN(x,min_x);
+		max_y = MAX(y,max_y);
+		min_y = MIN(y,min_y);
+		//printf("Trackpoint: lat %f - lon %f\n",tp->lat, tp->lon);
+	}
+	
+	// TODO last segment to current pos.
+	// globalx?
+	//gdk_draw_line (pixmap, gc, x, y, last_x, last_y);
+	/*
+	NOT READY FOR PRIME TIME
+
+	if(	
+		gpsdata && 
+		gpsdata->fix.longitude !=0 &&  
+		gpsdata->fix.latitude != 0 &&
+		last_x != 0 &&
+		last_y != 0
+		)
+	{
+		pixel_x = lon2pixel(global_zoom, deg2rad(gpsdata->fix.longitude));
+		pixel_y = lat2pixel(global_zoom, deg2rad(gpsdata->fix.latitude));
+			
+		x = pixel_x - global_x;
+		y = pixel_y - global_y;
+
+	
+		gdk_draw_line (pixmap, gc, x, y, last_x, last_y);
+printf("LINE x y lx ly: %d %d %d %d\n",x,y,last_x,last_y);	
+			gtk_widget_queue_draw_area (
+			map_drawable, 
+			x-4, y-4,
+			8,8);
+	} */
+	
+		gtk_widget_queue_draw_area (
+			GTK_WIDGET(map), 
+			min_x, min_y,
+			max_x, max_y);
+
 }
 
 void
@@ -1012,11 +1114,17 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 								30+7+7,30+7+7);
 	
 	//If trip marker add to list of gps points. Iterate over, and draw them
-	//to the pixmap
+	if (priv->trip_counter) {
+		coord_t *tp = g_new0(coord_t,1);
+		tp->lat = rlat;
+		tp->lon = rlon;
+		priv->trip = g_slist_append(priv->trip, tp);
+		osm_gps_map_print_track (map, priv->trip);
+	}
 }
 
 coord_t
-osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y)
+osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 {
 	coord_t coord;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -1024,12 +1132,6 @@ osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y)
 	coord.lat = rad2deg(pixel2lat(priv->global_zoom, priv->global_y + pixel_y));
 	coord.lon = rad2deg(pixel2lon(priv->global_zoom, priv->global_x + pixel_x));
 	return coord;
-}
-
-int osm_gps_map_get_zoom_level (OsmGpsMap *map)
-{
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	return priv->global_zoom;
 }
 
 GtkWidget *
