@@ -1026,6 +1026,12 @@ osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y)
 	return coord;
 }
 
+int osm_gps_map_get_zoom_level (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	return priv->global_zoom;
+}
+
 GtkWidget *
 osm_gps_map_new (void)
 {

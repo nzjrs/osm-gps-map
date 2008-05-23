@@ -73,6 +73,7 @@ void osm_gps_map_paint_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *i
 void osm_gps_map_osd_speed (OsmGpsMap *map, float speed);
 void osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading);
 coord_t osm_gps_map_get_co_ordinatites (OsmGpsMap *map, int pixel_x, int pixel_y);
+int osm_gps_map_get_zoom_level (OsmGpsMap *map);
 GtkWidget * osm_gps_map_new(void);
 
 G_END_DECLS

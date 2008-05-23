@@ -106,6 +106,13 @@
   )
 )
 
+(define-method get_zoom_level
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_zoom_level")
+  (return-type "int")
+
+)
+
 (define-function osm_gps_map_new
   (c-name "osm_gps_map_new")
   (is-constructor-of "OsmGpsMap")
