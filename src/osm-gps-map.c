@@ -448,14 +448,14 @@ osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int
 }
 
 static bbox_pixel_t
-osm_gps_map_get_bbox_pixel (OsmGpsMap *map, bbox_t bbox, int zoom)
+osm_gps_map_get_bbox_pixel (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom)
 {
 	bbox_pixel_t bbox_pixel;
 	
-	bbox_pixel.x1 = lon2pixel(zoom, bbox.pt1.lon);
-	bbox_pixel.y1 = lat2pixel(zoom, bbox.pt1.lat);
-	bbox_pixel.x2 = lon2pixel(zoom, bbox.pt2.lon);
-	bbox_pixel.y2 = lat2pixel(zoom, bbox.pt2.lat);
+	bbox_pixel.x1 = lon2pixel(zoom, pt1->lon);
+	bbox_pixel.y1 = lat2pixel(zoom, pt1->lat);
+	bbox_pixel.x2 = lon2pixel(zoom, pt2->lon);
+	bbox_pixel.y2 = lat2pixel(zoom, pt2->lat);
 
 	g_debug("1:%d,%d 2:%d,%d",bbox_pixel.x1,bbox_pixel.y1,bbox_pixel.x2,bbox_pixel.y2);
 	
@@ -814,18 +814,20 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 
 
 void
-osm_gps_map_download_maps (OsmGpsMap *map, bbox_t bbox, int zoom_start, int zoom_end)
+osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end)
 {
 	bbox_pixel_t bbox_pixel;
 	int zoom;
-
-	zoom_end = (zoom_end > 17) ? 17 : zoom_end;
-	g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 	
-	for(zoom=zoom_start; zoom<=zoom_end; zoom++)
-	{
-		bbox_pixel = osm_gps_map_get_bbox_pixel(map, bbox, zoom);
-		osm_gps_map_queue_tile_dl_for_bbox(map, bbox_pixel,zoom);
+	if (pt1 && pt2) {
+		zoom_end = (zoom_end > 17) ? 17 : zoom_end;
+		g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
+	
+		for(zoom=zoom_start; zoom<=zoom_end; zoom++)
+		{
+			bbox_pixel = osm_gps_map_get_bbox_pixel(map, pt1, pt2, zoom);
+			osm_gps_map_queue_tile_dl_for_bbox(map, bbox_pixel,zoom);
+		}
 	}
 }
 
@@ -861,22 +863,19 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	}
 }
 
-bbox_t
-osm_gps_map_get_bbox (OsmGpsMap *map)
+void
+osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
 {
-	bbox_t bbox;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
-	g_debug("Get bbox");
+	if (pt1 && pt2) {
+		pt1->lat = pixel2lat(priv->global_zoom, priv->global_y);
+		pt1->lon = pixel2lon(priv->global_zoom, priv->global_x);
+		pt2->lat = pixel2lat(priv->global_zoom, priv->global_y + GTK_WIDGET(map)->allocation.height);
+		pt2->lon = pixel2lon(priv->global_zoom, priv->global_x + GTK_WIDGET(map)->allocation.width);
 
-	bbox.pt1.lat = pixel2lat(priv->global_zoom, priv->global_y);
-	bbox.pt1.lon = pixel2lon(priv->global_zoom, priv->global_x);
-	bbox.pt2.lat = pixel2lat(priv->global_zoom, priv->global_y + GTK_WIDGET(map)->allocation.height);
-	bbox.pt2.lon = pixel2lon(priv->global_zoom, priv->global_x + GTK_WIDGET(map)->allocation.width);
-
-	g_debug("BBOX: %f %f %f %f", bbox.pt1.lat, bbox.pt1.lon, bbox.pt2.lat, bbox.pt2.lon);
-	
-	return bbox;
+		g_debug("BBOX: %f %f %f %f", pt1->lat, pt1->lon, pt2->lat, pt2->lon);
+	}
 }
 
 void
@@ -1049,10 +1048,11 @@ printf("LINE x y lx ly: %d %d %d %d\n",x,y,last_x,last_y);
 			8,8);
 	} */
 	
+		// Also account for line width (5)
 		gtk_widget_queue_draw_area (
 			GTK_WIDGET(map), 
-			min_x, min_y,
-			max_x, max_y);
+			min_x-5, min_y-5,
+			max_x+10, max_y+10);
 
 }
 

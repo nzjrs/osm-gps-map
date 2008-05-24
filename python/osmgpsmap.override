@@ -17,11 +17,11 @@ override osm_gps_map_get_bbox noargs
 static PyObject *
 _wrap_osm_gps_map_get_bbox(PyGObject *self)
 {
-    bbox_t box;
+    coord_t pt1,pt2;
 
-    box = osm_gps_map_get_bbox(OSM_GPS_MAP(self->obj));
+    osm_gps_map_get_bbox(OSM_GPS_MAP(self->obj), &pt1, &pt2);
 
-    return Py_BuildValue("(dddd)", box.pt1.lat, box.pt1.lon, box.pt2.lat, box.pt2.lon);
+    return Py_BuildValue("(dddd)", pt1.lat, pt1.lon, pt2.lat, pt2.lon);
 }
 %%
 override osm_gps_map_get_co_ordinates kwargs

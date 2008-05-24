@@ -22,7 +22,8 @@
   (c-name "osm_gps_map_download_maps")
   (return-type "none")
   (parameters
-    '("bbox_t" "bbox")
+    '("coord_t*" "pt1")
+    '("coord_t*" "pt2")
     '("int" "zoom_start")
     '("int" "zoom_end")
   )
@@ -31,7 +32,11 @@
 (define-method get_bbox
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_get_bbox")
-  (return-type "bbox_t")
+  (return-type "none")
+  (parameters
+    '("coord_t*" "pt1")
+    '("coord_t*" "pt2")
+  )
 )
 
 (define-method set_mapcenter
