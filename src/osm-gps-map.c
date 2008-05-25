@@ -1195,6 +1195,7 @@ void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
 	g_slist_free(priv->trip);
 	priv->trip = NULL;
 	osm_gps_map_map_redraw (map);
