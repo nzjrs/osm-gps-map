@@ -1191,6 +1191,15 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	}
 }
 
+void
+osm_gps_map_clear_gps (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	g_slist_free(priv->trip);
+	priv->trip = NULL;
+	osm_gps_map_map_redraw (map);
+}
+
 coord_t
 osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 {

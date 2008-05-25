@@ -99,6 +99,12 @@
   )
 )
 
+(define-method clear_gps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_gps")
+  (return-type "none")
+)
+
 (define-method get_co_ordinates
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_get_co_ordinates")
