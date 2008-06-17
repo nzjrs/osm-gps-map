@@ -109,6 +109,7 @@ static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel
 static tile_t osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
 void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 void osm_gps_map_print_images (OsmGpsMap *map);
+void osm_gps_map_map_redraw (OsmGpsMap *map);
 
 gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
@@ -194,26 +195,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 		priv->global_x += (priv->mouse_x - (int) event->x);
 		priv->global_y += (priv->mouse_y - (int) event->y);
 	
-		gdk_draw_rectangle (
-			priv->pixmap,
-			widget->style->white_gc,
-			TRUE,
-			0, 0,
-			widget->allocation.width+260,
-			widget->allocation.height+260);
-					
-		gtk_widget_queue_draw_area (
-			widget, 
-			0,0,widget->allocation.width+260,widget->allocation.height+260);
-		
-		osm_gps_map_fill_tiles_pixel(OSM_GPS_MAP(widget),priv->global_x, priv->global_y, priv->global_zoom);	//FIXME zoom
-		
-		if (priv->trip_counter)
-			osm_gps_map_print_track (OSM_GPS_MAP(widget), priv->trip);
-		
-		osm_gps_map_print_images(OSM_GPS_MAP(widget));
-		//osd_speed(); //TODO add missing queue or soemthing...	
-		//printf("mouse delta: %d %d\n", mouse_dx, mouse_dy);
+		osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
 	}
 	else
 	{
@@ -317,32 +299,8 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	priv->gc_map = gdk_gc_new(priv->pixmap);
 
-//TODOremove or not...
-//#if 0
-//if(pixmap) printf("pixmap NOT NULL");
-//else printf("aieee: pixmap NULL\n");
+	osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
 
-	/* draw white background to initialise pixmap */
-	gdk_draw_rectangle (
-		priv->pixmap,
-		widget->style->white_gc,
-		TRUE,
-		0, 0,
-		widget->allocation.width+260,
-		widget->allocation.height+260);
-				
-	gtk_widget_queue_draw_area (
-		widget, 
-		0,0,widget->allocation.width+260,widget->allocation.height+260);
-//#endif
-
-	//todo: is this double call on init()?
-	//needed for resize event
-	osm_gps_map_fill_tiles_pixel(OSM_GPS_MAP(widget),
-								 priv->global_x,
-								 priv->global_y,
-								 priv->global_zoom);
-	
 	return FALSE;
 }
 
@@ -508,10 +466,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 	if (offset_x > 0) offset_x -= 256;
 	if (offset_y > 0) offset_y -= 256;
 	
-	priv->global_x = pixel_x;
-	priv->global_y = pixel_y;
-	priv->global_zoom = zoom;
-	
 	offset_xn = offset_x; //FIXME this is gedoppelt
 	offset_yn = offset_y;
 	// w/h drawable
@@ -563,6 +517,7 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 	}
 }
 
+/*
 void
 osm_gps_map_fill_tiles_latlon (OsmGpsMap *map, float lat, float lon, int zoom)
 {
@@ -574,7 +529,7 @@ osm_gps_map_fill_tiles_latlon (OsmGpsMap *map, float lat, float lon, int zoom)
 	g_debug("fill_tiles_latlon(): lat %f  %i -- lon %f  %i",lat,pixel_y,lon,pixel_x);
 	
 	osm_gps_map_fill_tiles_pixel (map, pixel_x, pixel_y, zoom);
-}
+}*/
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 
@@ -881,16 +836,36 @@ osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
 void
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
-	//TODO: There is no real need to run this on a timer. We should be smart enough
-	//to only redraw from the correct functions (like map resized, gps arrive, etc)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-
 	g_debug("REPAINTING.............");
-	osm_gps_map_fill_tiles_pixel(map, priv->global_x, priv->global_y, priv->global_zoom);
 
-	//print_track();
-	//paint_friends();
-	//osd_speed();
+	/* draw white background to initialise pixmap */
+	gdk_draw_rectangle (
+		priv->pixmap,
+		GTK_WIDGET(map)->style->white_gc,
+		TRUE,
+		0, 0,
+		GTK_WIDGET(map)->allocation.width+260,
+		GTK_WIDGET(map)->allocation.height+260);
+
+/*				
+	gtk_widget_queue_draw_area (
+		GTK_WIDGET(map), 
+		0,0,
+		GTK_WIDGET(map)->allocation.width+260,
+		GTK_WIDGET(map)->allocation.height+260);
+*/
+
+	osm_gps_map_fill_tiles_pixel(
+		map,
+		priv->global_x,
+		priv->global_y,
+		priv->global_zoom);
+
+	if (priv->trip_counter)
+		osm_gps_map_print_track (map, priv->trip);
+		
+	osm_gps_map_print_images(map);
 }
 
 void
@@ -907,18 +882,11 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 	pixel_x = lon2pixel(zoom, rlon);
 	pixel_y = lat2pixel(zoom, rlat);
 
-	g_debug("fill_tiles_latlon(): lat %f  %i -- lon %f  %i",lat,pixel_y,lon,pixel_x);
-	
-	osm_gps_map_fill_tiles_pixel (map,
-								  pixel_x - GTK_WIDGET(map)->allocation.width/2,
-								  pixel_y - GTK_WIDGET(map)->allocation.height/2,
-								  zoom);
+	priv->global_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
+	priv->global_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
+	priv->global_zoom = zoom;
 
-	if (priv->trip_counter)
-		osm_gps_map_print_track (map, priv->trip);
-		
-	osm_gps_map_print_images(map);
-	//osd_speed(); //TODO add missing queue or soemthing...
+	osm_gps_map_map_redraw(map);
 }
 
 int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
@@ -947,13 +915,7 @@ int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		priv->global_x = ((priv->global_x + width_center) * factor) - width_center;
 		priv->global_y = ((priv->global_y + height_center) * factor) - height_center;
 		
-		osm_gps_map_fill_tiles_pixel(map, priv->global_x, priv->global_y, priv->global_zoom);
-	
-		if (priv->trip_counter)
-			osm_gps_map_print_track (map, priv->trip);
-			
-		osm_gps_map_print_images(map);
-		//osd_speed(); //TODO add missing queue or soemthing...
+		osm_gps_map_map_redraw(map);
 	}
 	return priv->global_zoom;
 }
@@ -1164,7 +1126,35 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	x = pixel_x - priv->global_x;
 	y = pixel_y - priv->global_y;
 
+	//Automatically center the map if the track approaches the edge
+	if(priv->global_autocenter)	{
+		int width = GTK_WIDGET(map)->allocation.width;
+		int height = GTK_WIDGET(map)->allocation.height;
+		if( x < (width/2 - width/8) 	|| x > (width/2 + width/8) 	|| 
+			y < (height/2 - height/8) 	|| y > (height/2 + height/8)) {
+
+			priv->global_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
+			priv->global_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
+		}
+	}
+
+	//If trip marker add to list of gps points.
+	if (priv->trip_counter) {
+		coord_t *tp = g_new0(coord_t,1);
+		tp->lat = rlat;
+		tp->lon = rlon;
+		priv->trip = g_slist_append(priv->trip, tp);
+	}
+
+	// this redraws the map (including the gps track, and adjusts the
+	// map center if it was changed
+	osm_gps_map_map_redraw(map);
+
+	// recalculate x and y incase we have autocentered
+	x = pixel_x - priv->global_x;
+	y = pixel_y - priv->global_y;
 	// draw current position as filled arc
+	// done last so that only one arc is drawn
 	marker = gdk_gc_new(priv->pixmap);
 	color.red = 5000;
 	color.green = 5000;
@@ -1179,29 +1169,8 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 				  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
 	gtk_widget_queue_draw_area (GTK_WIDGET(map),
 								x-(15+7),y-(15+7),
-								30+7+7,30+7+7);
-								
-	//Automatically center the map if the track approaches the edge
-	if(priv->global_autocenter)	{
-		int width = GTK_WIDGET(map)->allocation.width;
-		int height = GTK_WIDGET(map)->allocation.height;
-		if( x < (width/2 - width/8) 	|| x > (width/2 + width/8) 	|| 
-			y < (height/2 - height/8) 	|| y > (height/2 + height/8)) {
-				osm_gps_map_set_mapcenter(map,
-										  latitude,
-										  longitude,
-										  priv->global_zoom);
-		}
-	}
-	
-	//If trip marker add to list of gps points. Iterate over, and draw them
-	if (priv->trip_counter) {
-		coord_t *tp = g_new0(coord_t,1);
-		tp->lat = rlat;
-		tp->lon = rlon;
-		priv->trip = g_slist_append(priv->trip, tp);
-		osm_gps_map_print_track (map, priv->trip);
-	}
+								30+7+70,30+7+7);
+
 }
 
 void
