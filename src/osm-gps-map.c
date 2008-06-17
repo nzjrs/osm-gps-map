@@ -1180,6 +1180,19 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	gtk_widget_queue_draw_area (GTK_WIDGET(map),
 								x-(15+7),y-(15+7),
 								30+7+7,30+7+7);
+								
+	//Automatically center the map if the track approaches the edge
+	if(priv->global_autocenter)	{
+		int width = GTK_WIDGET(map)->allocation.width;
+		int height = GTK_WIDGET(map)->allocation.height;
+		if( x < (width/2 - width/8) 	|| x > (width/2 + width/8) 	|| 
+			y < (height/2 - height/8) 	|| y > (height/2 + height/8)) {
+				osm_gps_map_set_mapcenter(map,
+										  latitude,
+										  longitude,
+										  priv->global_zoom);
+		}
+	}
 	
 	//If trip marker add to list of gps points. Iterate over, and draw them
 	if (priv->trip_counter) {
