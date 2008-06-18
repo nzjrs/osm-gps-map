@@ -232,46 +232,50 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 		y = event->y;
 		state = event->state;
 	}
- 
-	if ( (state & GDK_BUTTON1_MASK)  && (priv->wtfcounter >= 6) ) {
-		priv->global_autocenter = FALSE;
-		priv->mouse_dx = x - priv->mouse_x;	
-		priv->mouse_dy = y - priv->mouse_y;
 
-		gdk_draw_drawable (
-			widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			priv->pixmap,
-			0,0,
-			priv->mouse_dx,priv->mouse_dy,
-			-1,-1);
+	// are we being dragged
+	if (state & GDK_BUTTON1_MASK) {
+		// yes, and we have dragged more than 6 pixels 
+		if (priv->wtfcounter >= 6) {
+			priv->global_autocenter = FALSE;
+			priv->mouse_dx = x - priv->mouse_x;	
+			priv->mouse_dy = y - priv->mouse_y;
 
-		//Paint white to the top and left of the map if dragging. Its less
-		//ugly than painting the corrupted map		
-		if(priv->mouse_dx>0) {
-			gdk_draw_rectangle (
+			gdk_draw_drawable (
 				widget->window,
-				widget->style->white_gc,
-				TRUE,
-				0, 0,
-				priv->mouse_dx,
-				widget->allocation.height);
-		}
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				priv->pixmap,
+				0,0,
+				priv->mouse_dx,priv->mouse_dy,
+				-1,-1);
+
+			//Paint white to the top and left of the map if dragging. Its less
+			//ugly than painting the corrupted map		
+			if(priv->mouse_dx>0) {
+				gdk_draw_rectangle (
+					widget->window,
+					widget->style->white_gc,
+					TRUE,
+					0, 0,
+					priv->mouse_dx,
+					widget->allocation.height);
+			}
 		
-		if (priv->mouse_dy>0) {
-			gdk_draw_rectangle (
-				widget->window,
-				widget->style->white_gc,
-				TRUE,
-				0, 0,
-				widget->allocation.width,
-				priv->mouse_dy);
-		}
+			if (priv->mouse_dy>0) {
+				gdk_draw_rectangle (
+					widget->window,
+					widget->style->white_gc,
+					TRUE,
+					0, 0,
+					widget->allocation.width,
+					priv->mouse_dy);
+			}
 
-		g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->mouse_x, priv->mouse_y, priv->mouse_dx, priv->mouse_dy, priv->wtfcounter);
-	}	
-	else
-		priv->wtfcounter++;
+			g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->mouse_x, priv->mouse_y, priv->mouse_dx, priv->mouse_dy, priv->wtfcounter);
+		} else {
+			priv->wtfcounter++;
+		}
+	}
 
 	return FALSE;
 }
@@ -1126,6 +1130,14 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	x = pixel_x - priv->global_x;
 	y = pixel_y - priv->global_y;
 
+	//If trip marker add to list of gps points.
+	if (priv->trip_counter) {
+		coord_t *tp = g_new0(coord_t,1);
+		tp->lat = rlat;
+		tp->lon = rlon;
+		priv->trip = g_slist_append(priv->trip, tp);
+	}
+
 	//Automatically center the map if the track approaches the edge
 	if(priv->global_autocenter)	{
 		int width = GTK_WIDGET(map)->allocation.width;
@@ -1138,12 +1150,10 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 		}
 	}
 
-	//If trip marker add to list of gps points.
-	if (priv->trip_counter) {
-		coord_t *tp = g_new0(coord_t,1);
-		tp->lat = rlat;
-		tp->lon = rlon;
-		priv->trip = g_slist_append(priv->trip, tp);
+	// dont draw anything if we are dragging
+	if (priv->wtfcounter > 0) {
+		g_debug("Dragging %d", priv->wtfcounter);
+		return;
 	}
 
 	// this redraws the map (including the gps track, and adjusts the
