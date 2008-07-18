@@ -104,7 +104,8 @@ enum
 	PROP_LATITUDE,
 	PROP_LONGITUDE,
 	PROP_MAP_X,
-	PROP_MAP_Y
+	PROP_MAP_Y,
+	PROP_TILES_QUEUED
 };
 
 static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
@@ -693,6 +694,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 	case PROP_MAP_Y:
 		g_value_set_int(value, priv->global_y);
 		break;
+	case PROP_TILES_QUEUED:
+		g_value_set_int(value, g_hash_table_size(priv->tile_queue));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -807,6 +811,17 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    G_MAXINT, /* maximum property value */
 	                                                    515,
 	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_TILES_QUEUED,
+	                                 g_param_spec_int ("tiles-queued",
+	                                                    "tiles-queued",
+	                                                    "number of tiles currently waiting to download",
+	                                                    G_MININT, /* minimum property value */
+	                                                    G_MAXINT, /* maximum property value */
+	                                                    0,
+	                                                    G_PARAM_READABLE));
+
 }
 
 
