@@ -36,6 +36,8 @@ struct _OsmGpsMapPrivate
 {
 	//TODO: These are gobject props, definately need to be renamed prop_x
 	SoupSession * soup_session;
+	GHashTable * tile_queue;
+
 	char * cache_dir;
 	char * repo_uri;
 	gboolean invert_zoom;
@@ -335,7 +337,7 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
 	
 	/* draw pixbuf onto pixmap */
 	gdk_draw_pixbuf (priv->pixmap,
-					 priv->gc_map,//TODO: It works if I just pass NULL here, should i?
+					 priv->gc_map,
 					 pixbuf,
 					 0,0,
 					 offset_x,offset_y,
@@ -352,9 +354,12 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 {
 	int fd;
 	tile_download_t *dl = (tile_download_t *)user_data;
+	OsmGpsMap *map = OSM_GPS_MAP(dl->map);
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
 		g_warning("Error downloading tile: %d %s", msg->status_code, msg->reason_phrase);
+		soup_session_requeue_message(session, msg);
 		return;
 	}
 
@@ -370,16 +375,17 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 		close (fd);
 		
 		/* Redraw the area of the screen */
-		if ( TRUE ) {
+		if ( msg->response_body->length > 0 ) {
 			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
 			if(pixbuf) {
 				g_debug("Found tile %s", dl->filename);
-				osm_gps_map_blit_tile(dl->map, pixbuf, dl->offset_x,dl->offset_y);
+				osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
 				g_object_unref (pixbuf);
 			}
 		}
 	}
-			
+
+	g_hash_table_remove(priv->tile_queue, dl->uri);
 	g_free(dl->uri);
 	g_free(dl->folder);
 	g_free(dl->filename);
@@ -543,7 +549,6 @@ osm_gps_map_init (OsmGpsMap *object)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
 
 	priv->pixmap = NULL;
-	priv->gc_map = NULL;
 
 	priv->trip_counter = TRUE;
 	priv->trip = NULL;
@@ -560,6 +565,10 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->soup_session = soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
 															 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
 															 NULL);
+
+	//Hash table which maps tile d/l URIs to SoupMessage requests
+	priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
+
 	
 	gtk_widget_add_events (GTK_WIDGET (object),
 			GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
@@ -568,7 +577,36 @@ osm_gps_map_init (OsmGpsMap *object)
 static void
 osm_gps_map_finalize (GObject *object)
 {
-	/* TODO: Add deinitalization code here */
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+
+	soup_session_abort(priv->soup_session);
+	g_object_unref(priv->soup_session);
+
+	g_hash_table_destroy(priv->tile_queue);
+
+	g_free(priv->cache_dir);
+	g_free(priv->repo_uri);
+
+	//clears the trip list and all resources
+	osm_gps_map_clear_gps(OSM_GPS_MAP(object));
+
+	//free the poi image lists
+	if (priv->images) {
+		GSList *list;
+		for(list = priv->images; list != NULL; list = list->next)
+		{
+			image_t *im = list->data;
+			g_object_unref(im->image);
+			g_free(im);
+		}
+		g_slist_free(priv->images);
+	}
+
+	if(priv->pixmap)
+		g_object_unref (priv->pixmap);
+
+	if(priv->gc_map)
+		g_object_unref(priv->gc_map);
 
 	G_OBJECT_CLASS (osm_gps_map_parent_class)->finalize (object);
 }
@@ -800,25 +838,34 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	if (!priv->invert_zoom)
 		dl->uri = g_strdup_printf(priv->repo_uri, zoom, x, y);
 	else
-		dl->uri = g_strdup_printf(priv->repo_uri, x, y, 17-zoom);	
+		dl->uri = g_strdup_printf(priv->repo_uri, x, y, 17-zoom);
 
-	dl->folder = g_strdup_printf("%s/%d/%d/",priv->cache_dir, zoom, x);
-	dl->filename = g_strdup_printf("%s/%d/%d/%d.png",priv->cache_dir, zoom, x, y);
-	dl->map = map;
-	dl->offset_x = offset_x;
-	dl->offset_y = offset_y;
-
-	g_debug("Download tile: %d,%d z:%d\n\t%s --> %s", x, y, zoom, dl->uri, dl->filename);
-	
-	msg = soup_message_new (SOUP_METHOD_GET, dl->uri);
-	if (msg) {
-		soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
-	} else {
-		g_warning("Could not create soup message");
-		g_free(dl->uri);
-		g_free(dl->folder);
-		g_free(dl->filename);
+	//check the tile has not already been queued for download
+	msg = (SoupMessage *)g_hash_table_lookup (priv->tile_queue, dl->uri);
+	if (msg != NULL) {
+		g_debug("Tile already downloading");
+	    g_free(dl->uri);
 		g_free(dl);
+	} else {
+		dl->folder = g_strdup_printf("%s/%d/%d/",priv->cache_dir, zoom, x);
+		dl->filename = g_strdup_printf("%s/%d/%d/%d.png",priv->cache_dir, zoom, x, y);
+		dl->map = map;
+		dl->offset_x = offset_x;
+		dl->offset_y = offset_y;
+
+		g_debug("Download tile: %d,%d z:%d\n\t%s --> %s", x, y, zoom, dl->uri, dl->filename);
+	
+		msg = soup_message_new (SOUP_METHOD_GET, dl->uri);
+		if (msg) {
+			g_hash_table_insert (priv->tile_queue, dl->uri, msg);
+			soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
+		} else {
+			g_warning("Could not create soup message");
+			g_free(dl->uri);
+			g_free(dl->folder);
+			g_free(dl->filename);
+			g_free(dl);
+		}
 	}
 }
 
@@ -1187,10 +1234,12 @@ void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
-	g_slist_free(priv->trip);
-	priv->trip = NULL;
-	osm_gps_map_map_redraw (map);
+	if (priv->trip) {
+		g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
+		g_slist_free(priv->trip);
+		priv->trip = NULL;
+		osm_gps_map_map_redraw (map);
+	}
 }
 
 coord_t

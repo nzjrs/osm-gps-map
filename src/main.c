@@ -90,6 +90,13 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 	return FALSE;
 }
 
+void
+on_close (GtkWidget *widget, gpointer user_data)
+{
+	gtk_main_quit();
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -170,7 +177,7 @@ main (int argc, char **argv)
             G_CALLBACK (on_button_release_event), (gpointer) entry);
 
 	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+			G_CALLBACK (on_close), (gpointer) map);
 
 	gtk_widget_show_all (window);
 
