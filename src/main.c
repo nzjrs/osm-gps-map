@@ -23,7 +23,7 @@
 
 static GdkPixbuf *star_image;
 
-//1=google, 2=oam, 3=osm
+//1=google, 2=oam, 3=osm, 4=
 #define MAP_PROVIDER 3
 
 gboolean
@@ -139,6 +139,15 @@ main (int argc, char **argv)
 						NULL);
 #elif MAP_PROVIDER == 3
 	map = osm_gps_map_new ();
+#elif MAP_PROVIDER == 4
+	map = osm_gps_map_new ();
+/*	map = g_object_new (OSM_TYPE_GPS_MAP,
+						"repo-uri","http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/%d/%d/%d.jpg",
+						"tile-cache","/tmp/Maps/OAM",
+						NULL);
+
+				"http://maps-for-free.com/layer/relief/z%d/row%d/%d_%d-%d.jpg"
+				"|%s/%d/%d/%d.png|%s/%d/%d/",*/
 #else
 	#error select map provider
 #endif

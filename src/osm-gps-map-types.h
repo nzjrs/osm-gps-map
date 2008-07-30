@@ -22,6 +22,7 @@
 #define _OSM_GPS_MAP_TYPES_H_
 
 #define TILESIZE 256
+#define DEFAULT_MAX_ZOOM 17
 
 typedef struct {
 	int x1;

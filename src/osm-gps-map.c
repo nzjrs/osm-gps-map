@@ -42,6 +42,7 @@ struct _OsmGpsMapPrivate
 	char * repo_uri;
 	gboolean invert_zoom;
 	int global_zoom;
+	int max_zoom;
 	gboolean global_autocenter;
 	gboolean global_auto_download;
 	int global_x;
@@ -100,6 +101,7 @@ enum
 	PROP_REPO_URI,
 	PROP_TILE_CACHE,
 	PROP_ZOOM,
+	PROP_MAX_ZOOM,
 	PROP_INVERT_ZOOM,
 	PROP_LATITUDE,
 	PROP_LONGITUDE,
@@ -560,8 +562,7 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->mouse_dy = 0;
 	priv->mouse_x = 0;
 	priv->mouse_y = 0;
-	
-	
+
 	//TODO: Change naumber of concurrent connections option
 	priv->soup_session = soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
 															 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
@@ -635,6 +636,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 	case PROP_ZOOM:
 		priv->global_zoom = g_value_get_int (value);
 		break;
+	case PROP_MAX_ZOOM:
+		priv->max_zoom = g_value_get_int (value);
+		break;
 	case PROP_INVERT_ZOOM:
 		priv->invert_zoom = g_value_get_boolean (value);
 		break;
@@ -674,6 +678,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 		break;
 	case PROP_ZOOM:
 		g_value_set_int(value, priv->global_zoom);
+		break;
+	case PROP_MAX_ZOOM:
+		g_value_set_int(value, priv->max_zoom);
 		break;
 	case PROP_INVERT_ZOOM:
 		g_value_set_boolean(value, priv->invert_zoom);
@@ -760,8 +767,18 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    "zoom",
 	                                                    "zoom level",
 	                                                    0, /* minimum property value */
-	                                                    17, /* maximum property value */
+	                                                    DEFAULT_MAX_ZOOM, /* maximum property value */
 	                                                    3,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_MAX_ZOOM,
+	                                 g_param_spec_int ("max-zoom",
+	                                                    "max zoom",
+	                                                    "maximum zoom level",
+	                                                    0, /* minimum property value */
+	                                                    DEFAULT_MAX_ZOOM, /* maximum property value */
+	                                                    DEFAULT_MAX_ZOOM,
 	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
@@ -830,9 +847,10 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 {
 	bbox_pixel_t bbox_pixel;
 	int zoom;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	if (pt1 && pt2) {
-		zoom_end = (zoom_end > 17) ? 17 : zoom_end;
+		zoom_end = (zoom_end > priv->max_zoom) ? priv->max_zoom : zoom_end;
 		g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 	
 		for(zoom=zoom_start; zoom<=zoom_end; zoom++)
@@ -853,7 +871,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	if (!priv->invert_zoom)
 		dl->uri = g_strdup_printf(priv->repo_uri, zoom, x, y);
 	else
-		dl->uri = g_strdup_printf(priv->repo_uri, x, y, 17-zoom);
+		dl->uri = g_strdup_printf(priv->repo_uri, x, y, priv->max_zoom-zoom);
 
 	//check the tile has not already been queued for download
 	msg = (SoupMessage *)g_hash_table_lookup (priv->tile_queue, dl->uri);
@@ -950,7 +968,9 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 
 	priv->global_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
 	priv->global_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
-	priv->global_zoom = zoom;
+
+	//constrain zoom 1 -> max_zoom
+	priv->global_zoom = CLAMP(zoom, 1, priv->max_zoom);
 
 	osm_gps_map_map_redraw(map);
 }
@@ -968,8 +988,8 @@ int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		height_center = GTK_WIDGET(map)->allocation.height / 2;
 		
 		zoom_old = priv->global_zoom;
-		//constrain zoom 1 -> 17
-		priv->global_zoom = (zoom > 1 ? (zoom <= 17 ? zoom : 17) : 1); 
+		//constrain zoom 1 -> max_zoom
+		priv->global_zoom = CLAMP(zoom, 1, priv->max_zoom); 
 		factor = exp(priv->global_zoom * M_LN2)/exp(zoom_old * M_LN2);
 		
 		g_debug("zoom changed from %d to %d factor:%f x:%d", zoom_old,priv->global_zoom, factor, priv->global_x);
