@@ -21,6 +21,9 @@
 #include <fcntl.h>
 #include <math.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <gdk/gdk.h>
 #include <glib.h>
