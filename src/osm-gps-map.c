@@ -116,6 +116,119 @@ void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offs
 void osm_gps_map_print_images (OsmGpsMap *map);
 void osm_gps_map_map_redraw (OsmGpsMap *map);
 
+/*
+ * Description:
+ *   Find and replace text within a string.
+ *
+ * Parameters:
+ *   src  (in) - pointer to source string
+ *   from (in) - pointer to search text
+ *   to   (in) - pointer to replacement text
+ *
+ * Returns:
+ *   Returns a pointer to dynamically-allocated memory containing string
+ *   with occurences of the text pointed to by 'from' replaced by with the
+ *   text pointed to by 'to'.
+ */
+static gchar *
+replace_string(const gchar *src, const gchar *from, const gchar *to)
+{
+	size_t size    = strlen(src) + 1;
+	size_t fromlen = strlen(from);
+	size_t tolen   = strlen(to);
+
+	/* Allocate the first chunk with enough for the original string. */
+	gchar *value = g_malloc(size);
+
+
+    /* We need to return 'value', so let's make a copy to mess around with. */
+	gchar *dst = value;
+
+	if ( value != NULL )
+	{
+		for ( ;; )
+		{
+			/* Try to find the search text. */
+			const gchar *match = g_strstr_len(src, size, from);
+			if ( match != NULL )
+			{
+				gchar *temp;
+				 /* Find out how many characters to copy up to the 'match'. */
+				size_t count = match - src;
+
+
+				/* Calculate the total size the string will be after the
+				 * replacement is performed. */
+				size += tolen - fromlen;
+
+				temp = g_realloc(value, size);
+				if ( temp == NULL )
+				{
+				   g_free(value);
+				   return NULL;
+				}
+
+				/* we'll want to return 'value' eventually, so let's point it 
+				 * to the memory that we are now working with. 
+				 * And let's not forget to point to the right location in 
+				 * the destination as well. */
+				dst = temp + (dst - value);
+				value = temp;
+
+				/*
+				 * Copy from the source to the point where we matched. Then
+				 * move the source pointer ahead by the amount we copied. And
+				 * move the destination pointer ahead by the same amount.
+				 */
+				g_memmove(dst, src, count);
+				src += count;
+				dst += count;
+
+				 /* Now copy in the replacement text 'to' at the position of
+				 * the match. Adjust the source pointer by the text we replaced.
+				 * Adjust the destination pointer by the amount of replacement
+				 * text. */
+				g_memmove(dst, to, tolen);
+				src += fromlen;
+				dst += tolen;
+			}
+			else
+			{
+		        /*
+		         * Copy any remaining part of the string. This includes the null
+		         * termination character.
+		         */
+		        strcpy(dst, src);
+		        break;
+			}
+		}
+	}
+	return value;
+}
+
+static gchar *
+replace_map_uri(const gchar *uri, int zoom, int x, int y)
+{
+	gchar *zs,*xs,*ys,*fz,*fx,*fy;
+
+	zs = g_strdup_printf("%d", zoom);
+	xs = g_strdup_printf("%d", x);
+	ys = g_strdup_printf("%d", y);
+
+	fz = replace_string(uri, "#Z", zs);
+	fx = replace_string(fz, "#X", xs);
+	fy = replace_string(fx, "#Y", ys);
+
+	g_free(zs);   
+	g_free(xs);
+	g_free(ys);
+
+	g_free(fz);
+	g_free(fx);
+
+	return fy;
+}
+
 gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 {
@@ -750,7 +863,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                 g_param_spec_string ("repo-uri",
 	                                                      "repo uri",
 	                                                      "osm repo uri",
-	                                                      "http://tile.openstreetmap.org/%d/%d/%d.png",
+	                                                      "http://tile.openstreetmap.org/#Z/#X/#Y.png",
 	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 	g_object_class_install_property (object_class,
@@ -869,10 +982,10 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	tile_download_t *dl = g_new0(tile_download_t,1);
 	
 	if (!priv->invert_zoom)
-		dl->uri = g_strdup_printf(priv->repo_uri, zoom, x, y);
+		dl->uri = replace_map_uri(priv->repo_uri, zoom, x, y);
 	else
-		dl->uri = g_strdup_printf(priv->repo_uri, x, y, priv->max_zoom-zoom);
-
+		dl->uri = replace_map_uri(priv->repo_uri, priv->max_zoom-zoom, x, y);
+		
 	//check the tile has not already been queued for download
 	msg = (SoupMessage *)g_hash_table_lookup (priv->tile_queue, dl->uri);
 	if (msg != NULL) {
