@@ -61,13 +61,13 @@ struct _OsmGpsMapPrivate
 	GdkGC *gc_map;
 	
 	//For tracking click and drag
-	int wtfcounter;
-	int mouse_dx;
-	int mouse_dy;
-	int	mouse_x;
-	int	mouse_y;
-	int local_x;
-	int local_y;
+	int drag_counter;
+	int drag_mouse_dx;
+	int drag_mouse_dy;
+	int	drag_start_mouse_x;
+	int	drag_start_mouse_y;
+	int drag_start_map_x;
+	int drag_start_map_y;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
@@ -268,7 +268,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-	priv->wtfcounter = 0;
+	priv->drag_counter = 0;
 	if ( (event->type==GDK_BUTTON_PRESS || event->type==GDK_2BUTTON_PRESS) )
 	{
 		g_debug("%s clicked with button %d",event->type==GDK_BUTTON_PRESS ? "single" : "double", event->button);
@@ -278,10 +278,10 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 			
 	}
 
-	priv->mouse_x = (int) event->x;
-	priv->mouse_y = (int) event->y;
-	priv->local_x = priv->map_x;
-	priv->local_y = priv->map_y;
+	priv->drag_start_mouse_x = (int) event->x;
+	priv->drag_start_mouse_y = (int) event->y;
+	priv->drag_start_map_x = priv->map_x;
+	priv->drag_start_map_y = priv->map_y;
 	/*
 	map_x += (int)event->x;
 	map_y += (int)event->y;
@@ -291,7 +291,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 	//if (event->button == 1 && pixmap != NULL)
 		//draw_circle (widget, event->x, event->y);
 
-	//printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, local_x);
+	//printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, drag_start_map_x);
 	
 	return FALSE;
 }
@@ -301,22 +301,22 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-	//printf("*** %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, local_x);
+	//printf("*** %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, drag_start_map_x);
 	
 	//if(global_mapmode)
-	if(priv->wtfcounter >= 6)
+	if(priv->drag_counter >= 6)
 	{
 		g_debug("mouse drag +8events");
-		//int mouse_dx, mouse_dy;
+		//int drag_mouse_dx, drag_mouse_dy;
 		
-		priv->map_x = priv->local_x;//FIXME unnecessary oder auch nicht: kein redraw, wenn nicht bewegt
-		priv->map_y = priv->local_y;
+		priv->map_x = priv->drag_start_map_x;//FIXME unnecessary oder auch nicht: kein redraw, wenn nicht bewegt
+		priv->map_y = priv->drag_start_map_y;
 		
-		//mouse_dx = mouse_x - (int) event->x;//FIXME entweder dx oder mouse_dx
-		//mouse_dy = mouse_y - (int) event->y;
+		//drag_mouse_dx = drag_start_mouse_x - (int) event->x;//FIXME entweder dx oder drag_mouse_dx
+		//drag_mouse_dy = drag_start_mouse_y - (int) event->y;
 		
-		priv->map_x += (priv->mouse_x - (int) event->x);
-		priv->map_y += (priv->mouse_y - (int) event->y);
+		priv->map_x += (priv->drag_start_mouse_x - (int) event->x);
+		priv->map_y += (priv->drag_start_mouse_y - (int) event->y);
 	
 		osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
 	}
@@ -328,11 +328,11 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 	}
 
 	/* ambiguity: this is global mouse dx,y */	
-	priv->mouse_dx = 0;
-	priv->mouse_dy = 0;
-	priv->wtfcounter = 0;
+	priv->drag_mouse_dx = 0;
+	priv->drag_mouse_dy = 0;
+	priv->drag_counter = 0;
 
-    //printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, local_x);
+    //printf("--- %s() %d %d: \n",__PRETTY_FUNCTION__, map_x, drag_start_map_x);
 	return FALSE;
 
 }
@@ -359,47 +359,47 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 	// are we being dragged
 	if (state & GDK_BUTTON1_MASK) {
 		// yes, and we have dragged more than 6 pixels 
-		if (priv->wtfcounter >= 6) {
+		if (priv->drag_counter >= 6) {
 
 			if (priv->map_auto_center)
 				g_object_set(G_OBJECT(widget), "auto-center", FALSE, NULL);
 
-			priv->mouse_dx = x - priv->mouse_x;	
-			priv->mouse_dy = y - priv->mouse_y;
+			priv->drag_mouse_dx = x - priv->drag_start_mouse_x;	
+			priv->drag_mouse_dy = y - priv->drag_start_mouse_y;
 
 			gdk_draw_drawable (
 				widget->window,
 				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 				priv->pixmap,
 				0,0,
-				priv->mouse_dx,priv->mouse_dy,
+				priv->drag_mouse_dx,priv->drag_mouse_dy,
 				-1,-1);
 
 			//Paint white to the top and left of the map if dragging. Its less
 			//ugly than painting the corrupted map		
-			if(priv->mouse_dx>0) {
+			if(priv->drag_mouse_dx>0) {
 				gdk_draw_rectangle (
 					widget->window,
 					widget->style->white_gc,
 					TRUE,
 					0, 0,
-					priv->mouse_dx,
+					priv->drag_mouse_dx,
 					widget->allocation.height);
 			}
 		
-			if (priv->mouse_dy>0) {
+			if (priv->drag_mouse_dy>0) {
 				gdk_draw_rectangle (
 					widget->window,
 					widget->style->white_gc,
 					TRUE,
 					0, 0,
 					widget->allocation.width,
-					priv->mouse_dy);
+					priv->drag_mouse_dy);
 			}
 
-			g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->mouse_x, priv->mouse_y, priv->mouse_dx, priv->mouse_dy, priv->wtfcounter);
+			g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->drag_start_mouse_x, priv->drag_start_mouse_y, priv->drag_mouse_dx, priv->drag_mouse_dy, priv->drag_counter);
 		} else {
-			priv->wtfcounter++;
+			priv->drag_counter++;
 		}
 	}
 
@@ -507,13 +507,16 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 			g_warning("Error creating tile download directory: %s", dl->folder);
 		}
 
-	g_hash_table_remove(priv->tile_queue, dl->uri);
-	g_free(dl->uri);
-	g_free(dl->folder);
-	g_free(dl->filename);
-	g_free(dl);
+		g_hash_table_remove(priv->tile_queue, dl->uri);
 
+		//if we finished downloading all tiles then we need to redraw the line
+		if (g_hash_table_size(priv->tile_queue) == 0)
+			osm_gps_map_map_redraw(map);
 
+		g_free(dl->uri);
+		g_free(dl->folder);
+		g_free(dl->filename);
+		g_free(dl);
 	} 
 	else 
 	{
@@ -702,11 +705,11 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->trip = NULL;
 	priv->images = NULL;
 	
-	priv->wtfcounter = 0;
-	priv->mouse_dx = 0;
-	priv->mouse_dy = 0;
-	priv->mouse_x = 0;
-	priv->mouse_y = 0;
+	priv->drag_counter = 0;
+	priv->drag_mouse_dx = 0;
+	priv->drag_mouse_dy = 0;
+	priv->drag_start_mouse_x = 0;
+	priv->drag_start_mouse_y = 0;
 
 	//TODO: Change naumber of concurrent connections option
 	priv->soup_session = soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
@@ -1415,8 +1418,8 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	}
 
 	// dont draw anything if we are dragging
-	if (priv->wtfcounter > 0) {
-		g_debug("Dragging %d", priv->wtfcounter);
+	if (priv->drag_counter > 0) {
+		g_debug("Dragging %d", priv->drag_counter);
 		return;
 	}
 
