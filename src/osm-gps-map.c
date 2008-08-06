@@ -539,13 +539,13 @@ static void
 osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int zoom)
 {
 	tile_t tile_11, tile_22;
-	int i,j=0;
+	int i,j,num_tiles=0;
 	
 	g_debug("Queuing tile/s for download");
 
 	tile_11 = osm_gps_map_get_tile(map, bbox_pixel.x1, bbox_pixel.y1, zoom);
 	tile_22 = osm_gps_map_get_tile(map, bbox_pixel.x2, bbox_pixel.y2, zoom);
-	
+
 	// loop x1-x2
 	for(i=tile_11.x; i<=tile_22.x; i++)
 	{
@@ -553,9 +553,11 @@ osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int
 		for(j=tile_11.y; j<=tile_22.y; j++)
 		{
 			// x = i, y = j
-			osm_gps_map_download_tile(map, zoom, i, j, -1, -1);
+			//osm_gps_map_download_tile(map, zoom, i, j, -1, -1);
+			num_tiles++;
 		}
 	}
+	g_debug("DL %d",num_tiles);
 }
 
 static bbox_pixel_t
@@ -736,7 +738,10 @@ osm_gps_map_finalize (GObject *object)
 	g_free(priv->repo_uri);
 
 	//clears the trip list and all resources
-	osm_gps_map_clear_gps(OSM_GPS_MAP(object));
+	if (priv->trip) {
+		g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
+		g_slist_free(priv->trip);
+	}
 
 	//free the poi image lists
 	if (priv->images) {
@@ -1021,7 +1026,8 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	if (pt1 && pt2) {
-		zoom_end = (zoom_end > priv->max_zoom) ? priv->max_zoom : zoom_end;
+
+		zoom_end = CLAMP(zoom_end, 1, priv->max_zoom);
 		g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 	
 		for(zoom=zoom_start; zoom<=zoom_end; zoom++)
