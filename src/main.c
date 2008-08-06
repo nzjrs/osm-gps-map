@@ -23,8 +23,11 @@
 
 static GdkPixbuf *star_image;
 
-//1=google, 2=oam, 3=osm, 4=maps-for-free.com
-#define MAP_PROVIDER 4
+//1=google, 2=oam, 3=osm, 4=maps-for-free.com, 5=osmr
+#define MAP_PROVIDER 5
+
+//proxy to use, or NULL
+#define PROXY_URI	NULL
 
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -93,6 +96,7 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 void
 on_close (GtkWidget *widget, gpointer user_data)
 {
+	gtk_widget_destroy(widget);
 	gtk_main_quit();
 }
 
@@ -128,14 +132,18 @@ main (int argc, char **argv)
 	//  w2t.99		Hybrid
 	//  w2p.99		Photo
 	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://mt.google.com/mt?n=404&v=w2p.99&x=#X&y=#Y&zoom=#Z",
-						"tile-cache","/tmp/Maps/Google",
+						"repo-uri","http://mt.google.com/mt?n=404&v=w2.99&x=#X&y=#Y&zoom=#Z",
+						"tile-cache","/tmp/Maps/GoogleM",
 						"invert-zoom",TRUE,
+						"proxy-uri",PROXY_URI,
+//Max Zoom for photo (w2p.99) is 15
+//						"max-zoom",15,
 						NULL);
 #elif MAP_PROVIDER == 2
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg",
 						"tile-cache","/tmp/Maps/OAM",
+						"proxy-uri",PROXY_URI,
 						NULL);
 #elif MAP_PROVIDER == 3
 	map = osm_gps_map_new ();
@@ -143,19 +151,15 @@ main (int argc, char **argv)
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg",
 						"tile-cache","/tmp/Maps/MFF",
-						"max-zoom",12,
+						"proxy-uri",PROXY_URI,
+						"max-zoom",11,
 						NULL);
-
-/*
-		g_sprintf(tile_data_tmp, 
-				"http://maps-for-free.com/layer/relief/z%d/row%d/%d_%d-%d.jpg"
-				"|%s/%d/%d/%d.png|%s/%d/%d/",
-				zoom,y,zoom,x,y,
-				repo->dir, zoom, x, y,
-				repo->dir, zoom, x);
-		maxzoom=12;
-*/
-
+#elif MAP_PROVIDER == 5
+	map = g_object_new (OSM_TYPE_GPS_MAP,
+						"repo-uri","http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png",
+						"tile-cache","/tmp/Maps/OSMR",
+						"proxy-uri",PROXY_URI,
+						NULL);
 #else
 	#error select map provider
 #endif

@@ -37,9 +37,10 @@
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
-	//TODO: These are gobject props, definately need to be renamed prop_x
 	SoupSession * soup_session;
+
 	GHashTable * tile_queue;
+	GHashTable * missing_tiles;
 
 	char * cache_dir;
 	char * repo_uri;
@@ -102,6 +103,7 @@ enum
 	PROP_AUTO_CENTER,
 	PROP_AUTO_DOWNLOAD,
 	PROP_REPO_URI,
+	PROP_PROXY_URI,
 	PROP_TILE_CACHE,
 	PROP_ZOOM,
 	PROP_MAX_ZOOM,
@@ -476,39 +478,61 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 	OsmGpsMap *map = OSM_GPS_MAP(dl->map);
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
-	if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
-		g_warning("Error downloading tile: %d %s", msg->status_code, msg->reason_phrase);
-		soup_session_requeue_message(session, msg);
-		return;
-	}
-
-	if (g_mkdir_with_parents(dl->folder,0700) != 0) {
-		g_warning("Error creating tile download directory: %s", dl->folder);
-		return;
-	}
-
-	fd = open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd != -1) {
-		write (fd, msg->response_body->data, msg->response_body->length);
-		g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
-		close (fd);
+	if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) 
+	{
+		if (g_mkdir_with_parents(dl->folder,0700) == 0) 
+		{
+			fd = open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd != -1) {
+				write (fd, msg->response_body->data, msg->response_body->length);
+				g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
+				close (fd);
 		
-		/* Redraw the area of the screen */
-		if ( msg->response_body->length > 0 ) {
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
-			if(pixbuf) {
-				g_debug("Found tile %s", dl->filename);
-				osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
-				g_object_unref (pixbuf);
+				/* Redraw the area of the screen */
+				if ( msg->response_body->length > 0 ) {
+					GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
+					if(pixbuf) {
+						g_debug("Found tile %s", dl->filename);
+						osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
+						g_object_unref (pixbuf);
+					}
+				}
 			}
 		}
-	}
+		else 
+		{
+			g_warning("Error creating tile download directory: %s", dl->folder);
+		}
 
 	g_hash_table_remove(priv->tile_queue, dl->uri);
 	g_free(dl->uri);
 	g_free(dl->folder);
 	g_free(dl->filename);
 	g_free(dl);
+
+
+	} 
+	else 
+	{
+		g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
+		if (msg->status_code == SOUP_STATUS_NOT_FOUND) 
+		{
+			g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
+			g_hash_table_remove(priv->tile_queue, dl->uri);
+		}
+		else if (msg->status_code == SOUP_STATUS_CANCELLED)
+		{
+			//application exiting
+			;
+		}
+		else 
+		{
+			soup_session_requeue_message(session, msg);
+			return;
+		}
+	}
+
+
 }
 
 static void
@@ -684,8 +708,13 @@ osm_gps_map_init (OsmGpsMap *object)
 															 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
 															 NULL);
 
+
 	//Hash table which maps tile d/l URIs to SoupMessage requests
 	priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
+
+	//Some mapping providers (Google) have varying degrees of tiles at multiple
+	//zoom levels
+	priv->missing_tiles = g_hash_table_new (g_str_hash, g_str_equal);
 
 	
 	gtk_widget_add_events (GTK_WIDGET (object),
@@ -701,6 +730,7 @@ osm_gps_map_finalize (GObject *object)
 	g_object_unref(priv->soup_session);
 
 	g_hash_table_destroy(priv->tile_queue);
+	g_hash_table_destroy(priv->missing_tiles);
 
 	g_free(priv->cache_dir);
 	g_free(priv->repo_uri);
@@ -726,6 +756,7 @@ osm_gps_map_finalize (GObject *object)
 	if(priv->gc_map)
 		g_object_unref(priv->gc_map);
 
+	g_debug("POOF");
 	G_OBJECT_CLASS (osm_gps_map_parent_class)->finalize (object);
 }
 
@@ -745,6 +776,22 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 		break;
 	case PROP_REPO_URI:
 		priv->repo_uri = g_value_dup_string (value);
+		break;
+	case PROP_PROXY_URI:
+		if ( g_value_get_string(value) ) {
+			GValue val = {0};
+			const char *proxy_uri;
+
+			proxy_uri = g_value_get_string(value);
+			g_debug("Setting proxy server: %s", proxy_uri);
+
+			SoupURI* uri = soup_uri_new(proxy_uri);
+			g_value_init(&val, SOUP_TYPE_URI);
+			g_value_take_boxed(&val, uri);
+
+			g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
+		}
+
 		break;
 	case PROP_TILE_CACHE:
 		priv->cache_dir = g_value_dup_string (value);
@@ -870,6 +917,14 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 	g_object_class_install_property (object_class,
+	                                 PROP_PROXY_URI,
+	                                 g_param_spec_string ("proxy-uri",
+	                                                      "proxy uri",
+	                                                      "http proxy uri on NULL",
+	                                                      NULL,
+	                                                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
 	                                 PROP_TILE_CACHE,
 	                                 g_param_spec_string ("tile-cache",
 	                                                      "tile cache",
@@ -989,10 +1044,12 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	else
 		dl->uri = replace_map_uri(priv->repo_uri, priv->max_zoom-zoom, x, y);
 		
-	//check the tile has not already been queued for download
-	msg = (SoupMessage *)g_hash_table_lookup (priv->tile_queue, dl->uri);
-	if (msg != NULL) {
-		g_debug("Tile already downloading");
+	//check the tile has not already been queued for download, 
+	//or has been attempted, and its missing
+	if ( 	g_hash_table_lookup_extended(priv->tile_queue, dl->uri, NULL, NULL) ||
+			g_hash_table_lookup_extended(priv->missing_tiles, dl->uri, NULL, NULL) ) 
+	{
+		g_debug("Tile already downloading (or missing)");
 	    g_free(dl->uri);
 		g_free(dl);
 	} else {
