@@ -52,9 +52,13 @@ struct _OsmGpsMapPrivate
 	int map_x;
 	int map_y;
 
+	//gps tracking state
 	gboolean trip_counter;
 	GSList *trip;
 	GSList *images;
+	float gps_rlat;
+	float gps_rlon;
+	gboolean gps_valid;
 
 	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
@@ -101,6 +105,7 @@ enum
 	PROP_0,
 
 	PROP_AUTO_CENTER,
+	PROP_TRIP_COUNTER,
 	PROP_AUTO_DOWNLOAD,
 	PROP_REPO_URI,
 	PROP_PROXY_URI,
@@ -701,9 +706,9 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	priv->pixmap = NULL;
 
-	priv->trip_counter = TRUE;
 	priv->trip = NULL;
 	priv->images = NULL;
+	priv->gps_valid = FALSE;
 	
 	priv->drag_counter = 0;
 	priv->drag_mouse_dx = 0;
@@ -716,7 +721,6 @@ osm_gps_map_init (OsmGpsMap *object)
 															 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
 															 NULL);
 
-
 	//Hash table which maps tile d/l URIs to SoupMessage requests
 	priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -724,7 +728,6 @@ osm_gps_map_init (OsmGpsMap *object)
 	//zoom levels
 	priv->missing_tiles = g_hash_table_new (g_str_hash, g_str_equal);
 
-	
 	gtk_widget_add_events (GTK_WIDGET (object),
 			GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
 }
@@ -781,6 +784,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 	{
 	case PROP_AUTO_CENTER:
 		priv->map_auto_center = g_value_get_boolean (value);
+		break;
+	case PROP_TRIP_COUNTER:
+		priv->trip_counter = g_value_get_boolean (value);
 		break;
 	case PROP_AUTO_DOWNLOAD:
 		priv->map_auto_download = g_value_get_boolean (value);
@@ -840,6 +846,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 	{
 	case PROP_AUTO_CENTER:
 		g_value_set_boolean(value, priv->map_auto_center);
+		break;
+	case PROP_TRIP_COUNTER:
+		g_value_set_boolean(value, priv->trip_counter);
 		break;
 	case PROP_AUTO_DOWNLOAD:
 		g_value_set_boolean(value, priv->map_auto_download);
@@ -908,6 +917,14 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                 g_param_spec_boolean ("auto-center",
 	                                                       "auto center",
 	                                                       "map auto center",
+	                                                       TRUE,
+	                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_TRIP_COUNTER,
+	                                 g_param_spec_boolean ("trip-counter",
+	                                                       "trip counter",
+	                                                       "should all gps points be added to a trip history for drawing a path",
 	                                                       TRUE,
 	                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
@@ -1133,7 +1150,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
 	if (priv->trip_counter)
 		osm_gps_map_print_track (map, priv->trip);
-		
+	osm_gps_map_draw_gps_point(map);
 	osm_gps_map_print_images(map);
 }
 
@@ -1282,11 +1299,11 @@ printf("LINE x y lx ly: %d %d %d %d\n",x,y,last_x,last_y);
 	} */
 	
 		// Also account for line width (5)
-		gtk_widget_queue_draw_area (
+	gtk_widget_queue_draw_area (
 			GTK_WIDGET(map), 
 			min_x-5, min_y-5,
 			max_x+10, max_y+10);
-
+	g_object_unref(gc);
 }
 
 void
@@ -1377,36 +1394,71 @@ osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
 	/* TODO: Add public function implementation here */
 }
 
+void 
+osm_gps_map_draw_gps_point (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	//incase we get called before we have got a gps point
+	if (priv->gps_valid) {
+		GdkColor color;
+		GdkGC *marker;
+		int x,y;
+
+		x = lon2pixel(priv->map_zoom, priv->gps_rlon) - priv->map_x;
+		y = lat2pixel(priv->map_zoom, priv->gps_rlat) - priv->map_y;
+
+		marker = gdk_gc_new(priv->pixmap);
+		color.red = 5000;
+		color.green = 5000;
+		color.blue = 55000;
+		gdk_gc_set_rgb_fg_color(marker, &color);
+		gdk_gc_set_line_attributes(marker,7, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+		gdk_draw_arc (priv->pixmap,
+					  marker,
+					  FALSE,		//filled
+					  x-15, y-15,	// x,y
+					  30,30,		// width, height
+					  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
+		gtk_widget_queue_draw_area (GTK_WIDGET(map),
+									x-(15+7),y-(15+7),
+									30+7+7,30+7+7);
+		g_object_unref(marker);
+	}
+}
+
 void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
-	//In radians
-	float rlat, rlon;
-	int pixel_x, pixel_y, x, y;
-	GdkColor color;
-	GdkGC *marker;
+	int pixel_x, pixel_y;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
-	rlat = deg2rad(latitude);
-	rlon = deg2rad(longitude);
+	priv->gps_rlat = deg2rad(latitude);
+	priv->gps_rlon = deg2rad(longitude);
+	priv->gps_valid = TRUE;
 
 	// pixel_x,y, offsets
-	pixel_x = lon2pixel(priv->map_zoom, rlon);
-	pixel_y = lat2pixel(priv->map_zoom, rlat);
-
-	x = pixel_x - priv->map_x;
-	y = pixel_y - priv->map_y;
+	pixel_x = lon2pixel(priv->map_zoom, priv->gps_rlon);
+	pixel_y = lat2pixel(priv->map_zoom, priv->gps_rlat);
 
 	//If trip marker add to list of gps points.
 	if (priv->trip_counter) {
 		coord_t *tp = g_new0(coord_t,1);
-		tp->lat = rlat;
-		tp->lon = rlon;
+		tp->lat = priv->gps_rlat;
+		tp->lon = priv->gps_rlon;
 		priv->trip = g_slist_append(priv->trip, tp);
+	}
+
+	// dont draw anything if we are dragging
+	if (priv->drag_counter > 0) {
+		g_debug("Dragging %d", priv->drag_counter);
+		return;
 	}
 
 	//Automatically center the map if the track approaches the edge
 	if(priv->map_auto_center)	{
+		int x = pixel_x - priv->map_x;
+		int y = pixel_y - priv->map_y;
 		int width = GTK_WIDGET(map)->allocation.width;
 		int height = GTK_WIDGET(map)->allocation.height;
 		if( x < (width/2 - width/8) 	|| x > (width/2 + width/8) 	|| 
@@ -1417,36 +1469,10 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 		}
 	}
 
-	// dont draw anything if we are dragging
-	if (priv->drag_counter > 0) {
-		g_debug("Dragging %d", priv->drag_counter);
-		return;
-	}
-
 	// this redraws the map (including the gps track, and adjusts the
 	// map center if it was changed
 	osm_gps_map_map_redraw(map);
-
-	// recalculate x and y incase we have autocentered
-	x = pixel_x - priv->map_x;
-	y = pixel_y - priv->map_y;
-	// draw current position as filled arc
-	// done last so that only one arc is drawn
-	marker = gdk_gc_new(priv->pixmap);
-	color.red = 5000;
-	color.green = 5000;
-	color.blue = 55000;
-	gdk_gc_set_rgb_fg_color(marker, &color);
-    gdk_gc_set_line_attributes(marker,7, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
-	gdk_draw_arc (priv->pixmap,
-				  marker,
-				  FALSE,		//filled
-				  x-15, y-15,	// x,y
-				  30,30,		// width, height
-				  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
-	gtk_widget_queue_draw_area (GTK_WIDGET(map),
-								x-(15+7),y-(15+7),
-								30+7+70,30+7+7);
+	osm_gps_map_draw_gps_point(map);
 
 }
 
