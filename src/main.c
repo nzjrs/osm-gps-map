@@ -24,7 +24,7 @@
 static GdkPixbuf *star_image;
 
 //1=google, 2=oam, 3=osm, 4=maps-for-free.com, 5=osmr
-#define MAP_PROVIDER 5
+#define MAP_PROVIDER 3
 
 //proxy to use, or NULL
 #define PROXY_URI	NULL
