@@ -20,7 +20,7 @@ openstreetmap_gps_map_DEPENDENCIES = \
 	libosmgpsmap.la
 
 openstreetmap_gps_map_LDFLAGS = \
-	-losmgpsmap
+	-losmgpsmap -lgthread-2.0
 
 openstreetmap_gps_map_LDADD = $(OPENSTREETMAP_GPS_MAP_LIBS)
 
@@ -30,4 +30,12 @@ lib_LTLIBRARIES = \
 libosmgpsmap_la_SOURCES = \
 	converter.c \
 	osm-gps-map.c
+
+libosmgpsmapincdir = $(includedir)/osmgpsmap
+libosmgpsmapinc_HEADERS = \
+	osm-gps-map.h
+
+noinst_HEADERS = \
+	converter.h \
+	osm-gps-map-types.h
 
