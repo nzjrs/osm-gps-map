@@ -32,6 +32,7 @@ AC_SUBST(OPENSTREETMAP_GPS_MAP_LIBS)
 
 
 AC_OUTPUT([
+osmgpsmap.pc
 Makefile
 src/Makefile
 

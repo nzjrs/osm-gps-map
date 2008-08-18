@@ -12,13 +12,11 @@ openstreetmap_gps_mapdoc_DATA = \
 	INSTALL\
 	NEWS
 
-EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = osmgpsmap.pc
 
-# Copy all the spec files. Of cource, only one is actually used.
-dist-hook:
-	for specfile in *.spec; do \
-		if test -f $$specfile; then \
-			cp -p $$specfile $(distdir); \
-		fi \
-	done
+EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA) \
+	osmgpsmap.pc.in
+
+
 
