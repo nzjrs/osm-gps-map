@@ -21,7 +21,7 @@ _wrap_osm_gps_map_get_bbox(PyGObject *self)
 
     osm_gps_map_get_bbox(OSM_GPS_MAP(self->obj), &pt1, &pt2);
 
-    return Py_BuildValue("(dddd)", pt1.lat, pt1.lon, pt2.lat, pt2.lon);
+    return Py_BuildValue("(dddd)", pt1.rlat, pt1.rlon, pt2.rlat, pt2.rlon);
 }
 %%
 override osm_gps_map_get_co_ordinates kwargs
@@ -45,6 +45,6 @@ _wrap_osm_gps_map_get_co_ordinates(PyGObject *self, PyObject *args,
 
     coord = osm_gps_map_get_co_ordinates(OSM_GPS_MAP(self->obj), pixel_x, pixel_y);
 
-    return Py_BuildValue("(dd)", coord.lat, coord.lon);
+    return Py_BuildValue("(dd)", coord.rlat, coord.rlon);
 }
 // vim: filetype=c
