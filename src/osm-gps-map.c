@@ -37,13 +37,13 @@
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
-	SoupSession * soup_session;
+	SoupSession *soup_session;
 
-	GHashTable * tile_queue;
-	GHashTable * missing_tiles;
+	GHashTable *tile_queue;
+	GHashTable *missing_tiles;
 
-	char * cache_dir;
-	char * repo_uri;
+	char *cache_dir;
+	char *repo_uri;
 	gboolean invert_zoom;
 	int map_zoom;
 	int max_zoom;
@@ -57,8 +57,7 @@ struct _OsmGpsMapPrivate
 	gboolean show_trip_history;
 	GSList *trip;
 	GSList *images;
-	float gps_rlat;
-	float gps_rlon;
+	coord_t *gps;
 	gboolean gps_valid;
 
 	//Used for storing the joined tiles
@@ -76,30 +75,6 @@ struct _OsmGpsMapPrivate
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
-
-typedef struct {
-	/* The details of the tile to download */
-	char *uri;
-	char *folder;
-	char *filename;
-	/* The area on the screen to redraw when it arrives */
-	OsmGpsMap *map;
-	int offset_x;
-	int offset_y;
-} tile_download_t;
-
-typedef struct {
-	int x;
-	int y;
-	int zoom;
-} tile_t;
-
-typedef struct {
-	coord_t pt;
-	GdkPixbuf *image;
-	int w;
-	int h;
-} image_t;
 
 enum
 {
@@ -122,12 +97,13 @@ enum
 	PROP_TILES_QUEUED
 };
 
+G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
+
 static void osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
-static tile_t osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom);
-void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
-void osm_gps_map_print_images (OsmGpsMap *map);
-void osm_gps_map_map_redraw (OsmGpsMap *map);
-void osm_gps_map_draw_gps_point (OsmGpsMap *map);
+static void osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
+static void osm_gps_map_print_images (OsmGpsMap *map);
+static void osm_gps_map_map_redraw (OsmGpsMap *map);
+static void osm_gps_map_draw_gps_point (OsmGpsMap *map);
 
 
 /*
@@ -243,7 +219,7 @@ replace_map_uri(const gchar *uri, int zoom, int x, int y)
 	return fy;
 }
 
-gboolean
+static gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 {
 	OsmGpsMap *map = OSM_GPS_MAP(widget);
@@ -272,7 +248,7 @@ osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 	return FALSE;
 }
 
-gboolean
+static gboolean
 osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
@@ -291,7 +267,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 	return FALSE;
 }
 
-gboolean
+static gboolean
 osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
@@ -314,7 +290,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 	return FALSE;
 }
 
-gboolean
+static gboolean
 osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 {
 	int x, y, width, height;
@@ -383,7 +359,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 	return FALSE;
 }
 
-gboolean
+static gboolean
 osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
@@ -411,7 +387,7 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 	return FALSE;
 }
 
-gboolean
+static gboolean
 osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
@@ -463,18 +439,25 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 		if (g_mkdir_with_parents(dl->folder,0700) == 0) 
 		{
 			fd = open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd != -1) {
+			if (fd != -1) 
+			{
 				write (fd, msg->response_body->data, msg->response_body->length);
 				g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
 				close (fd);
-		
 				/* Redraw the area of the screen */
-				if ( msg->response_body->length > 0 ) {
-					GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
-					if(pixbuf) {
-						g_debug("Found tile %s", dl->filename);
-						osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
-						g_object_unref (pixbuf);
+				if ( msg->response_body->length > 0 ) 
+				{
+					/* Unless these tiles were explicityly just queued, and 
+					should not be redrawn */
+					if (dl->offset_x != G_MININT && dl->offset_y != G_MININT) 
+					{
+						GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
+						if(pixbuf) 
+						{
+							g_debug("Found tile %s", dl->filename);
+							osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
+							g_object_unref (pixbuf);
+						}
 					}
 				}
 			}
@@ -515,46 +498,6 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 	}
 
 
-}
-
-static void
-osm_gps_map_queue_tile_dl_for_bbox (OsmGpsMap *map, bbox_pixel_t bbox_pixel, int zoom)
-{
-	tile_t tile_11, tile_22;
-	int i,j,num_tiles=0;
-	
-	g_debug("Queuing tile/s for download");
-
-	tile_11 = osm_gps_map_get_tile(map, bbox_pixel.x1, bbox_pixel.y1, zoom);
-	tile_22 = osm_gps_map_get_tile(map, bbox_pixel.x2, bbox_pixel.y2, zoom);
-
-	// loop x1-x2
-	for(i=tile_11.x; i<=tile_22.x; i++)
-	{
-		// loop y1 - y2
-		for(j=tile_11.y; j<=tile_22.y; j++)
-		{
-			// x = i, y = j
-			//osm_gps_map_download_tile(map, zoom, i, j, -1, -1);
-			num_tiles++;
-		}
-	}
-	g_debug("DL %d",num_tiles);
-}
-
-static bbox_pixel_t
-osm_gps_map_get_bbox_pixel (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom)
-{
-	bbox_pixel_t bbox_pixel;
-	
-	bbox_pixel.x1 = lon2pixel(zoom, pt1->lon);
-	bbox_pixel.y1 = lat2pixel(zoom, pt1->lat);
-	bbox_pixel.x2 = lon2pixel(zoom, pt2->lon);
-	bbox_pixel.y2 = lat2pixel(zoom, pt2->lat);
-
-	g_debug("1:%d,%d 2:%d,%d",bbox_pixel.x1,bbox_pixel.y1,bbox_pixel.x2,bbox_pixel.y2);
-	
-	return	bbox_pixel;
 }
 
 static void
@@ -649,22 +592,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 	}
 }
 
-/*
-void
-osm_gps_map_fill_tiles_latlon (OsmGpsMap *map, float lat, float lon, int zoom)
-{
-	int pixel_x, pixel_y;
-	
-	// pixel_x,y, offsets
-	pixel_x = lon2pixel(zoom, lon);
-	pixel_y = lat2pixel(zoom, lat);
-	g_debug("fill_tiles_latlon(): lat %f  %i -- lon %f  %i",lat,pixel_y,lon,pixel_x);
-	
-	osm_gps_map_fill_tiles_pixel (map, pixel_x, pixel_y, zoom);
-}*/
-
-G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
-
 static void
 osm_gps_map_init (OsmGpsMap *object)
 {
@@ -674,6 +601,8 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	priv->trip = NULL;
 	priv->images = NULL;
+
+	priv->gps = g_new0(coord_t, 1);
 	priv->gps_valid = FALSE;
 	
 	priv->drag_counter = 0;
@@ -683,9 +612,10 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->drag_start_mouse_y = 0;
 
 	//TODO: Change naumber of concurrent connections option
-	priv->soup_session = soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
-															 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
-															 NULL);
+	priv->soup_session = soup_session_async_new_with_options(
+								SOUP_SESSION_USER_AGENT,
+								 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
+								 NULL);
 
 	//Hash table which maps tile d/l URIs to SoupMessage requests
 	priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
@@ -1023,24 +953,49 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 void
 osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end)
 {
-	bbox_pixel_t bbox_pixel;
-	int zoom;
+	int i,j,zoom,num_tiles;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
-	if (pt1 && pt2) {
-
+	if (pt1 && pt2) 
+	{
+		gchar *filename;
+		num_tiles = 0;
 		zoom_end = CLAMP(zoom_end, 1, priv->max_zoom);
 		g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 	
 		for(zoom=zoom_start; zoom<=zoom_end; zoom++)
 		{
-			bbox_pixel = osm_gps_map_get_bbox_pixel(map, pt1, pt2, zoom);
-			osm_gps_map_queue_tile_dl_for_bbox(map, bbox_pixel,zoom);
+			int x1,y1,x2,y2;
+
+			x1 = (int)floor((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
+			y1 = (int)floor((float)lat2pixel(zoom, pt1->rlat) / (float)TILESIZE);
+
+			x2 = (int)floor((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
+			y2 = (int)floor((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
+
+			// loop x1-x2
+			for(i=x1; i<=x2; i++)
+			{
+				// loop y1 - y2
+				for(j=y1; j<=y2; j++)
+				{
+					// x = i, y = j
+					filename = g_strdup_printf("%s/%u/%u/%u.png", priv->cache_dir, zoom, i, j);
+					if (!g_file_test(filename, G_FILE_TEST_EXISTS))
+					{
+						//Use G_MININT to signify the tiles should not be blitted when complete
+						osm_gps_map_download_tile(map, zoom, i, j, G_MININT, G_MININT);
+						num_tiles++;
+					}
+					g_free(filename);
+				}
+			}
+			g_debug("DL @Z:%d = %d tiles",zoom,num_tiles);
 		}
 	}
 }
 
-void
+static void
 osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y)
 {
 	SoupMessage *msg;
@@ -1089,16 +1044,16 @@ osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
 	if (pt1 && pt2) {
-		pt1->lat = pixel2lat(priv->map_zoom, priv->map_y);
-		pt1->lon = pixel2lon(priv->map_zoom, priv->map_x);
-		pt2->lat = pixel2lat(priv->map_zoom, priv->map_y + GTK_WIDGET(map)->allocation.height);
-		pt2->lon = pixel2lon(priv->map_zoom, priv->map_x + GTK_WIDGET(map)->allocation.width);
+		pt1->rlat = pixel2lat(priv->map_zoom, priv->map_y);
+		pt1->rlon = pixel2lon(priv->map_zoom, priv->map_x);
+		pt2->rlat = pixel2lat(priv->map_zoom, priv->map_y + GTK_WIDGET(map)->allocation.height);
+		pt2->rlon = pixel2lon(priv->map_zoom, priv->map_x + GTK_WIDGET(map)->allocation.width);
 
-		g_debug("BBOX: %f %f %f %f", pt1->lat, pt1->lon, pt2->lat, pt2->lon);
+		g_debug("BBOX: %f %f %f %f", pt1->rlat, pt1->rlon, pt2->rlat, pt2->rlon);
 	}
 }
 
-void
+static void
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -1123,19 +1078,19 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 		osm_gps_map_print_track (map, priv->trip);
 	osm_gps_map_draw_gps_point(map);
 	osm_gps_map_print_images(map);
-	
+
 	//osm_gps_map_osd_speed(map, 1.5);
 }
 
 void
-osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
+osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int zoom)
 {
 	int pixel_x, pixel_y;
 	float rlat, rlon;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	
-	rlat = deg2rad(lat);
-	rlon = deg2rad(lon);
+	rlat = deg2rad(latitude);
+	rlon = deg2rad(longitude);
 	
 	// pixel_x,y, offsets
 	pixel_x = lon2pixel(zoom, rlon);
@@ -1150,7 +1105,8 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float lat, float lon, int zoom)
 	osm_gps_map_map_redraw(map);
 }
 
-int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
+int 
+osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
 	int zoom_old;
 	double factor;
@@ -1183,7 +1139,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	GSList *list;
 	int pixel_x, pixel_y, x,y, last_x = 0, last_y = 0;
 	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-	float lat, lon;
+	float rlat, rlon;
 	GdkColor color;
 	GdkGC *gc;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -1201,12 +1157,12 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	{
 		coord_t *tp = list->data;
 	
-		lat = tp->lat;
-		lon = tp->lon;
+		rlat = tp->rlat;
+		rlon = tp->rlon;
 		
 		// pixel_x,y, offsets
-		pixel_x = lon2pixel(priv->map_zoom, lon);
-		pixel_y = lat2pixel(priv->map_zoom, lat);
+		pixel_x = lon2pixel(priv->map_zoom, rlon);
+		pixel_y = lat2pixel(priv->map_zoom, rlat);
 		
 		x = pixel_x - priv->map_x;
 		y = pixel_y - priv->map_y;
@@ -1235,7 +1191,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	g_object_unref(gc);
 }
 
-void
+static void
 osm_gps_map_print_images (OsmGpsMap *map)
 {
 	GSList *list;
@@ -1248,12 +1204,12 @@ osm_gps_map_print_images (OsmGpsMap *map)
 		image_t *im = list->data;
 
 		// pixel_x,y, offsets
-		pixel_x = lon2pixel(priv->map_zoom, deg2rad(im->pt.lon));
-		pixel_y = lat2pixel(priv->map_zoom, deg2rad(im->pt.lat));
+		pixel_x = lon2pixel(priv->map_zoom, im->pt.rlon);
+		pixel_y = lat2pixel(priv->map_zoom, im->pt.rlat);
 		
 		g_debug("image %dx%d @: %f,%f (%d,%d)",
 					im->w, im->h,
-					im->pt.lat, im->pt.lon,
+					im->pt.rlat, im->pt.rlon,
 					pixel_x, pixel_y);
 		
 		x = pixel_x - priv->map_x;
@@ -1282,7 +1238,7 @@ osm_gps_map_print_images (OsmGpsMap *map)
 }
 
 void
-osm_gps_map_add_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image)
+osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
 {
 	image_t *im;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -1292,8 +1248,8 @@ osm_gps_map_add_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image)
 		im = g_new0(image_t,1);
 		im->w = gdk_pixbuf_get_width(image);
 		im->h = gdk_pixbuf_get_width(image);
-		im->pt.lat = lat;
-		im->pt.lon = lon;
+		im->pt.rlat = deg2rad(latitude);
+		im->pt.rlon = deg2rad(longitude);
 
 		g_object_ref(image);
 		im->image = image;
@@ -1302,18 +1258,6 @@ osm_gps_map_add_image (OsmGpsMap *map, float lat, float lon, GdkPixbuf *image)
 		
 		osm_gps_map_print_images(map);
 	}
-}
-
-tile_t
-osm_gps_map_get_tile (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom)
-{
-	tile_t tile;
-	
-	tile.x =  (int)floor((float)pixel_x / (float)TILESIZE);
-	tile.y =  (int)floor((float)pixel_y / (float)TILESIZE);
-	tile.zoom = zoom;
-	
-	return tile;
 }
 
 void
@@ -1374,7 +1318,7 @@ osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
 	g_object_unref (gc);
 }
 
-void 
+static void 
 osm_gps_map_draw_gps_point (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -1385,8 +1329,8 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		GdkGC *marker;
 		int x,y;
 
-		x = lon2pixel(priv->map_zoom, priv->gps_rlon) - priv->map_x;
-		y = lat2pixel(priv->map_zoom, priv->gps_rlat) - priv->map_y;
+		x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
+		y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
 
 		marker = gdk_gc_new(priv->pixmap);
 		color.red = 5000;
@@ -1413,19 +1357,19 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	int pixel_x, pixel_y;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
-	priv->gps_rlat = deg2rad(latitude);
-	priv->gps_rlon = deg2rad(longitude);
+	priv->gps->rlat = deg2rad(latitude);
+	priv->gps->rlon = deg2rad(longitude);
 	priv->gps_valid = TRUE;
 
 	// pixel_x,y, offsets
-	pixel_x = lon2pixel(priv->map_zoom, priv->gps_rlon);
-	pixel_y = lat2pixel(priv->map_zoom, priv->gps_rlat);
+	pixel_x = lon2pixel(priv->map_zoom, priv->gps->rlon);
+	pixel_y = lat2pixel(priv->map_zoom, priv->gps->rlat);
 
 	//If trip marker add to list of gps points.
 	if (priv->record_trip_history) {
 		coord_t *tp = g_new0(coord_t,1);
-		tp->lat = priv->gps_rlat;
-		tp->lon = priv->gps_rlon;
+		tp->rlat = priv->gps->rlat;
+		tp->rlon = priv->gps->rlon;
 		priv->trip = g_slist_append(priv->trip, tp);
 	}
 
@@ -1472,8 +1416,8 @@ osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 	coord_t coord;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
-	coord.lat = rad2deg(pixel2lat(priv->map_zoom, priv->map_y + pixel_y));
-	coord.lon = rad2deg(pixel2lon(priv->map_zoom, priv->map_x + pixel_x));
+	coord.rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
+	coord.rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
 	return coord;
 }
 

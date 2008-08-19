@@ -21,6 +21,9 @@
 #ifndef _OSM_GPS_MAP_TYPES_H_
 #define _OSM_GPS_MAP_TYPES_H_
 
+#include <gdk/gdk.h>
+#include "osm-gps-map.h"
+
 #define TILESIZE 256
 #define DEFAULT_MAX_ZOOM 17
 
@@ -30,5 +33,29 @@ typedef struct {
 	int x2;
 	int y2;
 } bbox_pixel_t;
+
+typedef struct {
+	/* The details of the tile to download */
+	char *uri;
+	char *folder;
+	char *filename;
+	/* The area on the screen to redraw when it arrives */
+	OsmGpsMap *map;
+	int offset_x;
+	int offset_y;
+} tile_download_t;
+
+typedef struct {
+	int x;
+	int y;
+	int zoom;
+} tile_t;
+
+typedef struct {
+	coord_t pt;
+	GdkPixbuf *image;
+	int w;
+	int h;
+} image_t;
 
 #endif /* _OSM_GPS_MAP_TYPES_H_ */

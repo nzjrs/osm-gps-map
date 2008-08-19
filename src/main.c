@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
@@ -29,6 +30,38 @@ static GdkPixbuf *star_image;
 //proxy to use, or NULL
 #define PROXY_URI	NULL
 
+typedef struct {
+	OsmGpsMap *map;
+	GtkWidget *entry;
+} timeout_cb_t;
+
+float
+deg2rad(float deg)
+{
+	return (deg * M_PI / 180.0);
+}
+
+float
+rad2deg(float rad)
+{
+	return (rad / M_PI * 180.0);
+}
+
+gboolean 
+on_timeout_check_tiles_in_queue(gpointer user_data)
+{
+	gchar *msg;
+	int remaining;
+	timeout_cb_t *data = (timeout_cb_t *)user_data;
+	g_object_get(data->map, "tiles-queued", &remaining,NULL);
+	
+	msg = g_strdup_printf("%d tiles queued",remaining);
+	gtk_entry_set_text(GTK_ENTRY(data->entry), msg);
+	g_free(msg);
+
+	return remaining > 0;
+}
+
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
@@ -39,13 +72,19 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 	{
 		g_debug("Double clicked %f %f", event->x, event->y);
 		coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
-		osm_gps_map_draw_gps (map, coord.lat,coord.lon, 0);
+		osm_gps_map_draw_gps (map, 
+						rad2deg(coord.rlat),
+						rad2deg(coord.rlon),
+						0);
 	}
 	
 	if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
 	{
 		coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
-		osm_gps_map_add_image (map, coord.lat, coord.lon, star_image);
+		osm_gps_map_add_image (map, 
+						rad2deg(coord.rlat),
+						rad2deg(coord.rlon),
+						star_image);
 	}
 	return FALSE;
 }
@@ -93,6 +132,26 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 	return FALSE;
 }
 
+gboolean 
+on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
+{
+	int zoom,max_zoom;
+	coord_t pt1, pt2;
+	timeout_cb_t *data;
+
+	data = (timeout_cb_t *)user_data;
+
+	osm_gps_map_get_bbox(data->map, &pt1, &pt2);
+	osm_gps_map_add_image (data->map, rad2deg(pt1.rlat), rad2deg(pt1.rlon), star_image);
+	osm_gps_map_add_image (data->map, rad2deg(pt2.rlat), rad2deg(pt2.rlon), star_image);
+
+	g_object_get(data->map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
+	osm_gps_map_download_maps(data->map, &pt1, &pt2, zoom, max_zoom);
+	g_timeout_add(500, on_timeout_check_tiles_in_queue, user_data);
+
+	return FALSE;
+}
+
 void
 on_close (GtkWidget *widget, gpointer user_data)
 {
@@ -111,8 +170,11 @@ main (int argc, char **argv)
 	GtkWidget *zoomInbutton;
 	GtkWidget *zoomOutbutton;
 	GtkWidget *homeButton;
+	GtkWidget *cacheButton;
 
 	GtkWidget *map;
+
+	timeout_cb_t *data;
 
 	g_thread_init(NULL);
 	gtk_init (&argc, &argv);
@@ -190,6 +252,14 @@ main (int argc, char **argv)
     g_signal_connect (G_OBJECT (homeButton), "clicked",
 		      G_CALLBACK (on_home_clicked_event), (gpointer) map);
 	gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);
+
+	data = g_new0(timeout_cb_t, 1);
+	data->map = OSM_GPS_MAP(map);
+	data->entry = entry;
+	cacheButton = gtk_button_new_with_label ("Cache");
+    g_signal_connect (G_OBJECT (cacheButton), "clicked",
+		      G_CALLBACK (on_cache_clicked_event), (gpointer) data);
+	gtk_box_pack_start (GTK_BOX(bbox), cacheButton, FALSE, TRUE, 0);
 
 	//Connect to map events
   	g_signal_connect (map, "button-press-event",

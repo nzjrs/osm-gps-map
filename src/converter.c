@@ -28,13 +28,13 @@
 float
 deg2rad(float deg)
 {
-	return (deg * M_PI / 180);
+	return (deg * M_PI / 180.0);
 }
 
 float
 rad2deg(float rad)
 {
-	return (rad / M_PI * 180);
+	return (rad / M_PI * 180.0);
 }
 
 
