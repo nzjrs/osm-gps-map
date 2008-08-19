@@ -1,11 +1,11 @@
 #!/bin/sh
 PYTHONPATH=/home/john/Albatross/branches/groundstation/osm-gps-map/python/.libs \
     python -c \
-'import gtk
+'import gtk.gdk
 import gobject
 import osmgpsmap
 
-gtk.threads_init()
+gtk.gdk.threads_init()
 
 def print_tiles(map):
     print map.get_property("tiles-queued")

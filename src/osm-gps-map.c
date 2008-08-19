@@ -34,6 +34,8 @@
 #include "osm-gps-map-types.h"
 #include "osm-gps-map.h"
 
+#define ENABLE_DEBUG 0
+
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
@@ -565,6 +567,13 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 }
 
 static void
+my_log_handler (const gchar * log_domain, GLogLevelFlags log_level, const gchar * message, gpointer user_data)
+{
+	if (!(log_level & G_LOG_LEVEL_DEBUG) || ENABLE_DEBUG)
+		g_log_default_handler (log_domain, log_level, message, user_data);
+}
+
+static void
 osm_gps_map_init (OsmGpsMap *object)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
@@ -598,6 +607,8 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	gtk_widget_add_events (GTK_WIDGET (object),
 			GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
+
+  	g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 }
 
 static void

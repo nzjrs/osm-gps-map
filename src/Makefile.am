@@ -31,6 +31,9 @@ libosmgpsmap_la_SOURCES = \
 	converter.c \
 	osm-gps-map.c
 
+libosmgpsmap_la_CFLAGS = \
+	-DG_LOG_DOMAIN=\"OsmGpsMap\"
+
 libosmgpsmapincdir = $(includedir)/osmgpsmap
 libosmgpsmapinc_HEADERS = \
 	osm-gps-map.h
