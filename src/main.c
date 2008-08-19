@@ -140,11 +140,7 @@ on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
 	timeout_cb_t *data;
 
 	data = (timeout_cb_t *)user_data;
-
 	osm_gps_map_get_bbox(data->map, &pt1, &pt2);
-	osm_gps_map_add_image (data->map, rad2deg(pt1.rlat), rad2deg(pt1.rlon), star_image);
-	osm_gps_map_add_image (data->map, rad2deg(pt2.rlat), rad2deg(pt2.rlon), star_image);
-
 	g_object_get(data->map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
 	osm_gps_map_download_maps(data->map, &pt1, &pt2, zoom, max_zoom);
 	g_timeout_add(500, on_timeout_check_tiles_in_queue, user_data);

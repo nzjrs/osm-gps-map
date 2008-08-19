@@ -244,7 +244,7 @@ osm_gps_map_print_images (OsmGpsMap *map)
 		pixel_x = lon2pixel(priv->map_zoom, im->pt.rlon);
 		pixel_y = lat2pixel(priv->map_zoom, im->pt.rlat);
 		
-		g_debug("image %dx%d @: %f,%f (%d,%d)",
+		g_debug("Image %dx%d @: %f,%f (%d,%d)",
 					im->w, im->h,
 					im->pt.rlat, im->pt.rlon,
 					pixel_x, pixel_y);
@@ -499,8 +499,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 	tiles_nx = floor((width  - offset_x) / TILESIZE) + 1;
 	tiles_ny = floor((height - offset_y) / TILESIZE) + 1;
 	
-	g_debug("Map width %i", width);
-
 	tile_x0 =  floor((float)pixel_x / (float)TILESIZE);
 	tile_y0 =  floor((float)pixel_y / (float)TILESIZE);
 
@@ -509,8 +507,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 	{
 		for (j=tile_y0;  j<(tile_y0+tiles_ny); j++)
 		{
-			g_debug("+++++++x,y: %d,%d -- %d, %d -- %d, %d",i,j,pixel_x,pixel_y,offset_x,offset_y);
-
 			if(	j<0	|| i<0 || i>=exp(zoom * M_LN2) || j>=exp(zoom * M_LN2))
 			{
 				gdk_draw_rectangle (priv->pixmap,
@@ -541,7 +537,6 @@ static void
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	g_debug("REPAINTING.............");
 
 	/* draw white background to initialise pixmap */
 	gdk_draw_rectangle (
@@ -783,26 +778,15 @@ osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 	OsmGpsMap *map = OSM_GPS_MAP(widget);
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-	if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK) {
-		if (event->direction == GDK_SCROLL_UP) {
-			g_debug("SCROLL UP+Ctrl");
-		} else {
-			g_debug("SCROLL DOWN+Ctrl");
-		}
+	if (event->direction == GDK_SCROLL_UP)
+	{
+		osm_gps_map_set_zoom(map, priv->map_zoom+1);
 	}
 	else
 	{
-		if (event->direction == GDK_SCROLL_UP)
-		{
-			g_debug("SCROLL UP");
-			osm_gps_map_set_zoom(map, priv->map_zoom+1);
-		}
-		else
-		{
-			g_debug("SCROLL DOWN");
-			osm_gps_map_set_zoom(map, priv->map_zoom-1);
-		}
+		osm_gps_map_set_zoom(map, priv->map_zoom-1);
 	}
+
 	return FALSE;
 }
 
@@ -812,11 +796,6 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
 	priv->drag_counter = 0;
-	if ( (event->type==GDK_BUTTON_PRESS || event->type==GDK_2BUTTON_PRESS) )
-	{
-		g_debug("%s clicked with button %d",event->type==GDK_BUTTON_PRESS ? "single" : "double", event->button);
-	}
-
 	priv->drag_start_mouse_x = (int) event->x;
 	priv->drag_start_mouse_y = (int) event->y;
 	priv->drag_start_map_x = priv->map_x;
@@ -922,8 +901,6 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-	g_debug("CONFIGURE");	
-
 	/* create pixmap */
 	if (priv->pixmap)
 		g_object_unref (priv->pixmap);
@@ -949,8 +926,6 @@ static gboolean
 osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
-
-	g_debug("EXPOSE");
 
 	gdk_draw_drawable (
 		widget->window,
