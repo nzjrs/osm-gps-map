@@ -1,0 +1,23 @@
+How to Build Windows Installers
+0) Make sure that mingw32 is selected as the compiler. Create (or edit) a .cfg file for distutils (distutils.cfg) 
+ 
+	eg: C:\Python25\Lib\distutils\distutils.cfg with this content: 
+	
+	[build]
+	compiler=mingw32
+
+
+1) Make sure Python is in path
+
+	$ echo $PATH
+	.:/usr/local/bin:/mingw/bin:/bin:/c/WINDOWS/system32:/c/WINDOWS:/c/WINDOWS/System32/Wbem:/c/Program Files/Altium Designer 6/System:/c/Program Files/TortoiseSVN/bin:/c/gtk/bin:/c/Python25
+
+2) Make sure the pygobject/pygtk headers and libs can be found
+
+	$ export PKG_CONFIG_PATH=/c/Python25/Lib/pkgconfig/
+	$ pkg-config.exe --libs pygobject-2.0
+	@FFI_LIBS@ -Lc:/Python25/lib -Lc:/gtk/lib -lgobject-2.0 -lglib-2.0 -lint
+	
+3) Build the windows installer
+
+	$ python setup.py bdist_wininst
