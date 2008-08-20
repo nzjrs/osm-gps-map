@@ -44,8 +44,8 @@
   (c-name "osm_gps_map_set_mapcenter")
   (return-type "none")
   (parameters
-    '("float" "lat")
-    '("float" "lon")
+    '("float" "latitude")
+    '("float" "longitude")
     '("int" "zoom")
   )
 )
@@ -59,13 +59,19 @@
   )
 )
 
-(define-method print_track
+(define-method add_track
   (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_print_track")
+  (c-name "osm_gps_map_add_track")
   (return-type "none")
   (parameters
-    '("GSList*" "trackpoint_list")
+    '("GSList*" "track")
   )
+)
+
+(define-method clear_tracks
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_tracks")
+  (return-type "none")
 )
 
 (define-method add_image
@@ -73,10 +79,16 @@
   (c-name "osm_gps_map_add_image")
   (return-type "none")
   (parameters
-    '("float" "lat")
-    '("float" "lon")
+    '("float" "latitude")
+    '("float" "longitude")
     '("GdkPixbuf*" "image")
   )
+)
+
+(define-method clear_images
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_images")
+  (return-type "none")
 )
 
 (define-method osd_speed

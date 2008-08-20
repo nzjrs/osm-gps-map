@@ -57,10 +57,13 @@ struct _OsmGpsMapPrivate
 	//gps tracking state
 	gboolean record_trip_history;
 	gboolean show_trip_history;
-	GSList *trip;
-	GSList *images;
+	GSList *trip_history;
 	coord_t *gps;
 	gboolean gps_valid;
+
+	//additional images or tracks added to the map
+	GSList *tracks;
+	GSList *images;
 
 	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
@@ -226,6 +229,62 @@ replace_map_uri(const gchar *uri, int zoom, int x, int y)
 	g_free(fx);
 
 	return fy;
+}
+
+static void
+my_log_handler (const gchar * log_domain, GLogLevelFlags log_level, const gchar * message, gpointer user_data)
+{
+	if (!(log_level & G_LOG_LEVEL_DEBUG) || ENABLE_DEBUG)
+		g_log_default_handler (log_domain, log_level, message, user_data);
+}
+
+/* clears the trip list and all resources */
+static void
+osm_gps_map_free_trip (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	if (priv->trip_history) {
+		g_slist_foreach(priv->trip_history, (GFunc) g_free, NULL);
+		g_slist_free(priv->trip_history);
+		priv->trip_history = NULL;
+	}
+}
+
+/* clears the tracks and all resources */
+static void
+osm_gps_map_free_tracks (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	if (priv->tracks) 
+	{
+		GSList* tmp = priv->tracks;
+		while (tmp != NULL)
+	  	{
+			g_slist_foreach(tmp->data, (GFunc) g_free, NULL);
+			g_slist_free(tmp->data);
+			tmp = g_slist_next(tmp);
+		}
+		g_slist_free(priv->tracks);
+		priv->tracks = NULL;
+	}
+}
+
+/* free the poi image lists */
+static void
+osm_gps_map_free_images (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	if (priv->images) {
+		GSList *list;
+		for(list = priv->images; list != NULL; list = list->next)
+		{
+			image_t *im = list->data;
+			g_object_unref(im->image);
+			g_free(im);
+		}
+		g_slist_free(priv->images);
+		priv->images = NULL;
+	}
 }
 
 static void
@@ -534,6 +593,86 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, int pixel_x, int pixel_y, int zoom
 }
 
 static void
+osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
+{
+	GSList *list;
+	int pixel_x, pixel_y, x,y, last_x = 0, last_y = 0;
+	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
+	float rlat, rlon;
+	GdkColor color;
+	GdkGC *gc;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	
+	// A red line
+	gc = gdk_gc_new(priv->pixmap);
+	color.green = 0;
+	color.blue = 0;
+	color.red = 60000;
+	gdk_gc_set_rgb_fg_color(gc, &color);
+	gdk_gc_set_line_attributes(gc,
+		5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+
+	for(list = trackpoint_list; list != NULL; list = list->next)
+	{
+		coord_t *tp = list->data;
+	
+		rlat = tp->rlat;
+		rlon = tp->rlon;
+
+		g_debug("PT %f,%f", rlat, rlon);
+		
+		// pixel_x,y, offsets
+		pixel_x = lon2pixel(priv->map_zoom, rlon);
+		pixel_y = lat2pixel(priv->map_zoom, rlat);
+		
+		x = pixel_x - priv->map_x;
+		y = pixel_y - priv->map_y;
+		
+		// first time through loop
+		if (list == trackpoint_list) {
+			last_x = x;
+			last_y = y;
+		}
+
+		gdk_draw_line (priv->pixmap, gc, x, y, last_x, last_y);
+		last_x = x;
+		last_y = y;
+		
+		max_x = MAX(x,max_x);
+		min_x = MIN(x,min_x);
+		max_y = MAX(y,max_y);
+		min_y = MIN(y,min_y);
+	}
+	
+	// Also account for line width (5)
+	gtk_widget_queue_draw_area (
+			GTK_WIDGET(map), 
+			min_x-5, min_y-5,
+			max_x+10, max_y+10);
+	g_object_unref(gc);
+}
+
+/* Prints the gps trip history, and any other tracks */
+static void
+osm_gps_map_print_tracks (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	
+	if (priv->show_trip_history)
+		osm_gps_map_print_track (map, priv->trip_history);
+	if (priv->tracks) 
+	{
+		g_debug("TRACK");
+		GSList* tmp = priv->tracks;
+		while (tmp != NULL)
+	  	{
+			osm_gps_map_print_track (map, tmp->data);
+			tmp = g_slist_next(tmp);
+		}
+	}
+}
+
+static void
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -553,19 +692,11 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 		priv->map_y,
 		priv->map_zoom);
 
-	if (priv->show_trip_history)
-		osm_gps_map_print_track (map, priv->trip);
+	osm_gps_map_print_tracks(map);
 	osm_gps_map_draw_gps_point(map);
 	osm_gps_map_print_images(map);
 
 	//osm_gps_map_osd_speed(map, 1.5);
-}
-
-static void
-my_log_handler (const gchar * log_domain, GLogLevelFlags log_level, const gchar * message, gpointer user_data)
-{
-	if (!(log_level & G_LOG_LEVEL_DEBUG) || ENABLE_DEBUG)
-		g_log_default_handler (log_domain, log_level, message, user_data);
 }
 
 static void
@@ -575,11 +706,12 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	priv->pixmap = NULL;
 
-	priv->trip = NULL;
-	priv->images = NULL;
-
+	priv->trip_history = NULL;
 	priv->gps = g_new0(coord_t, 1);
 	priv->gps_valid = FALSE;
+
+	priv->tracks = NULL;
+	priv->images = NULL;
 	
 	priv->drag_counter = 0;
 	priv->drag_mouse_dx = 0;
@@ -609,6 +741,7 @@ osm_gps_map_init (OsmGpsMap *object)
 static void
 osm_gps_map_finalize (GObject *object)
 {
+	OsmGpsMap *map = OSM_GPS_MAP(object);
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
 
 	soup_session_abort(priv->soup_session);
@@ -620,23 +753,9 @@ osm_gps_map_finalize (GObject *object)
 	g_free(priv->cache_dir);
 	g_free(priv->repo_uri);
 
-	//clears the trip list and all resources
-	if (priv->trip) {
-		g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
-		g_slist_free(priv->trip);
-	}
-
-	//free the poi image lists
-	if (priv->images) {
-		GSList *list;
-		for(list = priv->images; list != NULL; list = list->next)
-		{
-			image_t *im = list->data;
-			g_object_unref(im->image);
-			g_free(im);
-		}
-		g_slist_free(priv->images);
-	}
+	osm_gps_map_free_trip(map);
+	osm_gps_map_free_tracks(map);
+	osm_gps_map_free_images(map);
 
 	if(priv->pixmap)
 		g_object_unref (priv->pixmap);
@@ -1205,61 +1324,20 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 }
 
 void
-osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
+osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 {
-	GSList *list;
-	int pixel_x, pixel_y, x,y, last_x = 0, last_y = 0;
-	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-	float rlat, rlon;
-	GdkColor color;
-	GdkGC *gc;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	
-	// A red line
-	gc = gdk_gc_new(priv->pixmap);
-	color.green = 0;
-	color.blue = 0;
-	color.red = 60000;
-	gdk_gc_set_rgb_fg_color(gc, &color);
-	gdk_gc_set_line_attributes(gc,
-		5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
-
-	for(list = trackpoint_list; list != NULL; list = list->next)
-	{
-		coord_t *tp = list->data;
-	
-		rlat = tp->rlat;
-		rlon = tp->rlon;
-		
-		// pixel_x,y, offsets
-		pixel_x = lon2pixel(priv->map_zoom, rlon);
-		pixel_y = lat2pixel(priv->map_zoom, rlat);
-		
-		x = pixel_x - priv->map_x;
-		y = pixel_y - priv->map_y;
-		
-		// first time through loop
-		if (list == trackpoint_list) {
-			last_x = x;
-			last_y = y;
-		}
-
-		gdk_draw_line (priv->pixmap, gc, x, y, last_x, last_y);
-		last_x = x;
-		last_y = y;
-		
-		max_x = MAX(x,max_x);
-		min_x = MIN(x,min_x);
-		max_y = MAX(y,max_y);
-		min_y = MIN(y,min_y);
+	if (track) {
+		priv->tracks = g_slist_append(priv->tracks, track);
+		osm_gps_map_map_redraw(map);
 	}
-	
-	// Also account for line width (5)
-	gtk_widget_queue_draw_area (
-			GTK_WIDGET(map), 
-			min_x-5, min_y-5,
-			max_x+10, max_y+10);
-	g_object_unref(gc);
+}
+
+void
+osm_gps_map_clear_tracks (OsmGpsMap *map)
+{
+	osm_gps_map_free_tracks(map);
+	osm_gps_map_map_redraw(map);
 }
 
 void
@@ -1281,8 +1359,15 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 	
 		priv->images = g_slist_append(priv->images, im);
 		
-		osm_gps_map_print_images(map);
+		osm_gps_map_map_redraw(map);
 	}
+}
+
+void
+osm_gps_map_clear_images (OsmGpsMap *map)
+{
+	osm_gps_map_free_images(map);
+	osm_gps_map_map_redraw(map);
 }
 
 void
@@ -1362,7 +1447,7 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 		coord_t *tp = g_new0(coord_t,1);
 		tp->rlat = priv->gps->rlat;
 		tp->rlon = priv->gps->rlon;
-		priv->trip = g_slist_append(priv->trip, tp);
+		priv->trip_history = g_slist_append(priv->trip_history, tp);
 	}
 
 	// dont draw anything if we are dragging
@@ -1393,13 +1478,8 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	if (priv->trip) {
-		g_slist_foreach(priv->trip, (GFunc) g_free, NULL);
-		g_slist_free(priv->trip);
-		priv->trip = NULL;
-		osm_gps_map_map_redraw (map);
-	}
+	osm_gps_map_free_trip(map);
+	osm_gps_map_map_redraw(map);
 }
 
 coord_t

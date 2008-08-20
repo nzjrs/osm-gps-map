@@ -3,6 +3,7 @@ headers
 #include <Python.h>
 #include "osm-gps-map.h"
 #include "pygobject.h"
+#include <stdio.h>
 %%
 modulename osmgpsmap
 %%
@@ -47,4 +48,56 @@ _wrap_osm_gps_map_get_co_ordinates(PyGObject *self, PyObject *args,
 
     return Py_BuildValue("(dd)", coord.rlat, coord.rlon);
 }
+%%
+override osm_gps_map_add_track kwargs
+static PyObject *
+_wrap_osm_gps_map_add_track(PyGObject *self, PyObject *args, 
+                                     PyObject *kwargs)
+{
+    static char *kwlist[] = { "track", NULL };
+    float rlat,rlon;
+    int i, numItems;
+    PyObject *list;
+    PyObject *coords;
+    GSList *track = NULL;
+    int err = FALSE;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!:GpsMap.add_track", kwlist, &PyList_Type, &list))
+        return NULL;
+
+    numItems = PyList_Size(list);
+    for(i = 0; i < numItems; i++)
+    {
+        coords = PyList_GetItem(list,i);
+        if(PyArg_ParseTuple(coords,"ff",&rlat,&rlon)) 
+        {
+            coord_t *c = g_new0(coord_t, 1);
+            c->rlat = rlat;
+            c->rlon = rlon;
+            track = g_slist_append(track, c);
+        }
+        else
+        {
+            err = TRUE;
+            break;
+        }
+    }
+
+    if (err) 
+    {
+    	if (track) 
+        {
+    		g_slist_foreach(track, (GFunc) g_free, NULL);
+	    	g_slist_free(track);
+        }
+        PyErr_SetString(PyExc_ValueError, "track cordinates must be a 2-tuple of lat,lon in radians");
+    	return NULL;
+    }
+    else
+    {
+        osm_gps_map_add_track(OSM_GPS_MAP(self->obj), track);
+    }
+    Py_RETURN_NONE;
+}
+
 // vim: filetype=c
