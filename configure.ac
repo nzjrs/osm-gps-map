@@ -1,13 +1,9 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl Created by Anjuta application wizard.
-
 AC_INIT(osm-gps-map, 0.1)
-
-PKG_CONFIG_PATH=/opt/cvs/lib/pkgconfig/
-AC_SUBST(PKG_CONFIG_PATH)
-
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+
+AC_CONFIG_SRCDIR(osmgpsmap.pc.in)
 AM_CONFIG_HEADER(config.h)
+
 AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
@@ -15,21 +11,11 @@ AC_PROG_CC
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
-
-
-
-
-
 AM_PROG_LIBTOOL
-
-
 
 PKG_CHECK_MODULES(OPENSTREETMAP_GPS_MAP, [gtk+-2.0 libsoup-2.4   ])
 AC_SUBST(OPENSTREETMAP_GPS_MAP_CFLAGS)
 AC_SUBST(OPENSTREETMAP_GPS_MAP_LIBS)
-
-
-
 
 AC_OUTPUT([
 osmgpsmap.pc
