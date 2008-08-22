@@ -18,5 +18,6 @@ pkgconfig_DATA = osmgpsmap.pc
 EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA) \
 	osmgpsmap.pc.in
 
-
+release:
+	scp @PACKAGE@-@VERSION@.tar.gz john@open.grcnz.com:/srv/default/downloads/osm-gps-map/
 

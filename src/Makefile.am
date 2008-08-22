@@ -42,3 +42,5 @@ noinst_HEADERS = \
 	converter.h \
 	osm-gps-map-types.h
 
+EXTRA_DIST = \
+	poi.png
