@@ -30,6 +30,9 @@ static GdkPixbuf *star_image;
 //proxy to use, or NULL
 #define PROXY_URI	NULL
 
+//place downloaded maps in ~/Maps/xx (otherwise they go into /tmp)
+#define MAPS_IN_HOME 1
+
 typedef struct {
 	OsmGpsMap *map;
 	GtkWidget *entry;
@@ -167,8 +170,17 @@ main (int argc, char **argv)
 	GtkWidget *zoomOutbutton;
 	GtkWidget *homeButton;
 	GtkWidget *cacheButton;
-
 	GtkWidget *map;
+	char *cachedir;
+
+#if	MAPS_IN_HOME
+	const char *homedir = g_getenv("HOME");
+	if (!homedir)
+		homedir = g_get_home_dir();
+#else
+	const char *homedir = "/tmp";
+#endif
+	g_debug("Map Cache Dir: %s", homedir);
 
 	timeout_cb_t *data;
 
@@ -189,33 +201,41 @@ main (int argc, char **argv)
 	//  w2.99		Maps
 	//  w2t.99		Hybrid
 	//  w2p.99		Photo
+	cachedir = g_strdup_printf("%s/Maps/GoogleM", homedir);
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://mt.google.com/mt?n=404&v=w2.99&x=#X&y=#Y&zoom=#Z",
-						"tile-cache","/tmp/Maps/GoogleM",
+						"tile-cache",cachedir,
 						"invert-zoom",TRUE,
 						"proxy-uri",PROXY_URI,
 //Max Zoom for photo (w2p.99) is 15
 //						"max-zoom",15,
 						NULL);
 #elif MAP_PROVIDER == 2
+	cachedir = g_strdup_printf("%s/Maps/OAM", homedir);
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg",
-						"tile-cache","/tmp/Maps/OAM",
+						"tile-cache",cachedir,
 						"proxy-uri",PROXY_URI,
 						NULL);
 #elif MAP_PROVIDER == 3
-	map = osm_gps_map_new ();
+	cachedir = g_strdup_printf("%s/Maps/OSM", homedir);
+	map = g_object_new (OSM_TYPE_GPS_MAP,
+						"tile-cache",cachedir,
+						NULL);
+	g_free(cachedir);
 #elif MAP_PROVIDER == 4
+	cachedir = g_strdup_printf("%s/Maps/MFF", homedir);
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg",
-						"tile-cache","/tmp/Maps/MFF",
+						"tile-cache",cachedir,
 						"proxy-uri",PROXY_URI,
 						"max-zoom",11,
 						NULL);
 #elif MAP_PROVIDER == 5
+	cachedir = g_strdup_printf("%s/Maps/OSMR", homedir);
 	map = g_object_new (OSM_TYPE_GPS_MAP,
 						"repo-uri","http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png",
-						"tile-cache","/tmp/Maps/OSMR",
+						"tile-cache",cachedir,
 						"proxy-uri",PROXY_URI,
 						NULL);
 #else
