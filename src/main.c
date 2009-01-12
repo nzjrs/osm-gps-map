@@ -17,21 +17,33 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
 #include <math.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
-static GdkPixbuf *star_image;
-
-//1=google, 2=oam, 3=osm, 4=maps-for-free.com, 5=osmr
-#define MAP_PROVIDER 3
-
-//proxy to use, or NULL
-#define PROXY_URI	NULL
-
 //place downloaded maps in ~/Maps/xx (otherwise they go into /tmp)
 #define MAPS_IN_HOME 1
+
+typedef struct {
+	const char *name;
+	const char *uri;
+} map_source_t;
+
+static const map_source_t MAP_SOURCES[] = {
+	{"OpenStreetMap",			MAP_SOURCE_OPENSTREETMAP			},
+	{"OpenStreetMap Renderer",	MAP_SOURCE_OPENSTREETMAP_RENDERER	},
+	{"OpenAerialMap",			MAP_SOURCE_OPENAERIALMAP			},
+	{"Google Maps",				MAP_SOURCE_GOOGLE_MAPS				},
+	{"Google Maps Hybrid",		MAP_SOURCE_GOOGLE_HYBRID			},
+	{"Google Sattelite",		MAP_SOURCE_GOOGLE_SATTELITE			},
+	{"Google Sattelite Quad",	MAP_SOURCE_GOOGLE_SATTELITE_QUAD	},
+	{"Maps For Free",			MAP_SOURCE_MAPS_FOR_FREE			},
+	{"Virtual Earth Sattelite",	MAP_SOURCE_VIRTUAL_EARTH_SATTELITE	},
+};
+
+static GdkPixbuf *STAR_IMAGE;
 
 typedef struct {
 	OsmGpsMap *map;
@@ -87,7 +99,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 		osm_gps_map_add_image (map, 
 						rad2deg(coord.rlat),
 						rad2deg(coord.rlon),
-						star_image);
+						STAR_IMAGE);
 	}
 	return FALSE;
 }
@@ -158,6 +170,17 @@ on_close (GtkWidget *widget, gpointer user_data)
 	gtk_main_quit();
 }
 
+void
+usage (void)
+{
+	int i;
+
+	printf("Usage: %s MAP_ID\n\n", g_get_prgname());
+	printf("Valid Map IDS:\n");
+	for(i=0; i<(sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0])); i++)
+		printf("\t%d:\t%s\n",i,MAP_SOURCES[i].name);
+}
+
 
 int
 main (int argc, char **argv)
@@ -172,6 +195,7 @@ main (int argc, char **argv)
 	GtkWidget *cacheButton;
 	GtkWidget *map;
 	char *cachedir;
+	int map_provider;
 
 #if	MAPS_IN_HOME
 	const char *homedir = g_getenv("HOME");
@@ -180,67 +204,89 @@ main (int argc, char **argv)
 #else
 	const char *homedir = "/tmp";
 #endif
-	g_debug("Map Cache Dir: %s", homedir);
-
 	timeout_cb_t *data;
 
 	g_thread_init(NULL);
 	gtk_init (&argc, &argv);
 
+	if (argc != 2) {
+		usage();
+		return 1;
+	}
+
+	map_provider = atoi(argv[1]);
+	if (map_provider < 0 || map_provider > (sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0]))-1) {
+		usage();
+		return 2;
+	}
+
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 	
-	star_image = gdk_pixbuf_new_from_file_at_size (
-			"poi.png", 24,24,
-			NULL);
-	
-#if MAP_PROVIDER == 1
-	//According to 
-	//http://www.mgmaps.com/cache/MapTileCacher.perl
-	//the v string means:
-	//  w2.99		Maps
-	//  w2t.99		Hybrid
-	//  w2p.99		Photo
-	cachedir = g_strdup_printf("%s/Maps/GoogleM", homedir);
-	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://mt.google.com/mt?n=404&v=w2.99&x=#X&y=#Y&zoom=#Z",
-						"tile-cache",cachedir,
-						"invert-zoom",TRUE,
-						"proxy-uri",PROXY_URI,
-//Max Zoom for photo (w2p.99) is 15
-//						"max-zoom",15,
-						NULL);
-#elif MAP_PROVIDER == 2
-	cachedir = g_strdup_printf("%s/Maps/OAM", homedir);
-	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg",
-						"tile-cache",cachedir,
-						"proxy-uri",PROXY_URI,
-						NULL);
-#elif MAP_PROVIDER == 3
-	cachedir = g_strdup_printf("%s/Maps/OSM", homedir);
-	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"tile-cache",cachedir,
-						NULL);
+	STAR_IMAGE = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
+	cachedir = g_strdup_printf("%s/Maps/%s", homedir, MAP_SOURCES[map_provider].name);
+
+	g_debug("Map Cache Dir: %s", cachedir);
+	g_debug("Map Provider: %s (%d)", MAP_SOURCES[map_provider].name, map_provider);
+
+	switch(map_provider) {
+		//0:	OpenStreetMap
+		//1:	OpenStreetMap Renderer
+		//2:	OpenAerialMap
+		//3:	Google Maps
+		//4:	Google Maps Hybrid
+		//5:	Google Sattelite
+		//6:	Google Sattelite Quad
+		//7:	Maps For Free
+		//8:	Virtual Earth Sattelite
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		default:
+			map = g_object_new (OSM_TYPE_GPS_MAP,
+								"repo-uri",MAP_SOURCES[map_provider].uri,
+								"tile-cache",cachedir,
+								"tile-cache-is-full-path",TRUE,
+								"proxy-uri",g_getenv("http_proxy"),
+								NULL);
+			break;
+		case 7:
+			//Max Zoom = 11
+			map = g_object_new (OSM_TYPE_GPS_MAP,
+								"repo-uri",MAP_SOURCES[map_provider].uri,
+								"tile-cache",cachedir,
+								"tile-cache-is-full-path",TRUE,
+								"proxy-uri",g_getenv("http_proxy"),
+								"max-zoom",11,
+								NULL);
+			break;
+		case 5:
+		case 6:
+			//Max Zoom = 18
+			map = g_object_new (OSM_TYPE_GPS_MAP,
+								"repo-uri",MAP_SOURCES[map_provider].uri,
+								"tile-cache",cachedir,
+								"tile-cache-is-full-path",TRUE,
+								"proxy-uri",g_getenv("http_proxy"),
+								"max-zoom",18,
+								NULL);
+			break;
+		case 8:
+			//Max Zoom = 20
+			map = g_object_new (OSM_TYPE_GPS_MAP,
+								"repo-uri",MAP_SOURCES[map_provider].uri,
+								"tile-cache",cachedir,
+								"tile-cache-is-full-path",TRUE,
+								"proxy-uri",g_getenv("http_proxy"),
+								"max-zoom",20,
+								NULL);
+			break;
+	}
 	g_free(cachedir);
-#elif MAP_PROVIDER == 4
-	cachedir = g_strdup_printf("%s/Maps/MFF", homedir);
-	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg",
-						"tile-cache",cachedir,
-						"proxy-uri",PROXY_URI,
-						"max-zoom",11,
-						NULL);
-#elif MAP_PROVIDER == 5
-	cachedir = g_strdup_printf("%s/Maps/OSMR", homedir);
-	map = g_object_new (OSM_TYPE_GPS_MAP,
-						"repo-uri","http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png",
-						"tile-cache",cachedir,
-						"proxy-uri",PROXY_URI,
-						NULL);
-#else
-	#error select map provider
-#endif
+
+
     vbox = gtk_vbox_new (FALSE, 2);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 

@@ -25,7 +25,28 @@
 #include "osm-gps-map.h"
 
 #define TILESIZE 256
-#define DEFAULT_MAX_ZOOM 17
+#define MAX_ZOOM 20
+#define MIN_ZOOM 0
+
+#define URI_MARKER_X 	"#X"
+#define URI_MARKER_Y 	"#Y"
+#define URI_MARKER_Z 	"#Z"
+#define URI_MARKER_S 	"#S"
+#define URI_MARKER_Q 	"#Q"
+#define URI_MARKER_Q0 	"#W"
+#define URI_MARKER_YS 	"#U"
+#define URI_MARKER_R 	"#R"
+
+#define URI_HAS_X 	(1 << 0)
+#define URI_HAS_Y 	(1 << 1)
+#define URI_HAS_Z 	(1 << 2)
+#define URI_HAS_S 	(1 << 3)
+#define URI_HAS_Q 	(1 << 4)
+#define URI_HAS_Q0 	(1 << 5)
+#define URI_HAS_YS 	(1 << 6)
+#define URI_HAS_R 	(1 << 7)
+//....
+#define URI_FLAG_END (1 << 8)
 
 typedef struct {
 	int x1;

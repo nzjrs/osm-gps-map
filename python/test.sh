@@ -1,5 +1,5 @@
 #!/bin/sh
-PYTHONPATH=/home/john/Albatross/branches/groundstation/osm-gps-map/python/.libs \
+PYTHONPATH=`pwd`/.libs \
     python -c \
 'import gtk.gdk
 import gobject

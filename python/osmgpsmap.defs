@@ -131,6 +131,21 @@
   (c-name "osm_gps_map_new")
   (is-constructor-of "OsmGpsMap")
   (return-type "GtkWidget*")
+  (properties
+    '("auto_center" (optional))
+    '("record_trip_history" (optional))
+    '("show_trip-history" (optional))
+    '("auto_download" (optional))
+    '("repo_uri" (optional))
+    '("proxy_uri" (optional))
+    '("tile_cache" (optional))
+    '("tile_cache_is_full_path" (optional))
+    '("zoom" (optional))
+    '("max_zoom" (optional))
+    '("min_zoom" (optional))
+    '("map_x" (optional))
+    '("map_Y" (optional))
+  )
 )
 
 

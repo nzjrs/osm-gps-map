@@ -18,6 +18,7 @@
  */
 
 #include <pygobject.h>
+#include <osm-gps-map.h>
 
 void pyosmgpsmap_register_classes(PyObject *d);
 extern PyMethodDef pyosmgpsmap_functions[];
@@ -38,6 +39,24 @@ initosmgpsmap(void)
 #if 0
 	pyosmgpsmap_add_constants(m, "OSM_GPS_MAP_");
 #endif
+
+	/* Manually add all the Map repository strings */
+    PyModule_AddObject(m, "MAP_SOURCE_OPENSTREETMAP",
+		       PyString_FromString(MAP_SOURCE_OPENSTREETMAP));
+    PyModule_AddObject(m, "MAP_SOURCE_OPENSTREETMAP_RENDERER",
+		       PyString_FromString(MAP_SOURCE_OPENSTREETMAP_RENDERER));
+    PyModule_AddObject(m, "MAP_SOURCE_OPENAERIALMAP",
+		       PyString_FromString(MAP_SOURCE_OPENAERIALMAP));
+    PyModule_AddObject(m, "MAP_SOURCE_GOOGLE_HYBRID",
+		       PyString_FromString(MAP_SOURCE_GOOGLE_HYBRID));
+    PyModule_AddObject(m, "MAP_SOURCE_GOOGLE_SATTELITE",
+		       PyString_FromString(MAP_SOURCE_GOOGLE_SATTELITE));
+    PyModule_AddObject(m, "MAP_SOURCE_GOOGLE_SATTELITE_QUAD",
+		       PyString_FromString(MAP_SOURCE_GOOGLE_SATTELITE_QUAD));
+    PyModule_AddObject(m, "MAP_SOURCE_MAPS_FOR_FREE",
+		       PyString_FromString(MAP_SOURCE_MAPS_FOR_FREE));
+    PyModule_AddObject(m, "MAP_SOURCE_VIRTUAL_EARTH_SATTELITE",
+		       PyString_FromString(MAP_SOURCE_VIRTUAL_EARTH_SATTELITE));
 
 	if (PyErr_Occurred()) {
 		Py_FatalError("can't initialize module osmgpsmap");

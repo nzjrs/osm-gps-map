@@ -39,20 +39,32 @@
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
-	SoupSession *soup_session;
-
 	GHashTable *tile_queue;
 	GHashTable *missing_tiles;
 
-	char *cache_dir;
-	char *repo_uri;
-	gboolean invert_zoom;
 	int map_zoom;
 	int max_zoom;
+	int min_zoom;
 	gboolean map_auto_center;
 	gboolean map_auto_download;
 	int map_x;
 	int map_y;
+
+	//how we download tiles
+	SoupSession *soup_session;
+	char *proxy_uri;
+
+	//where downloaded tiles are cached	
+	char *cache_dir;
+	gboolean cache_dir_is_full_path;
+
+	//contains flags indicating the various special characters
+	//the uri string contains, that will be replaced when calculating
+	//the uri to download.
+	char *repo_uri;
+	int uri_format;
+	//flag indicating if the map source is located on the google
+	gboolean the_google;
 
 	//gps tracking state
 	gboolean record_trip_history;
@@ -68,6 +80,9 @@ struct _OsmGpsMapPrivate
 	//Used for storing the joined tiles
 	GdkPixmap *pixmap;
 	GdkGC *gc_map;
+
+	//The tile painted when one cannot be found
+	//GdkPixbuf *missing_tile;
 	
 	//For tracking click and drag
 	int drag_counter;
@@ -91,10 +106,11 @@ enum
 	PROP_AUTO_DOWNLOAD,
 	PROP_REPO_URI,
 	PROP_PROXY_URI,
-	PROP_TILE_CACHE,
+	PROP_TILE_CACHE_DIR,
+	PROP_TILE_CACHE_DIR_IS_FULL_PATH,
 	PROP_ZOOM,
 	PROP_MAX_ZOOM,
-	PROP_INVERT_ZOOM,
+	PROP_MIN_ZOOM,
 	PROP_LATITUDE,
 	PROP_LONGITUDE,
 	PROP_MAP_X,
@@ -108,7 +124,8 @@ G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  * Drawing function forward defintions
  */
 static gchar 	*replace_string(const gchar *src, const gchar *from, const gchar *to);
-static gchar 	*replace_map_uri(const gchar *uri, int zoom, int x, int y);
+static void		inspect_map_uri(OsmGpsMap *map);
+static gchar 	*replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
 static void 	osm_gps_map_print_images (OsmGpsMap *map);
 static void		osm_gps_map_draw_gps_point (OsmGpsMap *map);
 static void		osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y);
@@ -208,27 +225,144 @@ replace_string(const gchar *src, const gchar *from, const gchar *to)
 	return value;
 }
 
-static gchar *
-replace_map_uri(const gchar *uri, int zoom, int x, int y)
+static void
+map_convert_coords_to_quadtree_string(OsmGpsMap *map, gint x, gint y, gint zoomlevel,
+                                      gchar *buffer, const gchar initial,
+                                      const gchar *const quadrant)
 {
-	gchar *zs,*xs,*ys,*fz,*fx,*fy;
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    gchar *ptr = buffer;
+    gint n;
 
-	zs = g_strdup_printf("%d", zoom);
-	xs = g_strdup_printf("%d", x);
-	ys = g_strdup_printf("%d", y);
+    if (initial)
+        *ptr++ = initial;
 
-	fz = replace_string(uri, "#Z", zs);
-	fx = replace_string(fz, "#X", xs);
-	fy = replace_string(fx, "#Y", ys);
+    for(n = zoomlevel-1; n >= 0; n--)
+    {
+        gint xbit = (x >> n) & 1;
+        gint ybit = (y >> n) & 1;
+        *ptr++ = quadrant[xbit + 2 * ybit];
+    }
 
-	g_free(zs);   
-	g_free(xs);
-	g_free(ys);
+    *ptr++ = '\0';
+}
 
-	g_free(fz);
-	g_free(fx);
 
-	return fy;
+static void
+inspect_map_uri(OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_X))
+		priv->uri_format |= URI_HAS_X;
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_Y))
+		priv->uri_format |= URI_HAS_Y;
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_Z))
+		priv->uri_format |= URI_HAS_Z;
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_S))
+		priv->uri_format |= URI_HAS_S;
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_Q))
+		priv->uri_format |= URI_HAS_Q;	
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_Q0))
+		priv->uri_format |= URI_HAS_Q0;	
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_YS))
+		priv->uri_format |= URI_HAS_YS;	
+
+	if (g_strrstr(priv->repo_uri, URI_MARKER_R))
+		priv->uri_format |= URI_HAS_R;
+
+	if (g_strrstr(priv->repo_uri, "google.com"))
+		priv->the_google = TRUE;
+
+	g_debug("URI Format: 0x%X (google: %X)", priv->uri_format, priv->the_google);
+
+}
+
+static gchar *
+replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	char *url;
+	unsigned int i;
+	char location[22];
+
+	i = 1;
+	url = g_strdup(uri);
+	while (i < URI_FLAG_END) 
+	{
+		char *s;
+		char *old;
+
+		old = url;
+		switch(i & priv->uri_format) 
+		{
+			case URI_HAS_X:
+				s = g_strdup_printf("%d", x);
+				url = replace_string(url, URI_MARKER_X, s);
+				//g_debug("FOUND " URI_MARKER_X);
+				break;
+			case URI_HAS_Y:
+				s = g_strdup_printf("%d", y);
+				url = replace_string(url, URI_MARKER_Y, s);
+				//g_debug("FOUND " URI_MARKER_Y);
+				break;
+			case URI_HAS_Z:
+				s = g_strdup_printf("%d", zoom);
+				url = replace_string(url, URI_MARKER_Z, s);
+				//g_debug("FOUND " URI_MARKER_Z);
+				break;
+			case URI_HAS_S:
+				s = g_strdup_printf("%d", priv->max_zoom-zoom);
+				url = replace_string(url, URI_MARKER_S, s);
+				//g_debug("FOUND " URI_MARKER_S);
+				break;
+			case URI_HAS_Q:
+				map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'t',"qrts");
+				s = g_strdup_printf("%s", location);
+				url = replace_string(url, URI_MARKER_Q, s);
+				//g_debug("FOUND " URI_MARKER_Q);
+				break;
+			case URI_HAS_Q0:
+				map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'\0', "0123");
+				s = g_strdup_printf("%s", location);
+				url = replace_string(url, URI_MARKER_Q0, s);
+				//g_debug("FOUND " URI_MARKER_Q0);
+				break;
+			case URI_HAS_YS:
+//				s = g_strdup_printf("%d", y);
+//				url = replace_string(url, URI_MARKER_YS, s);
+				g_warning("FOUND " URI_MARKER_YS " NOT IMPLEMENTED");
+//            retval = g_strdup_printf(repo->url,
+//                    tilex,
+//                    (1 << (MAX_ZOOM - zoom)) - tiley - 1,
+//                    zoom - (MAX_ZOOM - 17));
+            	break;
+			case URI_HAS_R:
+				s = g_strdup_printf("%d", g_random_int_range(0,4));
+				url = replace_string(url, URI_MARKER_R, s);
+				//g_debug("FOUND " URI_MARKER_R);
+				break;
+			default:
+				s = NULL;
+				break;
+		}
+
+		if (s) {
+			g_free(s);
+			g_free(old);			
+		}
+
+		i = (i << 1);
+
+	}
+
+	return url;
 }
 
 static void
@@ -467,11 +601,9 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	SoupMessage *msg;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	tile_download_t *dl = g_new0(tile_download_t,1);
-	
-	if (!priv->invert_zoom)
-		dl->uri = replace_map_uri(priv->repo_uri, zoom, x, y);
-	else
-		dl->uri = replace_map_uri(priv->repo_uri, priv->max_zoom-zoom, x, y);
+
+	//calculate the uri to download	
+	dl->uri = replace_map_uri(map, priv->repo_uri, zoom, x, y);
 		
 	//check the tile has not already been queued for download, 
 	//or has been attempted, and its missing
@@ -492,6 +624,20 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	
 		msg = soup_message_new (SOUP_METHOD_GET, dl->uri);
 		if (msg) {
+			if (priv->the_google) {
+				//Set maps.google.com as the referrer
+				g_debug("Setting Google Referrer");
+				soup_message_headers_append(msg->request_headers, "Referer", "http://maps.google.com/");
+				//For google satelite also set the appropriate cookie value
+				if (priv->uri_format & URI_HAS_Q) {
+					const char *cookie = g_getenv("GOOGLE_COOKIE");
+					if (cookie) {
+						g_debug("Adding Google Cookie");
+						soup_message_headers_append(msg->request_headers, "Cookie", cookie);
+					}
+				}
+			}
+
 			g_hash_table_insert (priv->tile_queue, dl->uri, msg);
 			soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
 		} else {
@@ -719,7 +865,10 @@ osm_gps_map_init (OsmGpsMap *object)
 	priv->drag_start_mouse_x = 0;
 	priv->drag_start_mouse_y = 0;
 
-	//TODO: Change naumber of concurrent connections option
+	priv->uri_format = 0;
+	priv->the_google = FALSE;
+
+	//Change naumber of concurrent connections option?
 	priv->soup_session = soup_session_async_new_with_options(
 								SOUP_SESSION_USER_AGENT,
 								 "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
@@ -736,6 +885,36 @@ osm_gps_map_init (OsmGpsMap *object)
 			GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
 
   	g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
+}
+
+static GObject *
+osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam *properties)
+{
+	GObject *object;
+	OsmGpsMapPrivate *priv;
+
+	//Always chain up to the parent constructor
+	object = G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
+	priv = OSM_GPS_MAP_PRIVATE(object);
+
+	if (!priv->cache_dir_is_full_path) {
+		char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
+
+		if (priv->cache_dir) {
+			char *old = priv->cache_dir;
+			//the new cachedir is the given cache dir + the md5 of the repo_uri
+			priv->cache_dir = g_strdup_printf("%s/%s", old, md5);
+			g_debug("Adjusting cache dir %s -> %s", old, priv->cache_dir);
+			g_free(old);
+		} else {
+			//the new cachedir is the current dir + the md5 of the repo_uri
+			priv->cache_dir = g_strdup(md5);
+		}
+		
+		g_free(md5);
+	}	
+
+	return object;
 }
 
 static void
@@ -770,8 +949,9 @@ static void
 osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
 	g_return_if_fail (OSM_IS_GPS_MAP (object));
+	OsmGpsMap *map = OSM_GPS_MAP(object);
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
-	
+
 	switch (prop_id)
 	{
 	case PROP_AUTO_CENTER:
@@ -788,25 +968,29 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 		break;
 	case PROP_REPO_URI:
 		priv->repo_uri = g_value_dup_string (value);
+		inspect_map_uri(map);
 		break;
 	case PROP_PROXY_URI:
 		if ( g_value_get_string(value) ) {
 			GValue val = {0};
-			const char *proxy_uri;
 
-			proxy_uri = g_value_get_string(value);
-			g_debug("Setting proxy server: %s", proxy_uri);
+			priv->proxy_uri = g_value_dup_string (value);
+			g_debug("Setting proxy server: %s", priv->proxy_uri);
 
-			SoupURI* uri = soup_uri_new(proxy_uri);
+			SoupURI* uri = soup_uri_new(priv->proxy_uri);
 			g_value_init(&val, SOUP_TYPE_URI);
 			g_value_take_boxed(&val, uri);
 
 			g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
-		}
+		} else
+			priv->proxy_uri = NULL;
 
 		break;
-	case PROP_TILE_CACHE:
+	case PROP_TILE_CACHE_DIR:
 		priv->cache_dir = g_value_dup_string (value);
+		break;
+	case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
+		priv->cache_dir_is_full_path = g_value_get_boolean (value);
 		break;
 	case PROP_ZOOM:
 		priv->map_zoom = g_value_get_int (value);
@@ -814,8 +998,8 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 	case PROP_MAX_ZOOM:
 		priv->max_zoom = g_value_get_int (value);
 		break;
-	case PROP_INVERT_ZOOM:
-		priv->invert_zoom = g_value_get_boolean (value);
+	case PROP_MIN_ZOOM:
+		priv->min_zoom = g_value_get_int (value);
 		break;
 	case PROP_MAP_X:
 		priv->map_x = g_value_get_int (value);
@@ -854,8 +1038,14 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 	case PROP_REPO_URI:
 		g_value_set_string(value, priv->repo_uri);
 		break;
-	case PROP_TILE_CACHE:
+	case PROP_PROXY_URI:
+		g_value_set_string(value, priv->proxy_uri);
+		break;
+	case PROP_TILE_CACHE_DIR:
 		g_value_set_string(value, priv->cache_dir);
+		break;
+	case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
+		g_value_set_boolean(value, priv->cache_dir_is_full_path);
 		break;
 	case PROP_ZOOM:
 		g_value_set_int(value, priv->map_zoom);
@@ -863,8 +1053,8 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 	case PROP_MAX_ZOOM:
 		g_value_set_int(value, priv->max_zoom);
 		break;
-	case PROP_INVERT_ZOOM:
-		g_value_set_boolean(value, priv->invert_zoom);
+	case PROP_MIN_ZOOM:
+		g_value_set_int(value, priv->min_zoom);
 		break;
 	case PROP_LATITUDE:
 		lat = pixel2lat(priv->map_zoom,
@@ -1005,8 +1195,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 					widget->allocation.width,
 					priv->drag_mouse_dy);
 			}
-
-			g_debug("motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->drag_start_mouse_x, priv->drag_start_mouse_y, priv->drag_mouse_dx, priv->drag_mouse_dy, priv->drag_counter);
+			//g_debug("Motion: %i %i - start: %i %i - dx: %i %i --wtf %i\n", x,y, priv->drag_start_mouse_x, priv->drag_start_mouse_y, priv->drag_mouse_dx, priv->drag_mouse_dy, priv->drag_counter);
 		} else {
 			priv->drag_counter++;
 		}
@@ -1066,6 +1255,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	g_type_class_add_private (klass, sizeof (OsmGpsMapPrivate));
 
 	object_class->finalize = osm_gps_map_finalize;
+	object_class->constructor = osm_gps_map_constructor;
 	object_class->set_property = osm_gps_map_set_property;
 	object_class->get_property = osm_gps_map_get_property;
 	
@@ -1114,7 +1304,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                      "repo uri",
 	                                                      "osm repo uri",
 	                                                      "http://tile.openstreetmap.org/#Z/#X/#Y.png",
-	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_PROXY_URI,
@@ -1122,23 +1312,31 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                      "proxy uri",
 	                                                      "http proxy uri on NULL",
 	                                                      NULL,
-	                                                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
-	                                 PROP_TILE_CACHE,
+	                                 PROP_TILE_CACHE_DIR,
 	                                 g_param_spec_string ("tile-cache",
 	                                                      "tile cache",
 	                                                      "osm local tile cache dir",
-	                                                      "/tmp/Maps/OSM",
-	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+	                                                      "/tmp/Maps",
+	                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_TILE_CACHE_DIR_IS_FULL_PATH,
+	                                 g_param_spec_boolean ("tile-cache-is-full-path",
+	                                                       "tile cache is full path",
+	                                                       "if true, the path passed to tile-cache is interpreted as the full cache path",
+	                                                       FALSE,
+	                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_ZOOM,
 	                                 g_param_spec_int ("zoom",
 	                                                    "zoom",
 	                                                    "zoom level",
-	                                                    0, /* minimum property value */
-	                                                    DEFAULT_MAX_ZOOM, /* maximum property value */
+	                                                    MIN_ZOOM, /* minimum property value */
+	                                                    MAX_ZOOM, /* maximum property value */
 	                                                    3,
 	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -1147,18 +1345,20 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                 g_param_spec_int ("max-zoom",
 	                                                    "max zoom",
 	                                                    "maximum zoom level",
-	                                                    0, /* minimum property value */
-	                                                    DEFAULT_MAX_ZOOM, /* maximum property value */
-	                                                    DEFAULT_MAX_ZOOM,
+	                                                    MIN_ZOOM, /* minimum property value */
+	                                                    MAX_ZOOM, /* maximum property value */
+	                                                    17,
 	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
-	                                 PROP_INVERT_ZOOM,
-	                                 g_param_spec_boolean ("invert-zoom",
-	                                                       "invert zoom",
-	                                                       "is zoom inverted",
-	                                                       FALSE,
-	                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+	                                 PROP_MIN_ZOOM,
+	                                 g_param_spec_int ("min-zoom",
+	                                                    "min zoom",
+	                                                    "minimum zoom level",
+	                                                    MIN_ZOOM, /* minimum property value */
+	                                                    MAX_ZOOM, /* maximum property value */
+	                                                    1,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_LATITUDE,
@@ -1222,7 +1422,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 	{
 		gchar *filename;
 		num_tiles = 0;
-		zoom_end = CLAMP(zoom_end, 1, priv->max_zoom);
+		zoom_end = CLAMP(zoom_end, priv->min_zoom, priv->max_zoom);
 		g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 	
 		for(zoom=zoom_start; zoom<=zoom_end; zoom++)
@@ -1278,19 +1478,19 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int 
 	int pixel_x, pixel_y;
 	float rlat, rlon;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	//constrain zoom min_zoom -> max_zoom
+	priv->map_zoom = CLAMP(zoom, priv->min_zoom, priv->max_zoom);
 	
 	rlat = deg2rad(latitude);
 	rlon = deg2rad(longitude);
 	
 	// pixel_x,y, offsets
-	pixel_x = lon2pixel(zoom, rlon);
-	pixel_y = lat2pixel(zoom, rlat);
+	pixel_x = lon2pixel(priv->map_zoom, rlon);
+	pixel_y = lat2pixel(priv->map_zoom, rlat);
 
 	priv->map_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
 	priv->map_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
-
-	//constrain zoom 1 -> max_zoom
-	priv->map_zoom = CLAMP(zoom, 1, priv->max_zoom);
 
 	osm_gps_map_map_redraw(map);
 }
@@ -1309,11 +1509,11 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		height_center = GTK_WIDGET(map)->allocation.height / 2;
 		
 		zoom_old = priv->map_zoom;
-		//constrain zoom 1 -> max_zoom
-		priv->map_zoom = CLAMP(zoom, 1, priv->max_zoom); 
+		//constrain zoom min_zoom -> max_zoom
+		priv->map_zoom = CLAMP(zoom, priv->min_zoom, priv->max_zoom); 
 		factor = exp(priv->map_zoom * M_LN2)/exp(zoom_old * M_LN2);
 		
-		g_debug("zoom changed from %d to %d factor:%f x:%d", zoom_old,priv->map_zoom, factor, priv->map_x);
+		g_debug("Zoom changed from %d to %d factor:%f x:%d", zoom_old,priv->map_zoom, factor, priv->map_x);
 	
 		priv->map_x = ((priv->map_x + width_center) * factor) - width_center;
 		priv->map_y = ((priv->map_y + height_center) * factor) - height_center;
@@ -1498,3 +1698,4 @@ osm_gps_map_new (void)
 {
 	return g_object_new (OSM_TYPE_GPS_MAP, NULL);
 }
+

@@ -99,5 +99,25 @@ _wrap_osm_gps_map_add_track(PyGObject *self, PyObject *args,
     }
     Py_RETURN_NONE;
 }
+%%
+override osm_gps_map_download_maps kwargs
+static PyObject *
+_wrap_osm_gps_map_download_maps(PyGObject *self, PyObject *args, 
+                                     PyObject *kwargs)
+{
+    static char *kwlist[] = { "lat1", "lon1", "lat2", "lon2", "zoom_start", "zoom_end", NULL };
+    int zoom_start, zoom_end;
+    coord_t pt1, pt2;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+				        "ffffii:GpsMap.download_maps",
+				        kwlist, &pt1.rlat,&pt1.rlon,&pt2.rlat, &pt2.rlon,
+                        &zoom_start, &zoom_end))
+        return NULL;
+
+    osm_gps_map_download_maps(OSM_GPS_MAP(self->obj), &pt1, &pt2, zoom_start, zoom_end);
+
+    Py_RETURN_NONE;
+}
 
 // vim: filetype=c

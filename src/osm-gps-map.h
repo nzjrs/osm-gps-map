@@ -28,12 +28,6 @@
 
 G_BEGIN_DECLS
 
-#define OSM_GPS_MAP_DEFAULT_LATITUDE	23.12	
-#define OSM_GPS_MAP_DEFAULT_LONGITUDE   23.12
-#define OSM_GPS_MAP_TILE_SIZE			256
-#define OSM_GPS_MAP_MAX_ZOOM			17
-#define OSM_GPS_MAP_MIN_ZOOM			1
-
 #define OSM_TYPE_GPS_MAP             (osm_gps_map_get_type ())
 #define OSM_GPS_MAP(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP, OsmGpsMap))
 #define OSM_GPS_MAP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
@@ -58,6 +52,20 @@ typedef struct {
 	float rlat;
 	float rlon;
 } coord_t;
+
+//http://www.internettablettalk.com/forums/showthread.php?t=5209
+//https://garage.maemo.org/plugins/scmsvn/viewcvs.php/trunk/src/maps.c
+//http://www.ponies.me.uk/maps/GoogleTileUtils.java
+//http://www.mgmaps.com/cache/MapTileCacher.perl
+#define MAP_SOURCE_OPENSTREETMAP            "http://tile.openstreetmap.org/#Z/#X/#Y.png"
+#define MAP_SOURCE_OPENSTREETMAP_RENDERER   "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png"
+#define MAP_SOURCE_OPENAERIALMAP            "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg"
+#define MAP_SOURCE_GOOGLE_MAPS              "http://mt#R.google.com/mt?n=404&v=w2.99&x=#X&y=#Y&zoom=#S"
+#define MAP_SOURCE_GOOGLE_HYBRID            "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S"
+#define MAP_SOURCE_GOOGLE_SATTELITE         "http://khm#R.google.com/kh?n=404&v=32&x=#X&y=#Y&z=#Z"
+#define MAP_SOURCE_GOOGLE_SATTELITE_QUAD    "http://khm#R.google.com/kh?n=404&v=3&t=#Q"
+#define MAP_SOURCE_MAPS_FOR_FREE            "http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg"
+#define MAP_SOURCE_VIRTUAL_EARTH_SATTELITE  "http://a#R.ortho.tiles.virtualearth.net/tiles/a#W.jpeg?g=50"
 
 GType osm_gps_map_get_type (void) G_GNUC_CONST;
 void osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end);
