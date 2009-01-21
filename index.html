@@ -52,17 +52,52 @@
       A Gtk+ Widget for Displaying OpenStreetMap tiles. 
     </div>
 
-    <p>A Gtk+ widget, when given GPS points (lat/lon), draws a GPS track, and points of interest on a moving map display. Downloads map data from a number of websites, including openstreetmap.org, openaerialmap.org and others.</p><h2>Dependencies</h2>
-<p>libsoup 2.4</p>
-<h2>Install</h2>
-<p>FIXME</p>
-<h2>License</h2>
-<p>GPLv2</p>
-<h2>Authors</h2>
-<p>John Stowers (john.stowers@gmail.com)<br/>Mark Cottrell (mac132@student.canterbury.ac.nz)<br/>Marcus Bauer (marcus.bauer@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>John Stowers (john.stowers@gmail.com)<br/>      </p>
+    <p>A Gtk+ widget (and Python bindings) that when given GPS co-ordinates, draws a GPS track, and points of interest on a moving map display. 
+    Downloads map data from a number of websites, including openstreetmap.org, openaerialmap.org and others.</p>
+    <p><img src="screenshot.png"/></p>
+    <p>Currently supports a number of different mapping sources<br/>
+    <ul>
+        <li>openstreetmap (default)</li>
+        <li>openaerialmap</li>
+        <li>maps-for-free</li>
+        <li>satellite maps from a number of proprietary providers</li>
+    </ul></p>
+    <p>It also has the following features<br/>
+    <ul>
+        <li>Intelligent caching of maps, including the ability to request a specific area of the map to be cached ahead of time</li>
+        <li>Recording of points of interest on the map (and the ability to add arbitary pixmaps at those points</li>
+        <li>Automatically draws a GPS track (a line showing the history of past added points)</li>
+        <li>Automatic centering on new GPS points</li>
+        <li>Support for multiple other tracks of co-ordinate points</li>
+        <li>Adjustable Zoom</li>
+        <li>Includes a <a href="http://github.com/nzjrs/osm-gps-map/blob/ef4c2f4e20fdb53c30f67356ffefed78e2c38aa6/src/main.c">comprehensive example</a></li>
+        <li>Simple, <a href="http://github.com/nzjrs/osm-gps-map/blob/ef4c2f4e20fdb53c30f67356ffefed78e2c38aa6/src/osm-gps-map.h">flat API</a></li>
+    </ul>
 
+    <h2>Dependencies</h2>
+    <p><ul>
+        <li>libsoup 2.4</li>
+        <li>gtk+</li>
+        <li>pygtk-dev (optional, for python bindings)</li>
+    </ul></p>
+
+    <h2>Install</h2>
+    <p>
+<pre>./autogen.sh; make; make install #C library
+cd python; ./configure; make; make install #Python bindings</pre>
+    </p>
+
+    <h2>License</h2>
+    <p>GPLv2</p>
+
+    <h2>Authors</h2>
+    <p><ul>
+        <li>John Stowers (john.stowers@gmail.com)</li>        <li>Mark Cottrell (mac132@student.canterbury.ac.nz)</li>        <li>Originally based on <a href="http://www.tangogps.org">tangoGPS</a> by Marcus Bauer (marcus.bauer@gmail.com)</li>
+    </ul></p>
+    <h2>Contact</h2>
+    <p><ul>
+        <li>John Stowers (john.stowers@gmail.com)</li>
+    </ul></p>
 
     <h2>Download</h2>
     <p>
