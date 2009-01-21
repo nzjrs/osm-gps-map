@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
+import os
 from distutils.core import setup, Extension
 
 def pkg_config_parse(pkg, opt):
-    import os
     conf = os.popen('pkg-config %s %s' % (opt,pkg)).read()
     opt = opt[-2:]
     return [x.lstrip(opt) for x in conf.split()]
@@ -31,7 +31,6 @@ _osmgpsmap = Extension(name = 'osmgpsmap',
 setup( name = "pyosmgpsmap",
     version = "0.1",
     description = "python interface for osmgpsmap",
-    packages = ['osmgpsmap'],
     ext_modules = [_osmgpsmap],
     )
 
