@@ -1,4 +1,4 @@
-AC_INIT(osm-gps-map, 0.1)
+AC_INIT(osm-gps-map, 0.2)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 AC_CONFIG_SRCDIR(osmgpsmap.pc.in)
