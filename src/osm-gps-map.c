@@ -483,7 +483,7 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		int x,y;
 #ifdef USE_CAIRO
 		cairo_t *cr = gdk_cairo_create(priv->pixmap);
-		int r = GPS_POINT_SIZE;
+		int r = TILE_POINT_SIZE;
 		cairo_pattern_t *pat;
 #else
 		GdkColor color;
@@ -774,9 +774,9 @@ static void
 osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 {
 	GSList *list;
-	int pixel_x, pixel_y, x,y, last_x = 0, last_y = 0;
+	int x,y, last_x = 0, last_y = 0;
 	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-	float rlat, rlon;
+
 	GdkColor color;
 	GdkGC *gc;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -793,19 +793,10 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	for(list = trackpoint_list; list != NULL; list = list->next)
 	{
 		coord_t *tp = list->data;
-	
-		rlat = tp->rlat;
-		rlon = tp->rlon;
 
-		g_debug("PT %f,%f", rlat, rlon);
-		
-		// pixel_x,y, offsets
-		pixel_x = lon2pixel(priv->map_zoom, rlon);
-		pixel_y = lat2pixel(priv->map_zoom, rlat);
-		
-		x = pixel_x - priv->map_x;
-		y = pixel_y - priv->map_y;
-		
+		x = lon2pixel(priv->map_zoom, tp->rlon) - priv->map_x;
+		y = lat2pixel(priv->map_zoom, tp->rlat) - priv->map_y;
+	
 		// first time through loop
 		if (list == trackpoint_list) {
 			last_x = x;
