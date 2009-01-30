@@ -17,9 +17,27 @@ PKG_CHECK_MODULES(OPENSTREETMAP_GPS_MAP, [gtk+-2.0 libsoup-2.4 glib-2.0 >= 2.18]
 AC_SUBST(OPENSTREETMAP_GPS_MAP_CFLAGS)
 AC_SUBST(OPENSTREETMAP_GPS_MAP_LIBS)
 
+AC_ARG_ENABLE(cairo, 
+             [AC_HELP_STRING([--enable-cairo],
+                             [Use cairo to draw the map overlay])],
+              enable_cairo="$enableval",
+              enable_cairo="no")
+
+if test "x$enable_cairo" = "xyes"; then
+    PKG_CHECK_MODULES(CAIRO,[cairo >= 1.8])
+    AC_DEFINE(USE_CAIRO, 1, [Define if we're using cairo])
+    OPENSTREETMAP_GPS_MAP_CFLAGS="$OPENSTREETMAP_GPS_MAP_CFLAGS $CAIRO_CFLAGS"
+    OPENSTREETMAP_GPS_MAP_LIBS="$OPENSTREETMAP_GPS_MAP_LIBS $CAIRO_LIBS"
+fi
+
 AC_OUTPUT([
 osmgpsmap.pc
 Makefile
 src/Makefile
-
 ])
+
+echo
+echo $PACKAGE v$VERSION
+echo
+echo Prefix............... : $prefix
+echo cairo................ : $enable_cairo
