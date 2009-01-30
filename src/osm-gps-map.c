@@ -480,13 +480,37 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 
 	//incase we get called before we have got a gps point
 	if (priv->gps_valid) {
+		int x,y;
+#ifdef USE_CAIRO
+		cairo_t *cr = gdk_cairo_create(priv->pixmap);
+		int r = GPS_POINT_SIZE;
+		cairo_pattern_t *pat;
+#else
 		GdkColor color;
 		GdkGC *marker;
-		int x,y;
+#endif
 
 		x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
 		y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
 
+#ifdef USE_CAIRO
+		// draw ball gradient
+		pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
+		cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
+		cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
+		cairo_set_source (cr, pat);
+		cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+		cairo_fill (cr);
+		cairo_pattern_destroy (pat);
+		// draw ball border
+		cairo_set_line_width (cr, 1.0);
+		cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
+		cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+		cairo_stroke(cr);
+		cairo_destroy(cr);
+
+		gtk_widget_queue_draw_area (GTK_WIDGET(map), x-r, y-r, r*2, r*2);
+#else
 		marker = gdk_gc_new(priv->pixmap);
 		color.red = 5000;
 		color.green = 5000;
@@ -499,10 +523,12 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 					  x-15, y-15,	// x,y
 					  30,30,		// width, height
 					  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
+		g_object_unref(marker);
+
 		gtk_widget_queue_draw_area (GTK_WIDGET(map),
 									x-(15+7),y-(15+7),
 									30+7+7,30+7+7);
-		g_object_unref(marker);
+#endif
 	}
 }
 
