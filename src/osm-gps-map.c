@@ -774,21 +774,32 @@ static void
 osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 {
 	GSList *list;
-	int x,y, last_x = 0, last_y = 0;
+	int x,y;
 	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-
+#ifdef USE_CAIRO
+	cairo_t *cr;
+#else
+	int last_x = 0, last_y = 0;
 	GdkColor color;
 	GdkGC *gc;
+#endif
+
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-	
-	// A red line
+
+#ifdef USE_CAIRO
+	cr = gdk_cairo_create(priv->pixmap);
+	cairo_set_line_width (cr, TILE_LINE_SIZE);
+	cairo_set_source_rgba (cr, 0.2, 0.2, 1.0, 0.6);
+	cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+	cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
+#else
 	gc = gdk_gc_new(priv->pixmap);
 	color.green = 0;
 	color.blue = 0;
 	color.red = 60000;
 	gdk_gc_set_rgb_fg_color(gc, &color);
-	gdk_gc_set_line_attributes(gc,
-		5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+	gdk_gc_set_line_attributes(gc, 5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+#endif
 
 	for(list = trackpoint_list; list != NULL; list = list->next)
 	{
@@ -799,26 +810,45 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	
 		// first time through loop
 		if (list == trackpoint_list) {
+#ifdef USE_CAIRO
+			cairo_move_to(cr, x, y);
+#else
 			last_x = x;
 			last_y = y;
+#endif
 		}
 
+#ifdef USE_CAIRO
+		cairo_line_to(cr, x, y);
+#else
 		gdk_draw_line (priv->pixmap, gc, x, y, last_x, last_y);
 		last_x = x;
 		last_y = y;
+#endif
 		
 		max_x = MAX(x,max_x);
 		min_x = MIN(x,min_x);
 		max_y = MAX(y,max_y);
 		min_y = MIN(y,min_y);
 	}
-	
-	// Also account for line width (5)
+
+#ifdef USE_CAIRO
+	cairo_stroke(cr);
+	cairo_destroy(cr);
+
+	gtk_widget_queue_draw_area (
+			GTK_WIDGET(map),
+			min_x - TILE_LINE_SIZE,
+			min_y - TILE_LINE_SIZE,
+			max_x + (TILE_LINE_SIZE * 2),
+			max_y + (TILE_LINE_SIZE * 2));
+#else	
 	gtk_widget_queue_draw_area (
 			GTK_WIDGET(map), 
 			min_x-5, min_y-5,
 			max_x+10, max_y+10);
 	g_object_unref(gc);
+#endif
 }
 
 /* Prints the gps trip history, and any other tracks */
