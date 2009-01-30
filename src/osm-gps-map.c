@@ -494,6 +494,15 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
 
 #ifdef USE_CAIRO
+		// draw transparent area
+		cairo_set_line_width (cr, 1.5);
+		cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
+		cairo_arc (cr, x, y, r*15, 0, 2 * M_PI);
+		cairo_fill (cr);
+		// draw transparent area border
+		cairo_set_source_rgba (cr, 0.55, 0.55, 0.55, 0.4);
+		cairo_arc (cr, x, y, r*15, 0, 2 * M_PI);
+		cairo_stroke(cr);
 		// draw ball gradient
 		pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
 		cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
