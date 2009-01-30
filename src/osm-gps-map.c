@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <fcntl.h>
 #include <math.h>
 #include <unistd.h>
@@ -33,6 +35,10 @@
 #include "converter.h"
 #include "osm-gps-map-types.h"
 #include "osm-gps-map.h"
+
+#ifdef USE_CAIRO
+#include <cairo.h>
+#endif
 
 #define ENABLE_DEBUG 0
 
