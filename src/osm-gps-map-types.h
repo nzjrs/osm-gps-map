@@ -2,8 +2,11 @@
 /*
  * osm-gps-map-types.h
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
- * Copyright (C) John Stowers 2008 <john.stowers@gmail.com>
- * 
+ * Copyright (C) John Stowers 2009 <john.stowers@gmail.com>
+ *
+ * Contributions by
+ * Everaldo Canuto 2009 <everaldo.canuto@gmail.com>
+ *
  * osm-gps-map.c is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
