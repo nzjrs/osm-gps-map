@@ -61,7 +61,9 @@ typedef struct {
 #define MAP_SOURCE_OPENSTREETMAP_RENDERER   "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png"
 #define MAP_SOURCE_OPENAERIALMAP            "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg"
 #define MAP_SOURCE_GOOGLE_MAPS              "http://mt#R.google.com/mt?x=#X&y=#Y&zoom=#S"
-#define MAP_SOURCE_GOOGLE_HYBRID            "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S"
+//No longer working
+//#define MAP_SOURCE_GOOGLE_HYBRID          "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S"  
+#define MAP_SOURCE_GOOGLE_HYBRID            "http://mt#R.google.com/mt?x=#X&y=#Y&zoom=#S"
 #define MAP_SOURCE_GOOGLE_SATTELITE         "http://khm#R.google.com/kh?n=404&v=32&x=#X&y=#Y&z=#Z"
 #define MAP_SOURCE_GOOGLE_SATTELITE_QUAD    "http://khm#R.google.com/kh?n=404&v=3&t=#Q"
 #define MAP_SOURCE_MAPS_FOR_FREE            "http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg"
