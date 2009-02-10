@@ -481,9 +481,9 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 	//incase we get called before we have got a gps point
 	if (priv->gps_valid) {
 		int x,y;
+		int r = TILE_POINT_SIZE;
 #ifdef USE_CAIRO
 		cairo_t *cr = gdk_cairo_create(priv->pixmap);
-		int r = TILE_POINT_SIZE;
 		cairo_pattern_t *pat;
 #else
 		GdkColor color;
@@ -518,25 +518,30 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		cairo_stroke(cr);
 		cairo_destroy(cr);
 
-		gtk_widget_queue_draw_area (GTK_WIDGET(map), x-r, y-r, r*2, r*2);
+		gtk_widget_queue_draw_area (GTK_WIDGET(map), 
+									x-r, 
+									y-r, 
+									r*2, r*2);
 #else
 		marker = gdk_gc_new(priv->pixmap);
 		color.red = 5000;
 		color.green = 5000;
 		color.blue = 55000;
 		gdk_gc_set_rgb_fg_color(marker, &color);
-		gdk_gc_set_line_attributes(marker,7, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+		gdk_gc_set_line_attributes(marker,TILE_LINE_SIZE, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 		gdk_draw_arc (priv->pixmap,
 					  marker,
-					  FALSE,		//filled
-					  x-15, y-15,	// x,y
-					  30,30,		// width, height
+					  TRUE,			//filled
+					  x-r, y-r,		// x,y
+					  r*2,r*2,		// width, height
 					  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
 		g_object_unref(marker);
 
 		gtk_widget_queue_draw_area (GTK_WIDGET(map),
-									x-(15+7),y-(15+7),
-									30+7+7,30+7+7);
+									x-(r+TILE_LINE_SIZE),
+									y-(r+TILE_LINE_SIZE),
+									(r*2)+TILE_LINE_SIZE+TILE_LINE_SIZE,
+									(r*2)+TILE_LINE_SIZE+TILE_LINE_SIZE);
 #endif
 	}
 }
