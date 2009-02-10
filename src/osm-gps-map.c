@@ -807,7 +807,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	color.blue = 0;
 	color.red = 60000;
 	gdk_gc_set_rgb_fg_color(gc, &color);
-	gdk_gc_set_line_attributes(gc, 5, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+	gdk_gc_set_line_attributes(gc, TILE_LINE_SIZE, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 #endif
 
 	for(list = trackpoint_list; list != NULL; list = list->next)
@@ -841,21 +841,17 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 		min_y = MIN(y,min_y);
 	}
 
-#ifdef USE_CAIRO
-	cairo_stroke(cr);
-	cairo_destroy(cr);
-
 	gtk_widget_queue_draw_area (
 			GTK_WIDGET(map),
 			min_x - TILE_LINE_SIZE,
 			min_y - TILE_LINE_SIZE,
 			max_x + (TILE_LINE_SIZE * 2),
 			max_y + (TILE_LINE_SIZE * 2));
+
+#ifdef USE_CAIRO
+	cairo_stroke(cr);
+	cairo_destroy(cr);
 #else	
-	gtk_widget_queue_draw_area (
-			GTK_WIDGET(map), 
-			min_x-5, min_y-5,
-			max_x+10, max_y+10);
 	g_object_unref(gc);
 #endif
 }
