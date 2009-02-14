@@ -494,7 +494,9 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		int x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
 		int y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
 		int r = priv->ui_gps_point_inner_radius;
+		int r2 = priv->ui_gps_point_outer_radius;
 		int lw = priv->ui_gps_track_width;
+		int mr = MAX(r,r2);
 #ifdef USE_CAIRO
 		cairo_t *cr;
 		cairo_pattern_t *pat;
@@ -505,34 +507,41 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 
 #ifdef USE_CAIRO
 		cr = gdk_cairo_create(priv->pixmap);
-		// draw transparent area
-		cairo_set_line_width (cr, 1.5);
-		cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
-		cairo_arc (cr, x, y, r*15, 0, 2 * M_PI);
-		cairo_fill (cr);
-		// draw transparent area border
-		cairo_set_source_rgba (cr, 0.55, 0.55, 0.55, 0.4);
-		cairo_arc (cr, x, y, r*15, 0, 2 * M_PI);
-		cairo_stroke(cr);
-		// draw ball gradient
-		pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
-		cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
-		cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
-		cairo_set_source (cr, pat);
-		cairo_arc (cr, x, y, r, 0, 2 * M_PI);
-		cairo_fill (cr);
-		cairo_pattern_destroy (pat);
-		// draw ball border
-		cairo_set_line_width (cr, 1.0);
-		cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
-		cairo_arc (cr, x, y, r, 0, 2 * M_PI);
-		cairo_stroke(cr);
-		cairo_destroy(cr);
 
+		// draw transparent area
+		if (r2 > 0) {
+			cairo_set_line_width (cr, 1.5);
+			cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
+			cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
+			cairo_fill (cr);
+			// draw transparent area border
+			cairo_set_source_rgba (cr, 0.55, 0.55, 0.55, 0.4);
+			cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
+			cairo_stroke(cr);
+		}
+
+		// draw ball gradient
+		if (r > 0) {
+			pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
+			cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
+			cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
+			cairo_set_source (cr, pat);
+			cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+			cairo_fill (cr);
+			cairo_pattern_destroy (pat);
+			// draw ball border
+			cairo_set_line_width (cr, 1.0);
+			cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
+			cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+			cairo_stroke(cr);
+		}
+
+		cairo_destroy(cr);
 		gtk_widget_queue_draw_area (GTK_WIDGET(map), 
-									x-r, 
-									y-r, 
-									r*2, r*2);
+									x-mr, 
+									y-mr, 
+									mr*2, 
+									mr*2);
 #else
 		marker = gdk_gc_new(priv->pixmap);
 		color.red = 5000;
@@ -540,19 +549,30 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		color.blue = 55000;
 		gdk_gc_set_rgb_fg_color(marker, &color);
 		gdk_gc_set_line_attributes(marker, lw, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
-		gdk_draw_arc (priv->pixmap,
-					  marker,
-					  TRUE,			//filled
-					  x-r, y-r,		// x,y
-					  r*2,r*2,		// width, height
-					  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
-		g_object_unref(marker);
 
+		if (r2 > 0) { 
+			gdk_draw_arc (priv->pixmap,
+						  marker,
+						  FALSE,			//filled
+						  x-r2, y-r2,		// x,y
+						  r2*2,r2*2,		// width, height
+						  0, 360*64);		// start-end angle 64th, from 3h, anti clockwise
+		}
+		if (r > 0) {
+			gdk_draw_arc (priv->pixmap,
+						  marker,
+						  TRUE,			//filled
+						  x-r, y-r,		// x,y
+						  r*2,r*2,		// width, height
+						  0, 360*64);	// start-end angle 64th, from 3h, anti clockwise
+		}
+
+		g_object_unref(marker);
 		gtk_widget_queue_draw_area (GTK_WIDGET(map),
-									x-(r+lw),
-									y-(r+lw),
-									(r*2)+lw+lw,
-									(r*2)+lw+lw);
+									x-(mr+lw),
+									y-(mr+lw),
+									(mr*2)+lw+lw,
+									(mr*2)+lw+lw);
 #endif
 	}
 }
@@ -1523,7 +1543,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    "radius of the gps point highlight circle",
 	                                                    0, 			/* minimum property value */
 	                                                    G_MAXINT, 	/* maximum property value */
-	                                                    5,
+	                                                    20,
 	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 }
