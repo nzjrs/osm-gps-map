@@ -101,6 +101,11 @@ struct _OsmGpsMapPrivate
 	int	drag_start_mouse_y;
 	int drag_start_map_x;
 	int drag_start_map_y;
+
+	//for customizing the redering of the gps track
+	int ui_gps_track_width;
+	int ui_gps_point_inner_radius;
+	int ui_gps_point_outer_radius;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
@@ -124,7 +129,10 @@ enum
 	PROP_LONGITUDE,
 	PROP_MAP_X,
 	PROP_MAP_Y,
-	PROP_TILES_QUEUED
+	PROP_TILES_QUEUED,
+	PROP_GPS_TRACK_WIDTH,
+	PROP_GPS_POINT_R1,
+	PROP_GPS_POINT_R2
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -483,20 +491,20 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 
 	//incase we get called before we have got a gps point
 	if (priv->gps_valid) {
-		int x,y;
-		int r = TILE_POINT_SIZE;
+		int x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
+		int y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
+		int r = priv->ui_gps_point_inner_radius;
+		int lw = priv->ui_gps_track_width;
 #ifdef USE_CAIRO
-		cairo_t *cr = gdk_cairo_create(priv->pixmap);
+		cairo_t *cr;
 		cairo_pattern_t *pat;
 #else
 		GdkColor color;
 		GdkGC *marker;
 #endif
 
-		x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
-		y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
-
 #ifdef USE_CAIRO
+		cr = gdk_cairo_create(priv->pixmap);
 		// draw transparent area
 		cairo_set_line_width (cr, 1.5);
 		cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
@@ -531,7 +539,7 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		color.green = 5000;
 		color.blue = 55000;
 		gdk_gc_set_rgb_fg_color(marker, &color);
-		gdk_gc_set_line_attributes(marker,TILE_LINE_SIZE, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+		gdk_gc_set_line_attributes(marker, lw, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 		gdk_draw_arc (priv->pixmap,
 					  marker,
 					  TRUE,			//filled
@@ -541,10 +549,10 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 		g_object_unref(marker);
 
 		gtk_widget_queue_draw_area (GTK_WIDGET(map),
-									x-(r+TILE_LINE_SIZE),
-									y-(r+TILE_LINE_SIZE),
-									(r*2)+TILE_LINE_SIZE+TILE_LINE_SIZE,
-									(r*2)+TILE_LINE_SIZE+TILE_LINE_SIZE);
+									x-(r+lw),
+									y-(r+lw),
+									(r*2)+lw+lw,
+									(r*2)+lw+lw);
 #endif
 	}
 }
@@ -790,9 +798,12 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 static void
 osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 {
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
 	GSList *list;
 	int x,y;
 	int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
+	int lw = priv->ui_gps_track_width;
 #ifdef USE_CAIRO
 	cairo_t *cr;
 #else
@@ -801,11 +812,9 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	GdkGC *gc;
 #endif
 
-	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-
 #ifdef USE_CAIRO
 	cr = gdk_cairo_create(priv->pixmap);
-	cairo_set_line_width (cr, TILE_LINE_SIZE);
+	cairo_set_line_width (cr, lw);
 	cairo_set_source_rgba (cr, 0.2, 0.2, 1.0, 0.6);
 	cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
 	cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
@@ -815,7 +824,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 	color.blue = 0;
 	color.red = 60000;
 	gdk_gc_set_rgb_fg_color(gc, &color);
-	gdk_gc_set_line_attributes(gc, TILE_LINE_SIZE, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
+	gdk_gc_set_line_attributes(gc, lw, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 #endif
 
 	for(list = trackpoint_list; list != NULL; list = list->next)
@@ -851,10 +860,10 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 
 	gtk_widget_queue_draw_area (
 			GTK_WIDGET(map),
-			min_x - TILE_LINE_SIZE,
-			min_y - TILE_LINE_SIZE,
-			max_x + (TILE_LINE_SIZE * 2),
-			max_y + (TILE_LINE_SIZE * 2));
+			min_x - lw,
+			min_y - lw,
+			max_x + (lw * 2),
+			max_y + (lw * 2));
 
 #ifdef USE_CAIRO
 	cairo_stroke(cr);
@@ -1069,6 +1078,15 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 	case PROP_MAP_Y:
 		priv->map_y = g_value_get_int (value);
 		break;
+	case PROP_GPS_TRACK_WIDTH:
+		priv->ui_gps_track_width = g_value_get_int (value);
+		break;
+	case PROP_GPS_POINT_R1:
+		priv->ui_gps_point_inner_radius = g_value_get_int (value);
+		break;
+	case PROP_GPS_POINT_R2:
+		priv->ui_gps_point_outer_radius = g_value_get_int (value);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1136,6 +1154,15 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 		break;
 	case PROP_TILES_QUEUED:
 		g_value_set_int(value, g_hash_table_size(priv->tile_queue));
+		break;
+	case PROP_GPS_TRACK_WIDTH:
+		g_value_set_int(value, priv->ui_gps_track_width);
+		break;
+	case PROP_GPS_POINT_R1:
+		g_value_set_int(value, priv->ui_gps_point_inner_radius);
+		break;
+	case PROP_GPS_POINT_R2:
+		g_value_set_int(value, priv->ui_gps_point_outer_radius);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1468,6 +1495,36 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 	                                                    G_MAXINT, /* maximum property value */
 	                                                    0,
 	                                                    G_PARAM_READABLE));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_GPS_TRACK_WIDTH,
+	                                 g_param_spec_int ("gps-track-width",
+	                                                    "gps-track-width",
+	                                                    "width of the lines drawn for the gps track",
+	                                                    1, 			/* minimum property value */
+	                                                    G_MAXINT, 	/* maximum property value */
+	                                                    4,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_GPS_POINT_R1,
+	                                 g_param_spec_int ("gps-track-point-radius",
+	                                                    "gps-track-point-radius",
+	                                                    "radius of the gps point inner circle",
+	                                                    0, 			/* minimum property value */
+	                                                    G_MAXINT, 	/* maximum property value */
+	                                                    5,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_GPS_POINT_R2,
+	                                 g_param_spec_int ("gps-track-highlight-radius",
+	                                                    "gps-track-highlight-radius",
+	                                                    "radius of the gps point highlight circle",
+	                                                    0, 			/* minimum property value */
+	                                                    G_MAXINT, 	/* maximum property value */
+	                                                    5,
+	                                                    G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 }
 
