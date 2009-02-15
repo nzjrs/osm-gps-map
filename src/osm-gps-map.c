@@ -751,6 +751,18 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 	{
 		if (priv->map_auto_download)
 			osm_gps_map_download_tile(map,zoom,x,y,offset_x,offset_y);
+
+		//prevent some artifacts when drawing not yet loaded areas.
+		gdk_draw_rectangle (
+			priv->pixmap,
+			GTK_WIDGET(map)->style->white_gc,
+			TRUE, offset_x, offset_y, TILESIZE, TILESIZE);
+
+		gtk_widget_queue_draw_area (
+			GTK_WIDGET(map),
+			offset_x,offset_y,
+			TILESIZE,TILESIZE);
+
 	}
 	g_free(filename);
 }
