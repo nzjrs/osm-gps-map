@@ -847,7 +847,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 #ifdef USE_CAIRO
 	cr = gdk_cairo_create(priv->pixmap);
 	cairo_set_line_width (cr, lw);
-	cairo_set_source_rgba (cr, 0.2, 0.2, 1.0, 0.6);
+	cairo_set_source_rgba (cr, 60000.0/65535.0, 0.0, 0.0, 0.6);
 	cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
 	cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
 #else
