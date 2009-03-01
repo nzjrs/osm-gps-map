@@ -39,7 +39,7 @@ rad2deg(float rad)
 
 
 int
-lat2pixel(	float zoom,
+lat2pixel(	int zoom,
 		float lat)
 {
 	float lat_m;
@@ -47,8 +47,12 @@ lat2pixel(	float zoom,
 
 	lat_m = atanh(sin(lat));
 	
-	pixel_y = -( (lat_m * TILESIZE * exp(zoom * M_LN2) ) / (2*M_PI)) + 
-		    (exp(zoom * M_LN2) * (TILESIZE/2) );
+	/* the formula is
+	 *
+	 * pixel_y = -(2^zoom * TILESIZE * lat_m) / 2PI + (2^zoom * TILESIZE) / 2
+	 */
+	pixel_y = -(int)( (lat_m * TILESIZE * (1 << zoom) ) / (2*M_PI)) +
+		    ((1 << zoom) * (TILESIZE/2) );
 
 
 	return pixel_y;
@@ -56,13 +60,17 @@ lat2pixel(	float zoom,
 
 
 int
-lon2pixel(	float zoom,
+lon2pixel(	int zoom,
 		float lon)
 {
 	int pixel_x;
 
-	pixel_x = ( (lon * TILESIZE * exp(zoom * M_LN2) ) / (2*M_PI) ) + 
-		    ( exp(zoom * M_LN2) * (TILESIZE/2) );
+	/* the formula is
+	 *
+	 * pixel_x = (2^zoom * TILESIZE * lon) / 2PI + (2^zoom * TILESIZE) / 2
+	 */
+	pixel_x = (int)(( lon * TILESIZE * (1 << zoom) ) / (2*M_PI)) +
+		    ( (1 << zoom) * (TILESIZE/2) );
 	return pixel_x;
 }
 
