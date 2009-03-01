@@ -162,7 +162,7 @@ static void 	osm_gps_map_print_images (OsmGpsMap *map);
 static void		osm_gps_map_draw_gps_point (OsmGpsMap *map);
 static void		osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y);
 static void		osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data);
-static void		osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
+static void		osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw);
 static void		osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 static void		osm_gps_map_fill_tiles_pixel (OsmGpsMap *map);
 static void		osm_gps_map_map_redraw (OsmGpsMap *map);
@@ -638,21 +638,26 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 				write (fd, msg->response_body->data, msg->response_body->length);
 				g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
 				close (fd);
-				/* Redraw the area of the screen */
-				if ( msg->response_body->length > 0 ) 
-				{
-					/* Unless these tiles were explicityly just queued, and 
-					should not be redrawn */
-					if (dl->offset_x != G_MININT && dl->offset_y != G_MININT) 
+
+				if (dl->redraw)
 					{
 						GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
-						if(pixbuf) 
+
+					/* Store the tile into the cache */
+					if (G_LIKELY (pixbuf))
 						{
-							g_debug("Found tile %s", dl->filename);
-							osm_gps_map_blit_tile(map, pixbuf, dl->offset_x,dl->offset_y);
-							g_object_unref (pixbuf);
-						}
+						OsmCachedTile *tile = g_slice_new (OsmCachedTile);
+						tile->pixbuf = pixbuf;
+						tile->redraw_cycle = priv->redraw_cycle;
+						/* if the tile is already in the cache (it could be one
+						 * rendered from another zoom level), it will be
+						 * overwritten */
+						g_hash_table_insert (priv->tile_cache, dl->filename, tile);
+						/* NULL-ify dl->filename so that it won't be freed, as
+						 * we are using it as a key in the hash table */
+						dl->filename = NULL;
 					}
+					osm_gps_map_map_redraw (map);
 				}
 			}
 		}
@@ -662,10 +667,6 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 		}
 
 		g_hash_table_remove(priv->tile_queue, dl->uri);
-
-		//if we finished downloading all tiles then we need to redraw the line
-		if (g_hash_table_size(priv->tile_queue) == 0)
-			osm_gps_map_map_redraw(map);
 
 		g_free(dl->uri);
 		g_free(dl->folder);
@@ -695,7 +696,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 }
 
 static void
-osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y)
+osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw)
 {
 	SoupMessage *msg;
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
@@ -716,8 +717,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 		dl->folder = g_strdup_printf("%s/%d/%d/",priv->cache_dir, zoom, x);
 		dl->filename = g_strdup_printf("%s/%d/%d/%d.png",priv->cache_dir, zoom, x, y);
 		dl->map = map;
-		dl->offset_x = offset_x;
-		dl->offset_y = offset_y;
+		dl->redraw = redraw;
 
 		g_debug("Download tile: %d,%d z:%d\n\t%s --> %s", x, y, zoom, dl->uri, dl->filename);
 	
@@ -865,7 +865,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 	else
 	{
 		if (priv->map_auto_download)
-			osm_gps_map_download_tile(map,zoom,x,y,offset_x,offset_y);
+			osm_gps_map_download_tile(map, zoom, x, y, TRUE);
 
 		/* try to render the tile by scaling cached tiles from other zoom
 		 * levels */
@@ -1769,8 +1769,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 					filename = g_strdup_printf("%s/%u/%u/%u.png", priv->cache_dir, zoom, i, j);
 					if (!g_file_test(filename, G_FILE_TEST_EXISTS))
 					{
-						//Use G_MININT to signify the tiles should not be blitted when complete
-						osm_gps_map_download_tile(map, zoom, i, j, G_MININT, G_MININT);
+						osm_gps_map_download_tile(map, zoom, i, j, FALSE);
 						num_tiles++;
 					}
 					g_free(filename);

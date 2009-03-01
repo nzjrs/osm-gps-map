@@ -63,10 +63,9 @@ typedef struct {
 	char *uri;
 	char *folder;
 	char *filename;
-	/* The area on the screen to redraw when it arrives */
 	OsmGpsMap *map;
-	int offset_x;
-	int offset_y;
+	/* whether to redraw the map when the tile arrives */
+	gboolean redraw;
 } tile_download_t;
 
 typedef struct {
