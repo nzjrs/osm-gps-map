@@ -115,6 +115,7 @@ struct _OsmGpsMapPrivate
 	int ui_gps_point_outer_radius;
 
 	guint is_disposed : 1;
+	guint dragging : 1;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
@@ -1433,8 +1434,10 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-	if(priv->drag_counter >= 6)
+	if (priv->dragging)
 	{
+		priv->dragging = FALSE;
+
 		priv->map_x = priv->drag_start_map_x;
 		priv->map_y = priv->drag_start_map_y;
 		
@@ -1476,6 +1479,8 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 	// we havent dragged more than 6 pixels 
 	if (priv->drag_counter < 6)
 		return FALSE;
+
+	priv->dragging = TRUE;
 
 	if (priv->map_auto_center)
 		g_object_set(G_OBJECT(widget), "auto-center", FALSE, NULL);
@@ -1993,8 +1998,8 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 	}
 
 	// dont draw anything if we are dragging
-	if (priv->drag_counter > 0) {
-		g_debug("Dragging %d", priv->drag_counter);
+	if (priv->dragging) {
+		g_debug("Dragging");
 		return;
 	}
 
