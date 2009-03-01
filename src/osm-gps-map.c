@@ -107,6 +107,8 @@ struct _OsmGpsMapPrivate
 	int ui_gps_track_width;
 	int ui_gps_point_inner_radius;
 	int ui_gps_point_outer_radius;
+
+	guint is_disposed : 1;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
@@ -1109,10 +1111,15 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
 }
 
 static void
-osm_gps_map_finalize (GObject *object)
+osm_gps_map_dispose (GObject *object)
 {
 	OsmGpsMap *map = OSM_GPS_MAP(object);
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+
+	if (priv->is_disposed)
+		return;
+
+	priv->is_disposed = TRUE;
 
 	soup_session_abort(priv->soup_session);
 	g_object_unref(priv->soup_session);
@@ -1120,11 +1127,6 @@ osm_gps_map_finalize (GObject *object)
 	g_hash_table_destroy(priv->tile_queue);
 	g_hash_table_destroy(priv->missing_tiles);
 
-	g_free(priv->cache_dir);
-	g_free(priv->repo_uri);
-
-	osm_gps_map_free_trip(map);
-	osm_gps_map_free_tracks(map);
 	osm_gps_map_free_images(map);
 
 	if(priv->pixmap)
@@ -1132,6 +1134,21 @@ osm_gps_map_finalize (GObject *object)
 
 	if(priv->gc_map)
 		g_object_unref(priv->gc_map);
+
+	G_OBJECT_CLASS (osm_gps_map_parent_class)->dispose (object);
+}
+
+static void
+osm_gps_map_finalize (GObject *object)
+{
+	OsmGpsMap *map = OSM_GPS_MAP(object);
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+
+	g_free(priv->cache_dir);
+	g_free(priv->repo_uri);
+
+	osm_gps_map_free_trip(map);
+	osm_gps_map_free_tracks(map);
 
 	G_OBJECT_CLASS (osm_gps_map_parent_class)->finalize (object);
 }
@@ -1460,6 +1477,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 
 	g_type_class_add_private (klass, sizeof (OsmGpsMapPrivate));
 
+	object_class->dispose = osm_gps_map_dispose;
 	object_class->finalize = osm_gps_map_finalize;
 	object_class->constructor = osm_gps_map_constructor;
 	object_class->set_property = osm_gps_map_set_property;
