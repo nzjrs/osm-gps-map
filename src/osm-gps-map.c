@@ -728,6 +728,77 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x,
 	}
 }
 
+static GdkPixbuf *
+osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	gchar *filename;
+	GdkPixbuf *pixbuf;
+
+	filename = g_strdup_printf("%s/%u/%u/%u.png",
+							   priv->cache_dir,
+							   zoom, x, y);
+
+	pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+	g_free (filename);
+	return pixbuf;
+}
+
+static GdkPixbuf *
+osm_gps_map_find_bigger_tile (OsmGpsMap *map, int zoom, int x, int y,
+							  int *zoom_found)
+{
+	GdkPixbuf *pixbuf;
+	int next_zoom, next_x, next_y;
+
+	if (zoom == 0) return NULL;
+	next_zoom = zoom - 1;
+	next_x = x / 2;
+	next_y = y / 2;
+	pixbuf = osm_gps_map_load_cached_tile (map, next_zoom, next_x, next_y);
+	if (pixbuf)
+		*zoom_found = next_zoom;
+	else
+		pixbuf = osm_gps_map_find_bigger_tile (map, next_zoom, next_x, next_y,
+											   zoom_found);
+	return pixbuf;
+}
+
+static GdkPixbuf *
+osm_gps_map_render_missing_tile_upscaled (OsmGpsMap *map, int zoom,
+										  int x, int y)
+{
+	GdkPixbuf *pixbuf, *big, *area;
+	int zoom_big, zoom_diff, area_size, area_x, area_y;
+	int modulo;
+
+	big = osm_gps_map_find_bigger_tile (map, zoom, x, y, &zoom_big);
+	if (!big) return NULL;
+
+	g_debug ("Found bigger tile (zoom = %d, wanted = %d)", zoom_big, zoom);
+
+	/* get a Pixbuf for the area to magnify */
+	zoom_diff = zoom - zoom_big;
+	area_size = TILESIZE >> zoom_diff;
+	modulo = 1 << zoom_diff;
+	area_x = (x % modulo) * area_size;
+	area_y = (y % modulo) * area_size;
+	area = gdk_pixbuf_new_subpixbuf (big, area_x, area_y,
+									 area_size, area_size); 
+	g_object_unref (big);
+	pixbuf = gdk_pixbuf_scale_simple (area, TILESIZE, TILESIZE,
+									  GDK_INTERP_NEAREST);
+	g_object_unref (area);
+	return pixbuf;
+}
+
+static GdkPixbuf *
+osm_gps_map_render_missing_tile (OsmGpsMap *map, int zoom, int x, int y)
+{
+	/* maybe TODO: render from downscaled tiles, if the following fails */
+	return osm_gps_map_render_missing_tile_upscaled (map, zoom, x, y);
+}
+
 static void
 osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y)
 {
@@ -753,11 +824,27 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 		if (priv->map_auto_download)
 			osm_gps_map_download_tile(map,zoom,x,y,offset_x,offset_y);
 
+		/* try to render the tile by scaling cached tiles from other zoom
+		 * levels */
+		pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
+		if (pixbuf)
+		{
+			gdk_draw_pixbuf (priv->pixmap,
+							 priv->gc_map,
+							 pixbuf,
+							 0,0,
+							 offset_x,offset_y,
+							 TILESIZE,TILESIZE,
+							 GDK_RGB_DITHER_NONE, 0, 0);
+			g_object_unref (pixbuf);
+		}
+		else
+		{
 		//prevent some artifacts when drawing not yet loaded areas.
-		gdk_draw_rectangle (
-			priv->pixmap,
+			gdk_draw_rectangle (priv->pixmap,
 			GTK_WIDGET(map)->style->white_gc,
 			TRUE, offset_x, offset_y, TILESIZE, TILESIZE);
+		}
 
 		gtk_widget_queue_draw_area (
 			GTK_WIDGET(map),
