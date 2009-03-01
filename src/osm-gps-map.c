@@ -51,6 +51,7 @@ struct _OsmGpsMapPrivate
 {
 	GHashTable *tile_queue;
 	GHashTable *missing_tiles;
+	GHashTable *tile_cache;
 
 	int map_zoom;
 	int max_zoom;
@@ -59,6 +60,9 @@ struct _OsmGpsMapPrivate
 	gboolean map_auto_download;
 	int map_x;
 	int map_y;
+	guint max_tile_cache_size;
+	/* Incremented at each redraw */
+	guint redraw_cycle;
 
 	//how we download tiles
 	SoupSession *soup_session;
@@ -113,6 +117,14 @@ struct _OsmGpsMapPrivate
 
 #define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
 
+typedef struct
+{
+	GdkPixbuf *pixbuf;
+	/* We keep track of the number of the redraw cycle this tile was last used,
+	 * so that osm_gps_map_purge_cache() can remove the older ones */
+	guint redraw_cycle;
+} OsmCachedTile;
+
 enum
 {
 	PROP_0,
@@ -154,6 +166,13 @@ static void		osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, 
 static void		osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 static void		osm_gps_map_fill_tiles_pixel (OsmGpsMap *map);
 static void		osm_gps_map_map_redraw (OsmGpsMap *map);
+
+static void
+cached_tile_free (OsmCachedTile *tile)
+{
+	g_object_unref (tile->pixbuf);
+	g_slice_free (OsmCachedTile, tile);
+}
 
 /*
  * Description:
@@ -736,13 +755,35 @@ osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	gchar *filename;
 	GdkPixbuf *pixbuf;
+	OsmCachedTile *tile;
 
 	filename = g_strdup_printf("%s/%u/%u/%u.png",
 							   priv->cache_dir,
 							   zoom, x, y);
 
-	pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+	tile = g_hash_table_lookup (priv->tile_cache, filename);
+	if (tile)
+	{
 	g_free (filename);
+	}
+	else
+	{
+		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+		if (pixbuf)
+		{
+			tile = g_slice_new (OsmCachedTile);
+			tile->pixbuf = pixbuf;
+			g_hash_table_insert (priv->tile_cache, filename, tile);
+		}
+	}
+
+	/* set/update the redraw_cycle timestamp on the tile */
+	if (tile)
+	{
+		tile->redraw_cycle = priv->redraw_cycle;
+		pixbuf = g_object_ref (tile->pixbuf);
+	}
+
 	return pixbuf;
 }
 
@@ -1016,9 +1057,31 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
 }
 
 static void
+osm_gps_map_purge_cache (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+	GHashTableIter iter;
+	OsmCachedTile *tile;
+
+	if (g_hash_table_size (priv->tile_cache) < priv->max_tile_cache_size)
+		return;
+
+	/* run through the cache, and remove the tiles which have not been used
+	 * during the last redraw operation */
+	g_hash_table_iter_init (&iter, priv->tile_cache);
+	while (g_hash_table_iter_next (&iter, NULL, (gpointer)&tile))
+	{
+		if (tile->redraw_cycle != priv->redraw_cycle)
+			g_hash_table_iter_remove (&iter);
+	}
+}
+
+static void
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	priv->redraw_cycle++;
 
 	/* draw white background to initialise pixmap */
 	gdk_draw_rectangle (
@@ -1036,6 +1099,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 	osm_gps_map_print_images(map);
 
 	//osm_gps_map_osd_speed(map, 1.5);
+	osm_gps_map_purge_cache(map);
 }
 
 static void
@@ -1073,6 +1137,11 @@ osm_gps_map_init (OsmGpsMap *object)
 	//Some mapping providers (Google) have varying degrees of tiles at multiple
 	//zoom levels
 	priv->missing_tiles = g_hash_table_new (g_str_hash, g_str_equal);
+
+	/* memory cache for most recently used tiles */
+	priv->tile_cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+											  g_free, (GDestroyNotify)cached_tile_free);
+	priv->max_tile_cache_size = 20;
 
 	gtk_widget_add_events (GTK_WIDGET (object),
 			GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
@@ -1126,6 +1195,7 @@ osm_gps_map_dispose (GObject *object)
 
 	g_hash_table_destroy(priv->tile_queue);
 	g_hash_table_destroy(priv->missing_tiles);
+	g_hash_table_destroy(priv->tile_cache);
 
 	osm_gps_map_free_images(map);
 
