@@ -1087,6 +1087,13 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
 	priv->idle_map_redraw = 0;
 
+	/* the motion_notify handler uses priv->pixmap to redraw the area; if we
+	 * change it while we are dragging, we will end up showing it in the wrong
+	 * place. This could be fixed by carefully recompute the coordinates, but
+	 * for now it's easier just to disable redrawing the map while dragging */
+	if (priv->dragging)
+		return FALSE;
+
 	priv->redraw_cycle++;
 
 	/* draw white background to initialise pixmap */
