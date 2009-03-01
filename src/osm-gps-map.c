@@ -1,4 +1,5 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set noet sw=4 ts=4: */
 /*
  * osm-gps-map.c
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
