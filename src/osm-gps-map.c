@@ -63,6 +63,8 @@ struct _OsmGpsMapPrivate
 	guint max_tile_cache_size;
 	/* Incremented at each redraw */
 	guint redraw_cycle;
+	/* ID of the idle redraw operation */
+	guint idle_map_redraw;
 
 	//how we download tiles
 	SoupSession *soup_session;
@@ -165,7 +167,8 @@ static void		osm_gps_map_tile_download_complete (SoupSession *session, SoupMessa
 static void		osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw);
 static void		osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y);
 static void		osm_gps_map_fill_tiles_pixel (OsmGpsMap *map);
-static void		osm_gps_map_map_redraw (OsmGpsMap *map);
+static gboolean	osm_gps_map_map_redraw (OsmGpsMap *map);
+static void		osm_gps_map_map_redraw_idle (OsmGpsMap *map);
 
 static void
 cached_tile_free (OsmCachedTile *tile)
@@ -657,7 +660,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 						 * we are using it as a key in the hash table */
 						dl->filename = NULL;
 					}
-					osm_gps_map_map_redraw (map);
+					osm_gps_map_map_redraw_idle (map);
 				}
 			}
 		}
@@ -1076,10 +1079,12 @@ osm_gps_map_purge_cache (OsmGpsMap *map)
 	}
 }
 
-static void
+static gboolean
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	priv->idle_map_redraw = 0;
 
 	priv->redraw_cycle++;
 
@@ -1100,6 +1105,17 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
 	//osm_gps_map_osd_speed(map, 1.5);
 	osm_gps_map_purge_cache(map);
+
+	return FALSE;
+}
+
+static void
+osm_gps_map_map_redraw_idle (OsmGpsMap *map)
+{
+	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+	if (priv->idle_map_redraw == 0)
+		priv->idle_map_redraw = g_idle_add ((GSourceFunc)osm_gps_map_map_redraw, map);
 }
 
 static void
@@ -1204,6 +1220,9 @@ osm_gps_map_dispose (GObject *object)
 
 	if(priv->gc_map)
 		g_object_unref(priv->gc_map);
+
+	if (priv->idle_map_redraw != 0)
+		g_source_remove (priv->idle_map_redraw);
 
 	G_OBJECT_CLASS (osm_gps_map_parent_class)->dispose (object);
 }
@@ -1422,7 +1441,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 		priv->map_x += (priv->drag_start_mouse_x - (int) event->x);
 		priv->map_y += (priv->drag_start_mouse_y - (int) event->y);
 	
-		osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
+		osm_gps_map_map_redraw_idle(OSM_GPS_MAP(widget));
 	}
 
 	priv->drag_mouse_dx = 0;
@@ -1518,7 +1537,7 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	priv->gc_map = gdk_gc_new(priv->pixmap);
 
-	osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
+	osm_gps_map_map_redraw_idle(OSM_GPS_MAP(widget));
 
 	return FALSE;
 }
@@ -1815,7 +1834,7 @@ osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int 
 	priv->map_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
 	priv->map_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
 
-	osm_gps_map_map_redraw(map);
+	osm_gps_map_map_redraw_idle(map);
 }
 
 int 
@@ -1841,7 +1860,7 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 		priv->map_x = ((priv->map_x + width_center) * factor) - width_center;
 		priv->map_y = ((priv->map_y + height_center) * factor) - height_center;
 		
-		osm_gps_map_map_redraw(map);
+		osm_gps_map_map_redraw_idle(map);
 	}
 	return priv->map_zoom;
 }
@@ -1852,7 +1871,7 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 	OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 	if (track) {
 		priv->tracks = g_slist_append(priv->tracks, track);
-		osm_gps_map_map_redraw(map);
+		osm_gps_map_map_redraw_idle(map);
 	}
 }
 
@@ -1860,7 +1879,7 @@ void
 osm_gps_map_clear_tracks (OsmGpsMap *map)
 {
 	osm_gps_map_free_tracks(map);
-	osm_gps_map_map_redraw(map);
+	osm_gps_map_map_redraw_idle(map);
 }
 
 void
@@ -1882,7 +1901,7 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 	
 		priv->images = g_slist_append(priv->images, im);
 		
-		osm_gps_map_map_redraw(map);
+		osm_gps_map_map_redraw_idle(map);
 	}
 }
 
@@ -1890,7 +1909,7 @@ void
 osm_gps_map_clear_images (OsmGpsMap *map)
 {
 	osm_gps_map_free_images(map);
-	osm_gps_map_map_redraw(map);
+	osm_gps_map_map_redraw_idle(map);
 }
 
 void
@@ -1995,14 +2014,14 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 
 	// this redraws the map (including the gps track, and adjusts the
 	// map center if it was changed
-	osm_gps_map_map_redraw(map);
+	osm_gps_map_map_redraw_idle(map);
 }
 
 void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
 	osm_gps_map_free_trip(map);
-	osm_gps_map_map_redraw(map);
+	osm_gps_map_map_redraw_idle(map);
 }
 
 coord_t
