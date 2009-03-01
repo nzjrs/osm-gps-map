@@ -49,6 +49,22 @@ _wrap_osm_gps_map_get_co_ordinates(PyGObject *self, PyObject *args,
     return Py_BuildValue("(dd)", coord.rlat, coord.rlon);
 }
 %%
+override osm_gps_map_set_center
+static PyObject *
+_wrap_osm_gps_map_set_center(PyGObject *self, PyObject *args)
+{
+    double latitude, longitude;
+
+    if (PyTuple_Size(args) == 1)
+        args = PyTuple_GetItem(args, 0);
+    if (!PyArg_ParseTuple(args, "dd:OsmGpsMap.set_center", &latitude, &longitude))
+        return NULL;
+    osm_gps_map_set_center(OSM_GPS_MAP(self->obj), latitude, longitude);
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+%%
 override osm_gps_map_add_track kwargs
 static PyObject *
 _wrap_osm_gps_map_add_track(PyGObject *self, PyObject *args, 

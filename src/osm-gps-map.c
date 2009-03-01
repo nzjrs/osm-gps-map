@@ -1839,11 +1839,15 @@ osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
 void
 osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int zoom)
 {
+    osm_gps_map_set_center (map, latitude, longitude);
+    osm_gps_map_set_zoom (map, zoom);
+}
+
+void
+osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
+{
     int pixel_x, pixel_y;
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
-
-    //constrain zoom min_zoom -> max_zoom
-    priv->map_zoom = CLAMP(zoom, priv->min_zoom, priv->max_zoom);
 
     priv->center_rlat = deg2rad(latitude);
     priv->center_rlon = deg2rad(longitude);
