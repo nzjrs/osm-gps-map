@@ -57,7 +57,8 @@ _wrap_osm_gps_map_set_center(PyGObject *self, PyObject *args)
 
     if (PyTuple_Size(args) == 1)
         args = PyTuple_GetItem(args, 0);
-    if (!PyArg_ParseTuple(args, "dd:OsmGpsMap.set_center", &latitude, &longitude))
+    if (!PyArg_ParseTuple(args, "dd;OsmGpsMap.set_center takes two floats (also in a tuple)",
+                          &latitude, &longitude))
         return NULL;
     osm_gps_map_set_center(OSM_GPS_MAP(self->obj), latitude, longitude);
 
