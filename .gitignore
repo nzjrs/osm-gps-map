@@ -8,6 +8,7 @@
 INSTALL
 Makefile
 autom4te.cache/
+compile
 config.guess
 config.h
 config.log
@@ -23,7 +24,9 @@ osmgpsmap.pc
 python/COPYING
 python/INSTALL
 python/autom4te.cache/
+python/build/
 python/configure
+python/osmgpsmap.c
 src/Makefile
 src/openstreetmap-gps-map
 stamp-h1
