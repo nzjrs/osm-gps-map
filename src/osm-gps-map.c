@@ -1559,7 +1559,7 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 
     priv->gc_map = gdk_gc_new(priv->pixmap);
 
-    osm_gps_map_map_redraw_idle(OSM_GPS_MAP(widget));
+    osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
 
     return FALSE;
 }
