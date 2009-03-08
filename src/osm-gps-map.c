@@ -472,8 +472,11 @@ osm_gps_map_print_images (OsmGpsMap *map)
     GSList *list;
     int x,y,pixel_x,pixel_y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
+    int map_x0, map_y0;
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
+    map_x0 = priv->map_x + EXTRA_BORDER;
+    map_y0 = priv->map_y + EXTRA_BORDER;
     for(list = priv->images; list != NULL; list = list->next)
     {
         image_t *im = list->data;
@@ -487,8 +490,8 @@ osm_gps_map_print_images (OsmGpsMap *map)
                 im->pt.rlat, im->pt.rlon,
                 pixel_x, pixel_y);
 
-        x = pixel_x - priv->map_x;
-        y = pixel_y - priv->map_y;
+        x = pixel_x - map_x0;
+        y = pixel_y - map_y0;
 
         gdk_draw_pixbuf (
                          priv->pixmap,
@@ -507,8 +510,8 @@ osm_gps_map_print_images (OsmGpsMap *map)
 
     gtk_widget_queue_draw_area (
                                 GTK_WIDGET(map),
-                                min_x, min_y,
-                                max_x, max_y);
+                                min_x + EXTRA_BORDER, min_y + EXTRA_BORDER,
+                                max_x + EXTRA_BORDER, max_y + EXTRA_BORDER);
 
 }
 
@@ -519,12 +522,17 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 
     //incase we get called before we have got a gps point
     if (priv->gps_valid) {
-        int x = lon2pixel(priv->map_zoom, priv->gps->rlon) - priv->map_x;
-        int y = lat2pixel(priv->map_zoom, priv->gps->rlat) - priv->map_y;
+        int map_x0, map_y0;
+        int x, y;
         int r = priv->ui_gps_point_inner_radius;
         int r2 = priv->ui_gps_point_outer_radius;
         int lw = priv->ui_gps_track_width;
         int mr = MAX(r,r2);
+
+        map_x0 = priv->map_x + EXTRA_BORDER;
+        map_y0 = priv->map_y + EXTRA_BORDER;
+        x = lon2pixel(priv->map_zoom, priv->gps->rlon) - map_x0;
+        y = lat2pixel(priv->map_zoom, priv->gps->rlat) - map_y0;
 #ifdef USE_CAIRO
         cairo_t *cr;
         cairo_pattern_t *pat;
@@ -921,8 +929,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
     if (offset_x > 0) offset_x -= TILESIZE;
     if (offset_y > 0) offset_y -= TILESIZE;
 
-    offset_xn = offset_x;
-    offset_yn = offset_y;
+    offset_xn = offset_x + EXTRA_BORDER;
+    offset_yn = offset_y + EXTRA_BORDER;
 
     width  = GTK_WIDGET(map)->allocation.width;
     height = GTK_WIDGET(map)->allocation.height;
@@ -960,7 +968,7 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
             offset_yn += TILESIZE;
         }
         offset_xn += TILESIZE;
-        offset_yn = offset_y;
+        offset_yn = offset_y + EXTRA_BORDER;
     }
 }
 
@@ -973,6 +981,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     int lw = priv->ui_gps_track_width;
+    int map_x0, map_y0;
 #ifdef USE_CAIRO
     cairo_t *cr;
 #else
@@ -996,12 +1005,14 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
     gdk_gc_set_line_attributes(gc, lw, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 #endif
 
+    map_x0 = priv->map_x + EXTRA_BORDER;
+    map_y0 = priv->map_y + EXTRA_BORDER;
     for(list = trackpoint_list; list != NULL; list = list->next)
     {
         coord_t *tp = list->data;
 
-        x = lon2pixel(priv->map_zoom, tp->rlon) - priv->map_x;
-        y = lat2pixel(priv->map_zoom, tp->rlat) - priv->map_y;
+        x = lon2pixel(priv->map_zoom, tp->rlon) - map_x0;
+        y = lat2pixel(priv->map_zoom, tp->rlat) - map_y0;
 
         // first time through loop
         if (list == trackpoint_list) {
@@ -1502,29 +1513,49 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                        priv->pixmap,
                        0,0,
-                       priv->drag_mouse_dx,priv->drag_mouse_dy,
+                       priv->drag_mouse_dx - EXTRA_BORDER, priv->drag_mouse_dy - EXTRA_BORDER,
                        -1,-1);
 
-    //Paint white to the top and left of the map if dragging. Its less
+    //Paint white outside of the map if dragging. Its less
     //ugly than painting the corrupted map
-    if(priv->drag_mouse_dx>0) {
+    if(priv->drag_mouse_dx>EXTRA_BORDER) {
         gdk_draw_rectangle (
                             widget->window,
                             widget->style->white_gc,
                             TRUE,
                             0, 0,
-                            priv->drag_mouse_dx,
+                            priv->drag_mouse_dx - EXTRA_BORDER,
+                            widget->allocation.height);
+    }
+    else if (-priv->drag_mouse_dx > EXTRA_BORDER)
+    {
+        gdk_draw_rectangle (
+                            widget->window,
+                            widget->style->white_gc,
+                            TRUE,
+                            priv->drag_mouse_dx + widget->allocation.width + EXTRA_BORDER, 0,
+                            -priv->drag_mouse_dx - EXTRA_BORDER,
                             widget->allocation.height);
     }
 
-    if (priv->drag_mouse_dy>0) {
+    if (priv->drag_mouse_dy>EXTRA_BORDER) {
         gdk_draw_rectangle (
                             widget->window,
                             widget->style->white_gc,
                             TRUE,
                             0, 0,
                             widget->allocation.width,
-                            priv->drag_mouse_dy);
+                            priv->drag_mouse_dy - EXTRA_BORDER);
+    }
+    else if (-priv->drag_mouse_dy > EXTRA_BORDER)
+    {
+        gdk_draw_rectangle (
+                            widget->window,
+                            widget->style->white_gc,
+                            TRUE,
+                            0, priv->drag_mouse_dy + widget->allocation.height + EXTRA_BORDER,
+                            widget->allocation.width,
+                            -priv->drag_mouse_dy - EXTRA_BORDER);
     }
 
     return FALSE;
@@ -1565,7 +1596,7 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
                        widget->window,
                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                        priv->pixmap,
-                       event->area.x, event->area.y,
+                       event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
                        event->area.x, event->area.y,
                        event->area.width, event->area.height);
 
