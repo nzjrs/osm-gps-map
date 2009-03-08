@@ -927,8 +927,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
     width  = GTK_WIDGET(map)->allocation.width;
     height = GTK_WIDGET(map)->allocation.height;
 
-    tiles_nx = floor((width  - offset_x) / TILESIZE) + 1;
-    tiles_ny = floor((height - offset_y) / TILESIZE) + 1;
+    tiles_nx = (width  - offset_x) / TILESIZE + 1;
+    tiles_ny = (height - offset_y) / TILESIZE + 1;
 
     tile_x0 =  floor((float)priv->map_x / (float)TILESIZE);
     tile_y0 =  floor((float)priv->map_y / (float)TILESIZE);
