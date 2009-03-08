@@ -924,8 +924,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 
     offset_x = - priv->map_x % TILESIZE;
     offset_y = - priv->map_y % TILESIZE;
-    if (offset_x > 0) offset_x -= 256;
-    if (offset_y > 0) offset_y -= 256;
+    if (offset_x > 0) offset_x -= TILESIZE;
+    if (offset_y > 0) offset_y -= TILESIZE;
 
     offset_xn = offset_x;
     offset_yn = offset_y;
