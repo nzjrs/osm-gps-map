@@ -1,4 +1,5 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
+/* vim:set et sw=4 ts=4 cino=t0,(0: */
 /*
  * osm-gps-map.h
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
@@ -11,12 +12,12 @@
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * osm-gps-map.c is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,17 +44,17 @@ typedef struct _OsmGpsMap OsmGpsMap;
 
 struct _OsmGpsMapClass
 {
-	GtkDrawingAreaClass parent_class;
+    GtkDrawingAreaClass parent_class;
 };
 
 struct _OsmGpsMap
 {
-	GtkDrawingArea parent_instance;
+    GtkDrawingArea parent_instance;
 };
 
 typedef struct {
-	float rlat;
-	float rlon;
+    float rlat;
+    float rlon;
 } coord_t;
 
 //http://www.internettablettalk.com/forums/showthread.php?t=5209
@@ -65,7 +66,7 @@ typedef struct {
 #define MAP_SOURCE_OPENAERIALMAP            "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg"
 #define MAP_SOURCE_GOOGLE_MAPS              "http://mt#R.google.com/mt?x=#X&y=#Y&zoom=#S"
 //No longer working
-//#define MAP_SOURCE_GOOGLE_HYBRID          "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S"  
+//#define MAP_SOURCE_GOOGLE_HYBRID          "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S"
 #define MAP_SOURCE_GOOGLE_HYBRID            "http://mt#R.google.com/mt?x=#X&y=#Y&zoom=#S"
 #define MAP_SOURCE_GOOGLE_SATTELITE         "http://khm#R.google.com/kh?n=404&v=32&x=#X&y=#Y&z=#Z"
 #define MAP_SOURCE_GOOGLE_SATTELITE_QUAD    "http://khm#R.google.com/kh?n=404&v=3&t=#Q"
