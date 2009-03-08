@@ -46,6 +46,8 @@
 
 #define ENABLE_DEBUG 0
 
+#define EXTRA_BORDER (TILESIZE / 2)
+
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
@@ -1102,8 +1104,8 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
                         GTK_WIDGET(map)->style->white_gc,
                         TRUE,
                         0, 0,
-                        GTK_WIDGET(map)->allocation.width+260,
-                        GTK_WIDGET(map)->allocation.height+260);
+                        GTK_WIDGET(map)->allocation.width + EXTRA_BORDER * 2,
+                        GTK_WIDGET(map)->allocation.height + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map);
 
@@ -1539,8 +1541,8 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 
     priv->pixmap = gdk_pixmap_new (
                                    widget->window,
-                                   widget->allocation.width+260,
-                                   widget->allocation.height+260,
+                                   widget->allocation.width + EXTRA_BORDER * 2,
+                                   widget->allocation.height + EXTRA_BORDER * 2,
                                    -1);
 
     /* and gc, used for clipping (I think......) */
