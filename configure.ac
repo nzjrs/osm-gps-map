@@ -18,10 +18,10 @@ AC_SUBST(OPENSTREETMAP_GPS_MAP_CFLAGS)
 AC_SUBST(OPENSTREETMAP_GPS_MAP_LIBS)
 
 AC_ARG_ENABLE(cairo, 
-             [AC_HELP_STRING([--enable-cairo],
-                             [Use cairo to draw the map overlay])],
+             [AC_HELP_STRING([--disable-cairo],
+                             [Use Gdk instead of cairo to draw the map overlay])],
               enable_cairo="$enableval",
-              enable_cairo="no")
+              enable_cairo="yes")
 
 if test "x$enable_cairo" = "xyes"; then
     PKG_CHECK_MODULES(CAIRO,[cairo >= 1.8])
