@@ -2077,3 +2077,28 @@ osm_gps_map_new (void)
     return g_object_new (OSM_TYPE_GPS_MAP, NULL);
 }
 
+void
+osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
+                                  float *latitude, float *longitude)
+{
+    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+    if (latitude)
+        *latitude = rad2deg(pixel2lat(priv->map_zoom, priv->map_y + pixel_y));
+    if (longitude)
+        *longitude = rad2deg(pixel2lon(priv->map_zoom, priv->map_x + pixel_x));
+}
+
+void
+osm_gps_map_geographic_to_screen (OsmGpsMap *map,
+                                  float latitude, float longitude,
+                                  gint *pixel_x, gint *pixel_y)
+{
+    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+
+    if (pixel_x)
+        *pixel_x = lon2pixel(priv->map_zoom, deg2rad(longitude)) - priv->map_x;
+    if (pixel_y)
+        *pixel_y = lat2pixel(priv->map_zoom, deg2rad(latitude)) - priv->map_y;
+}
+
