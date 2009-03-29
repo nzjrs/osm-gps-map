@@ -90,9 +90,9 @@ coord_t osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y);
 GtkWidget * osm_gps_map_new(void);
 void osm_gps_map_screen_to_geographic (OsmGpsMap *map,
                                        gint pixel_x, gint pixel_y,
-                                       float *latitude, float *longitude);
+                                       gfloat *latitude, gfloat *longitude);
 void osm_gps_map_geographic_to_screen (OsmGpsMap *map,
-                                       float latitude, float longitude,
+                                       gfloat latitude, gfloat longitude,
                                        gint *pixel_x, gint *pixel_y);
 
 G_END_DECLS

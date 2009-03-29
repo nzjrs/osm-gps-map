@@ -2079,7 +2079,7 @@ osm_gps_map_new (void)
 
 void
 osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
-                                  float *latitude, float *longitude)
+                                  gfloat *latitude, gfloat *longitude)
 {
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
@@ -2091,7 +2091,7 @@ osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
 
 void
 osm_gps_map_geographic_to_screen (OsmGpsMap *map,
-                                  float latitude, float longitude,
+                                  gfloat latitude, gfloat longitude,
                                   gint *pixel_x, gint *pixel_y)
 {
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
