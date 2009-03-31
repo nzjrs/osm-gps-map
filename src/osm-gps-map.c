@@ -300,7 +300,7 @@ map_convert_coords_to_quadtree_string(OsmGpsMap *map, gint x, gint y, gint zooml
 static void
 inspect_map_uri(OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (g_strrstr(priv->repo_uri, URI_MARKER_X))
         priv->uri_format |= URI_HAS_X;
@@ -336,7 +336,7 @@ inspect_map_uri(OsmGpsMap *map)
 static gchar *
 replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     char *url;
     unsigned int i;
     char location[22];
@@ -425,7 +425,7 @@ my_log_handler (const gchar * log_domain, GLogLevelFlags log_level, const gchar 
 static void
 osm_gps_map_free_trip (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     if (priv->trip_history) {
         g_slist_foreach(priv->trip_history, (GFunc) g_free, NULL);
         g_slist_free(priv->trip_history);
@@ -437,7 +437,7 @@ osm_gps_map_free_trip (OsmGpsMap *map)
 static void
 osm_gps_map_free_tracks (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     if (priv->tracks)
     {
         GSList* tmp = priv->tracks;
@@ -456,7 +456,7 @@ osm_gps_map_free_tracks (OsmGpsMap *map)
 static void
 osm_gps_map_free_images (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     if (priv->images) {
         GSList *list;
         for(list = priv->images; list != NULL; list = list->next)
@@ -477,7 +477,7 @@ osm_gps_map_print_images (OsmGpsMap *map)
     int x,y,pixel_x,pixel_y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     int map_x0, map_y0;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     map_x0 = priv->map_x + EXTRA_BORDER;
     map_y0 = priv->map_y + EXTRA_BORDER;
@@ -522,7 +522,7 @@ osm_gps_map_print_images (OsmGpsMap *map)
 static void
 osm_gps_map_draw_gps_point (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     //incase we get called before we have got a gps point
     if (priv->gps_valid) {
@@ -620,7 +620,7 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 static void
 osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     g_debug("Queing redraw @ %d,%d (w:%d h:%d)", offset_x,offset_y, TILESIZE,TILESIZE);
 
@@ -644,7 +644,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
     int fd;
     tile_download_t *dl = (tile_download_t *)user_data;
     OsmGpsMap *map = OSM_GPS_MAP(dl->map);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code))
     {
@@ -717,7 +717,7 @@ static void
 osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw)
 {
     SoupMessage *msg;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     tile_download_t *dl = g_new0(tile_download_t,1);
 
     //calculate the uri to download
@@ -770,7 +770,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 static GdkPixbuf *
 osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
     GdkPixbuf *pixbuf;
     OsmCachedTile *tile;
@@ -863,7 +863,7 @@ osm_gps_map_render_missing_tile (OsmGpsMap *map, int zoom, int x, int y)
 static void
 osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
     GdkPixbuf *pixbuf;
 
@@ -919,7 +919,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 static void
 osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     int i,j, width, height, tile_x0, tile_y0, tiles_nx, tiles_ny;
     int offset_xn = 0;
     int offset_yn = 0;
@@ -979,7 +979,7 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 static void
 osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     GSList *list;
     int x,y;
@@ -1061,7 +1061,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 static void
 osm_gps_map_print_tracks (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->show_trip_history)
         osm_gps_map_print_track (map, priv->trip_history);
@@ -1080,7 +1080,7 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
 static void
 osm_gps_map_purge_cache (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     GHashTableIter iter;
     OsmCachedTile *tile;
 
@@ -1100,7 +1100,7 @@ osm_gps_map_purge_cache (OsmGpsMap *map)
 static gboolean
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     priv->idle_map_redraw = 0;
 
@@ -1137,7 +1137,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 static void
 osm_gps_map_map_redraw_idle (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->idle_map_redraw == 0)
         priv->idle_map_redraw = g_idle_add ((GSourceFunc)osm_gps_map_map_redraw, map);
@@ -1227,7 +1227,7 @@ static void
 osm_gps_map_dispose (GObject *object)
 {
     OsmGpsMap *map = OSM_GPS_MAP(object);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->is_disposed)
         return;
@@ -1259,7 +1259,7 @@ static void
 osm_gps_map_finalize (GObject *object)
 {
     OsmGpsMap *map = OSM_GPS_MAP(object);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+    OsmGpsMapPrivate *priv = map->priv;
 
     g_free(priv->cache_dir);
     g_free(priv->repo_uri);
@@ -1275,7 +1275,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 {
     g_return_if_fail (OSM_IS_GPS_MAP (object));
     OsmGpsMap *map = OSM_GPS_MAP(object);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+    OsmGpsMapPrivate *priv = map->priv;
 
     switch (prop_id)
     {
@@ -1354,8 +1354,8 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 {
     g_return_if_fail (OSM_IS_GPS_MAP (object));
     float lat,lon;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
     OsmGpsMap *map = OSM_GPS_MAP(object);
+    OsmGpsMapPrivate *priv = map->priv;
 
     switch (prop_id)
     {
@@ -1430,7 +1430,7 @@ static gboolean
 osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (event->direction == GDK_SCROLL_UP)
     {
@@ -1815,7 +1815,7 @@ void
 osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end)
 {
     int i,j,zoom,num_tiles;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (pt1 && pt2)
     {
@@ -1858,7 +1858,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 void
 osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if (pt1 && pt2) {
         pt1->rlat = pixel2lat(priv->map_zoom, priv->map_y);
@@ -1881,7 +1881,10 @@ void
 osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
 {
     int pixel_x, pixel_y;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
 
     priv->center_rlat = deg2rad(latitude);
     priv->center_rlon = deg2rad(longitude);
@@ -1903,7 +1906,10 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
     int zoom_old;
     double factor;
     int width_center, height_center;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    priv = map->priv;
 
     if (zoom != priv->map_zoom)
     {
@@ -1937,7 +1943,11 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 void
 osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
     if (track) {
         priv->tracks = g_slist_append(priv->tracks, track);
         osm_gps_map_map_redraw_idle(map);
@@ -1947,6 +1957,8 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 void
 osm_gps_map_clear_tracks (OsmGpsMap *map)
 {
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+
     osm_gps_map_free_tracks(map);
     osm_gps_map_map_redraw_idle(map);
 }
@@ -1954,10 +1966,12 @@ osm_gps_map_clear_tracks (OsmGpsMap *map)
 void
 osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
 {
-    image_t *im;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
 
     if (image) {
+        OsmGpsMapPrivate *priv = map->priv;
+        image_t *im;
+
         //cache w/h for speed, and add image to list
         im = g_new0(image_t,1);
         im->w = gdk_pixbuf_get_width(image);
@@ -1977,6 +1991,8 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 void
 osm_gps_map_clear_images (OsmGpsMap *map)
 {
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+
     osm_gps_map_free_images(map);
     osm_gps_map_map_redraw_idle(map);
 }
@@ -1984,7 +2000,7 @@ osm_gps_map_clear_images (OsmGpsMap *map)
 void
 osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
 
     PangoContext        *context = NULL;
     PangoLayout     *layout  = NULL;
@@ -1996,6 +2012,9 @@ osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
     gchar *buffer;
     //static int x = 10, y = 10;
     static int width = 0, height = 0;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
 
     buffer = g_strdup_printf("%.0f", speed);
 
@@ -2043,7 +2062,10 @@ void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
     int pixel_x, pixel_y;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
 
     priv->gps->rlat = deg2rad(latitude);
     priv->gps->rlon = deg2rad(longitude);
@@ -2098,7 +2120,7 @@ coord_t
 osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 {
     coord_t coord;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     coord.rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
     coord.rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
@@ -2115,7 +2137,10 @@ void
 osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
                                   gfloat *latitude, gfloat *longitude)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
 
     if (latitude)
         *latitude = rad2deg(pixel2lat(priv->map_zoom, priv->map_y + pixel_y));
@@ -2128,7 +2153,10 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                   gfloat latitude, gfloat longitude,
                                   gint *pixel_x, gint *pixel_y)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
 
     if (pixel_x)
         *pixel_x = lon2pixel(priv->map_zoom, deg2rad(longitude)) - priv->map_x;
