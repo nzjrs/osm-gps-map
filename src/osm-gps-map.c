@@ -634,10 +634,6 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
                      offset_x,offset_y,
                      TILESIZE,TILESIZE,
                      GDK_RGB_DITHER_NONE, 0, 0);
-
-    gtk_widget_queue_draw_area (GTK_WIDGET(map),
-                                offset_x,offset_y,
-                                TILESIZE,TILESIZE);
 }
 
 static void
@@ -908,12 +904,6 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
                                 GTK_WIDGET(map)->style->white_gc,
                                 TRUE, offset_x, offset_y, TILESIZE, TILESIZE);
         }
-
-        gtk_widget_queue_draw_area (
-                                    GTK_WIDGET(map),
-                                    offset_x,offset_y,
-                                    TILESIZE,TILESIZE);
-
     }
     g_free(filename);
 }
@@ -959,10 +949,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
                                     TRUE,
                                     offset_xn, offset_yn,
                                     TILESIZE,TILESIZE);
-
-                gtk_widget_queue_draw_area (GTK_WIDGET(map),
-                                            offset_xn,offset_yn,
-                                            TILESIZE,TILESIZE);
             }
             else
             {
@@ -1132,6 +1118,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
     //osm_gps_map_osd_speed(map, 1.5);
     osm_gps_map_purge_cache(map);
+    gtk_widget_queue_draw (GTK_WIDGET (map));
 
     return FALSE;
 }
