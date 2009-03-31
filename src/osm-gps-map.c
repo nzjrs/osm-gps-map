@@ -48,7 +48,6 @@
 
 #define EXTRA_BORDER (TILESIZE / 2)
 
-typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapPrivate
 {
     GHashTable *tile_queue;
@@ -126,7 +125,7 @@ struct _OsmGpsMapPrivate
     guint center_coord_set : 1;
 };
 
-#define OSM_GPS_MAP_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), OSM_TYPE_GPS_MAP, OsmGpsMapPrivate))
+#define OSM_GPS_MAP_PRIVATE(o)  (OSM_GPS_MAP (o)->priv)
 
 typedef struct
 {
@@ -1148,7 +1147,10 @@ osm_gps_map_map_redraw_idle (OsmGpsMap *map)
 static void
 osm_gps_map_init (OsmGpsMap *object)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(object);
+    OsmGpsMapPrivate *priv;
+
+    priv = G_TYPE_INSTANCE_GET_PRIVATE (object, OSM_TYPE_GPS_MAP, OsmGpsMapPrivate);
+    object->priv = priv;
 
     priv->pixmap = NULL;
 
