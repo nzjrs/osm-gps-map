@@ -158,4 +158,27 @@
   )
 )
 
+(define-method screen_to_geographic
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_screen_to_geographic")
+  (return-type "none")
+  (parameters
+    '("int" "pixel_x")
+    '("int" "pixel_y")
+    '("float*" "latitude")
+    '("float*" "longitude")
+  )
+)
+
+(define-method geographic_to_screen
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_geographic_to_screen")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("int*" "pixel_x")
+    '("int*" "pixel_y")
+  )
+)
 

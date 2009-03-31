@@ -66,6 +66,45 @@ _wrap_osm_gps_map_set_center(PyGObject *self, PyObject *args)
     return Py_None;
 }
 %%
+override osm_gps_map_screen_to_geographic
+static PyObject *
+_wrap_osm_gps_map_screen_to_geographic(PyGObject *self, PyObject *args)
+{
+    int pixel_x, pixel_y;
+    gfloat latitude, longitude;
+
+    if (PyTuple_Size(args) == 1)
+        args = PyTuple_GetItem(args, 0);
+    if (!PyArg_ParseTuple(args, "ii:OsmGpsMap.screen_to_geographic takes two"
+                          "integers (also in a tuple)", &pixel_x, &pixel_y))
+        return NULL;
+
+    osm_gps_map_screen_to_geographic(OSM_GPS_MAP(self->obj), pixel_x, pixel_y,
+                                     &latitude, &longitude);
+
+    return Py_BuildValue("(ff)", latitude, longitude);
+}
+%%
+override osm_gps_map_geographic_to_screen
+static PyObject *
+_wrap_osm_gps_map_geographic_to_screen(PyGObject *self, PyObject *args)
+{
+    int pixel_x, pixel_y;
+    gfloat latitude, longitude;
+
+    if (PyTuple_Size(args) == 1)
+        args = PyTuple_GetItem(args, 0);
+    if (!PyArg_ParseTuple(args, "ff:OsmGpsMap.geographic_to_screen takes two"
+                          "floats (also in a tuple)", &latitude, &longitude))
+        return NULL;
+
+    osm_gps_map_geographic_to_screen(OSM_GPS_MAP(self->obj),
+                                     latitude, longitude,
+                                     &pixel_x, &pixel_y);
+
+    return Py_BuildValue("(ii)", pixel_x, pixel_y);
+}
+%%
 override osm_gps_map_add_track kwargs
 static PyObject *
 _wrap_osm_gps_map_add_track(PyGObject *self, PyObject *args, 
