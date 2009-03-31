@@ -280,7 +280,6 @@ map_convert_coords_to_quadtree_string(OsmGpsMap *map, gint x, gint y, gint zooml
                                       gchar *buffer, const gchar initial,
                                       const gchar *const quadrant)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
     gchar *ptr = buffer;
     gint n;
 
