@@ -24,9 +24,6 @@
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
-//place downloaded maps in ~/Maps/xx (otherwise they go into /tmp)
-#define MAPS_IN_HOME 1
-
 typedef struct {
     const char *name;
     const char *uri;
@@ -43,6 +40,18 @@ static const map_source_t MAP_SOURCES[] = {
     {"Maps For Free",           MAP_SOURCE_MAPS_FOR_FREE            },
     {"Virtual Earth Sattelite", MAP_SOURCE_VIRTUAL_EARTH_SATTELITE  },
 };
+
+static int map_provider = 0;
+static gboolean maps_in_temp = FALSE;
+static gboolean debug = FALSE;
+static GOptionEntry entries[] =
+{
+  { "maps-in-temp", 't', 0, G_OPTION_ARG_NONE, &maps_in_temp, "Store maps in /tmp instead of ~/Maps", NULL },
+  { "debug", 'd', 0, G_OPTION_ARG_NONE, &debug, "Enable debugging", NULL },
+  { "map", 'm', 0, G_OPTION_ARG_INT, &map_provider, "Map source", "N" },
+  { NULL }
+};
+
 
 static GdkPixbuf *STAR_IMAGE;
 
@@ -172,12 +181,13 @@ on_close (GtkWidget *widget, gpointer user_data)
 }
 
 void
-usage (void)
+usage (GOptionContext *context)
 {
     int i;
 
-    printf("Usage: %s MAP_ID\n\n", g_get_prgname());
-    printf("Valid Map IDS:\n");
+    puts(g_option_context_get_help(context, TRUE, NULL));
+
+    printf("Valid map sources:\n");
     for(i=0; i<(sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0])); i++)
         printf("\t%d:\t%s\n",i,MAP_SOURCES[i].name);
 }
@@ -196,30 +206,38 @@ main (int argc, char **argv)
     GtkWidget *cacheButton;
     GtkWidget *map;
     char *cachedir;
-    int map_provider;
-
-#if MAPS_IN_HOME
-    const char *homedir = g_getenv("HOME");
-    if (!homedir)
-        homedir = g_get_home_dir();
-#else
-    const char *homedir = "/tmp";
-#endif
+    char *homedir;
+    GError *error = NULL;
+    GOptionContext *context;
     timeout_cb_t *data;
 
     g_thread_init(NULL);
     gtk_init (&argc, &argv);
 
-    if (argc != 2) {
-        usage();
+    context = g_option_context_new ("- test tree model performance");
+    g_option_context_set_help_enabled(context, FALSE);
+    g_option_context_add_main_entries (context, entries, NULL);
+
+    if (!g_option_context_parse (context, &argc, &argv, &error)) {
+        usage(context);
         return 1;
     }
 
-    map_provider = atoi(argv[1]);
     if (map_provider < 0 || map_provider > (sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0]))-1) {
-        usage();
+        usage(context);
         return 2;
     }
+
+    if (maps_in_temp)
+        homedir = g_strdup("/tmp");
+    else {
+        homedir = g_strdup(g_getenv("HOME"));
+        if (!homedir)
+            homedir = g_strdup(g_get_home_dir());
+    }
+
+    if (debug)
+        gdk_window_set_debug_updates(TRUE);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
@@ -337,5 +355,7 @@ main (int argc, char **argv)
 
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
     gtk_main ();
+
+    g_free(homedir);
     return 0;
 }
