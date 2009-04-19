@@ -1175,7 +1175,10 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->max_tile_cache_size = 20;
 
     gtk_widget_add_events (GTK_WIDGET (object),
-                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
+                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                           GDK_POINTER_MOTION_MASK |
+                           GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
+    GTK_WIDGET_SET_FLAGS (object, GTK_CAN_FOCUS);
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 }
