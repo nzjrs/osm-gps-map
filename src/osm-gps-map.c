@@ -1417,7 +1417,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 }
 
 static gboolean
-osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
+_osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
@@ -1623,7 +1623,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->button_press_event = osm_gps_map_button_press;
     widget_class->button_release_event = osm_gps_map_button_release;
     widget_class->motion_notify_event = osm_gps_map_motion_notify;
-    widget_class->scroll_event = osm_gps_map_scroll;
+    widget_class->scroll_event = _osm_gps_map_scroll;
 
     g_object_class_install_property (object_class,
                                      PROP_AUTO_CENTER,
