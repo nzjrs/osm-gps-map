@@ -182,3 +182,13 @@
   )
 )
 
+(define-method scroll
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_scroll")
+  (return-type "none")
+  (parameters
+    '("gint" "dx")
+    '("gint" "dy")
+  )
+)
+

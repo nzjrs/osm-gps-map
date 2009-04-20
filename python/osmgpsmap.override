@@ -105,6 +105,25 @@ _wrap_osm_gps_map_geographic_to_screen(PyGObject *self, PyObject *args)
     return Py_BuildValue("(ii)", pixel_x, pixel_y);
 }
 %%
+override osm_gps_map_scroll
+static PyObject *
+_wrap_osm_gps_map_scroll(PyGObject *self, PyObject *args)
+{
+    int dx, dy;
+
+    if (PyTuple_Size(args) == 1)
+        args = PyTuple_GetItem(args, 0);
+    if (!PyArg_ParseTuple(args, "ii:OsmGpsMap.scroll takes two "
+                          "integers (also in a tuple)", &dx, &dy))
+        return NULL;
+
+    osm_gps_map_scroll(OSM_GPS_MAP(self->obj), dx, dy);
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+%%
 override osm_gps_map_add_track kwargs
 static PyObject *
 _wrap_osm_gps_map_add_track(PyGObject *self, PyObject *args, 
