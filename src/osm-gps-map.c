@@ -2154,3 +2154,18 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
         *pixel_y = lat2pixel(priv->map_zoom, deg2rad(latitude)) - priv->map_y;
 }
 
+void
+osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    priv->center_coord_set = FALSE;
+    priv->map_x += dx;
+    priv->map_y += dy;
+
+    osm_gps_map_map_redraw_idle (map);
+}
+
