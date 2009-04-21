@@ -479,8 +479,8 @@ osm_gps_map_print_images (OsmGpsMap *map)
     int map_x0, map_y0;
     OsmGpsMapPrivate *priv = map->priv;
 
-    map_x0 = priv->map_x + EXTRA_BORDER;
-    map_y0 = priv->map_y + EXTRA_BORDER;
+    map_x0 = priv->map_x - EXTRA_BORDER;
+    map_y0 = priv->map_y - EXTRA_BORDER;
     for(list = priv->images; list != NULL; list = list->next)
     {
         image_t *im = list->data;
@@ -533,8 +533,8 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
         int lw = priv->ui_gps_track_width;
         int mr = MAX(r,r2);
 
-        map_x0 = priv->map_x + EXTRA_BORDER;
-        map_y0 = priv->map_y + EXTRA_BORDER;
+        map_x0 = priv->map_x - EXTRA_BORDER;
+        map_y0 = priv->map_y - EXTRA_BORDER;
         x = lon2pixel(priv->map_zoom, priv->gps->rlon) - map_x0;
         y = lat2pixel(priv->map_zoom, priv->gps->rlat) - map_y0;
 #ifdef USE_CAIRO
@@ -995,8 +995,8 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
     gdk_gc_set_line_attributes(gc, lw, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
 #endif
 
-    map_x0 = priv->map_x + EXTRA_BORDER;
-    map_y0 = priv->map_y + EXTRA_BORDER;
+    map_x0 = priv->map_x - EXTRA_BORDER;
+    map_y0 = priv->map_y - EXTRA_BORDER;
     for(list = trackpoint_list; list != NULL; list = list->next)
     {
         coord_t *tp = list->data;
