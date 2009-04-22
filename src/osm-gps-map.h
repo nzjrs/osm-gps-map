@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 
 typedef struct _OsmGpsMapClass OsmGpsMapClass;
 typedef struct _OsmGpsMap OsmGpsMap;
+typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 
 struct _OsmGpsMapClass
 {
@@ -50,6 +51,7 @@ struct _OsmGpsMapClass
 struct _OsmGpsMap
 {
     GtkDrawingArea parent_instance;
+    OsmGpsMapPrivate *priv;
 };
 
 typedef struct {
