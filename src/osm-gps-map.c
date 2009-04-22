@@ -1175,7 +1175,10 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->max_tile_cache_size = 20;
 
     gtk_widget_add_events (GTK_WIDGET (object),
-                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK);
+                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                           GDK_POINTER_MOTION_MASK |
+                           GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
+    GTK_WIDGET_SET_FLAGS (object, GTK_CAN_FOCUS);
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 }
@@ -1414,7 +1417,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 }
 
 static gboolean
-osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
+_osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
@@ -1620,7 +1623,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->button_press_event = osm_gps_map_button_press;
     widget_class->button_release_event = osm_gps_map_button_release;
     widget_class->motion_notify_event = osm_gps_map_motion_notify;
-    widget_class->scroll_event = osm_gps_map_scroll;
+    widget_class->scroll_event = _osm_gps_map_scroll;
 
     g_object_class_install_property (object_class,
                                      PROP_AUTO_CENTER,
@@ -2149,5 +2152,20 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
         *pixel_x = lon2pixel(priv->map_zoom, deg2rad(longitude)) - priv->map_x;
     if (pixel_y)
         *pixel_y = lat2pixel(priv->map_zoom, deg2rad(latitude)) - priv->map_y;
+}
+
+void
+osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    priv->center_coord_set = FALSE;
+    priv->map_x += dx;
+    priv->map_y += dy;
+
+    osm_gps_map_map_redraw_idle (map);
 }
 
