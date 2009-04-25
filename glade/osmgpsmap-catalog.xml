@@ -1,0 +1,13 @@
+<glade-catalog name="osmgpsmap" library="osmgpsmap" depends="gtk+">
+
+  <!-- <init-function>my_catalog_init</init-function> -->
+
+  <glade-widget-classes>
+    <glade-widget-class name="OsmGpsMap" generic-name="osmgpsmap" title="Gtk+ Open Street Map Widget"/>
+  </glade-widget-classes>
+
+  <glade-widget-group name="OsmGpsMap" title="Map Widgets">
+    <glade-widget-class-ref name="OsmGpsMap"/>
+  </glade-widget-group>
+
+</glade-catalog>
