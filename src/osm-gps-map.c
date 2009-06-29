@@ -1965,7 +1965,7 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
         //cache w/h for speed, and add image to list
         im = g_new0(image_t,1);
         im->w = gdk_pixbuf_get_width(image);
-        im->h = gdk_pixbuf_get_width(image);
+        im->h = gdk_pixbuf_get_height(image);
         im->pt.rlat = deg2rad(latitude);
         im->pt.rlon = deg2rad(longitude);
 
