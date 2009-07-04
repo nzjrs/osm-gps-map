@@ -25,23 +25,42 @@
 #include "osm-gps-map.h"
 
 typedef struct {
+    const OsmGpsMapSource_t id;
     const char *name;
-    const char *uri;
 } map_source_t;
 
+#if 0
+    ,
+    SOURCE_OPENSTREETMAP,
+    SOURCE_OPENSTREETMAP_RENDERER,
+    SOURCE_OPENAERIALMAP,
+    SOURCE_MAPS_FOR_FREE,
+    SOURCE_GOOGLE_STREET,
+    SOURCE_GOOGLE_SATELLITE,
+    SOURCE_GOOGLE_HYBRID,
+    SOURCE_VIRTUAL_EARTH_STREET,
+    SOURCE_VIRTUAL_EARTH_SATELLITE,
+    SOURCE_VIRTUAL_EARTH_HYBRID,
+    SOURCE_YAHOO_STREET,
+    SOURCE_YAHOO_SATELLITE,
+    SOURCE_YAHOO_HYBRID
+#endif
+
 static const map_source_t MAP_SOURCES[] = {
-    {"OpenStreetMap",           MAP_SOURCE_OPENSTREETMAP            },
-    {"OpenStreetMap Renderer",  MAP_SOURCE_OPENSTREETMAP_RENDERER   },
-    {"OpenAerialMap",           MAP_SOURCE_OPENAERIALMAP            },
-    {"Google Maps",             MAP_SOURCE_GOOGLE_MAPS              },
-    {"Google Maps Hybrid",      MAP_SOURCE_GOOGLE_HYBRID            },
-    {"Google Sattelite",        MAP_SOURCE_GOOGLE_SATTELITE         },
-    {"Google Sattelite Quad",   MAP_SOURCE_GOOGLE_SATTELITE_QUAD    },
-    {"Maps For Free",           MAP_SOURCE_MAPS_FOR_FREE            },
-    {"Virtual Earth Sattelite", MAP_SOURCE_VIRTUAL_EARTH_SATTELITE  },
+    {SOURCE_NULL,                       "INVALID"                   },
+    {SOURCE_OPENSTREETMAP,              "OpenStreetMap"             },
+    {SOURCE_OPENSTREETMAP_RENDERER,     "OpenStreetMap Renderer"    },
+    {SOURCE_OPENAERIALMAP,              "OpenAerialMap"             },
+    {SOURCE_MAPS_FOR_FREE,              "Maps For Free"             },
+    {SOURCE_GOOGLE_STREET,              "Google Maps"               },
+    {SOURCE_GOOGLE_SATELLITE,           "Google Satelite"           },
+    {SOURCE_GOOGLE_HYBRID,              "Google Maps Hybrid"        },
+    {SOURCE_VIRTUAL_EARTH_STREET,       "Virtual Earth"             },
+    {SOURCE_VIRTUAL_EARTH_SATELLITE,    "Virtual Earth Satelite"    },
+    {SOURCE_VIRTUAL_EARTH_HYBRID,       "Virtual Earth Hybrid"      },
 };
 
-static int map_provider = 0;
+static OsmGpsMapSource_t map_provider = 0;
 static gboolean maps_in_temp = FALSE;
 static gboolean debug = FALSE;
 static GOptionEntry entries[] =
@@ -189,9 +208,8 @@ usage (GOptionContext *context)
 
     printf("Valid map sources:\n");
     for(i=0; i<(sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0])); i++)
-        printf("\t%d:\t%s\n",i,MAP_SOURCES[i].name);
+        printf("\t%d:\t%s\n",MAP_SOURCES[i].id,MAP_SOURCES[i].name);
 }
-
 
 int
 main (int argc, char **argv)
@@ -205,6 +223,7 @@ main (int argc, char **argv)
     GtkWidget *homeButton;
     GtkWidget *cacheButton;
     GtkWidget *map;
+    const char *repo_uri;
     char *cachedir;
     char *homedir;
     GError *error = NULL;
@@ -223,7 +242,8 @@ main (int argc, char **argv)
         return 1;
     }
 
-    if (map_provider < 0 || map_provider > (sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0]))-1) {
+    repo_uri = osm_gps_map_get_repo_uri(map_provider);
+    if ( repo_uri == NULL ) {
         usage(context);
         return 2;
     }
@@ -249,57 +269,41 @@ main (int argc, char **argv)
     g_debug("Map Provider: %s (%d)", MAP_SOURCES[map_provider].name, map_provider);
 
     switch(map_provider) {
-        //0:    OpenStreetMap
-        //1:    OpenStreetMap Renderer
-        //2:    OpenAerialMap
-        //3:    Google Maps
-        //4:    Google Maps Hybrid
-        //5:    Google Sattelite
-        //6:    Google Sattelite Quad
-        //7:    Maps For Free
-        //8:    Virtual Earth Sattelite
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case SOURCE_OPENSTREETMAP:
+        case SOURCE_OPENSTREETMAP_RENDERER:
+        case SOURCE_OPENAERIALMAP:
+        case SOURCE_GOOGLE_STREET:
+        case SOURCE_GOOGLE_HYBRID:
+        case SOURCE_VIRTUAL_EARTH_STREET:
+        case SOURCE_VIRTUAL_EARTH_SATELLITE:
+        case SOURCE_VIRTUAL_EARTH_HYBRID:
         default:
+            //Max Zoom = 17
             map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",MAP_SOURCES[map_provider].uri,
+                                "repo-uri",repo_uri,
                                 "tile-cache",cachedir,
                                 "tile-cache-is-full-path",TRUE,
                                 "proxy-uri",g_getenv("http_proxy"),
                                 NULL);
             break;
-        case 7:
+        case SOURCE_MAPS_FOR_FREE:
             //Max Zoom = 11
             map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",MAP_SOURCES[map_provider].uri,
+                                "repo-uri",repo_uri,
                                 "tile-cache",cachedir,
                                 "tile-cache-is-full-path",TRUE,
                                 "proxy-uri",g_getenv("http_proxy"),
                                 "max-zoom",11,
                                 NULL);
             break;
-        case 5:
-        case 6:
+        case SOURCE_GOOGLE_SATELLITE:
             //Max Zoom = 18
             map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",MAP_SOURCES[map_provider].uri,
+                                "repo-uri",repo_uri,
                                 "tile-cache",cachedir,
                                 "tile-cache-is-full-path",TRUE,
                                 "proxy-uri",g_getenv("http_proxy"),
                                 "max-zoom",18,
-                                NULL);
-            break;
-        case 8:
-            //Max Zoom = 20
-            map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",MAP_SOURCES[map_provider].uri,
-                                "tile-cache",cachedir,
-                                "tile-cache-is-full-path",TRUE,
-                                "proxy-uri",g_getenv("http_proxy"),
-                                "max-zoom",20,
                                 NULL);
             break;
     }

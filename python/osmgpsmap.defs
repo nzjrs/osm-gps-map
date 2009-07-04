@@ -8,7 +8,13 @@
 )
 
 ;; Enumerations and flags ...
-
+(define-enum MapSource
+  (in-module "Osm")
+  (c-name "OsmGpsMapSource_t")
+  (values
+   '("OpenStreetMap" "SOURCE_OPENSTREETMAP")
+  )
+)
 
 ;; From osm-gps-map.h
 
@@ -189,6 +195,14 @@
   (parameters
     '("gint" "dx")
     '("gint" "dy")
+  )
+)
+
+(define-function get_repo_uri
+  (c-name "osm_gps_map_get_repo_uri")
+  (return-type "const-char*")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
   )
 )
 

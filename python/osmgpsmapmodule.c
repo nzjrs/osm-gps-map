@@ -34,12 +34,14 @@ initosmgpsmap(void)
 	d = PyModule_GetDict(m);
 
 	pyosmgpsmap_register_classes(d);
+    pyosmgpsmap_add_constants(m, "SOURCE_");
 
 	/* Add this if we ever add an enum or something to osmgpsmap. */
 #if 0
 	pyosmgpsmap_add_constants(m, "OSM_GPS_MAP_");
 #endif
 
+#if 0
 	/* Manually add all the Map repository strings */
     PyModule_AddObject(m, "MAP_SOURCE_OPENSTREETMAP",
 		       PyString_FromString(MAP_SOURCE_OPENSTREETMAP));
@@ -57,6 +59,7 @@ initosmgpsmap(void)
 		       PyString_FromString(MAP_SOURCE_MAPS_FOR_FREE));
     PyModule_AddObject(m, "MAP_SOURCE_VIRTUAL_EARTH_SATTELITE",
 		       PyString_FromString(MAP_SOURCE_VIRTUAL_EARTH_SATTELITE));
+#endif
 
 	if (PyErr_Occurred()) {
 		Py_FatalError("can't initialize module osmgpsmap");
