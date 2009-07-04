@@ -3,6 +3,7 @@ Changes in 0.4.0
   * Remove map repo uris from public API. They should now be retrieved using
     osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
   * Add osm_gps_map_get_scale
+  * Implement a blank map source that just draws grey tiles
 
 Changes in 0.3.0
 ======================

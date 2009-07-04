@@ -104,7 +104,7 @@ struct _OsmGpsMapPrivate
     GdkGC *gc_map;
 
     //The tile painted when one cannot be found
-    //GdkPixbuf *missing_tile;
+    GdkPixbuf *null_tile;
 
     //For tracking click and drag
     int drag_counter;
@@ -123,6 +123,7 @@ struct _OsmGpsMapPrivate
     guint is_disposed : 1;
     guint dragging : 1;
     guint center_coord_set : 1;
+    guint null_source : 1;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (OSM_GPS_MAP (o)->priv)
@@ -918,9 +919,12 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
-    filename = g_strdup_printf("%s/%u/%u/%u.png",
-                               priv->cache_dir,
-                               zoom, x, y);
+    if (priv->null_source) {
+        osm_gps_map_blit_tile(map, priv->null_tile, offset_x,offset_y);
+        return;
+    }
+
+    filename = g_strdup_printf("%s/%u/%u/%u.png", priv->cache_dir, zoom, x, y);
 
     pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
     if(pixbuf)
@@ -1241,6 +1245,7 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
 {
     GObject *object;
     OsmGpsMapPrivate *priv;
+    const char *null_uri;
 
     //Always chain up to the parent constructor
     object = G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
@@ -1262,6 +1267,15 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
 
         g_free(md5);
     }
+
+    null_uri = osm_gps_map_source_get_repo_uri(OSM_GPS_MAP_SOURCE_NULL);
+    if ( strcmp(priv->repo_uri, null_uri)  == 0 ) {
+        g_debug("Using null source");
+        priv->null_source = TRUE;
+
+        priv->null_tile = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 256, 256);
+        gdk_pixbuf_fill(priv->null_tile, 0xcccccc00);
+    }        
 
     return object;
 }
@@ -1288,6 +1302,9 @@ osm_gps_map_dispose (GObject *object)
 
     if(priv->pixmap)
         g_object_unref (priv->pixmap);
+
+    if (priv->null_tile)
+        g_object_unref (priv->null_tile);
 
     if(priv->gc_map)
         g_object_unref(priv->gc_map);
@@ -1903,7 +1920,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
     switch(source)
     {
         case OSM_GPS_MAP_SOURCE_NULL:
-            return NULL;
+            return "none://";
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
             return OSM_REPO_URI;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
@@ -1951,7 +1968,7 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
 {
     switch(source) {
         case OSM_GPS_MAP_SOURCE_NULL:
-            return 17;
+            return 18;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
             return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
