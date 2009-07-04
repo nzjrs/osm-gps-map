@@ -1714,8 +1714,8 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_REPO_URI,
                                      g_param_spec_string ("repo-uri",
                                                           "repo uri",
-                                                          "osm repo uri",
-                                                          "http://tile.openstreetmap.org/#Z/#X/#Y.png",
+                                                          "map source tile repository uri",
+                                                          OSM_REPO_URI,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
@@ -1759,7 +1759,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        "maximum zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
-                                                       17,
+                                                       OSM_MAX_ZOOM,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
@@ -1769,7 +1769,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        "minimum zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
-                                                       1,
+                                                       OSM_MIN_ZOOM,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
@@ -1905,7 +1905,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_NULL:
             return NULL;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
-            return "http://tile.openstreetmap.org/#Z/#X/#Y.png";
+            return OSM_REPO_URI;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
             return "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png";
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
@@ -1943,7 +1943,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
 int 
 osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source)
 {
-    return 0;
+    return 1;
 }
 
 int 
@@ -1951,7 +1951,9 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
 {
     switch(source) {
         case OSM_GPS_MAP_SOURCE_NULL:
+            return 17;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+            return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:

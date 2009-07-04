@@ -32,6 +32,10 @@
 #define MAX_ZOOM 20
 #define MIN_ZOOM 0
 
+#define OSM_REPO_URI    "http://tile.openstreetmap.org/#Z/#X/#Y.png"
+#define OSM_MIN_ZOOM    1
+#define OSM_MAX_ZOOM    18
+
 #define URI_MARKER_X    "#X"
 #define URI_MARKER_Y    "#Y"
 #define URI_MARKER_Z    "#Z"
