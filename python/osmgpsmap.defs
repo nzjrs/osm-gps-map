@@ -211,6 +211,12 @@
   )
 )
 
+(define-method get_scale
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_scale")
+  (return-type "float")
+)
+
 (define-function source_get_repo_uri
   (c-name "osm_gps_map_source_get_repo_uri")
   (return-type "const-char*")

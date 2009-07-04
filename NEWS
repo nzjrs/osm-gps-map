@@ -2,6 +2,7 @@ Changes in 0.4.0
   * Fix for segfault when adding images to the map
   * Remove map repo uris from public API. They should now be retrieved using
     osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
+  * Add osm_gps_map_get_scale
 
 Changes in 0.3.0
 ======================

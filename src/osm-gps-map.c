@@ -421,6 +421,59 @@ my_log_handler (const gchar * log_domain, GLogLevelFlags log_level, const gchar 
         g_log_default_handler (log_domain, log_level, message, user_data);
 }
 
+static float
+osm_gps_map_get_scale_at_point(int zoom, float rlat, float rlon)
+{
+    /* This is a naieve implementation with values from
+    http://wiki.openstreetmap.org/index.php/FAQ#What_is_the_map_scale_for_a_particular_zoom_level_of_the_map.3F  
+    http://almien.co.uk/OSM/Tools/Scale/
+
+    The true scale, becase of the mercator projection of all supported map 
+    sources, depends on the lat and lon of the point */
+    switch (zoom) {
+        case 0:
+            return 156412.0;
+        case 1:
+            return 78206.0;
+        case 2:
+            return 39135.758482;
+        case 3:
+            return 19567.879241;
+        case 4:
+            return 9783.939621;
+        case 5:
+            return 4891.969810;
+        case 6:
+            return 2445.984905;
+        case 7:
+            return 1222.992453;
+        case 8:
+            return 611.496226;
+        case 9:
+            return 305.748113;
+        case 10:
+            return 152.874057;
+        case 11:
+            return 76.437028;
+        case 12:
+            return 38.218514;
+        case 13:
+            return 19.109257;
+        case 14:
+            return 9.554629;
+        case 15:
+            return 4.777314;
+        case 16:
+            return 2.388657;
+        case 17:
+            return 1.194329;
+        case 18:
+            return 0.597164;
+    }
+
+    return 0.0;
+}
+
 /* clears the trip list and all resources */
 static void
 osm_gps_map_free_trip (OsmGpsMap *map)
@@ -2286,5 +2339,16 @@ osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
     priv->map_y += dy;
 
     osm_gps_map_map_redraw_idle (map);
+}
+
+float
+osm_gps_map_get_scale(OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
 }
 

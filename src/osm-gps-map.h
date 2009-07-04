@@ -104,6 +104,7 @@ void osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                        gfloat latitude, gfloat longitude,
                                        gint *pixel_x, gint *pixel_y);
 void osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy);
+float osm_gps_map_get_scale(OsmGpsMap *map);
 
 G_END_DECLS
 
