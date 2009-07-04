@@ -18,80 +18,93 @@
  with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
+import sys
+import os.path
 import gtk.gdk
 import gobject
+
+#Try static lib first
+mydir = os.path.dirname(os.path.abspath(__file__))
+libdir = os.path.join(mydir, ".libs")
+sys.path.insert(0, libdir)
+
 import osmgpsmap
  
-gtk.gdk.threads_init()
+class UI(gtk.Window):
+    def __init__(self):
+        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
-def print_tiles(osm):
-    if osm.get_property('tiles-queued') != 0:
-        print osm.get_property('tiles-queued'), 'tiles queued'
-    return True
+        self.set_default_size(500, 500)
+        self.connect('destroy', lambda x: gtk.main_quit())
+        self.set_title('OpenStreetMap GPS Mapper')
 
-def zoom_in_clicked(button, osm):
-    osm.set_zoom(osm.get_property('zoom') + 1)
- 
-def zoom_out_clicked(button, osm):
-    osm.set_zoom(osm.get_property('zoom') - 1)
+        vbox = gtk.VBox(False, 0)
+        self.add(vbox)
+        vbox.show()
+        hbox = gtk.HBox(False, 0)
 
-def home_clicked(button, osm):
-    osm.set_mapcenter(-44.39, 171.25, 12)
- 
-def cache_clicked(button, osm):
-    bbox = osm.get_bbox()
-    osm.download_maps(
-        *bbox,
-        zoom_start=osm.get_property('zoom'),
-        zoom_end=osm.get_property('max-zoom')
-    )
-
-def map_clicked(osm, event):
-    latlon_entry.set_text(
-        'latitude %s longitude %s' % (
-            osm.get_property('latitude'),
-            osm.get_property('longitude')
+        self.osm = osmgpsmap.GpsMap(
+            tile_cache=os.path.expanduser('~/Maps/OpenStreetMap'),
+            tile_cache_is_full_path=True
         )
-    )
+        self.osm.connect('button_release_event', self.map_clicked)
+        self.latlon_entry = gtk.Entry()
+
+        zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)
+        zoom_in_button.connect('clicked', self.zoom_in_clicked)
+        zoom_out_button = gtk.Button(stock=gtk.STOCK_ZOOM_OUT)
+        zoom_out_button.connect('clicked', self.zoom_out_clicked)
+        home_button = gtk.Button(stock=gtk.STOCK_HOME)
+        home_button.connect('clicked', self.home_clicked)
+        cache_button = gtk.Button('Cache')
+        cache_button.connect('clicked', self.cache_clicked)
+
+        vbox.pack_start(self.osm)
+        hbox.pack_start(zoom_in_button)
+        hbox.pack_start(zoom_out_button)
+        hbox.pack_start(home_button)
+        hbox.pack_start(cache_button)
+        vbox.pack_start(hbox, False)
+        vbox.pack_start(self.latlon_entry, False)
+
+        gobject.timeout_add(500, self.print_tiles)
+        
+
+    def print_tiles(self):
+        if self.osm.props.tiles_queued != 0:
+            print self.osm.props.tiles_queued, 'tiles queued'
+        return True
+
+    def zoom_in_clicked(self, button):
+        self.osm.set_zoom(self.osm.props.zoom + 1)
  
-window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-window.set_default_size(500, 500)
-window.connect('destroy', lambda x: gtk.main_quit())
-window.set_title('OpenStreetMap GPS Mapper')
+    def zoom_out_clicked(self, button):
+        self.osm.set_zoom(self.osm.props.zoom - 1)
 
-vbox = gtk.VBox(False, 0)
-window.add(vbox)
-vbox.show()
-hbox = gtk.HBox(False, 0)
-
-osm = osmgpsmap.GpsMap(
-    tile_cache=os.path.expanduser('~/Maps/OpenStreetMap'),
-    tile_cache_is_full_path=True
-)
-osm.connect('button_release_event', map_clicked)
-latlon_entry = gtk.Entry()
-
-zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)
-zoom_in_button.connect('clicked', zoom_in_clicked, osm)
-zoom_out_button = gtk.Button(stock=gtk.STOCK_ZOOM_OUT)
-zoom_out_button.connect('clicked', zoom_out_clicked, osm)
-home_button = gtk.Button(stock=gtk.STOCK_HOME)
-home_button.connect('clicked', home_clicked, osm)
-cache_button = gtk.Button('Cache')
-cache_button.connect('clicked', cache_clicked, osm)
-
-vbox.pack_start(osm)
-hbox.pack_start(zoom_in_button)
-hbox.pack_start(zoom_out_button)
-hbox.pack_start(home_button)
-hbox.pack_start(cache_button)
-vbox.pack_start(hbox, False)
-vbox.pack_start(latlon_entry, False)
-
-window.show_all()
+    def home_clicked(self, button):
+        self.osm.set_mapcenter(-44.39, 171.25, 12)
  
-gobject.timeout_add(500, print_tiles, osm)
+    def cache_clicked(self, button):
+        bbox = self.osm.get_bbox()
+        self.osm.download_maps(
+            *bbox,
+            zoom_start=self.osm.props.zoom,
+            zoom_end=self.osm.props.max_zoom
+        )
+
+    def map_clicked(self, osm, event):
+        self.latlon_entry.set_text(
+            'Map Centre: latitude %s longitude %s' % (
+                self.osm.props.latitude,
+                self.osm.props.longitude
+            )
+        )
  
-gtk.main()
+
+if __name__ == "__main__":
+    gtk.gdk.threads_init()
+
+    u = UI()
+    u.show_all()
+    gtk.main()
 
