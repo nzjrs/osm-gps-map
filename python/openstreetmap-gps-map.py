@@ -38,10 +38,8 @@ class UI(gtk.Window):
         self.connect('destroy', lambda x: gtk.main_quit())
         self.set_title('OpenStreetMap GPS Mapper')
 
-        vbox = gtk.VBox(False, 0)
-        self.add(vbox)
-        vbox.show()
-        hbox = gtk.HBox(False, 0)
+        self.vbox = gtk.VBox(False, 0)
+        self.add(self.vbox)
 
         self.osm = osmgpsmap.GpsMap(
             tile_cache=os.path.expanduser('~/Maps/OpenStreetMap'),
@@ -59,16 +57,71 @@ class UI(gtk.Window):
         cache_button = gtk.Button('Cache')
         cache_button.connect('clicked', self.cache_clicked)
 
-        vbox.pack_start(self.osm)
+        self.vbox.pack_start(self.osm)
+        hbox = gtk.HBox(False, 0)
         hbox.pack_start(zoom_in_button)
         hbox.pack_start(zoom_out_button)
         hbox.pack_start(home_button)
         hbox.pack_start(cache_button)
-        vbox.pack_start(hbox, False)
-        vbox.pack_start(self.latlon_entry, False)
+
+        #add ability to test custom map URIs
+        ex = gtk.Expander("<b>Map Repository URI</b>")
+        ex.props.use_markup = True
+        vb = gtk.VBox()
+        hb = gtk.HBox()
+        self.repouri_entry = gtk.Entry()
+        self.repouri_entry.set_text(self.osm.props.repo_uri)
+        gobtn = gtk.Button("Load Map URI")
+        gobtn.connect("clicked", self.load_map_clicked)
+        exp = gtk.Label(
+"""
+Enter an repository URL to fetch map tiles from in the box below. Special metacharacters may be included in this url
+
+<i>Metacharacters:</i>
+\t#X\tMax X location
+\t#Y\tMax Y location
+\t#Z\tMap zoom (0 = min zoom, fully zoomed out)
+\t#S\tInverse zoom (max-zoom - #Z)
+\t#Q\tQuadtree encoded tile (qrts)
+\t#W\tQuadtree encoded tile (1234)
+\t#U\tEncoding not implemeted
+\t#R\tRandom integer, 0-4""")
+        exp.props.xalign = 0
+        exp.props.use_markup = True
+        exp.props.wrap = True
+
+        ex.add(vb)
+        vb.pack_start(exp, False)
+        vb.pack_start(hb, False)
+        hb.pack_start(self.repouri_entry, True)
+        hb.pack_start(gobtn, False)
+
+        self.vbox.pack_end(ex, False)
+        self.vbox.pack_end(self.latlon_entry, False)
+        self.vbox.pack_end(hbox, False)
 
         gobject.timeout_add(500, self.print_tiles)
-        
+
+    def load_map_clicked(self, button):
+        uri = self.repouri_entry.get_text()
+        if uri:
+            if self.osm:
+                #remove old map
+                self.vbox.remove(self.osm)
+
+            try:
+                self.osm = osmgpsmap.GpsMap(
+                    tile_cache=os.path.expanduser('/tmp/Maps'),
+                    repo_uri=uri
+                )
+                self.osm.connect('button_release_event', self.map_clicked)
+            except Exception, e:
+                print "ERROR:", e
+                self.osm = osm.GpsMap()
+
+            self.vbox.pack_start(self.osm, True)
+            self.osm.connect('button_release_event', self.map_clicked)
+            self.osm.show()
 
     def print_tiles(self):
         if self.osm.props.tiles_queued != 0:
