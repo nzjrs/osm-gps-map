@@ -1417,7 +1417,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 }
 
 static gboolean
-_osm_gps_map_scroll (GtkWidget *widget, GdkEventScroll  *event)
+osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
@@ -1623,7 +1623,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->button_press_event = osm_gps_map_button_press;
     widget_class->button_release_event = osm_gps_map_button_release;
     widget_class->motion_notify_event = osm_gps_map_motion_notify;
-    widget_class->scroll_event = _osm_gps_map_scroll;
+    widget_class->scroll_event = osm_gps_map_scroll_event;
 
     g_object_class_install_property (object_class,
                                      PROP_AUTO_CENTER,
@@ -1801,6 +1801,45 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 
 }
 
+const char* 
+osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
+{
+    switch(source)
+    {
+        case OSM_GPS_MAP_SOURCE_NULL:
+            return "None";
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+            return "OpenStreetMap";
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
+            return "OpenStreetMap Renderer";
+        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+            return "OpenAerialMap";
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
+            return "Maps-For-Free";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+            return "Google Maps";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
+            return "Google Satellite";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+            return "Google Hybrid";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
+            return "Virtual Earth";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
+            return "Virtual Earth Satellite";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
+            return "Virtual Earth Hybrid";
+        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
+            return "Yahoo Maps";
+        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
+            return "Yahoo Satellite";
+        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
+            return "Yahoo Hybrid";
+        default:
+            return NULL;
+    }
+    return NULL;
+}
+
 //http://www.internettablettalk.com/forums/showthread.php?t=5209
 //https://garage.maemo.org/plugins/scmsvn/viewcvs.php/trunk/src/maps.c?root=maemo-mapper&view=markup
 //http://www.ponies.me.uk/maps/GoogleTileUtils.java
@@ -1841,11 +1880,44 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
              *  y = (1 << (MAX_ZOOM - zoom)) - tiley - 1,
              *  z = zoom - (MAX_ZOOM - 17));
              */
-            return NULL; 
+            return NULL;
         default:
             return NULL;
     }
     return NULL;
+}
+
+int 
+osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source)
+{
+    return 0;
+}
+
+int 
+osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
+{
+    switch(source) {
+        case OSM_GPS_MAP_SOURCE_NULL:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
+        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
+        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
+        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
+            return 17;
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
+            return 11;
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
+            return 18;
+        default:
+            return 17;
+    }
+    return 17;
 }
 
 void

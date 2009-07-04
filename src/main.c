@@ -24,42 +24,6 @@
 #include <gtk/gtk.h>
 #include "osm-gps-map.h"
 
-typedef struct {
-    const OsmGpsMapSource_t id;
-    const char *name;
-} map_source_t;
-
-#if 0
-    ,
-    OSM_GPS_MAP_SOURCE_OPENSTREETMAP,
-    OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,
-    OSM_GPS_MAP_SOURCE_OPENAERIALMAP,
-    OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,
-    OSM_GPS_MAP_SOURCE_GOOGLE_STREET,
-    OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,
-    OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,
-    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,
-    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,
-    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,
-    OSM_GPS_MAP_SOURCE_YAHOO_STREET,
-    OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE,
-    OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
-#endif
-
-static const map_source_t MAP_SOURCES[] = {
-    {OSM_GPS_MAP_SOURCE_NULL,                       "INVALID"                   },
-    {OSM_GPS_MAP_SOURCE_OPENSTREETMAP,              "OpenStreetMap"             },
-    {OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,     "OpenStreetMap Renderer"    },
-    {OSM_GPS_MAP_SOURCE_OPENAERIALMAP,              "OpenAerialMap"             },
-    {OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,              "Maps For Free"             },
-    {OSM_GPS_MAP_SOURCE_GOOGLE_STREET,              "Google Maps"               },
-    {OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,           "Google Satelite"           },
-    {OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,              "Google Maps Hybrid"        },
-    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,       "Virtual Earth"             },
-    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,    "Virtual Earth Satelite"    },
-    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,       "Virtual Earth Hybrid"      },
-};
-
 static OsmGpsMapSource_t map_provider = 0;
 static gboolean maps_in_temp = FALSE;
 static gboolean debug = FALSE;
@@ -207,8 +171,11 @@ usage (GOptionContext *context)
     puts(g_option_context_get_help(context, TRUE, NULL));
 
     printf("Valid map sources:\n");
-    for(i=0; i<(sizeof(MAP_SOURCES)/sizeof(MAP_SOURCES[0])); i++)
-        printf("\t%d:\t%s\n",MAP_SOURCES[i].id,MAP_SOURCES[i].name);
+    for(i=OSM_GPS_MAP_SOURCE_NULL; i <= OSM_GPS_MAP_SOURCE_YAHOO_HYBRID; i++)
+    {
+        const char *name = osm_gps_map_source_get_friendly_name(i);
+        printf("\t%d:\t%s\n",i,name);
+    }
 }
 
 int
@@ -224,6 +191,8 @@ main (int argc, char **argv)
     GtkWidget *cacheButton;
     GtkWidget *map;
     const char *repo_uri;
+    const char *friendly_name;
+    int max_zoom;
     char *cachedir;
     char *homedir;
     GError *error = NULL;
@@ -233,7 +202,7 @@ main (int argc, char **argv)
     g_thread_init(NULL);
     gtk_init (&argc, &argv);
 
-    context = g_option_context_new ("- test tree model performance");
+    context = g_option_context_new ("- Map browser");
     g_option_context_set_help_enabled(context, FALSE);
     g_option_context_add_main_entries (context, entries, NULL);
 
@@ -247,6 +216,9 @@ main (int argc, char **argv)
         usage(context);
         return 2;
     }
+
+    friendly_name = osm_gps_map_source_get_friendly_name(map_provider);
+    max_zoom = osm_gps_map_source_get_max_zoom(map_provider);
 
     if (maps_in_temp)
         homedir = g_strdup("/tmp");
@@ -263,52 +235,21 @@ main (int argc, char **argv)
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 
     STAR_IMAGE = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
-    cachedir = g_strdup_printf("%s/Maps/%s", homedir, MAP_SOURCES[map_provider].name);
+    cachedir = g_strdup_printf("%s/Maps/%s", homedir, friendly_name);
 
     g_debug("Map Cache Dir: %s", cachedir);
-    g_debug("Map Provider: %s (%d)", MAP_SOURCES[map_provider].name, map_provider);
+    g_debug("Map Provider: %s (%d)", friendly_name, map_provider);
+    g_debug("Map Maximum Zoom: %d", max_zoom);
 
-    switch(map_provider) {
-        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
-        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
-        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
-        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
-        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
-        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
-        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
-        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
-        default:
-            //Max Zoom = 17
-            map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",repo_uri,
-                                "tile-cache",cachedir,
-                                "tile-cache-is-full-path",TRUE,
-                                "proxy-uri",g_getenv("http_proxy"),
-                                NULL);
-            break;
-        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
-            //Max Zoom = 11
-            map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",repo_uri,
-                                "tile-cache",cachedir,
-                                "tile-cache-is-full-path",TRUE,
-                                "proxy-uri",g_getenv("http_proxy"),
-                                "max-zoom",11,
-                                NULL);
-            break;
-        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
-            //Max Zoom = 18
-            map = g_object_new (OSM_TYPE_GPS_MAP,
-                                "repo-uri",repo_uri,
-                                "tile-cache",cachedir,
-                                "tile-cache-is-full-path",TRUE,
-                                "proxy-uri",g_getenv("http_proxy"),
-                                "max-zoom",18,
-                                NULL);
-            break;
-    }
+    map = g_object_new (OSM_TYPE_GPS_MAP,
+                        "repo-uri",repo_uri,
+                        "tile-cache",cachedir,
+                        "tile-cache-is-full-path",TRUE,
+                        "proxy-uri",g_getenv("http_proxy"),
+                        "max-zoom",max_zoom,
+                        NULL);
+
     g_free(cachedir);
-
 
     vbox = gtk_vbox_new (FALSE, 2);
     gtk_container_add (GTK_CONTAINER (window), vbox);

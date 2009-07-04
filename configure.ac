@@ -1,4 +1,4 @@
-AC_INIT(osm-gps-map, 0.3.1)
+AC_INIT(osm-gps-map, 0.4.0)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 AC_CONFIG_SRCDIR(osmgpsmap.pc.in)
@@ -29,6 +29,8 @@ if test "x$enable_cairo" = "xyes"; then
     OPENSTREETMAP_GPS_MAP_CFLAGS="$OPENSTREETMAP_GPS_MAP_CFLAGS $CAIRO_CFLAGS"
     OPENSTREETMAP_GPS_MAP_LIBS="$OPENSTREETMAP_GPS_MAP_LIBS $CAIRO_LIBS"
 fi
+
+CFLAGS="$CFLAGS -Wall -Wswitch-enum"
 
 AC_OUTPUT([
 osmgpsmap.pc
