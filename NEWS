@@ -1,0 +1,15 @@
+Changes in 0.4.0
+  * Fix for segfault when adding images to the map
+
+Changes in 0.3.0
+======================
+  * A new major contributor, Alberto Mardegan, 
+    worked on many of the new features of this release. Thanks a lot Alberto!
+  * Draw map tracks with Cairo by default.
+  * Interpolate between zoom levels while waiting for a tile to download.
+  * Stop using GET_PRIVATE, and cache priv* for performance.
+  * Keep an extra border of images offscreen for smoother scrolling at 
+    the edges of the map.
+  * Keep the last N tiles in memory to improve render performance
+    (previously they were loaded from disk)
+  * Add some new api; osm_gps_set_center, osm_gps_map_scroll.
