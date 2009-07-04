@@ -31,33 +31,33 @@ typedef struct {
 
 #if 0
     ,
-    SOURCE_OPENSTREETMAP,
-    SOURCE_OPENSTREETMAP_RENDERER,
-    SOURCE_OPENAERIALMAP,
-    SOURCE_MAPS_FOR_FREE,
-    SOURCE_GOOGLE_STREET,
-    SOURCE_GOOGLE_SATELLITE,
-    SOURCE_GOOGLE_HYBRID,
-    SOURCE_VIRTUAL_EARTH_STREET,
-    SOURCE_VIRTUAL_EARTH_SATELLITE,
-    SOURCE_VIRTUAL_EARTH_HYBRID,
-    SOURCE_YAHOO_STREET,
-    SOURCE_YAHOO_SATELLITE,
-    SOURCE_YAHOO_HYBRID
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP,
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,
+    OSM_GPS_MAP_SOURCE_OPENAERIALMAP,
+    OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,
+    OSM_GPS_MAP_SOURCE_GOOGLE_STREET,
+    OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,
+    OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,
+    OSM_GPS_MAP_SOURCE_YAHOO_STREET,
+    OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE,
+    OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
 #endif
 
 static const map_source_t MAP_SOURCES[] = {
-    {SOURCE_NULL,                       "INVALID"                   },
-    {SOURCE_OPENSTREETMAP,              "OpenStreetMap"             },
-    {SOURCE_OPENSTREETMAP_RENDERER,     "OpenStreetMap Renderer"    },
-    {SOURCE_OPENAERIALMAP,              "OpenAerialMap"             },
-    {SOURCE_MAPS_FOR_FREE,              "Maps For Free"             },
-    {SOURCE_GOOGLE_STREET,              "Google Maps"               },
-    {SOURCE_GOOGLE_SATELLITE,           "Google Satelite"           },
-    {SOURCE_GOOGLE_HYBRID,              "Google Maps Hybrid"        },
-    {SOURCE_VIRTUAL_EARTH_STREET,       "Virtual Earth"             },
-    {SOURCE_VIRTUAL_EARTH_SATELLITE,    "Virtual Earth Satelite"    },
-    {SOURCE_VIRTUAL_EARTH_HYBRID,       "Virtual Earth Hybrid"      },
+    {OSM_GPS_MAP_SOURCE_NULL,                       "INVALID"                   },
+    {OSM_GPS_MAP_SOURCE_OPENSTREETMAP,              "OpenStreetMap"             },
+    {OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,     "OpenStreetMap Renderer"    },
+    {OSM_GPS_MAP_SOURCE_OPENAERIALMAP,              "OpenAerialMap"             },
+    {OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,              "Maps For Free"             },
+    {OSM_GPS_MAP_SOURCE_GOOGLE_STREET,              "Google Maps"               },
+    {OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,           "Google Satelite"           },
+    {OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,              "Google Maps Hybrid"        },
+    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,       "Virtual Earth"             },
+    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,    "Virtual Earth Satelite"    },
+    {OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,       "Virtual Earth Hybrid"      },
 };
 
 static OsmGpsMapSource_t map_provider = 0;
@@ -242,7 +242,7 @@ main (int argc, char **argv)
         return 1;
     }
 
-    repo_uri = osm_gps_map_get_repo_uri(map_provider);
+    repo_uri = osm_gps_map_source_get_repo_uri(map_provider);
     if ( repo_uri == NULL ) {
         usage(context);
         return 2;
@@ -269,14 +269,14 @@ main (int argc, char **argv)
     g_debug("Map Provider: %s (%d)", MAP_SOURCES[map_provider].name, map_provider);
 
     switch(map_provider) {
-        case SOURCE_OPENSTREETMAP:
-        case SOURCE_OPENSTREETMAP_RENDERER:
-        case SOURCE_OPENAERIALMAP:
-        case SOURCE_GOOGLE_STREET:
-        case SOURCE_GOOGLE_HYBRID:
-        case SOURCE_VIRTUAL_EARTH_STREET:
-        case SOURCE_VIRTUAL_EARTH_SATELLITE:
-        case SOURCE_VIRTUAL_EARTH_HYBRID:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
+        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
         default:
             //Max Zoom = 17
             map = g_object_new (OSM_TYPE_GPS_MAP,
@@ -286,7 +286,7 @@ main (int argc, char **argv)
                                 "proxy-uri",g_getenv("http_proxy"),
                                 NULL);
             break;
-        case SOURCE_MAPS_FOR_FREE:
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             //Max Zoom = 11
             map = g_object_new (OSM_TYPE_GPS_MAP,
                                 "repo-uri",repo_uri,
@@ -296,7 +296,7 @@ main (int argc, char **argv)
                                 "max-zoom",11,
                                 NULL);
             break;
-        case SOURCE_GOOGLE_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
             //Max Zoom = 18
             map = g_object_new (OSM_TYPE_GPS_MAP,
                                 "repo-uri",repo_uri,

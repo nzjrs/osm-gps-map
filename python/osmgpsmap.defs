@@ -12,7 +12,20 @@
   (in-module "Osm")
   (c-name "OsmGpsMapSource_t")
   (values
-   '("OpenStreetMap" "SOURCE_OPENSTREETMAP")
+   '("None" "OSM_GPS_MAP_SOURCE_NULL")
+   '("OpenStreetMap" "OSM_GPS_MAP_SOURCE_OPENSTREETMAP")
+   '("OpenStreetMap Renderer" "OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER")
+   '("OpenAerialMap" "OSM_GPS_MAP_SOURCE_OPENAERIALMAP")
+   '("Maps For Free" "OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE")
+   '("Google Maps" "OSM_GPS_MAP_SOURCE_GOOGLE_STREET")
+   '("Google Satellite" "OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE")
+   '("Google Maps Hybrid" "OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID")
+   '("Virtual Earth" "OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET")
+   '("Virtual Earth Satellite" "OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE")
+   '("Virtual Earth Hybrid" "OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID")
+   '("Yahoo Maps" "OSM_GPS_MAP_SOURCE_YAHOO_STREET")
+   '("Yahoo Maps Satellite" "OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE")
+   '("Yahoo Maps Hybrid" "OSM_GPS_MAP_SOURCE_YAHOO_HYBRID")
   )
 )
 
@@ -198,8 +211,8 @@
   )
 )
 
-(define-function get_repo_uri
-  (c-name "osm_gps_map_get_repo_uri")
+(define-function source_get_repo_uri
+  (c-name "osm_gps_map_source_get_repo_uri")
   (return-type "const-char*")
   (parameters
     '("OsmGpsMapSource_t" "source")

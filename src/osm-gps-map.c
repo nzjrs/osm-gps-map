@@ -1806,35 +1806,35 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 //http://www.ponies.me.uk/maps/GoogleTileUtils.java
 //http://www.mgmaps.com/cache/MapTileCacher.perl
 const char* 
-osm_gps_map_get_repo_uri(OsmGpsMapSource_t source)
+osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
 {
     switch(source)
     {
-        case SOURCE_NULL:
+        case OSM_GPS_MAP_SOURCE_NULL:
             return NULL;
-        case SOURCE_OPENSTREETMAP:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
             return "http://tile.openstreetmap.org/#Z/#X/#Y.png";
-        case SOURCE_OPENSTREETMAP_RENDERER:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
             return "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png";
-        case SOURCE_OPENAERIALMAP:
+        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
             return "http://tile.openaerialmap.org/tiles/1.0.0/openaerialmap-900913/#Z/#X/#Y.jpg";
-        case SOURCE_MAPS_FOR_FREE:
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             return "http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg";
-        case SOURCE_GOOGLE_STREET:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
             return "http://mt#R.google.com/vt/v=w2.97&x=#X&y=#Y&z=#Z";
-        case SOURCE_GOOGLE_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
             return "http://khm#R.google.com/kh?n=404&v=3&t=#Q";
-        case SOURCE_GOOGLE_HYBRID:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
             return NULL; /* No longer working  "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S" */
-        case SOURCE_VIRTUAL_EARTH_STREET:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/r#W.jpeg?g=50";
-        case SOURCE_VIRTUAL_EARTH_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/a#W.jpeg?g=50";
-        case SOURCE_VIRTUAL_EARTH_HYBRID:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/h#W.jpeg?g=50";
-        case SOURCE_YAHOO_STREET:
-        case SOURCE_YAHOO_SATELLITE:
-        case SOURCE_YAHOO_HYBRID:
+        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
+        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
             /* TODO: Implement signed Y, aka U
              * http://us.maps3.yimg.com/aerial.maps.yimg.com/ximg?v=1.7&t=a&s=256&x=%d&y=%-d&z=%d 
              *  x = tilex,
