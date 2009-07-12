@@ -1108,9 +1108,9 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
 
     if (priv->show_trip_history)
         osm_gps_map_print_track (map, priv->trip_history);
+
     if (priv->tracks)
     {
-        g_debug("TRACK");
         GSList* tmp = priv->tracks;
         while (tmp != NULL)
         {
@@ -1120,24 +1120,23 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
     }
 }
 
+static gboolean
+osm_gps_map_purge_cache_check(gpointer key, gpointer value, gpointer user)
+{
+   return (((OsmCachedTile*)value)->redraw_cycle != ((OsmGpsMapPrivate*)user)->redraw_cycle);
+}
+
 static void
 osm_gps_map_purge_cache (OsmGpsMap *map)
 {
-    OsmGpsMapPrivate *priv = map->priv;
-    GHashTableIter iter;
-    OsmCachedTile *tile;
+   OsmGpsMapPrivate *priv = map->priv;
 
-    if (g_hash_table_size (priv->tile_cache) < priv->max_tile_cache_size)
-        return;
+   if (g_hash_table_size (priv->tile_cache) < priv->max_tile_cache_size)
+       return;
 
-    /* run through the cache, and remove the tiles which have not been used
-     * during the last redraw operation */
-    g_hash_table_iter_init (&iter, priv->tile_cache);
-    while (g_hash_table_iter_next (&iter, NULL, (gpointer)&tile))
-    {
-        if (tile->redraw_cycle != priv->redraw_cycle)
-            g_hash_table_iter_remove (&iter);
-    }
+   /* run through the cache, and remove the tiles which have not been used
+    * during the last redraw operation */
+   g_hash_table_foreach_remove(priv->tile_cache, osm_gps_map_purge_cache_check, priv);
 }
 
 static gboolean
