@@ -174,6 +174,7 @@
     '("min_zoom" (optional))
     '("map_x" (optional))
     '("map_Y" (optional))
+    '("map_source" (optional))
   )
 )
 

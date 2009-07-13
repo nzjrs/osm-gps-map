@@ -1422,7 +1422,6 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             break;
         case PROP_MAP_SOURCE:
             priv->map_source = g_value_get_int (value);
-            g_print("SETTER %d\n,", priv->map_source);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
