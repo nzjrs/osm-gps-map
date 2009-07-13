@@ -83,6 +83,7 @@ struct _OsmGpsMapPrivate
     //contains flags indicating the various special characters
     //the uri string contains, that will be replaced when calculating
     //the uri to download.
+    OsmGpsMapSource_t map_source;
     char *repo_uri;
     int uri_format;
     //flag indicating if the map source is located on the google
@@ -123,7 +124,6 @@ struct _OsmGpsMapPrivate
     guint is_disposed : 1;
     guint dragging : 1;
     guint center_coord_set : 1;
-    guint null_source : 1;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (OSM_GPS_MAP (o)->priv)
@@ -158,7 +158,8 @@ enum
     PROP_TILES_QUEUED,
     PROP_GPS_TRACK_WIDTH,
     PROP_GPS_POINT_R1,
-    PROP_GPS_POINT_R2
+    PROP_GPS_POINT_R2,
+    PROP_MAP_SOURCE
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -919,7 +920,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
-    if (priv->null_source) {
+    if (priv->map_source == OSM_GPS_MAP_SOURCE_NULL) {
         osm_gps_map_blit_tile(map, priv->null_tile, offset_x,offset_y);
         return;
     }
@@ -1212,6 +1213,8 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->uri_format = 0;
     priv->the_google = FALSE;
 
+    priv->map_source = -1;
+
     //Change naumber of concurrent connections option?
     priv->soup_session = soup_session_async_new_with_options(
                                                              SOUP_SESSION_USER_AGENT,
@@ -1244,11 +1247,34 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
 {
     GObject *object;
     OsmGpsMapPrivate *priv;
-    const char *null_uri;
+    OsmGpsMap *map;
+    const char *uri, *name;
 
     //Always chain up to the parent constructor
     object = G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
+    map = OSM_GPS_MAP(object);
     priv = OSM_GPS_MAP_PRIVATE(object);
+
+    //user can specify a map source ID, or a repo URI as the map source
+    uri = osm_gps_map_source_get_repo_uri(OSM_GPS_MAP_SOURCE_NULL);
+    if ( (priv->map_source == 0) || (strcmp(priv->repo_uri, uri) == 0) ) {
+        g_debug("Using null source");
+        priv->map_source = OSM_GPS_MAP_SOURCE_NULL;
+
+        priv->null_tile = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 256, 256);
+        gdk_pixbuf_fill(priv->null_tile, 0xcccccc00);
+    }
+    else if (priv->map_source >= 0) {
+        //check if the source given is valid
+        uri = osm_gps_map_source_get_repo_uri(priv->map_source);
+        if (uri) {
+            g_debug("Setting map source from ID");
+            g_free(priv->repo_uri);
+            priv->repo_uri = g_strdup(uri);
+            priv->max_zoom = osm_gps_map_source_get_max_zoom(priv->map_source);
+            priv->min_zoom = osm_gps_map_source_get_min_zoom(priv->map_source);
+        }
+    }
 
     if (!priv->cache_dir_is_full_path) {
         char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
@@ -1267,14 +1293,7 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
         g_free(md5);
     }
 
-    null_uri = osm_gps_map_source_get_repo_uri(OSM_GPS_MAP_SOURCE_NULL);
-    if ( strcmp(priv->repo_uri, null_uri)  == 0 ) {
-        g_debug("Using null source");
-        priv->null_source = TRUE;
-
-        priv->null_tile = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 256, 256);
-        gdk_pixbuf_fill(priv->null_tile, 0xcccccc00);
-    }        
+    inspect_map_uri(map);
 
     return object;
 }
@@ -1352,7 +1371,6 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             break;
         case PROP_REPO_URI:
             priv->repo_uri = g_value_dup_string (value);
-            inspect_map_uri(map);
             break;
         case PROP_PROXY_URI:
             if ( g_value_get_string(value) ) {
@@ -1401,6 +1419,10 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             break;
         case PROP_GPS_POINT_R2:
             priv->ui_gps_point_outer_radius = g_value_get_int (value);
+            break;
+        case PROP_MAP_SOURCE:
+            priv->map_source = g_value_get_int (value);
+            g_print("SETTER %d\n,", priv->map_source);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1478,6 +1500,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_GPS_POINT_R2:
             g_value_set_int(value, priv->ui_gps_point_outer_radius);
+            break;
+        case PROP_MAP_SOURCE:
+            g_value_set_int(value, priv->map_source);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1734,7 +1759,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                           OSM_REPO_URI,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-    g_object_class_install_property (object_class,
+     g_object_class_install_property (object_class,
                                      PROP_PROXY_URI,
                                      g_param_spec_string ("proxy-uri",
                                                           "proxy uri",
@@ -1868,6 +1893,15 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        20,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_MAP_SOURCE,
+                                     g_param_spec_int ("map-source",
+                                                       "map source",
+                                                       "map source ID",
+                                                       -1,           /* minimum property value */
+                                                       G_MAXINT,    /* maximum property value */
+                                                       -1,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 const char* 

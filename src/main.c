@@ -192,7 +192,6 @@ main (int argc, char **argv)
     GtkWidget *map;
     const char *repo_uri;
     const char *friendly_name;
-    int max_zoom;
     char *cachedir;
     char *homedir;
     GError *error = NULL;
@@ -211,6 +210,8 @@ main (int argc, char **argv)
         return 1;
     }
 
+    /* Only use the repo_uri to check if the user has supplied a
+    valid map source ID */
     repo_uri = osm_gps_map_source_get_repo_uri(map_provider);
     if ( repo_uri == NULL ) {
         usage(context);
@@ -218,7 +219,6 @@ main (int argc, char **argv)
     }
 
     friendly_name = osm_gps_map_source_get_friendly_name(map_provider);
-    max_zoom = osm_gps_map_source_get_max_zoom(map_provider);
 
     if (maps_in_temp)
         homedir = g_strdup("/tmp");
@@ -239,14 +239,12 @@ main (int argc, char **argv)
 
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", friendly_name, map_provider);
-    g_debug("Map Maximum Zoom: %d", max_zoom);
 
     map = g_object_new (OSM_TYPE_GPS_MAP,
-                        "repo-uri",repo_uri,
+                        "map-source",map_provider,
                         "tile-cache",cachedir,
                         "tile-cache-is-full-path",TRUE,
                         "proxy-uri",g_getenv("http_proxy"),
-                        "max-zoom",max_zoom,
                         NULL);
 
     g_free(cachedir);

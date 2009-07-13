@@ -1,4 +1,7 @@
 Changes in 0.4.0
+  * Map can now be constructed by passing a MAP_SOURCE ID instead of
+    the map repo uri
+  * Fix iter safety when purging the tile cache
   * Fix for segfault when adding images to the map
   * Remove map repo uris from public API. They should now be retrieved using
     osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
