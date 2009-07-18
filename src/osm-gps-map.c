@@ -692,7 +692,7 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
 static void
 osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
-    int fd;
+    FILE *file;
     tile_download_t *dl = (tile_download_t *)user_data;
     OsmGpsMap *map = OSM_GPS_MAP(dl->map);
     OsmGpsMapPrivate *priv = map->priv;
@@ -701,12 +701,12 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
     {
         if (g_mkdir_with_parents(dl->folder,0700) == 0)
         {
-            fd = open(dl->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd != -1)
+            file = g_fopen(dl->filename, "wb");
+            if (file != NULL)
             {
-                write (fd, msg->response_body->data, msg->response_body->length);
+                fwrite (msg->response_body->data, 1, msg->response_body->length, file);
                 g_debug("Wrote %lld bytes to %s", msg->response_body->length, dl->filename);
-                close (fd);
+                fclose (file);
 
                 if (dl->redraw)
                 {
