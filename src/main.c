@@ -35,7 +35,6 @@ static GOptionEntry entries[] =
   { NULL }
 };
 
-
 static GdkPixbuf *STAR_IMAGE;
 
 typedef struct {
@@ -43,17 +42,8 @@ typedef struct {
     GtkWidget *entry;
 } timeout_cb_t;
 
-float
-deg2rad(float deg)
-{
-    return (deg * M_PI / 180.0);
-}
-
-float
-rad2deg(float rad)
-{
-    return (rad / M_PI * 180.0);
-}
+#define DEG2RAD(deg) (deg * M_PI / 180.0)
+#define RAD2DEG(rad) (rad / M_PI * 180.0)
 
 gboolean
 on_timeout_check_tiles_in_queue(gpointer user_data)
@@ -81,8 +71,8 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
         g_debug("Double clicked %f %f", event->x, event->y);
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
         osm_gps_map_draw_gps (map,
-                              rad2deg(coord.rlat),
-                              rad2deg(coord.rlon),
+                              RAD2DEG(coord.rlat),
+                              RAD2DEG(coord.rlon),
                               0);
     }
 
@@ -90,8 +80,8 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     {
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
         osm_gps_map_add_image (map,
-                               rad2deg(coord.rlat),
-                               rad2deg(coord.rlon),
+                               RAD2DEG(coord.rlat),
+                               RAD2DEG(coord.rlon),
                                STAR_IMAGE);
     }
     return FALSE;
