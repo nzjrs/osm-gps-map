@@ -193,7 +193,7 @@ main (int argc, char **argv)
     const char *repo_uri;
     const char *friendly_name;
     char *cachedir;
-    char *homedir;
+    gboolean fullpath;
     GError *error = NULL;
     GOptionContext *context;
     timeout_cb_t *data;
@@ -220,12 +220,16 @@ main (int argc, char **argv)
 
     friendly_name = osm_gps_map_source_get_friendly_name(map_provider);
 
-    if (maps_in_temp)
-        homedir = g_strdup("/tmp");
-    else {
-        homedir = g_strdup(g_getenv("HOME"));
-        if (!homedir)
-            homedir = g_strdup(g_get_home_dir());
+    if (maps_in_temp) {
+        cachedir = NULL;
+        fullpath = FALSE;
+    } else {
+        cachedir = g_build_filename(
+                        g_get_user_cache_dir(),
+                        "osmgpsmap",
+                        friendly_name,
+                        NULL);
+        fullpath = TRUE;
     }
 
     if (debug)
@@ -235,7 +239,6 @@ main (int argc, char **argv)
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 
     STAR_IMAGE = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
-    cachedir = g_strdup_printf("%s/Maps/%s", homedir, friendly_name);
 
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", friendly_name, map_provider);
@@ -243,7 +246,7 @@ main (int argc, char **argv)
     map = g_object_new (OSM_TYPE_GPS_MAP,
                         "map-source",map_provider,
                         "tile-cache",cachedir,
-                        "tile-cache-is-full-path",TRUE,
+                        "tile-cache-is-full-path",fullpath,
                         "proxy-uri",g_getenv("http_proxy"),
                         NULL);
 
@@ -299,6 +302,6 @@ main (int argc, char **argv)
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
     gtk_main ();
 
-    g_free(homedir);
+    g_free(cachedir);
     return 0;
 }

@@ -783,8 +783,15 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
         g_free(dl->uri);
         g_free(dl);
     } else {
-        dl->folder = g_strdup_printf("%s/%d/%d/",priv->cache_dir, zoom, x);
-        dl->filename = g_strdup_printf("%s/%d/%d/%d.png",priv->cache_dir, zoom, x, y);
+        dl->folder = g_strdup_printf("%s%c%d%c%d%c",
+                            priv->cache_dir, G_DIR_SEPARATOR,
+                            zoom, G_DIR_SEPARATOR,
+                            x, G_DIR_SEPARATOR);
+        dl->filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+                            priv->cache_dir, G_DIR_SEPARATOR,
+                            zoom, G_DIR_SEPARATOR,
+                            x, G_DIR_SEPARATOR,
+                            y);
         dl->map = map;
         dl->redraw = redraw;
 
@@ -826,9 +833,11 @@ osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
     GdkPixbuf *pixbuf;
     OsmCachedTile *tile;
 
-    filename = g_strdup_printf("%s/%u/%u/%u.png",
-                               priv->cache_dir,
-                               zoom, x, y);
+    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+                priv->cache_dir, G_DIR_SEPARATOR,
+                zoom, G_DIR_SEPARATOR,
+                x, G_DIR_SEPARATOR,
+                y);
 
     tile = g_hash_table_lookup (priv->tile_cache, filename);
     if (tile)
@@ -925,7 +934,11 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
         return;
     }
 
-    filename = g_strdup_printf("%s/%u/%u/%u.png", priv->cache_dir, zoom, x, y);
+    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+                priv->cache_dir, G_DIR_SEPARATOR,
+                zoom, G_DIR_SEPARATOR,
+                x, G_DIR_SEPARATOR,
+                y);
 
     pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
     if(pixbuf)
@@ -1282,7 +1295,7 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
         if (priv->cache_dir) {
             char *old = priv->cache_dir;
             //the new cachedir is the given cache dir + the md5 of the repo_uri
-            priv->cache_dir = g_strdup_printf("%s/%s", old, md5);
+            priv->cache_dir = g_strdup_printf("%s%c%s", old, G_DIR_SEPARATOR, md5);
             g_debug("Adjusting cache dir %s -> %s", old, priv->cache_dir);
             g_free(old);
         } else {
@@ -1389,7 +1402,14 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 
             break;
         case PROP_TILE_CACHE_DIR:
-            priv->cache_dir = g_value_dup_string (value);
+            if ( g_value_get_string(value) )
+                priv->cache_dir = g_value_dup_string (value);
+            else {
+                priv->cache_dir = g_build_filename(
+                                    g_get_tmp_dir(),
+                                    "osmgpsmap",
+                                    NULL);
+            }
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
             priv->cache_dir_is_full_path = g_value_get_boolean (value);
@@ -1771,7 +1791,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      g_param_spec_string ("tile-cache",
                                                           "tile cache",
                                                           "osm local tile cache dir",
-                                                          "/tmp/Maps",
+                                                          NULL,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
@@ -2054,7 +2074,11 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
                 for(j=y1; j<=y2; j++)
                 {
                     // x = i, y = j
-                    filename = g_strdup_printf("%s/%u/%u/%u.png", priv->cache_dir, zoom, i, j);
+                    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+                                    priv->cache_dir, G_DIR_SEPARATOR,
+                                    zoom, G_DIR_SEPARATOR,
+                                    i, G_DIR_SEPARATOR,
+                                    j);
                     if (!g_file_test(filename, G_FILE_TEST_EXISTS))
                     {
                         osm_gps_map_download_tile(map, zoom, i, j, FALSE);

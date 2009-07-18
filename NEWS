@@ -7,6 +7,7 @@ Changes in 0.4.0
     osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
   * Add osm_gps_map_get_scale
   * Implement a blank map source that just draws grey tiles
+  * Demo application now stores maps in XDG_CACHE_DIR
 
 Changes in 0.3.0
 ======================
