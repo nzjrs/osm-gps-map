@@ -80,6 +80,7 @@ GType osm_gps_map_get_type (void) G_GNUC_CONST;
 
 const char* osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source);
 const char* osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source);
+const char *osm_gps_map_source_get_image_format(OsmGpsMapSource_t source);
 int osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source);
 int osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source);
 

@@ -175,6 +175,7 @@
     '("map_x" (optional))
     '("map_Y" (optional))
     '("map_source" (optional))
+    '("image_format" (optional))
   )
 )
 
@@ -245,6 +246,14 @@
 (define-function source_get_min_zoom
   (c-name "osm_gps_map_source_get_min_zoom")
   (return-type "int")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
+(define-function source_get_image_format
+  (c-name "osm_gps_map_source_get_image_format")
+  (return-type "const-char*")
   (parameters
     '("OsmGpsMapSource_t" "source")
   )

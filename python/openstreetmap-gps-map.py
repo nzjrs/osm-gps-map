@@ -68,9 +68,10 @@ class UI(gtk.Window):
         ex = gtk.Expander("<b>Map Repository URI</b>")
         ex.props.use_markup = True
         vb = gtk.VBox()
-        hb = gtk.HBox()
         self.repouri_entry = gtk.Entry()
         self.repouri_entry.set_text(self.osm.props.repo_uri)
+        self.image_format_entry = gtk.Entry()
+        self.image_format_entry.set_text(self.osm.props.image_format)
         gobtn = gtk.Button("Load Map URI")
         gobtn.connect("clicked", self.load_map_clicked)
         exp = gtk.Label(
@@ -92,9 +93,18 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
 
         ex.add(vb)
         vb.pack_start(exp, False)
-        vb.pack_start(hb, False)
+
+        hb = gtk.HBox()
+        hb.pack_start(gtk.Label("URI: "), False)
         hb.pack_start(self.repouri_entry, True)
-        hb.pack_start(gobtn, False)
+        vb.pack_start(hb, False)
+
+        hb = gtk.HBox()
+        hb.pack_start(gtk.Label("Image Format: "), False)
+        hb.pack_start(self.image_format_entry, True)
+        vb.pack_start(hb, False)
+
+        vb.pack_start(gobtn, False)
 
         self.vbox.pack_end(ex, False)
         self.vbox.pack_end(self.latlon_entry, False)
@@ -104,7 +114,8 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
 
     def load_map_clicked(self, button):
         uri = self.repouri_entry.get_text()
-        if uri:
+        format = self.image_format_entry.get_text()
+        if uri and format:
             if self.osm:
                 #remove old map
                 self.vbox.remove(self.osm)
@@ -112,7 +123,8 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             try:
                 self.osm = osmgpsmap.GpsMap(
                     tile_cache=os.path.expanduser('/tmp/Maps'),
-                    repo_uri=uri
+                    repo_uri=uri,
+                    image_format=format
                 )
                 self.osm.connect('button_release_event', self.map_clicked)
             except Exception, e:

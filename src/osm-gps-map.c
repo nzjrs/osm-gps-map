@@ -85,6 +85,7 @@ struct _OsmGpsMapPrivate
     //the uri to download.
     OsmGpsMapSource_t map_source;
     char *repo_uri;
+    char *image_format;
     int uri_format;
     //flag indicating if the map source is located on the google
     gboolean the_google;
@@ -159,7 +160,8 @@ enum
     PROP_GPS_TRACK_WIDTH,
     PROP_GPS_POINT_R1,
     PROP_GPS_POINT_R2,
-    PROP_MAP_SOURCE
+    PROP_MAP_SOURCE,
+    PROP_IMAGE_FORMAT
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -787,11 +789,12 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
                             priv->cache_dir, G_DIR_SEPARATOR,
                             zoom, G_DIR_SEPARATOR,
                             x, G_DIR_SEPARATOR);
-        dl->filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+        dl->filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
                             priv->cache_dir, G_DIR_SEPARATOR,
                             zoom, G_DIR_SEPARATOR,
                             x, G_DIR_SEPARATOR,
-                            y);
+                            y,
+                            priv->image_format);
         dl->map = map;
         dl->redraw = redraw;
 
@@ -833,11 +836,12 @@ osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
     GdkPixbuf *pixbuf;
     OsmCachedTile *tile;
 
-    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
                 priv->cache_dir, G_DIR_SEPARATOR,
                 zoom, G_DIR_SEPARATOR,
                 x, G_DIR_SEPARATOR,
-                y);
+                y,
+                priv->image_format);
 
     tile = g_hash_table_lookup (priv->tile_cache, filename);
     if (tile)
@@ -934,11 +938,12 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
         return;
     }
 
-    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
                 priv->cache_dir, G_DIR_SEPARATOR,
                 zoom, G_DIR_SEPARATOR,
                 x, G_DIR_SEPARATOR,
-                y);
+                y,
+                priv->image_format);
 
     pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
     if(pixbuf)
@@ -1283,7 +1288,10 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
         if (uri) {
             g_debug("Setting map source from ID");
             g_free(priv->repo_uri);
+
             priv->repo_uri = g_strdup(uri);
+            priv->image_format = g_strdup(
+                osm_gps_map_source_get_image_format(priv->map_source));
             priv->max_zoom = osm_gps_map_source_get_max_zoom(priv->map_source);
             priv->min_zoom = osm_gps_map_source_get_min_zoom(priv->map_source);
         }
@@ -1354,6 +1362,7 @@ osm_gps_map_finalize (GObject *object)
 
     g_free(priv->cache_dir);
     g_free(priv->repo_uri);
+    g_free(priv->image_format);
 
     osm_gps_map_free_trip(map);
     osm_gps_map_free_tracks(map);
@@ -1443,6 +1452,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_MAP_SOURCE:
             priv->map_source = g_value_get_int (value);
             break;
+        case PROP_IMAGE_FORMAT:
+            priv->image_format = g_value_dup_string (value);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
             break;
@@ -1522,6 +1534,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_MAP_SOURCE:
             g_value_set_int(value, priv->map_source);
+            break;
+        case PROP_IMAGE_FORMAT:
+            g_value_set_string(value, priv->image_format);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1921,6 +1936,14 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        G_MAXINT,    /* maximum property value */
                                                        -1,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+    g_object_class_install_property (object_class,
+                                     PROP_IMAGE_FORMAT,
+                                     g_param_spec_string ("image-format",
+                                                          "image format",
+                                                          "map source tile repository image format (jpg, png)",
+                                                          OSM_IMAGE_FORMAT,
+                                                          G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 const char* 
@@ -2009,6 +2032,33 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
     return NULL;
 }
 
+const char *
+osm_gps_map_source_get_image_format(OsmGpsMapSource_t source)
+{
+    switch(source) {
+        case OSM_GPS_MAP_SOURCE_NULL:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
+            return "png";
+        case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
+        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
+        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
+        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
+            return "jpg";
+        default:
+            return "bin";
+    }
+    return "bin";
+}
+
+
 int 
 osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source)
 {
@@ -2074,11 +2124,12 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
                 for(j=y1; j<=y2; j++)
                 {
                     // x = i, y = j
-                    filename = g_strdup_printf("%s%c%d%c%d%c%d.png",
+                    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
                                     priv->cache_dir, G_DIR_SEPARATOR,
                                     zoom, G_DIR_SEPARATOR,
                                     i, G_DIR_SEPARATOR,
-                                    j);
+                                    j,
+                                    priv->image_format);
                     if (!g_file_test(filename, G_FILE_TEST_EXISTS))
                     {
                         osm_gps_map_download_tile(map, zoom, i, j, FALSE);
