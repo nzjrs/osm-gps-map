@@ -114,6 +114,15 @@
   )
 )
 
+(define-method remove_image
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_remove_image")
+  (return-type "gboolean")
+  (parameters
+    '("GdkPixbuf*" "image")
+  )
+)
+
 (define-method clear_images
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_clear_images")

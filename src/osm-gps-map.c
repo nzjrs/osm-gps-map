@@ -2276,6 +2276,28 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
     }
 }
 
+gboolean
+osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+    if (priv->images) {
+        GSList *list;
+        for(list = priv->images; list != NULL; list = list->next)
+        {
+            image_t *im = list->data;
+	        if (im->image == image)
+	        {
+		        priv->images = g_slist_remove_link(priv->images, list);
+		        g_object_unref(im->image);
+		        g_free(im);
+		        osm_gps_map_map_redraw_idle(map);
+		        return TRUE;
+	        }
+        }
+    }
+    return FALSE;
+}
+
 void
 osm_gps_map_clear_images (OsmGpsMap *map)
 {
