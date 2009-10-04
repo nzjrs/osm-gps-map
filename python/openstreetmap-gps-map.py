@@ -42,8 +42,7 @@ class UI(gtk.Window):
         self.add(self.vbox)
 
         self.osm = osmgpsmap.GpsMap(
-            tile_cache=os.path.expanduser('~/Maps/OpenStreetMap'),
-            tile_cache_is_full_path=True
+            tile_cache=osmgpsmap.get_default_cache_directory(),
         )
         self.osm.connect('button_release_event', self.map_clicked)
         self.latlon_entry = gtk.Entry()
@@ -122,7 +121,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
 
             try:
                 self.osm = osmgpsmap.GpsMap(
-                    tile_cache=os.path.expanduser('/tmp/Maps'),
+                    tile_cache=osmgpsmap.get_default_cache_directory(),
                     repo_uri=uri,
                     image_format=format
                 )

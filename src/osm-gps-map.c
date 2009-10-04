@@ -2500,3 +2500,11 @@ osm_gps_map_get_scale(OsmGpsMap *map)
     return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
 }
 
+char * osm_gps_map_get_default_cache_directory(void)
+{
+    return g_build_filename(
+                        g_get_user_cache_dir(),
+                        "osmgpsmap",
+                        NULL);
+}
+

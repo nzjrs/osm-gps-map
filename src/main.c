@@ -214,11 +214,10 @@ main (int argc, char **argv)
         cachedir = NULL;
         fullpath = FALSE;
     } else {
-        cachedir = g_build_filename(
-                        g_get_user_cache_dir(),
-                        "osmgpsmap",
-                        friendly_name,
-                        NULL);
+        char *mapcachedir;
+        mapcachedir = osm_gps_map_get_default_cache_directory();
+        cachedir = g_build_filename(mapcachedir,friendly_name,NULL);
+        g_free(mapcachedir);
         fullpath = TRUE;
     }
 

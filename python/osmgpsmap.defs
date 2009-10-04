@@ -36,6 +36,11 @@
   (return-type "GType")
 )
 
+(define-function get_default_cache_directory
+  (c-name "osm_gps_map_get_default_cache_directory")
+  (return-type "char*")
+)
+
 (define-method download_maps
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_download_maps")
