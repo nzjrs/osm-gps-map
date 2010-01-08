@@ -36,6 +36,46 @@
   (return-type "GType")
 )
 
+(define-function source_get_friendly_name
+  (c-name "osm_gps_map_source_get_friendly_name")
+  (return-type "const-char*")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
+(define-function source_get_repo_uri
+  (c-name "osm_gps_map_source_get_repo_uri")
+  (return-type "const-char*")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
+(define-function source_get_image_format
+  (c-name "osm_gps_map_source_get_image_format")
+  (return-type "const-char*")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
+(define-function source_get_min_zoom
+  (c-name "osm_gps_map_source_get_min_zoom")
+  (return-type "int")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
+(define-function source_get_max_zoom
+  (c-name "osm_gps_map_source_get_max_zoom")
+  (return-type "int")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
+)
+
 (define-function get_default_cache_directory
   (c-name "osm_gps_map_get_default_cache_directory")
   (return-type "char*")
@@ -233,43 +273,5 @@
   (return-type "float")
 )
 
-(define-function source_get_repo_uri
-  (c-name "osm_gps_map_source_get_repo_uri")
-  (return-type "const-char*")
-  (parameters
-    '("OsmGpsMapSource_t" "source")
-  )
-)
 
-(define-function source_get_friendly_name
-  (c-name "osm_gps_map_source_get_friendly_name")
-  (return-type "const-char*")
-  (parameters
-    '("OsmGpsMapSource_t" "source")
-  )
-)
-
-(define-function source_get_max_zoom
-  (c-name "osm_gps_map_source_get_max_zoom")
-  (return-type "int")
-  (parameters
-    '("OsmGpsMapSource_t" "source")
-  )
-)
-
-(define-function source_get_min_zoom
-  (c-name "osm_gps_map_source_get_min_zoom")
-  (return-type "int")
-  (parameters
-    '("OsmGpsMapSource_t" "source")
-  )
-)
-
-(define-function source_get_image_format
-  (c-name "osm_gps_map_source_get_image_format")
-  (return-type "const-char*")
-  (parameters
-    '("OsmGpsMapSource_t" "source")
-  )
-)
 
