@@ -96,6 +96,7 @@ struct _OsmGpsMapPrivate
     gboolean show_trip_history;
     GSList *trip_history;
     coord_t *gps;
+    float gps_heading;
     gboolean gps_valid;
 
     //additional images or tracks added to the map
@@ -548,7 +549,7 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
         int r = priv->ui_gps_point_inner_radius;
         int r2 = priv->ui_gps_point_outer_radius;
         int lw = priv->ui_gps_track_width;
-        int mr = MAX(r,r2);
+        int mr = MAX(3*r,r2);
 
         map_x0 = priv->map_x - EXTRA_BORDER;
         map_y0 = priv->map_y - EXTRA_BORDER;
@@ -573,6 +574,22 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
 
         // draw ball gradient
         if (r > 0) {
+            // draw direction arrow
+            if(!isnan(priv->gps_heading)) 
+            {
+                cairo_move_to (cr, x-r*cos(priv->gps_heading), y-r*sin(priv->gps_heading));
+                cairo_line_to (cr, x+3*r*sin(priv->gps_heading), y-3*r*cos(priv->gps_heading));
+                cairo_line_to (cr, x+r*cos(priv->gps_heading), y+r*sin(priv->gps_heading));
+                cairo_close_path (cr);
+
+                cairo_set_source_rgba (cr, 0.3, 0.3, 1.0, 0.5);
+                cairo_fill_preserve (cr);
+
+                cairo_set_line_width (cr, 1.0);
+                cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.5);
+                cairo_stroke(cr);
+            }
+
             pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
             cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
             cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
@@ -1183,6 +1200,7 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->trip_history = NULL;
     priv->gps = g_new0(coord_t, 1);
     priv->gps_valid = FALSE;
+    priv->gps_heading = OSM_GPS_MAP_INVALID;
 
     priv->tracks = NULL;
     priv->images = NULL;
@@ -2353,6 +2371,7 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
     priv->gps->rlat = deg2rad(latitude);
     priv->gps->rlon = deg2rad(longitude);
     priv->gps_valid = TRUE;
+    priv->gps_heading = deg2rad(heading);
 
     // pixel_x,y, offsets
     pixel_x = lon2pixel(priv->map_zoom, priv->gps->rlon);

@@ -178,7 +178,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             self.osm.draw_gps(
                     math.degrees(rlat),
                     math.degrees(rlon),
-                    0.0);
+                    osmgpsmap.INVALID);
  
 
 if __name__ == "__main__":

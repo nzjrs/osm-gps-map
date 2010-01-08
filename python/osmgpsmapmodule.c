@@ -36,6 +36,9 @@ initosmgpsmap(void)
 	pyosmgpsmap_register_classes(d);
     pyosmgpsmap_add_constants(m, "OSM_GPS_MAP_");
 
+	PyModule_AddObject(m, "INVALID",
+		       PyFloat_FromDouble(OSM_GPS_MAP_INVALID));
+
 	if (PyErr_Occurred()) {
 		Py_FatalError("can't initialize module osmgpsmap");
 	}

@@ -87,6 +87,8 @@ typedef enum {
     OSM_GPS_MAP_KEY_MAX
 } OsmGpsMapKey_t;
 
+#define OSM_GPS_MAP_INVALID  (0.0/0.0)
+
 GType osm_gps_map_get_type (void) G_GNUC_CONST;
 
 const char* osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source);

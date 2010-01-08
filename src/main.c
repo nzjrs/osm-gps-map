@@ -67,14 +67,15 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     coord_t coord;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
 
-    if ( (event->button == 1) && (event->type == GDK_2BUTTON_PRESS) )
+    if (    ((event->button == 1) || (event->button == 3)) 
+            && (event->type == GDK_2BUTTON_PRESS) )
     {
         g_debug("Double clicked %f %f", event->x, event->y);
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
         osm_gps_map_draw_gps (map,
                               RAD2DEG(coord.rlat),
                               RAD2DEG(coord.rlon),
-                              0);
+                              (event->button == 1 ? OSM_GPS_MAP_INVALID : g_random_double_range(0,360)));
     }
 
     if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
