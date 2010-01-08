@@ -29,6 +29,7 @@ libdir = os.path.join(mydir, ".libs")
 sys.path.insert(0, libdir)
 
 import osmgpsmap
+print "using library: %s" % osmgpsmap.__file__
  
 class UI(gtk.Window):
     def __init__(self):

@@ -48,9 +48,9 @@ if test -f ../src/libosmgpsmap.la; then
 	#file cannot tell us to also include/link gtk/soup, so we must manually do it
 	PKG_CHECK_MODULES(OSMGPSMAP, [gtk+-2.0 libsoup-2.4])
 
-	#and we must link to the static lib
-	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I../src"
-	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS ../src/libosmgpsmap.la"
+	#and we must link to the local lib
+	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I../src/"
+	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS -L../src/.libs/ -losmgpsmap"
 else
 	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap)
 fi
