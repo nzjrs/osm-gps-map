@@ -30,3 +30,5 @@ python/osmgpsmap.c
 src/Makefile
 src/openstreetmap-gps-map
 stamp-h1
+ChangeLog
+COPYING
