@@ -26,7 +26,7 @@ EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
 	python/aclocal.m4                           \
 	python/configure                            \
 	python/osmgpsmapmodule.c                    \
-	python/test.sh                              \
+	python/openstreetmap-gps-map.py             \
 	python/AUTHORS                              \
 	python/configure.ac                         \
 	python/osmgpsmap.override                   \
