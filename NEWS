@@ -1,4 +1,9 @@
+Changes in 0.5.0
+======================
+  * TODO
+
 Changes in 0.4.0
+======================
   * Map can now be constructed by passing a MAP_SOURCE ID instead of
     the map repo uri
   * Fix iter safety when purging the tile cache
