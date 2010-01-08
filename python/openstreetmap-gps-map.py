@@ -46,6 +46,14 @@ class UI(gtk.Window):
             tile_cache=osmgpsmap.get_default_cache_directory(),
         )
         self.osm.connect('button_release_event', self.map_clicked)
+
+        #connect keyboard shortcuts
+        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_FULLSCREEN, gtk.gdk.keyval_from_name("F11"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_UP, gtk.gdk.keyval_from_name("Up"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_DOWN, gtk.gdk.keyval_from_name("Down"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
+
         self.latlon_entry = gtk.Entry()
 
         zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)

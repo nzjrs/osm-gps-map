@@ -22,6 +22,7 @@
 #include <math.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "osm-gps-map.h"
 
 static OsmGpsMapSource_t map_provider = 0;
@@ -238,6 +239,13 @@ main (int argc, char **argv)
                         "tile-cache-is-full-path",fullpath,
                         "proxy-uri",g_getenv("http_proxy"),
                         NULL);
+
+    //Enable keyboard navigation
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_F11);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_UP, GDK_Up);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_Down);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_Left);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
 
     g_free(cachedir);
 

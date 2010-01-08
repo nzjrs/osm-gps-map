@@ -76,6 +76,17 @@ typedef enum {
     OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
 } OsmGpsMapSource_t;
 
+typedef enum {
+    OSM_GPS_MAP_KEY_FULLSCREEN,
+    OSM_GPS_MAP_KEY_ZOOMIN,
+    OSM_GPS_MAP_KEY_ZOOMOUT,
+    OSM_GPS_MAP_KEY_UP,
+    OSM_GPS_MAP_KEY_DOWN,
+    OSM_GPS_MAP_KEY_LEFT,
+    OSM_GPS_MAP_KEY_RIGHT,
+    OSM_GPS_MAP_KEY_MAX
+} OsmGpsMapKey_t;
+
 GType osm_gps_map_get_type (void) G_GNUC_CONST;
 
 const char* osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source);
@@ -109,6 +120,7 @@ void osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                        gint *pixel_x, gint *pixel_y);
 void osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy);
 float osm_gps_map_get_scale(OsmGpsMap *map);
+void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 
 G_END_DECLS
 

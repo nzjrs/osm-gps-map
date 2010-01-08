@@ -29,6 +29,20 @@
   )
 )
 
+(define-enum Key
+  (in-module "Osm")
+  (c-name "OsmGpsMapKey_t")
+  (values
+   '("Fullscreen" "OSM_GPS_MAP_KEY_FULLSCREEN")
+   '("Zoom In" "OSM_GPS_MAP_KEY_ZOOMIN")
+   '("Zoom Out" "OSM_GPS_MAP_KEY_ZOOMOUT")
+   '("Up" "OSM_GPS_MAP_KEY_UP")
+   '("Down" "OSM_GPS_MAP_KEY_DOWN")
+   '("Left" "OSM_GPS_MAP_KEY_LEFT")
+   '("Right" "OSM_GPS_MAP_KEY_RIGHT")
+  )
+)
+
 ;; From osm-gps-map.h
 
 (define-function osm_gps_map_get_type
@@ -273,5 +287,14 @@
   (return-type "float")
 )
 
+(define-method set_keyboard_shortcut
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_keyboard_shortcut")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapKey_t" "key")
+    '("guint" "keyval")
+  )
+)
 
 
