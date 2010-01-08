@@ -8,6 +8,10 @@ Changes in 0.4.0
   * Add osm_gps_map_get_scale
   * Implement a blank map source that just draws grey tiles
   * Demo application now stores maps in XDG_CACHE_DIR
+  * Fix build and crashes on windows
+  * Add getters for name and zoom
+  * Add a more complete python example
+  * Add ability to purge the cache
 
 Changes in 0.3.0
 ======================
