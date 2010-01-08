@@ -57,6 +57,9 @@
 //....
 #define URI_FLAG_END (1 << 8)
 
+/* equatorial radius in meters */
+#define OSM_EQ_RADIUS   (6378137.0)
+
 typedef struct {
     int x1;
     int y1;
