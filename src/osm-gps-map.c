@@ -356,7 +356,7 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
     url = g_strdup(uri);
     while (i < URI_FLAG_END)
     {
-        char *s;
+        char *s = NULL;
         char *old;
 
         old = url;
