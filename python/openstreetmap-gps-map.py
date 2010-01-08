@@ -17,7 +17,7 @@
  You should have received a copy of the GNU General Public License along
  with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
+import math
 import sys
 import os.path
 import gtk.gdk
@@ -158,12 +158,19 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         )
 
     def map_clicked(self, osm, event):
-        self.latlon_entry.set_text(
-            'Map Centre: latitude %s longitude %s' % (
-                self.osm.props.latitude,
-                self.osm.props.longitude
+        if event.button == 1:
+            self.latlon_entry.set_text(
+                'Map Centre: latitude %s longitude %s' % (
+                    self.osm.props.latitude,
+                    self.osm.props.longitude
+                )
             )
-        )
+        elif event.button == 2:
+            rlat, rlon = self.osm.get_co_ordinates(event.x, event.y)
+            self.osm.draw_gps(
+                    math.degrees(rlat),
+                    math.degrees(rlon),
+                    0.0);
  
 
 if __name__ == "__main__":
