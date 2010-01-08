@@ -47,6 +47,8 @@
 
 #define OSM_GPS_MAP_SCROLL_STEP 10
 
+#define USER_AGENT "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
+
 struct _OsmGpsMapPrivate
 {
     GHashTable *tile_queue;
@@ -1201,10 +1203,9 @@ osm_gps_map_init (OsmGpsMap *object)
         priv->keybindings[i] = 0;
 
     //Change naumber of concurrent connections option?
-    priv->soup_session = soup_session_async_new_with_options(
-                                                             SOUP_SESSION_USER_AGENT,
-                                                             "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
-                                                             NULL);
+    priv->soup_session =
+        soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
+                                            USER_AGENT, NULL);
 
     //Hash table which maps tile d/l URIs to SoupMessage requests
     priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
