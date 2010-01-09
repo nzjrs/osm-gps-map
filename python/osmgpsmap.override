@@ -2,6 +2,8 @@
 headers
 #include <Python.h>
 #include "osm-gps-map.h"
+#include "osm-gps-map-osd.h"
+#include "osm-gps-map-layer.h"
 #include "pygobject.h"
 #include <stdio.h>
 %%
@@ -10,6 +12,7 @@ modulename osmgpsmap
 import gobject.GObject as PyGObject_Type
 import gtk.DrawingArea as PyGtkDrawingArea_Type
 import gtk.gdk.Pixbuf as PyGdkPixbuf_Type 
+import gtk.gdk.Drawable as PyGdkDrawable_Type
 %%
 ignore-glob
 	*_get_type

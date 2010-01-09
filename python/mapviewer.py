@@ -33,7 +33,24 @@ sys.path.insert(0, libdir)
 
 import osmgpsmap
 print "using library: %s" % osmgpsmap.__file__
- 
+
+class DummyLayer(gobject.GObject, osmgpsmap.GpsMapLayer):
+    def __init__(self):
+        gobject.GObject.__init__(self)
+
+    def do_draw(self, gpsmap, gdkdrawable):
+        pass
+
+    def do_render(self, gpsmap):
+        pass
+
+    def do_busy(self):
+        return False
+
+    def do_button_press(self, gpsmap, gdkeventbutton):
+        return False
+gobject.type_register(DummyLayer)
+
 class UI(gtk.Window):
     def __init__(self):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
@@ -46,6 +63,13 @@ class UI(gtk.Window):
         self.add(self.vbox)
 
         self.osm = osmgpsmap.GpsMap()
+        self.osm.add_layer(
+                    osmgpsmap.GpsMapOsd(
+                        show_dpad=True,
+                        show_zoom=True))
+        self.osm.add_layer(
+                    DummyLayer())
+
         self.osm.connect('button_release_event', self.map_clicked)
 
         #connect keyboard shortcuts

@@ -7,6 +7,13 @@
   (gtype-id "OSM_TYPE_GPS_MAP")
 )
 
+(define-object GpsMapOsd
+  (in-module "Osm")
+  (parent "GObject")
+  (c-name "OsmGpsMapOsd")
+  (gtype-id "OSM_TYPE_GPS_MAP_OSD")
+)
+
 ;; Enumerations and flags ...
 (define-enum MapSource
   (in-module "Osm")
@@ -155,6 +162,18 @@
   )
 )
 
+(define-method zoom_in
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_zoom_in")
+  (return-type "int")
+)
+
+(define-method zoom_out
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_zoom_out")
+  (return-type "int")
+)
+
 (define-method add_track
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_add_track")
@@ -300,4 +319,89 @@
   )
 )
 
+(define-method add_layer
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_add_layer")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapLayer*" "layer")
+  )
+)
 
+
+
+;; From osm-gps-map-osd.h
+
+(define-function osm_gps_map_osd_get_type
+  (c-name "osm_gps_map_osd_get_type")
+  (return-type "GType")
+)
+
+(define-function osm_gps_map_osd_new
+  (c-name "osm_gps_map_osd_new")
+  (is-constructor-of "OsmGpsMapOsd")
+  (return-type "OsmGpsMapOsd*")
+  (properties
+    '("osd_x" (optional))
+    '("osd_y" (optional))
+    '("dpad_radius" (optional))
+    '("show_scale" (optional))
+    '("show_coordinates" (optional))
+    '("show_crosshair" (optional))
+    '("show_dpad" (optional))
+    '("show_zoom" (optional))
+    '("show_gps_in_dpad" (optional))
+    '("show_gps_in_zoom" (optional))
+  )
+)
+
+
+
+;; From osm-gps-map-layer.h
+
+(define-interface GpsMapLayer
+  (in-module "Osm")
+  (c-name "OsmGpsMapLayer")
+  (gtype-id "OSM_TYPE_GPS_MAP_LAYER")
+  (prerequisite "GObject")
+)
+
+(define-function osm_gps_map_layer_get_type
+  (c-name "osm_gps_map_layer_get_type")
+  (return-type "GType")
+)
+
+(define-virtual render
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_render")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMap*" "map")
+  )
+)
+
+(define-virtual draw
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_draw")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMap*" "map")
+    '("GdkDrawable*" "drawable")
+  )
+)
+
+(define-virtual busy
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_busy")
+  (return-type "gboolean")
+)
+
+(define-virtual button_press
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_button_press")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMap*" "map")
+    '("GdkEventButton*" "event")
+  )
+)

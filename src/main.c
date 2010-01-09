@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "osm-gps-map.h"
+#include "osm-gps-map-osd.h"
 
 static OsmGpsMapSource_t map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean default_cache = FALSE;
@@ -186,6 +187,7 @@ main (int argc, char **argv)
     GtkWidget *homeButton;
     GtkWidget *cacheButton;
     OsmGpsMap *map;
+    OsmGpsMapLayer *osd;
     const char *repo_uri;
     const char *friendly_name;
     char *cachedir;
@@ -242,6 +244,19 @@ main (int argc, char **argv)
                         "tile-cache",cachedir,
                         "proxy-uri",g_getenv("http_proxy"),
                         NULL);
+
+    osd = g_object_new (OSM_TYPE_GPS_MAP_OSD,
+                        "show-scale",TRUE,
+                        "show-coordinates",TRUE,
+                        "show-crosshair",TRUE,
+                        "show-dpad",TRUE,
+                        "show-zoom",TRUE,
+                        "show-gps-in-dpad",TRUE,
+                        "show-gps-in-zoom",FALSE,
+                        "dpad-radius", 30,
+                        NULL);
+    osm_gps_map_add_layer(OSM_GPS_MAP(map), osd);
+    g_object_unref(G_OBJECT(osd));
 
     //Enable keyboard navigation
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_F11);

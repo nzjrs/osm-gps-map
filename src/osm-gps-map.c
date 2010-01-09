@@ -113,6 +113,9 @@ struct _OsmGpsMapPrivate
     //The tile painted when one cannot be found
     GdkPixbuf *null_tile;
 
+    //A list of OsmGpsMapLayer* layers, such as the OSD
+    GSList *layers;
+
     //For tracking click and drag
     int drag_counter;
     int drag_mouse_dx;
@@ -496,6 +499,17 @@ osm_gps_map_free_images (OsmGpsMap *map)
         }
         g_slist_free(priv->images);
         priv->images = NULL;
+    }
+}
+
+static void
+osm_gps_map_free_layers(OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+    if (priv->layers) {
+        g_slist_foreach(priv->layers, (GFunc) g_object_unref, NULL);
+        g_slist_free(priv->layers);
+        priv->layers = NULL;
     }
 }
 
@@ -1161,6 +1175,18 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
     priv->idle_map_redraw = 0;
 
+    /* don't redraw the entire map while the OSD is doing */
+    /* some animation or the like. This is to keep the animation */
+    /* fluid */
+    if (priv->layers) {
+        GSList *list;
+        for(list = priv->layers; list != NULL; list = list->next) {
+            OsmGpsMapLayer *layer = list->data;
+            if (osm_gps_map_layer_busy(layer))
+                return FALSE;
+        }
+    }
+
     /* the motion_notify handler uses priv->pixmap to redraw the area; if we
      * change it while we are dragging, we will end up showing it in the wrong
      * place. This could be fixed by carefully recompute the coordinates, but
@@ -1187,6 +1213,14 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_print_tracks(map);
     osm_gps_map_draw_gps_point(map);
     osm_gps_map_print_images(map);
+
+    if (priv->layers) {
+        GSList *list;
+        for(list = priv->layers; list != NULL; list = list->next) {
+            OsmGpsMapLayer *layer = list->data;
+            osm_gps_map_layer_render (layer, map);
+        }
+    }
 
     osm_gps_map_purge_cache(map);
     gtk_widget_queue_draw (GTK_WIDGET (map));
@@ -1253,11 +1287,11 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
                 handled = TRUE;
                 } break;
             case OSM_GPS_MAP_KEY_ZOOMIN:
-                osm_gps_map_set_zoom(map, priv->map_zoom+1);
+                osm_gps_map_zoom_in(map);
                 handled = TRUE;
                 break;
             case OSM_GPS_MAP_KEY_ZOOMOUT:
-                osm_gps_map_set_zoom(map, priv->map_zoom-1);
+                osm_gps_map_zoom_out(map);
                 handled = TRUE;
                 break;
             case OSM_GPS_MAP_KEY_UP:
@@ -1310,6 +1344,7 @@ osm_gps_map_init (OsmGpsMap *object)
 
     priv->tracks = NULL;
     priv->images = NULL;
+    priv->layers = NULL;
 
     priv->drag_counter = 0;
     priv->drag_mouse_dx = 0;
@@ -1469,7 +1504,9 @@ osm_gps_map_dispose (GObject *object)
     g_hash_table_destroy(priv->missing_tiles);
     g_hash_table_destroy(priv->tile_cache);
 
+    /* images and layers contain GObjects which need unreffing, so free here */
     osm_gps_map_free_images(map);
+    osm_gps_map_free_layers(map);
 
     if(priv->pixmap)
         g_object_unref (priv->pixmap);
@@ -1506,6 +1543,7 @@ osm_gps_map_finalize (GObject *object)
     g_free(priv->repo_uri);
     g_free(priv->image_format);
 
+    /* trip and tracks contain simple non GObject types, so free them here */
     osm_gps_map_free_trip(map);
     osm_gps_map_free_tracks(map);
 
@@ -1709,16 +1747,11 @@ static gboolean
 osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
-    OsmGpsMapPrivate *priv = map->priv;
 
     if (event->direction == GDK_SCROLL_UP)
-    {
-        osm_gps_map_set_zoom(map, priv->map_zoom+1);
-    }
-    else
-    {
-        osm_gps_map_set_zoom(map, priv->map_zoom-1);
-    }
+        osm_gps_map_zoom_in(map);
+    else if (event->direction == GDK_SCROLL_DOWN)
+        osm_gps_map_zoom_out(map);
 
     return FALSE;
 }
@@ -1726,7 +1759,17 @@ osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
 static gboolean
 osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMapPrivate *priv = map->priv;
+
+    if (priv->layers) {
+        GSList *list;
+        for(list = priv->layers; list != NULL; list = list->next) {
+            OsmGpsMapLayer *layer = list->data;
+            if (osm_gps_map_layer_button_press(layer, map, event))
+                return FALSE;
+        }
+    }
 
     priv->button_down = TRUE;
     priv->drag_counter = 0;
@@ -1870,7 +1913,8 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 static gboolean
 osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMapPrivate *priv = map->priv;
 
     GdkDrawable *drawable = widget->window;
 
@@ -1929,6 +1973,14 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
                                 0, priv->drag_mouse_dy + widget->allocation.height + EXTRA_BORDER,
                                 widget->allocation.width,
                                 -priv->drag_mouse_dy - EXTRA_BORDER);
+        }
+    }
+
+    if (priv->layers) {
+        GSList *list;
+        for(list = priv->layers; list != NULL; list = list->next) {
+            OsmGpsMapLayer *layer = list->data;
+            osm_gps_map_layer_draw(layer, map, drawable);
         }
     }
 
@@ -2471,6 +2523,20 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
     return priv->map_zoom;
 }
 
+int
+osm_gps_map_zoom_in (OsmGpsMap *map)
+{
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    return osm_gps_map_set_zoom(map, map->priv->map_zoom+1);
+}
+
+int
+osm_gps_map_zoom_out (OsmGpsMap *map)
+{
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    return osm_gps_map_set_zoom(map, map->priv->map_zoom-1);
+}
+
 void
 osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 {
@@ -2733,5 +2799,14 @@ void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint
 
     map->priv->keybindings[key] = keyval;
     map->priv->keybindings_enabled = TRUE;
+}
+
+void osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_LAYER (layer));
+
+    g_object_ref(G_OBJECT(layer));
+    map->priv->layers = g_slist_append(map->priv->layers, layer);
 }
 

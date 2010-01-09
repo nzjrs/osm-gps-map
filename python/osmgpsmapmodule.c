@@ -19,6 +19,8 @@
 
 #include <pygobject.h>
 #include <osm-gps-map.h>
+#include <osm-gps-map-osd.h>
+#include <osm-gps-map-layer.h>
 
 void pyosmgpsmap_register_classes(PyObject *d);
 extern PyMethodDef pyosmgpsmap_functions[];
