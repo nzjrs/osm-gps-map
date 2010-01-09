@@ -944,7 +944,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 {
     OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
-    GdkPixbuf *pixbuf = NULL;
+    GdkPixbuf *pixbuf;
 
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
@@ -1173,7 +1173,6 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_draw_gps_point(map);
     osm_gps_map_print_images(map);
 
-    //osm_gps_map_osd_speed(map, 1.5);
     osm_gps_map_purge_cache(map);
     gtk_widget_queue_draw (GTK_WIDGET (map));
 
