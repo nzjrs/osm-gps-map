@@ -962,7 +962,10 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
                 y,
                 priv->image_format);
 
-    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+    /* try to get file from internal cache first */
+    if(!(pixbuf = osm_gps_map_load_cached_tile(map, zoom, x, y)))
+        pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+
     if(pixbuf)
     {
         g_debug("Found tile %s", filename);
