@@ -119,6 +119,7 @@ struct _OsmGpsMapPrivate
     int drag_start_mouse_y;
     int drag_start_map_x;
     int drag_start_map_y;
+    guint drag_expose;
 
     //for customizing the redering of the gps track
     int ui_gps_track_width;
@@ -1162,6 +1163,10 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     if (priv->dragging)
         return FALSE;
 
+    /* undo all offsets that may have happened when dragging */
+    priv->drag_mouse_dx = 0;
+    priv->drag_mouse_dy = 0;
+
     priv->redraw_cycle++;
 
     /* draw white background to initialise pixmap */
@@ -1444,6 +1449,9 @@ osm_gps_map_dispose (GObject *object)
     if (priv->idle_map_redraw != 0)
         g_source_remove (priv->idle_map_redraw);
 
+    if (priv->drag_expose != 0)
+        g_source_remove (priv->drag_expose);
+
     G_OBJECT_CLASS (osm_gps_map_parent_class)->dispose (object);
 }
 
@@ -1705,10 +1713,21 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
         osm_gps_map_map_redraw_idle(map);
     }
 
-    priv->drag_mouse_dx = 0;
-    priv->drag_mouse_dy = 0;
-    priv->drag_counter = 0;
+    priv->drag_counter = -1;
 
+    return FALSE;
+}
+
+static gboolean
+osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event);
+
+static gboolean
+osm_gps_map_map_expose (GtkWidget *widget)
+{
+    OsmGpsMapPrivate *priv = OSM_GPS_MAP(widget)->priv;
+
+    priv->drag_expose = 0;
+    osm_gps_map_expose (widget, NULL);
     return FALSE;
 }
 
@@ -1732,11 +1751,17 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     if (!(state & GDK_BUTTON1_MASK))
         return FALSE;
 
-    priv->drag_counter++;
-
-    // we havent dragged more than 6 pixels
-    if (priv->drag_counter < 6)
+    if (priv->drag_counter < 0) 
         return FALSE;
+
+    /* not yet dragged far enough? */
+    if(!priv->drag_counter &&
+       ( (x - priv->drag_start_mouse_x) * (x - priv->drag_start_mouse_x) + 
+         (y - priv->drag_start_mouse_y) * (y - priv->drag_start_mouse_y) <
+         10*10))
+        return FALSE;
+
+    priv->drag_counter++;
 
     priv->dragging = TRUE;
 
@@ -1746,55 +1771,10 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     priv->drag_mouse_dx = x - priv->drag_start_mouse_x;
     priv->drag_mouse_dy = y - priv->drag_start_mouse_y;
 
-    gdk_draw_drawable (
-                       widget->window,
-                       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                       priv->pixmap,
-                       0,0,
-                       priv->drag_mouse_dx - EXTRA_BORDER, priv->drag_mouse_dy - EXTRA_BORDER,
-                       -1,-1);
-
-    //Paint white outside of the map if dragging. Its less
-    //ugly than painting the corrupted map
-    if(priv->drag_mouse_dx>EXTRA_BORDER) {
-        gdk_draw_rectangle (
-                            widget->window,
-                            widget->style->white_gc,
-                            TRUE,
-                            0, 0,
-                            priv->drag_mouse_dx - EXTRA_BORDER,
-                            widget->allocation.height);
-    }
-    else if (-priv->drag_mouse_dx > EXTRA_BORDER)
-    {
-        gdk_draw_rectangle (
-                            widget->window,
-                            widget->style->white_gc,
-                            TRUE,
-                            priv->drag_mouse_dx + widget->allocation.width + EXTRA_BORDER, 0,
-                            -priv->drag_mouse_dx - EXTRA_BORDER,
-                            widget->allocation.height);
-    }
-
-    if (priv->drag_mouse_dy>EXTRA_BORDER) {
-        gdk_draw_rectangle (
-                            widget->window,
-                            widget->style->white_gc,
-                            TRUE,
-                            0, 0,
-                            widget->allocation.width,
-                            priv->drag_mouse_dy - EXTRA_BORDER);
-    }
-    else if (-priv->drag_mouse_dy > EXTRA_BORDER)
-    {
-        gdk_draw_rectangle (
-                            widget->window,
-                            widget->style->white_gc,
-                            TRUE,
-                            0, priv->drag_mouse_dy + widget->allocation.height + EXTRA_BORDER,
-                            widget->allocation.width,
-                            -priv->drag_mouse_dy - EXTRA_BORDER);
-    }
+    /* instead of redrawing directly just add an idle function */
+    if (!priv->drag_expose)
+        priv->drag_expose = 
+            g_idle_add ((GSourceFunc)osm_gps_map_map_expose, widget);
 
     return FALSE;
 }
@@ -1809,10 +1789,17 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
         g_object_unref (priv->pixmap);
 
     priv->pixmap = gdk_pixmap_new (
-                                   widget->window,
-                                   widget->allocation.width + EXTRA_BORDER * 2,
-                                   widget->allocation.height + EXTRA_BORDER * 2,
-                                   -1);
+                        widget->window,
+                        widget->allocation.width + EXTRA_BORDER * 2,
+                        widget->allocation.height + EXTRA_BORDER * 2,
+                        -1);
+
+    // pixel_x,y, offsets
+    gint pixel_x = lon2pixel(priv->map_zoom, priv->center_rlon);
+    gint pixel_y = lat2pixel(priv->map_zoom, priv->center_rlat);
+
+    priv->map_x = pixel_x - widget->allocation.width/2;
+    priv->map_y = pixel_y - widget->allocation.height/2;
 
     /* and gc, used for clipping (I think......) */
     if(priv->gc_map)
@@ -1830,13 +1817,65 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-    gdk_draw_drawable (
-                       widget->window,
-                       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                       priv->pixmap,
-                       event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
-                       event->area.x, event->area.y,
-                       event->area.width, event->area.height);
+    GdkDrawable *drawable = widget->window;
+
+    if (!priv->drag_mouse_dx && !priv->drag_mouse_dy && event)
+    {
+        gdk_draw_drawable (drawable,
+                           widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                           priv->pixmap,
+                           event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
+                           event->area.x, event->area.y,
+                           event->area.width, event->area.height);
+    }
+    else
+    {
+        gdk_draw_drawable (drawable,
+                           widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                           priv->pixmap,
+                           0,0,
+                           priv->drag_mouse_dx - EXTRA_BORDER, 
+                           priv->drag_mouse_dy - EXTRA_BORDER,
+                           -1,-1);
+        
+        //Paint white outside of the map if dragging. Its less
+        //ugly than painting the corrupted map
+        if(priv->drag_mouse_dx>EXTRA_BORDER) {
+            gdk_draw_rectangle (drawable,
+                                widget->style->white_gc,
+                                TRUE,
+                                0, 0,
+                                priv->drag_mouse_dx - EXTRA_BORDER,
+                                widget->allocation.height);
+        }
+        else if (-priv->drag_mouse_dx > EXTRA_BORDER)
+        {
+            gdk_draw_rectangle (drawable,
+                                widget->style->white_gc,
+                                TRUE,
+                                priv->drag_mouse_dx + widget->allocation.width + EXTRA_BORDER, 0,
+                                -priv->drag_mouse_dx - EXTRA_BORDER,
+                                widget->allocation.height);
+        }
+        
+        if (priv->drag_mouse_dy>EXTRA_BORDER) {
+            gdk_draw_rectangle (drawable,
+                                widget->style->white_gc,
+                                TRUE,
+                                0, 0,
+                                widget->allocation.width,
+                                priv->drag_mouse_dy - EXTRA_BORDER);
+        }
+        else if (-priv->drag_mouse_dy > EXTRA_BORDER)
+        {
+            gdk_draw_rectangle (drawable,
+                                widget->style->white_gc,
+                                TRUE,
+                                0, priv->drag_mouse_dy + widget->allocation.height + EXTRA_BORDER,
+                                widget->allocation.width,
+                                -priv->drag_mouse_dy - EXTRA_BORDER);
+        }
+    }
 
     return FALSE;
 }
