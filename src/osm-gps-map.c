@@ -314,6 +314,8 @@ static void
 inspect_map_uri(OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv = map->priv;
+    priv->uri_format = 0;
+    priv->the_google = FALSE;
 
     if (g_strrstr(priv->repo_uri, URI_MARKER_X))
         priv->uri_format |= URI_HAS_X;
@@ -1344,20 +1346,12 @@ osm_gps_map_init (OsmGpsMap *object)
                             G_CALLBACK(on_window_key_press), priv);
 }
 
-static GObject *
-osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam *properties)
+static void
+osm_gps_map_setup(OsmGpsMapPrivate *priv)
 {
-    GObject *object;
-    OsmGpsMapPrivate *priv;
-    OsmGpsMap *map;
-    const char *uri, *name;
+    const char *uri;
 
-    //Always chain up to the parent constructor
-    object = G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
-    map = OSM_GPS_MAP(object);
-    priv = OSM_GPS_MAP_PRIVATE(object);
-
-    //user can specify a map source ID, or a repo URI as the map source
+   //user can specify a map source ID, or a repo URI as the map source
     uri = osm_gps_map_source_get_repo_uri(OSM_GPS_MAP_SOURCE_NULL);
     if ( (priv->map_source == 0) || (strcmp(priv->repo_uri, uri) == 0) ) {
         g_debug("Using null source");
@@ -1399,8 +1393,18 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
         priv->cache_dir = g_strdup(priv->tile_dir);
     }
     g_debug("Cache dir: %s", priv->cache_dir);
+}
 
-    inspect_map_uri(map);
+static GObject *
+osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam *properties)
+{
+    //Always chain up to the parent constructor
+    GObject *object = 
+        G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
+
+    osm_gps_map_setup(OSM_GPS_MAP_PRIVATE(object));
+
+    inspect_map_uri(OSM_GPS_MAP(object));
 
     return object;
 }
@@ -1536,9 +1540,31 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_GPS_POINT_R2:
             priv->ui_gps_point_outer_radius = g_value_get_int (value);
             break;
-        case PROP_MAP_SOURCE:
+        case PROP_MAP_SOURCE: {
+            gint old = priv->map_source;
             priv->map_source = g_value_get_int (value);
-            break;
+            if(old >= OSM_GPS_MAP_SOURCE_NULL && 
+               priv->map_source != old &&
+               priv->map_source >= OSM_GPS_MAP_SOURCE_NULL &&
+               priv->map_source <= OSM_GPS_MAP_SOURCE_LAST) {
+
+                /* we now have to switch the entire map */
+
+                /* flush the ram cache */
+                g_hash_table_remove_all(priv->tile_cache);
+
+                osm_gps_map_setup(priv);
+
+                inspect_map_uri(map);
+
+                /* adjust zoom if necessary */
+                if(priv->map_zoom > priv->max_zoom) 
+                    osm_gps_map_set_zoom(map, priv->max_zoom);
+
+                if(priv->map_zoom < priv->min_zoom)
+                    osm_gps_map_set_zoom(map, priv->min_zoom);
+
+            } } break;
         case PROP_IMAGE_FORMAT:
             priv->image_format = g_value_dup_string (value);
             break;

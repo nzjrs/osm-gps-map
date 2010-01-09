@@ -165,7 +165,7 @@ usage (GOptionContext *context)
     puts(g_option_context_get_help(context, TRUE, NULL));
 
     printf("Valid map sources:\n");
-    for(i=OSM_GPS_MAP_SOURCE_NULL; i <= OSM_GPS_MAP_SOURCE_YAHOO_HYBRID; i++)
+    for(i=OSM_GPS_MAP_SOURCE_NULL; i <= OSM_GPS_MAP_SOURCE_LAST; i++)
     {
         const char *name = osm_gps_map_source_get_friendly_name(i);
         printf("\t%d:\t%s\n",i,name);
