@@ -26,11 +26,13 @@
 #include "osm-gps-map.h"
 
 static OsmGpsMapSource_t map_provider = 0;
-static gboolean maps_in_temp = FALSE;
+static gboolean default_cache = FALSE;
+static gboolean no_cache = FALSE;
 static gboolean debug = FALSE;
 static GOptionEntry entries[] =
 {
-  { "maps-in-temp", 't', 0, G_OPTION_ARG_NONE, &maps_in_temp, "Store maps in /tmp instead of ~/Maps", NULL },
+  { "default-cache", 'D', 0, G_OPTION_ARG_NONE, &default_cache, "Store maps in default cache", NULL },
+  { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &no_cache, "Disable cache", NULL },
   { "debug", 'd', 0, G_OPTION_ARG_NONE, &debug, "Enable debugging", NULL },
   { "map", 'm', 0, G_OPTION_ARG_INT, &map_provider, "Map source", "N" },
   { NULL }
@@ -185,7 +187,6 @@ main (int argc, char **argv)
     const char *repo_uri;
     const char *friendly_name;
     char *cachedir;
-    gboolean fullpath;
     GError *error = NULL;
     GOptionContext *context;
     timeout_cb_t *data;
@@ -212,15 +213,15 @@ main (int argc, char **argv)
 
     friendly_name = osm_gps_map_source_get_friendly_name(map_provider);
 
-    if (maps_in_temp) {
-        cachedir = NULL;
-        fullpath = FALSE;
+    if (default_cache) {
+        cachedir = OSM_GPS_MAP_CACHE_AUTO;
+    } else if (no_cache) {
+        cachedir = OSM_GPS_MAP_CACHE_DISABLED;
     } else {
         char *mapcachedir;
         mapcachedir = osm_gps_map_get_default_cache_directory();
         cachedir = g_build_filename(mapcachedir,friendly_name,NULL);
         g_free(mapcachedir);
-        fullpath = TRUE;
     }
 
     if (debug)
@@ -237,7 +238,6 @@ main (int argc, char **argv)
     map = g_object_new (OSM_TYPE_GPS_MAP,
                         "map-source",map_provider,
                         "tile-cache",cachedir,
-                        "tile-cache-is-full-path",fullpath,
                         "proxy-uri",g_getenv("http_proxy"),
                         NULL);
 
@@ -247,8 +247,6 @@ main (int argc, char **argv)
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_Down);
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_Left);
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
-
-    g_free(cachedir);
 
     vbox = gtk_vbox_new (FALSE, 2);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -300,6 +298,5 @@ main (int argc, char **argv)
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
     gtk_main ();
 
-    g_free(cachedir);
     return 0;
 }

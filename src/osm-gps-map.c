@@ -41,7 +41,7 @@
 #include "osm-gps-map-types.h"
 #include "osm-gps-map.h"
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 
 #define EXTRA_BORDER (TILESIZE / 2)
 
@@ -78,8 +78,8 @@ struct _OsmGpsMapPrivate
     char *proxy_uri;
 
     //where downloaded tiles are cached
+    char *tile_dir;
     char *cache_dir;
-    gboolean cache_dir_is_full_path;
 
     //contains flags indicating the various special characters
     //the uri string contains, that will be replaced when calculating
@@ -155,7 +155,6 @@ enum
     PROP_REPO_URI,
     PROP_PROXY_URI,
     PROP_TILE_CACHE_DIR,
-    PROP_TILE_CACHE_DIR_IS_FULL_PATH,
     PROP_ZOOM,
     PROP_MAX_ZOOM,
     PROP_MIN_ZOOM,
@@ -1287,22 +1286,24 @@ osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam 
         }
     }
 
-    if (!priv->cache_dir_is_full_path) {
-        char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
+    if ((priv->tile_dir != NULL) && (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0)) {
+        priv->cache_dir == NULL;
+    } else if ( (priv->tile_dir == NULL) || (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0)) {
+        char *md5;
+        char *base;
 
-        if (priv->cache_dir) {
-            char *old = priv->cache_dir;
-            //the new cachedir is the given cache dir + the md5 of the repo_uri
-            priv->cache_dir = g_strdup_printf("%s%c%s", old, G_DIR_SEPARATOR, md5);
-            g_debug("Adjusting cache dir %s -> %s", old, priv->cache_dir);
-            g_free(old);
-        } else {
-            //the new cachedir is the current dir + the md5 of the repo_uri
-            priv->cache_dir = g_strdup(md5);
-        }
+        md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
+        base = osm_gps_map_get_default_cache_directory();
 
+        //the cachedir is the base dir + the md5 of the repo_uri
+        priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, md5);
+
+        g_free(base);
         g_free(md5);
+     } else {
+        priv->cache_dir = g_strdup(priv->tile_dir);
     }
+    g_debug("Cache dir: %s", priv->cache_dir);
 
     inspect_map_uri(map);
 
@@ -1350,7 +1351,12 @@ osm_gps_map_finalize (GObject *object)
     OsmGpsMap *map = OSM_GPS_MAP(object);
     OsmGpsMapPrivate *priv = map->priv;
 
-    g_free(priv->cache_dir);
+    if (priv->tile_dir)
+        g_free(priv->tile_dir);
+
+    if (priv->cache_dir)
+        g_free(priv->cache_dir);
+
     g_free(priv->repo_uri);
     g_free(priv->image_format);
 
@@ -1402,16 +1408,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             break;
         case PROP_TILE_CACHE_DIR:
             if ( g_value_get_string(value) )
-                priv->cache_dir = g_value_dup_string (value);
-            else {
-                priv->cache_dir = g_build_filename(
-                                    g_get_tmp_dir(),
-                                    "osmgpsmap",
-                                    NULL);
-            }
-            break;
-        case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-            priv->cache_dir_is_full_path = g_value_get_boolean (value);
+                priv->tile_dir = g_value_dup_string (value);
             break;
         case PROP_ZOOM:
             priv->map_zoom = g_value_get_int (value);
@@ -1481,9 +1478,6 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_TILE_CACHE_DIR:
             g_value_set_string(value, priv->cache_dir);
-            break;
-        case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-            g_value_set_boolean(value, priv->cache_dir_is_full_path);
             break;
         case PROP_ZOOM:
             g_value_set_int(value, priv->map_zoom);
@@ -1796,16 +1790,8 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      g_param_spec_string ("tile-cache",
                                                           "tile cache",
                                                           "osm local tile cache dir",
-                                                          NULL,
+                                                          OSM_GPS_MAP_CACHE_AUTO,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-
-    g_object_class_install_property (object_class,
-                                     PROP_TILE_CACHE_DIR_IS_FULL_PATH,
-                                     g_param_spec_boolean ("tile-cache-is-full-path",
-                                                           "tile cache is full path",
-                                                           "if true, the path passed to tile-cache is interpreted as the full cache path",
-                                                           FALSE,
-                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
                                      PROP_ZOOM,
