@@ -2380,6 +2380,29 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 }
 
 void
+osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
+{
+    OsmGpsMapPrivate *priv;
+
+    if(!old_track) {
+        osm_gps_map_add_track (map, new_track);
+        return;
+    }
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    GSList *old = g_slist_find(priv->tracks, old_track);
+    if(!old) {
+        g_warning("track to be replaced not found");
+        return;
+    }
+
+    old->data = new_track;
+    osm_gps_map_map_redraw_idle(map);
+}
+
+void
 osm_gps_map_clear_tracks (OsmGpsMap *map)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));

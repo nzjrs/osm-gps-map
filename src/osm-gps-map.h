@@ -108,6 +108,7 @@ void osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude,
 void osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude);
 int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
 void osm_gps_map_add_track (OsmGpsMap *map, GSList *track);
+void osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track);
 void osm_gps_map_clear_tracks (OsmGpsMap *map);
 void osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
 gboolean osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image);
