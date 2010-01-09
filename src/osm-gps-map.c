@@ -2077,7 +2077,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        -1,           /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        -1,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
                                      PROP_IMAGE_FORMAT,
