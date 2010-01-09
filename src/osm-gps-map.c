@@ -888,7 +888,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 {
     OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
-    GdkPixbuf *pixbuf;
+    GdkPixbuf *pixbuf = NULL;
 
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
