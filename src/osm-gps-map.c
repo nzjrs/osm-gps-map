@@ -552,7 +552,6 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map)
         int x, y;
         int r = priv->ui_gps_point_inner_radius;
         int r2 = priv->ui_gps_point_outer_radius;
-        int lw = priv->ui_gps_track_width;
         int mr = MAX(3*r,r2);
 
         map_x0 = priv->map_x - EXTRA_BORDER;
