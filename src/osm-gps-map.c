@@ -1452,6 +1452,8 @@ osm_gps_map_dispose (GObject *object)
     if (priv->drag_expose != 0)
         g_source_remove (priv->drag_expose);
 
+    g_free(priv->gps);
+
     G_OBJECT_CLASS (osm_gps_map_parent_class)->dispose (object);
 }
 
