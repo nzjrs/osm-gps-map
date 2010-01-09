@@ -833,7 +833,7 @@ osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
 {
     OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
-    GdkPixbuf *pixbuf;
+    GdkPixbuf *pixbuf = NULL;
     OsmCachedTile *tile;
 
     filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
@@ -1175,8 +1175,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     priv->redraw_cycle++;
 
     /* draw white background to initialise pixmap */
-    gdk_draw_rectangle (
-                        priv->pixmap,
+    gdk_draw_rectangle (priv->pixmap,
                         GTK_WIDGET(map)->style->white_gc,
                         TRUE,
                         0, 0,
