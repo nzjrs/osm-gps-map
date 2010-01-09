@@ -2357,9 +2357,6 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
         g_debug("Zoom changed from %d to %d factor:%f x:%d",
                 zoom_old, priv->map_zoom, factor, priv->map_x);
 
-        /* adjust gps precision indicator */
-        priv->ui_gps_point_outer_radius *= factor;
-
         osm_gps_map_map_redraw_idle(map);
     }
     return priv->map_zoom;
