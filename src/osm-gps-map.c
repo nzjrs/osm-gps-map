@@ -33,6 +33,7 @@
 
 #include <gdk/gdk.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <glib/gprintf.h>
 #include <libsoup/soup.h>
 #include <cairo.h>
