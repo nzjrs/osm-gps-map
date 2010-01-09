@@ -12,6 +12,8 @@ AC_HEADER_STDC
 
 AM_PROG_LIBTOOL
 
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
 AC_ARG_ENABLE(more-warnings,
 	      [  --disable-more-warnings  Inhibit compiler warnings],
 	      set_more_warnings=no)
