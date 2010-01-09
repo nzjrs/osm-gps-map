@@ -2334,7 +2334,7 @@ int
 osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
     int zoom_old;
-    double factor;
+    double factor = 0.0;
     int width_center, height_center;
     OsmGpsMapPrivate *priv;
 
