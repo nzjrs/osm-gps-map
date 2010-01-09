@@ -2468,67 +2468,6 @@ osm_gps_map_clear_images (OsmGpsMap *map)
 }
 
 void
-osm_gps_map_osd_speed (OsmGpsMap *map, float speed)
-{
-    OsmGpsMapPrivate *priv;
-
-    PangoContext        *context = NULL;
-    PangoLayout     *layout  = NULL;
-    PangoFontDescription    *desc    = NULL;
-
-    GdkColor color;
-    GdkGC *gc;
-
-    gchar *buffer;
-    //static int x = 10, y = 10;
-    static int width = 0, height = 0;
-
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
-    priv = map->priv;
-
-    buffer = g_strdup_printf("%.0f", speed);
-
-    /* pango initialisation */
-    context = gtk_widget_get_pango_context (GTK_WIDGET(map));
-    layout  = pango_layout_new (context);
-    desc    = pango_font_description_new();
-
-    pango_font_description_set_size (desc, 40 * PANGO_SCALE);
-    pango_layout_set_font_description (layout, desc);
-    pango_layout_set_text (layout, buffer, strlen(buffer));
-
-    gc = gdk_gc_new (GTK_WIDGET(map)->window);
-
-    color.red = (0 > 50) ? 0xffff : 0;
-    color.green = 0;
-    color.blue = 0;
-
-    gdk_gc_set_rgb_fg_color (gc, &color);
-
-    /* faster / less flicker alternative:*/
-    gdk_draw_drawable (
-                       GTK_WIDGET(map)->window,
-                       GTK_WIDGET(map)->style->fg_gc[GTK_WIDGET_STATE(map)],
-                       priv->pixmap,
-                       0,0,
-                       0,0,
-                       width+10,width+10);
-
-    gdk_draw_layout(GTK_WIDGET(map)->window,
-                    gc,
-                    0, 0,
-                    layout);
-
-    /* set width and height */
-    pango_layout_get_pixel_size(layout, &width, &height);
-
-    g_free(buffer);
-    pango_font_description_free (desc);
-    g_object_unref (layout);
-    g_object_unref (gc);
-}
-
-void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
     int pixel_x, pixel_y;
