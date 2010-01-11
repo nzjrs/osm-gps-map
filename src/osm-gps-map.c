@@ -4,6 +4,7 @@
  * osm-gps-map.c
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
  * Copyright (C) John Stowers 2009 <john.stowers@gmail.com>
+ * Copyright (C) Till Harbaum 2009 <till@harbaum.org>
  *
  * Contributions by
  * Everaldo Canuto 2009 <everaldo.canuto@gmail.com>
