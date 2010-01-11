@@ -188,15 +188,6 @@
   (return-type "none")
 )
 
-(define-method osd_speed
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_osd_speed")
-  (return-type "none")
-  (parameters
-    '("float" "speed")
-  )
-)
-
 (define-method draw_gps
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_draw_gps")
