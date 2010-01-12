@@ -76,7 +76,7 @@ typedef enum {
     OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE,
     OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
 } OsmGpsMapSource_t;
-#define OSM_GPS_MAP_SOURCE_LAST OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
+#define OSM_GPS_MAP_SOURCE_LAST     OSM_GPS_MAP_SOURCE_YAHOO_HYBRID
 
 typedef enum {
     OSM_GPS_MAP_KEY_FULLSCREEN,
@@ -89,44 +89,41 @@ typedef enum {
     OSM_GPS_MAP_KEY_MAX
 } OsmGpsMapKey_t;
 
-#define OSM_GPS_MAP_INVALID  (0.0/0.0)
+#define OSM_GPS_MAP_INVALID         (0.0/0.0)
 #define OSM_GPS_MAP_CACHE_DISABLED  "none://"
 #define OSM_GPS_MAP_CACHE_AUTO      "auto://"
 
-GType osm_gps_map_get_type (void) G_GNUC_CONST;
+GType       osm_gps_map_get_type                    (void) G_GNUC_CONST;
 
-const char* osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source);
-const char* osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source);
-const char *osm_gps_map_source_get_image_format(OsmGpsMapSource_t source);
-int osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source);
-int osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source);
+GtkWidget*  osm_gps_map_new                         (void);
 
-char * osm_gps_map_get_default_cache_directory(void);
+char*       osm_gps_map_get_default_cache_directory (void);
 
-void osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end);
-void osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2);
-void osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int zoom);
-void osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude);
-int osm_gps_map_set_zoom (OsmGpsMap *map, int zoom);
-void osm_gps_map_add_track (OsmGpsMap *map, GSList *track);
-void osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track);
-void osm_gps_map_clear_tracks (OsmGpsMap *map);
-void osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
-gboolean osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image);
-void osm_gps_map_clear_images (OsmGpsMap *map);
-void osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading);
-void osm_gps_map_clear_gps (OsmGpsMap *map);
-coord_t osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y);
-GtkWidget * osm_gps_map_new(void);
-void osm_gps_map_screen_to_geographic (OsmGpsMap *map,
-                                       gint pixel_x, gint pixel_y,
-                                       gfloat *latitude, gfloat *longitude);
-void osm_gps_map_geographic_to_screen (OsmGpsMap *map,
-                                       gfloat latitude, gfloat longitude,
-                                       gint *pixel_x, gint *pixel_y);
-void osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy);
-float osm_gps_map_get_scale(OsmGpsMap *map);
-void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
+const char* osm_gps_map_source_get_friendly_name    (OsmGpsMapSource_t source);
+const char* osm_gps_map_source_get_repo_uri         (OsmGpsMapSource_t source);
+const char* osm_gps_map_source_get_image_format     (OsmGpsMapSource_t source);
+int         osm_gps_map_source_get_min_zoom         (OsmGpsMapSource_t source);
+int         osm_gps_map_source_get_max_zoom         (OsmGpsMapSource_t source);
+
+void        osm_gps_map_download_maps               (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end);
+void        osm_gps_map_get_bbox                    (OsmGpsMap *map, coord_t *pt1, coord_t *pt2);
+void        osm_gps_map_set_mapcenter               (OsmGpsMap *map, float latitude, float longitude, int zoom);
+void        osm_gps_map_set_center                  (OsmGpsMap *map, float latitude, float longitude);
+int         osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);
+void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *track);
+void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track);
+void        osm_gps_map_clear_tracks                (OsmGpsMap *map);
+void        osm_gps_map_add_image                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
+gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image);
+void        osm_gps_map_clear_images                (OsmGpsMap *map);
+void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading);
+void        osm_gps_map_clear_gps                   (OsmGpsMap *map);
+coord_t     osm_gps_map_get_co_ordinates            (OsmGpsMap *map, int pixel_x, int pixel_y);
+void        osm_gps_map_screen_to_geographic        (OsmGpsMap *map, gint pixel_x, gint pixel_y, gfloat *latitude, gfloat *longitude);
+void        osm_gps_map_geographic_to_screen        (OsmGpsMap *map, gfloat latitude, gfloat longitude, gint *pixel_x, gint *pixel_y);
+void        osm_gps_map_scroll                      (OsmGpsMap *map, gint dx, gint dy);
+float       osm_gps_map_get_scale                   (OsmGpsMap *map);
+void        osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 
 G_END_DECLS
 
