@@ -5,6 +5,7 @@
 *.o
 *.deps/
 *.libs/
+*.tar.gz
 INSTALL
 Makefile
 autom4te.cache/
@@ -28,6 +29,7 @@ python/build/
 python/configure
 python/osmgpsmap.c
 src/Makefile
-src/openstreetmap-gps-map
+src/mapviewer
 stamp-h1
 ChangeLog
+
