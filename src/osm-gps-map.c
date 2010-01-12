@@ -1387,7 +1387,7 @@ osm_gps_map_setup(OsmGpsMapPrivate *priv)
     }
 
     if ((priv->tile_dir != NULL) && (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0)) {
-        priv->cache_dir == NULL;
+        priv->cache_dir = NULL;
     } else if ((priv->tile_dir == NULL) || (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0)) {
         char *md5;
         char *base;
@@ -2619,7 +2619,7 @@ osm_gps_map_get_scale(OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), OSM_GPS_MAP_INVALID);
     priv = map->priv;
 
     return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
