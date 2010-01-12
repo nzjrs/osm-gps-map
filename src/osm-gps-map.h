@@ -128,6 +128,12 @@ void osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy);
 float osm_gps_map_get_scale(OsmGpsMap *map);
 void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 
+int osm_gps_map_latitude_to_pixel(OsmGpsMap *map, int zoom, float lat);
+int osm_gps_map_longitude_to_pixel(OsmGpsMap *map, int zoom, float lon);
+float osm_gps_map_pixel_to_latitude(OsmGpsMap *map, int zoom, int pixel_y);
+float osm_gps_map_pixel_to_longitude(OsmGpsMap *map, int zoom, int pixel_x);
+
+
 G_END_DECLS
 
 #endif /* _OSM_GPS_MAP_H_ */
