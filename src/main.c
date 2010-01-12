@@ -25,7 +25,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "osm-gps-map.h"
 
-static OsmGpsMapSource_t map_provider = 0;
+static OsmGpsMapSource_t map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean default_cache = FALSE;
 static gboolean no_cache = FALSE;
 static gboolean debug = FALSE;
