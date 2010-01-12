@@ -183,7 +183,7 @@ main (int argc, char **argv)
     GtkWidget *zoomOutbutton;
     GtkWidget *homeButton;
     GtkWidget *cacheButton;
-    GtkWidget *map;
+    OsmGpsMap *map;
     const char *repo_uri;
     const char *friendly_name;
     char *cachedir;
@@ -252,7 +252,7 @@ main (int argc, char **argv)
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
     //Add the map to the box
-    gtk_box_pack_start (GTK_BOX(vbox), map, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(vbox), GTK_WIDGET(map), TRUE, TRUE, 0);
     //And add a box for the buttons
     bbox = gtk_hbox_new (TRUE, 0);
     gtk_box_pack_start (GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
@@ -277,7 +277,7 @@ main (int argc, char **argv)
     gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);
 
     data = g_new0(timeout_cb_t, 1);
-    data->map = OSM_GPS_MAP(map);
+    data->map = map;
     data->entry = entry;
     cacheButton = gtk_button_new_with_label ("Cache");
     g_signal_connect (G_OBJECT (cacheButton), "clicked",
@@ -285,9 +285,9 @@ main (int argc, char **argv)
     gtk_box_pack_start (GTK_BOX(bbox), cacheButton, FALSE, TRUE, 0);
 
     //Connect to map events
-    g_signal_connect (map, "button-press-event",
+    g_signal_connect (G_OBJECT (map), "button-press-event",
                       G_CALLBACK (on_button_press_event), (gpointer) entry);
-    g_signal_connect (map, "button-release-event",
+    g_signal_connect (G_OBJECT (map), "button-release-event",
                       G_CALLBACK (on_button_release_event), (gpointer) entry);
 
     g_signal_connect (window, "destroy",
