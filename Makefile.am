@@ -3,8 +3,8 @@
 
 SUBDIRS = src
 
-openstreetmap_gps_mapdocdir = ${prefix}/doc/openstreetmap-gps-map
-openstreetmap_gps_mapdoc_DATA =                 \
+osm_gps_mapdocdir = ${prefix}/doc/osm-gps-map
+osm_gps_mapdoc_DATA =                           \
 	README                                      \
 	COPYING                                     \
 	AUTHORS                                     \
@@ -26,7 +26,7 @@ EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
 	python/aclocal.m4                           \
 	python/configure                            \
 	python/osmgpsmapmodule.c                    \
-	python/openstreetmap-gps-map.py             \
+	python/mapviewer.py                         \
 	python/AUTHORS                              \
 	python/configure.ac                         \
 	python/osmgpsmap.override                   \

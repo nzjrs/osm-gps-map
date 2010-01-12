@@ -11,18 +11,18 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
-bin_PROGRAMS = openstreetmap-gps-map
+bin_PROGRAMS = mapviewer
 
-openstreetmap_gps_map_SOURCES = \
+mapviewer_SOURCES = \
 	main.c
 
-openstreetmap_gps_map_DEPENDENCIES = \
+mapviewer_DEPENDENCIES = \
 	libosmgpsmap.la
 
-openstreetmap_gps_map_LDFLAGS = \
+mapviewer_LDFLAGS = \
 	-losmgpsmap -lgthread-2.0
 
-openstreetmap_gps_map_LDADD = $(OPENSTREETMAP_GPS_MAP_LIBS)
+mapviewer_LDADD = $(OPENSTREETMAP_GPS_MAP_LIBS)
 
 lib_LTLIBRARIES = \
 	libosmgpsmap.la
