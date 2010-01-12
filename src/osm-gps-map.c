@@ -2642,27 +2642,3 @@ void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint
     map->priv->keybindings_enabled = TRUE;
 }
 
-int
-osm_gps_map_latitude_to_pixel(OsmGpsMap *map, int zoom, float lat)
-{
-    return lat2pixel(zoom, lat);
-}
-
-int
-osm_gps_map_longitude_to_pixel(OsmGpsMap *map, int zoom, float lon)
-{
-    return lon2pixel(zoom, lon);
-}
-
-float
-osm_gps_map_pixel_to_latitude(OsmGpsMap *map, int zoom, int pixel_y)
-{
-    return pixel2lat(zoom, pixel_y);
-}
-
-float
-osm_gps_map_pixel_to_longitude(OsmGpsMap *map, int zoom, int pixel_x)
-{
-    return pixel2lon(zoom, pixel_x);
-}
-

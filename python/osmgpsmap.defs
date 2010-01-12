@@ -288,44 +288,4 @@
   )
 )
 
-(define-method latitude_to_pixel
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_latitude_to_pixel")
-  (return-type "int")
-  (parameters
-    '("int" "zoom")
-    '("float" "lat")
-  )
-)
-
-(define-method longitude_to_pixel
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_longitude_to_pixel")
-  (return-type "int")
-  (parameters
-    '("int" "zoom")
-    '("float" "lon")
-  )
-)
-
-(define-method pixel_to_latitude
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_pixel_to_latitude")
-  (return-type "float")
-  (parameters
-    '("int" "zoom")
-    '("int" "pixel_y")
-  )
-)
-
-(define-method pixel_to_longitude
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_pixel_to_longitude")
-  (return-type "float")
-  (parameters
-    '("int" "zoom")
-    '("int" "pixel_x")
-  )
-)
-
 
