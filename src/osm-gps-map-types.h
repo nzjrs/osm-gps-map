@@ -25,7 +25,12 @@
 #ifndef _OSM_GPS_MAP_TYPES_H_
 #define _OSM_GPS_MAP_TYPES_H_
 
+#include "config.h"
+
 #include <gdk/gdk.h>
+#if USE_LIBSOUP22
+#include <libsoup/soup.h>
+#endif
 #include "osm-gps-map.h"
 
 #define TILESIZE 256
@@ -75,6 +80,9 @@ typedef struct {
     OsmGpsMap *map;
     /* whether to redraw the map when the tile arrives */
     gboolean redraw;
+#if USE_LIBSOUP22
+    SoupSession *session;
+#endif
 } tile_download_t;
 
 typedef struct {
