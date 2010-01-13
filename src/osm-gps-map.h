@@ -114,6 +114,7 @@ void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *tra
 void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track);
 void        osm_gps_map_clear_tracks                (OsmGpsMap *map);
 void        osm_gps_map_add_image                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
+void        osm_gps_map_add_image_with_alignment    (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign);
 gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image);
 void        osm_gps_map_clear_images                (OsmGpsMap *map);
 void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading);

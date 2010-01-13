@@ -529,7 +529,7 @@ osm_gps_map_print_images (OsmGpsMap *map)
                          priv->gc_map,
                          im->image,
                          0,0,
-                         x-(im->w/2),y-(im->h/2),
+                         x-im->xoffset,y-im->yoffset,
                          im->w,im->h,
                          GDK_RGB_DITHER_NONE, 0, 0);
 
@@ -2437,7 +2437,7 @@ osm_gps_map_clear_tracks (OsmGpsMap *map)
 }
 
 void
-osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
+osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));
 
@@ -2452,6 +2452,10 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
         im->pt.rlat = deg2rad(latitude);
         im->pt.rlon = deg2rad(longitude);
 
+        //handle alignment
+        im->xoffset = xalign * im->w;
+        im->yoffset = yalign * im->h;
+
         g_object_ref(image);
         im->image = image;
 
@@ -2459,6 +2463,12 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 
         osm_gps_map_map_redraw_idle(map);
     }
+}
+
+void
+osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
+{
+    osm_gps_map_add_image_with_alignment (map, latitude, longitude, image, 0.5, 0.5);
 }
 
 gboolean
