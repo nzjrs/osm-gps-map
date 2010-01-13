@@ -2017,7 +2017,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_ZOOM,
                                      g_param_spec_int ("zoom",
                                                        "zoom",
-                                                       "zoom level",
+                                                       "initial zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
                                                        3,
