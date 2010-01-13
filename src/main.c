@@ -168,7 +168,9 @@ usage (GOptionContext *context)
     for(i=OSM_GPS_MAP_SOURCE_NULL; i <= OSM_GPS_MAP_SOURCE_LAST; i++)
     {
         const char *name = osm_gps_map_source_get_friendly_name(i);
-        printf("\t%d:\t%s\n",i,name);
+        const char *uri = osm_gps_map_source_get_repo_uri(i);
+        if (uri != NULL)
+            printf("\t%d:\t%s\n",i,name);
     }
 }
 
