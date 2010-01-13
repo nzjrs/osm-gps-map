@@ -2604,9 +2604,11 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
     priv = map->priv;
 
     if (pixel_x)
-        *pixel_x = lon2pixel(priv->map_zoom, deg2rad(longitude)) - priv->map_x;
+        *pixel_x = lon2pixel(priv->map_zoom, deg2rad(longitude)) -
+            priv->map_x + priv->drag_mouse_dx;
     if (pixel_y)
-        *pixel_y = lat2pixel(priv->map_zoom, deg2rad(latitude)) - priv->map_y;
+        *pixel_y = lat2pixel(priv->map_zoom, deg2rad(latitude)) -
+            priv->map_y + priv->drag_mouse_dy;
 }
 
 void
