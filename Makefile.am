@@ -54,7 +54,7 @@ ChangeLog:
 	fi
 
 release:
-	scp @PACKAGE@-@VERSION@.tar.gz john@open.grcnz.com:/srv/default/downloads/osm-gps-map/
+	scp @PACKAGE@-@VERSION@.tar.gz root@greenbirdsystems.com:/var/www/johnstowers.co.nz/files/osm-gps-map/
 
 .PHONY: ChangeLog
 
