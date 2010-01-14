@@ -42,9 +42,7 @@ class UI(gtk.Window):
         self.vbox = gtk.VBox(False, 0)
         self.add(self.vbox)
 
-        self.osm = osmgpsmap.GpsMap(
-            tile_cache=osmgpsmap.get_default_cache_directory(),
-        )
+        self.osm = osmgpsmap.GpsMap()
         self.osm.connect('button_release_event', self.map_clicked)
 
         #connect keyboard shortcuts
@@ -127,10 +125,8 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             if self.osm:
                 #remove old map
                 self.vbox.remove(self.osm)
-
             try:
                 self.osm = osmgpsmap.GpsMap(
-                    tile_cache=osmgpsmap.get_default_cache_directory(),
                     repo_uri=uri,
                     image_format=format
                 )
