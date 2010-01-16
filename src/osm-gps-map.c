@@ -1215,6 +1215,8 @@ center_coord_update(OsmGpsMap *map) {
 
     priv->center_rlon = pixel2lon(priv->map_zoom, pixel_x);
     priv->center_rlat = pixel2lat(priv->map_zoom, pixel_y);
+
+    g_signal_emit_by_name(widget, "changed");
 }
 
 static gboolean 
@@ -2140,6 +2142,10 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                           "map source tile repository image format (jpg, png)",
                                                           OSM_IMAGE_FORMAT,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+    g_signal_new ("changed", OSM_TYPE_GPS_MAP,
+                  G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 const char* 
@@ -2408,6 +2414,8 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     priv->map_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
 
     osm_gps_map_map_redraw_idle(map);
+
+    g_signal_emit_by_name(map, "changed");
 }
 
 int 
@@ -2438,6 +2446,8 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
                 zoom_old, priv->map_zoom, factor, priv->map_x);
 
         osm_gps_map_map_redraw_idle(map);
+
+        g_signal_emit_by_name(map, "changed");
     }
     return priv->map_zoom;
 }
