@@ -2323,6 +2323,12 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
     return 17;
 }
 
+gboolean
+osm_gps_map_source_is_valid(OsmGpsMapSource_t source)
+{
+    return osm_gps_map_source_get_repo_uri(source) != NULL;
+}
+
 void
 osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end)
 {

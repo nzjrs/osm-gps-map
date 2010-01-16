@@ -50,6 +50,11 @@
   (return-type "GType")
 )
 
+(define-function get_default_cache_directory
+  (c-name "osm_gps_map_get_default_cache_directory")
+  (return-type "char*")
+)
+
 (define-function source_get_friendly_name
   (c-name "osm_gps_map_source_get_friendly_name")
   (return-type "const-char*")
@@ -90,9 +95,12 @@
   )
 )
 
-(define-function get_default_cache_directory
-  (c-name "osm_gps_map_get_default_cache_directory")
-  (return-type "char*")
+(define-function osm_gps_map_source_is_valid
+  (c-name "osm_gps_map_source_is_valid")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMapSource_t" "source")
+  )
 )
 
 (define-method download_maps
