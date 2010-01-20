@@ -22,7 +22,8 @@ mapviewer_DEPENDENCIES = \
 mapviewer_LDFLAGS = \
 	-losmgpsmap -lgthread-2.0
 
-mapviewer_LDADD = $(OPENSTREETMAP_GPS_MAP_LIBS)
+mapviewer_LDADD = \
+	$(OPENSTREETMAP_GPS_MAP_LIBS)
 
 lib_LTLIBRARIES = \
 	libosmgpsmap.la
@@ -41,6 +42,9 @@ endif
 libosmgpsmap_la_LDFLAGS = \
 	-version-info $(LT_VERSION_INFO)    \
 	$(no_undefined)
+
+libosmgpsmap_la_LIBADD = \
+	$(OPENSTREETMAP_GPS_MAP_LIBS)
 
 libosmgpsmapincdir = $(includedir)/osmgpsmap
 libosmgpsmapinc_HEADERS = \
