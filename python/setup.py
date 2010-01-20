@@ -28,8 +28,8 @@ _osmgpsmap = Extension(name = 'osmgpsmap',
             libraries = get_libs('osmgpsmap pygobject-2.0'),
         )
 
-setup( name = "pyosmgpsmap",
-    version = "0.1",
+setup( name = "python-osmgpsmap",
+    version = "0.5",
     description = "python interface for osmgpsmap",
     ext_modules = [_osmgpsmap],
     )

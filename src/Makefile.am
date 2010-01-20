@@ -34,6 +34,14 @@ libosmgpsmap_la_SOURCES = \
 libosmgpsmap_la_CFLAGS = \
 	-DG_LOG_DOMAIN=\"OsmGpsMap\"
 
+if OS_WIN32
+no_undefined = -no-undefined
+endif
+
+libosmgpsmap_la_LDFLAGS = \
+	-version-info $(LT_VERSION_INFO)    \
+	$(no_undefined)
+
 libosmgpsmapincdir = $(includedir)/osmgpsmap
 libosmgpsmapinc_HEADERS = \
 	osm-gps-map.h
