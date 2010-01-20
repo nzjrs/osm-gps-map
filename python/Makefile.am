@@ -37,4 +37,5 @@ osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 update-defs:
 	$(PYGTK_H2DEF) ../src/osm-gps-map.h > osmgpsmap-new.defs
 	
-
+release: dist
+	scp @PACKAGE@-@VERSION@.tar.gz root@greenbirdsystems.com:/var/www/johnstowers.co.nz/files/osm-gps-map/
