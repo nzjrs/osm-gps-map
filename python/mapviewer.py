@@ -23,6 +23,9 @@ import os.path
 import gtk.gdk
 import gobject
 
+gobject.threads_init()
+gtk.gdk.threads_init()
+
 #Try static lib first
 mydir = os.path.dirname(os.path.abspath(__file__))
 libdir = os.path.join(mydir, ".libs")
@@ -178,9 +181,9 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
  
 
 if __name__ == "__main__":
-    gtk.gdk.threads_init()
-
     u = UI()
     u.show_all()
+    if os.name == "nt": gtk.gdk.threads_enter()
     gtk.main()
+    if os.name == "nt": gtk.gdk.threads_leave()
 

@@ -17,7 +17,11 @@ osmgpsmap_la_SOURCES = osmgpsmapmodule.c osmgpsmap.c
 #nodist_osmgpsmap_la_SOURCES = osmgpsmap.c
 
 CLEANFILES = osmgpsmap.c
-EXTRA_DIST = setup.py osmgpsmap.override $(defs_DATA)
+EXTRA_DIST = \
+	setup.py \
+	mapviewer.py \
+	osmgpsmap.override \
+	$(defs_DATA)
 
 osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 .defs.c:
