@@ -1,6 +1,16 @@
 Changes in 0.5.0
 ======================
-  * TODO
+  * GDK drawing is not supported anymore, you must have cairo installed
+  * Use automake silent rules
+  * Add keyboard navigation support to map widget
+  * Draw GPS heading in position indicator
+  * Allow disabling of tile cache
+  * You can now change the map source at runtime
+  * Redraw and performance improvements
+  * Update python bindings
+  * Build and run correctly on Windows
+  * Add OPENCYCLEMAP and OSM_PUBLIC_TRANSPORT
+  * Much of the new work for this release was based on code from Till Harbaum
 
 Changes in 0.4.0
 ======================
