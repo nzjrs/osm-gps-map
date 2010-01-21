@@ -1,5 +1,7 @@
 Changes in 0.5.0
 ======================
+  * Note: Many of the improvements this release was based on 
+    code from Till Harbaum
   * GDK drawing is not supported anymore, you must have cairo installed
   * Use automake silent rules
   * Add keyboard navigation support to map widget
@@ -10,7 +12,9 @@ Changes in 0.5.0
   * Update python bindings
   * Build and run correctly on Windows
   * Add OPENCYCLEMAP and OSM_PUBLIC_TRANSPORT
-  * Much of the new work for this release was based on code from Till Harbaum
+  * A new "changed" signal. Connect to this to monitor when the map zoom/scroll
+    or center changes.
+  * Add osm_gps_map_source_is_valid
 
 Changes in 0.4.0
 ======================
