@@ -29,7 +29,7 @@ _osmgpsmap = Extension(name = 'osmgpsmap',
         )
 
 setup( name = "python-osmgpsmap",
-    version = "0.5",
+    version = "0.6.0",
     description = "python interface for osmgpsmap",
     ext_modules = [_osmgpsmap],
     )

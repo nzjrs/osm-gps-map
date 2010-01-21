@@ -1,5 +1,5 @@
 AC_PREREQ(2.53)
-AC_INIT(python-osmgpsmap, 0.5.0)
+AC_INIT(python-osmgpsmap, 0.6.0)
 AC_CONFIG_SRCDIR(osmgpsmap.defs)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
