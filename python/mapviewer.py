@@ -1,22 +1,22 @@
 #!/usr/bin/python
 
 """
- Copyright (C) Hadley Rich 2008 <hads@nice.net.nz>
- based on main.c - with thanks to John Stowers
+Copyright (C) Hadley Rich 2008 <hads@nice.net.nz>
+based on main.c - with thanks to John Stowers
 
- osm-gps.py is free software: you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by the
- Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+This is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License
+as published by the Free Software Foundation; version 2.
 
- osm-gps.py is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License along
- with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
+
 import math
 import sys
 import os.path
