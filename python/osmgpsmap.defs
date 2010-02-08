@@ -266,6 +266,7 @@
     '("gps_track_highlight_radius" (optional))
     '("map_source" (optional))
     '("image_format" (optional))
+    '("drag_limit" (optional))
   )
 )
 
