@@ -101,6 +101,9 @@ struct _OsmGpsMapPrivate
     float gps_heading;
     gboolean gps_valid;
 
+#ifdef OSD_DOUBLE_BUFFER
+    GdkPixmap *dbuf_pixmap;
+#endif
     //additional images or tracks added to the map
     GSList *tracks;
     GSList *images;
@@ -1524,6 +1527,12 @@ osm_gps_map_dispose (GObject *object)
 
     g_free(priv->gps);
 
+
+#ifdef OSD_DOUBLE_BUFFER
+    if(priv->dbuf_pixmap)
+        g_object_unref (priv->dbuf_pixmap);
+#endif
+
     G_OBJECT_CLASS (osm_gps_map_parent_class)->dispose (object);
 }
 
@@ -1896,6 +1905,18 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
     priv->map_x = pixel_x - widget->allocation.width/2;
     priv->map_y = pixel_y - widget->allocation.height/2;
 
+#ifdef OSD_DOUBLE_BUFFER
+    if (priv->dbuf_pixmap)
+        g_object_unref (priv->dbuf_pixmap);
+
+    priv->dbuf_pixmap = gdk_pixmap_new (
+                        widget->window,
+                        widget->allocation.width,
+                        widget->allocation.height,
+                        -1);
+#endif
+
+
     /* and gc, used for clipping (I think......) */
     if(priv->gc_map)
         g_object_unref(priv->gc_map);
@@ -1915,7 +1936,11 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
 
+#ifdef OSD_DOUBLE_BUFFER
+    GdkDrawable *drawable = priv->dbuf_pixmap;
+#else
     GdkDrawable *drawable = widget->window;
+#endif
 
     if (!priv->drag_mouse_dx && !priv->drag_mouse_dy && event)
     {
@@ -1980,6 +2005,12 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
         for(list = priv->layers; list != NULL; list = list->next) {
             OsmGpsMapLayer *layer = list->data;
             osm_gps_map_layer_draw(layer, map, drawable);
+#ifdef OSD_DOUBLE_BUFFER
+            gdk_draw_drawable (widget->window,
+                       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                       priv->dbuf_pixmap,
+                       0,0,0,0,-1,-1);
+#endif
         }
     }
 
