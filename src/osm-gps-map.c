@@ -2473,6 +2473,8 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     priv = map->priv;
 
+    g_object_set(G_OBJECT(map), "auto-center", FALSE, NULL);
+
     priv->center_rlat = deg2rad(latitude);
     priv->center_rlon = deg2rad(longitude);
 
