@@ -1,6 +1,11 @@
 Changes in 0.6.0
 ======================
-  * TBA
+  * Support libsoup-2.2 and libsoup-2.4
+  * Add a Add a OsmGpsMapLayer interface and a default OSD using the 
+    interface. OsdGpsMapOsd is one implementation of this interface which
+    draws one or all of; scale, map center coords, zoom control, dpade
+    control, center crosshair. Much of the drawing code was from Till Harbaum.
+  * Make the drag limit a gobject property
 
 Changes in 0.5.0
 ======================
