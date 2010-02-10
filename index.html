@@ -54,7 +54,7 @@
 
     <p>A Gtk+ widget (and Python bindings) that when given GPS co-ordinates, draws a GPS track, and points of interest on a moving map display. 
     Downloads map data from a number of websites, including openstreetmap.org. The library has excellent performance and is currently used in a number of Gtk+ and Maemo applications.</p>
-    <p><img src="screenshot.png"/></p>
+    <p><img src="screenshot.png"/><br/><img src="screenshot-osd.png"/></p>
     <p>Currently supports a number of different mapping sources<br/>
     <ul>
         <li>openstreetmap (default)</li>
@@ -72,11 +72,13 @@
         <li>Built in support for keyboard navgation</li>
         <li>Includes a <a href="http://github.com/nzjrs/osm-gps-map/blob/master/src/main.c">comprehensive example</a></li>
         <li>Simple, <a href="http://github.com/nzjrs/osm-gps-map/blob/master/src/osm-gps-map.h">flat API</a></li>
+        <li>Support for showing additional display layers rendered on top of the map</li>
+        <li>Optional on screen display (OSD)</li>
     </ul>
 
     <h2>Dependencies</h2>
     <p><ul>
-        <li>libsoup 2.4</li>
+        <li>libsoup-2.4 (recommended) or libsoup-2.2</li>
         <li>gtk+</li>
         <li>cairo</li>
         <li>pygtk-dev (optional, for python bindings)</li>
@@ -116,6 +118,13 @@ cd python; ./configure; make; make install #Python bindings</pre>
             <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/python-osmgpsmap-0.5.0.tar.gz">python bindings (tar)</a></li>
             <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/osm-gps-map-0.5.0_win32.zip">windows (zip)</a></li>
             <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/python-osmgpsmap-0.5.win32-py2.6.exe">windows python bindings (exe)</a></li>
+        </ul>
+        <li>0.6</li><ul>
+            <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/osm-gps-map-0.6.0.tar.gz">source (tar)</a></li>
+            <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/python-osmgpsmap-0.6.0.tar.gz">python bindings (tar)</a></li>
+<!--            <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/osm-gps-map-0.6.0_win32.zip">windows (zip)</a></li>
+            <li><a href="http://www.johnstowers.co.nz/files/osm-gps-map/python-osmgpsmap-0.6.win32-py2.6.exe">windows python bindings (exe)</a></li>
+-->
         </ul>
         <li>unstable snapshot <a href="http://github.com/nzjrs/osm-gps-map/tarball/master">(tar)</a> <a href="http://github.com/nzjrs/osm-gps-map/zipball/master">(zip)</a></li>
     </ul>
