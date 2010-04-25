@@ -32,7 +32,7 @@ libdir = os.path.join(mydir, ".libs")
 sys.path.insert(0, libdir)
 
 import osmgpsmap
-print "using library: %s" % osmgpsmap.__file__
+print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap.__version__)
 
 class DummyLayer(gobject.GObject, osmgpsmap.GpsMapLayer):
     def __init__(self):
