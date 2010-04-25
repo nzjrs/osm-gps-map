@@ -2342,7 +2342,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
                "http://mt#R.google.com/mt?n=404&v=w2t.99&x=#X&y=#Y&zoom=#S" */
             return NULL;
         case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
-            return "http://khm#R.google.com/kh/v=54&x=#X&y=#Y&z=#Z";
+            return "http://khm#R.google.com/kh/v=58&x=#X&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/r#W.jpeg?g=50";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
