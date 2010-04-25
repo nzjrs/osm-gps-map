@@ -895,6 +895,10 @@ osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
             tile->pixbuf = pixbuf;
             g_hash_table_insert (priv->tile_cache, filename, tile);
         }
+        else
+        {
+            g_free (filename);
+        }
     }
 
     /* set/update the redraw_cycle timestamp on the tile */
