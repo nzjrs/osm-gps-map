@@ -382,28 +382,23 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
             case URI_HAS_X:
                 s = g_strdup_printf("%d", x);
                 url = replace_string(url, URI_MARKER_X, s);
-                //g_debug("FOUND " URI_MARKER_X);
                 break;
             case URI_HAS_Y:
                 s = g_strdup_printf("%d", y);
                 url = replace_string(url, URI_MARKER_Y, s);
-                //g_debug("FOUND " URI_MARKER_Y);
                 break;
             case URI_HAS_Z:
                 s = g_strdup_printf("%d", zoom);
                 url = replace_string(url, URI_MARKER_Z, s);
-                //g_debug("FOUND " URI_MARKER_Z);
                 break;
             case URI_HAS_S:
                 s = g_strdup_printf("%d", priv->max_zoom-zoom);
                 url = replace_string(url, URI_MARKER_S, s);
-                //g_debug("FOUND " URI_MARKER_S);
                 break;
             case URI_HAS_Q:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'t',"qrts");
                 s = g_strdup_printf("%s", location);
                 url = replace_string(url, URI_MARKER_Q, s);
-                //g_debug("FOUND " URI_MARKER_Q);
                 break;
             case URI_HAS_Q0:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'\0', "0123");
@@ -423,7 +418,6 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
             case URI_HAS_R:
                 s = g_strdup_printf("%d", g_random_int_range(0,4));
                 url = replace_string(url, URI_MARKER_R, s);
-                //g_debug("FOUND " URI_MARKER_R);
                 break;
             default:
                 s = NULL;
@@ -2128,11 +2122,75 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    /**
+     * OsmGpsMap:repo-uri:
+     *
+     * A URI string which defines the location and format to fetch tiles
+     * for the map. The string is of the format
+     * "http://tile.openstreetmap.org/&num;Z/&num;X/&num;Y.png". Characters
+     * that begin with &num; are treated as tokens and replaced according to
+     * the following rules;
+     *
+     * <itemizedlist>
+     * <listitem>
+     * <para>
+     * \#X - X-tile, slippy map format
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#Y - Y-tile, slippy map format, mercator projection
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#Z - Zoom level, where min_zoom &gt;= zoom &lt;= max_zoom
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#S - Zoom level, where -max_zoom &gt;= (zoom-max_zoom) &lt;= min_zoom
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#Q - Quad tree format, set of "qrts"
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#Q0 - Quad tree format, set of "0123"
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#YS - Not Implemented
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * \#R - Random integer in range [0,4]
+     * </para>
+     * </listitem>
+     * </itemizedlist>
+     *
+     * <note>
+     * <para>
+     * If you do not wish to use the default map tiles (provided by OpenStreeMap)
+     * it is recommened that you use one of the predefined map sources, and thus
+     * you should construct the map by setting #OsmGpsMap:map-source and not
+     * #OsmGpsMap:repo-uri. The #OsmGpsMap:repo-uri property is primarily
+     * designed for applications that wish complete control of tile repository
+     * management, or wish to use #OsmGpsMap with a tile repository it does not
+     * explicitly support.
+     * </para>
+     * </note>
+     **/
     g_object_class_install_property (object_class,
                                      PROP_REPO_URI,
                                      g_param_spec_string ("repo-uri",
                                                           "repo uri",
-                                                          "map source tile repository uri",
+                                                          "Map source tile repository uri",
                                                           OSM_REPO_URI,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -2140,39 +2198,76 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_PROXY_URI,
                                      g_param_spec_string ("proxy-uri",
                                                           "proxy uri",
-                                                          "http proxy uri on NULL",
+                                                          "HTTP proxy uri or NULL",
                                                           NULL,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+
+    /**
+     * OsmGpsMap:tile-cache:
+     *
+     * Either a full path or one of the special format URIs
+     * #OSM_GPS_MAP_CACHE_DISABLED, #OSM_GPS_MAP_CACHE_AUTO,
+     * #OSM_GPS_MAP_CACHE_FRIENDLY. Also see #OsmGpsMap:tile-cache-base for a
+     * full understanding.
+     *
+     * #OSM_GPS_MAP_CACHE_DISABLED disables the on disk tile cache (so all tiles
+     * are fetched from the network. #OSM_GPS_MAP_CACHE_AUTO causes the tile
+     * cache to be /tile-cache-base/md5(repo-uri), where md5 is the md5sum
+     * of #OsmGpsMap:repo-uri. #OSM_GPS_MAP_CACHE_FRIENDLY
+     * causes the tile cache to be /tile-cache-base/friendlyname(repo-uri).
+     *
+     * Any other string is interpreted as a local path, i.e. /path/to/cache
+     **/
     g_object_class_install_property (object_class,
                                      PROP_TILE_CACHE_DIR,
                                      g_param_spec_string ("tile-cache",
                                                           "tile cache",
-                                                          "osm local tile cache dir",
+                                                          "Tile cache dir",
                                                           OSM_GPS_MAP_CACHE_AUTO,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    /**
+     * OsmGpsMap:tile-cache-base:
+     *
+     * The base directory of the tile cache when you have constructed
+     * the map with #OsmGpsMap:tile-cache set to #OSM_GPS_MAP_CACHE_AUTO or
+     * #OSM_GPS_MAP_CACHE_FRIENDLY
+     *
+     * The string is interpreted as a local path, i.e. /path/to/cache
+     **/
     g_object_class_install_property (object_class,
                                      PROP_TILE_CACHE_BASE_DIR,
                                      g_param_spec_string ("tile-cache-base",
                                                           "tile cache-base",
-                                                          "base directory to which friendly and auto paths are appended",
+                                                          "Base directory to which friendly and auto paths are appended",
                                                           NULL,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * OsmGpsMap:tile-cache-is-full-path:
+     *
+     * Deprecated: Use #OsmGpsMap:tile-cache and #OsmGpsMap:tile-cache-base instead
+     **/
      g_object_class_install_property (object_class,
                                       PROP_TILE_CACHE_DIR_IS_FULL_PATH,
                                       g_param_spec_boolean ("tile-cache-is-full-path",
                                                             "tile cache is full path",
-                                                            "DEPRECIATED",
+                                                            NULL,
                                                             FALSE,
                                                             G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+    /**
+     * OsmGpsMap:zoom:
+     *
+     * The map zoom level. Connect to notify::zoom if you want to be informed
+     * when this changes.
+    **/
     g_object_class_install_property (object_class,
                                      PROP_ZOOM,
                                      g_param_spec_int ("zoom",
                                                        "zoom",
-                                                       "initial zoom level",
+                                                       "Map zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
                                                        3,
@@ -2182,7 +2277,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_MAX_ZOOM,
                                      g_param_spec_int ("max-zoom",
                                                        "max zoom",
-                                                       "maximum zoom level",
+                                                       "Maximum zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
                                                        OSM_MAX_ZOOM,
@@ -2192,7 +2287,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_MIN_ZOOM,
                                      g_param_spec_int ("min-zoom",
                                                        "min zoom",
-                                                       "minimum zoom level",
+                                                       "Minimum zoom level",
                                                        MIN_ZOOM, /* minimum property value */
                                                        MAX_ZOOM, /* maximum property value */
                                                        OSM_MIN_ZOOM,
@@ -2202,7 +2297,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_LATITUDE,
                                      g_param_spec_float ("latitude",
                                                          "latitude",
-                                                         "latitude in degrees",
+                                                         "Latitude in degrees",
                                                          -90.0, /* minimum property value */
                                                          90.0, /* maximum property value */
                                                          0,
@@ -2212,7 +2307,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_LONGITUDE,
                                      g_param_spec_float ("longitude",
                                                          "longitude",
-                                                         "longitude in degrees",
+                                                         "Longitude in degrees",
                                                          -180.0, /* minimum property value */
                                                          180.0, /* maximum property value */
                                                          0,
@@ -2222,7 +2317,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_MAP_X,
                                      g_param_spec_int ("map-x",
                                                        "map-x",
-                                                       "initial map x location",
+                                                       "Initial map x location",
                                                        G_MININT, /* minimum property value */
                                                        G_MAXINT, /* maximum property value */
                                                        890,
@@ -2232,17 +2327,23 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_MAP_Y,
                                      g_param_spec_int ("map-y",
                                                        "map-y",
-                                                       "initial map y location",
+                                                       "Initial map y location",
                                                        G_MININT, /* minimum property value */
                                                        G_MAXINT, /* maximum property value */
                                                        515,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * OsmGpsMap:tiles-queued:
+     *
+     * The number of tiles currently waiting to download. Connect to
+     * notify::tiles-queued if you want to be informed when this changes
+    **/
     g_object_class_install_property (object_class,
                                      PROP_TILES_QUEUED,
                                      g_param_spec_int ("tiles-queued",
                                                        "tiles-queued",
-                                                       "number of tiles currently waiting to download",
+                                                       "The number of tiles currently waiting to download",
                                                        G_MININT, /* minimum property value */
                                                        G_MAXINT, /* maximum property value */
                                                        0,
@@ -2252,7 +2353,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_GPS_TRACK_WIDTH,
                                      g_param_spec_int ("gps-track-width",
                                                        "gps-track-width",
-                                                       "width of the lines drawn for the gps track",
+                                                       "The width of the lines drawn for the gps track",
                                                        1,           /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        4,
@@ -2262,7 +2363,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_GPS_POINT_R1,
                                      g_param_spec_int ("gps-track-point-radius",
                                                        "gps-track-point-radius",
-                                                       "radius of the gps point inner circle",
+                                                       "The radius of the gps point inner circle",
                                                        0,           /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        5,
@@ -2272,17 +2373,30 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_GPS_POINT_R2,
                                      g_param_spec_int ("gps-track-highlight-radius",
                                                        "gps-track-highlight-radius",
-                                                       "radius of the gps point highlight circle",
+                                                       "The radius of the gps point highlight circle",
                                                        0,           /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        20,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    /**
+     * OsmGpsMap:map-source:
+     *
+     * A #OsmGpsMapSource_t representing the tile repository to use
+     *
+     * <note>
+     * <para>
+     * If you do not wish to use the default map tiles (provided by OpenStreeMap)
+     * it is recommened that you set this property at construction, instead
+     * of setting #OsmGpsMap:repo-uri.
+     * </para>
+     * </note>
+     **/
     g_object_class_install_property (object_class,
                                      PROP_MAP_SOURCE,
                                      g_param_spec_int ("map-source",
                                                        "map source",
-                                                       "map source ID",
+                                                       "The map source ID",
                                                        -1,          /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        -1,
@@ -2292,7 +2406,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_IMAGE_FORMAT,
                                      g_param_spec_string ("image-format",
                                                           "image format",
-                                                          "map source tile repository image format (jpg, png)",
+                                                          "The map source tile repository image format (jpg, png)",
                                                           OSM_IMAGE_FORMAT,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -2300,7 +2414,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      PROP_DRAG_LIMIT,
                                      g_param_spec_int ("drag-limit",
                                                        "drag limit",
-                                                       "the number of pixels the user has to move the pointer in order to start dragging",
+                                                       "The number of pixels the user has to move the pointer in order to start dragging",
                                                        0,           /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
                                                        10,
@@ -2877,7 +2991,8 @@ osm_gps_map_get_scale(OsmGpsMap *map)
     return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
 }
 
-char * osm_gps_map_get_default_cache_directory(void)
+char *
+osm_gps_map_get_default_cache_directory(void)
 {
     return g_build_filename(
                         g_get_user_cache_dir(),
@@ -2885,7 +3000,8 @@ char * osm_gps_map_get_default_cache_directory(void)
                         NULL);
 }
 
-void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval)
+void
+osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     g_return_if_fail(key < OSM_GPS_MAP_KEY_MAX);
@@ -2894,7 +3010,8 @@ void osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint
     map->priv->keybindings_enabled = TRUE;
 }
 
-void osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
+void
+osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     g_return_if_fail (OSM_GPS_MAP_IS_LAYER (layer));

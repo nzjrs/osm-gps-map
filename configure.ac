@@ -51,10 +51,15 @@ AC_SUBST(LT_VERSION_INFO)
 
 CFLAGS="$CFLAGS -Wall -Wswitch-enum"
 
+GTK_DOC_CHECK(1.11)
+
 AC_OUTPUT([
 osmgpsmap.pc
 Makefile
 src/Makefile
+docs/Makefile
+docs/reference/Makefile
+docs/reference/version.xml
 ])
 
 echo
