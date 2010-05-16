@@ -763,6 +763,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
             osm_gps_map_map_redraw_idle (map);
         }
         g_hash_table_remove(priv->tile_queue, dl->uri);
+        g_object_notify(G_OBJECT(map), "tiles-queued");
 
         g_free(dl->uri);
         g_free(dl->folder);
@@ -776,6 +777,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
         {
             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
+            g_object_notify(G_OBJECT(map), "tiles-queued");
         }
         else if (msg->status_code == SOUP_STATUS_CANCELLED)
         {
@@ -855,6 +857,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 #endif
 
             g_hash_table_insert (priv->tile_queue, dl->uri, msg);
+            g_object_notify (G_OBJECT (map), "tiles-queued");
             soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
         } else {
             g_warning("Could not create soup message");
