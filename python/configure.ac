@@ -52,7 +52,7 @@ if test -f ../src/libosmgpsmap.la; then
 
 	#and we must link to the local lib
 	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I../src/"
-	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS -L../src/.libs/ -losmgpsmap"
+	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS ../src/libosmgpsmap.la"
 else
 	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap)
 fi
