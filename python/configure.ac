@@ -51,8 +51,8 @@ if test -f ../src/libosmgpsmap.la; then
 	PKG_CHECK_MODULES(OSMGPSMAP, [gtk+-2.0 libsoup-2.4])
 
 	#and we must link to the local lib
-	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I../src/"
-	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS ../src/libosmgpsmap.la"
+	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I\$(top_srcdir)/../src/"
+	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS \$(top_builddir)/../src/libosmgpsmap.la"
 else
 	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap)
 fi
