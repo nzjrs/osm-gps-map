@@ -16,7 +16,7 @@ AM_PROG_LIBTOOL
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
-PKG_CHECK_MODULES(OPENSTREETMAP_GPS_MAP, [gtk+-2.0 glib-2.0 >= 2.18 cairo >= 1.8])
+PKG_CHECK_MODULES(OPENSTREETMAP_GPS_MAP, [gtk+-2.0 glib-2.0 >= 2.16 cairo >= 1.6])
 
 PKG_CHECK_MODULES(SOUP24, libsoup-2.4,
     soup_ver=2.4, [
