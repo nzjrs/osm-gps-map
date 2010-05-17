@@ -16,13 +16,11 @@ bin_PROGRAMS = mapviewer
 mapviewer_SOURCES = \
 	main.c
 
-mapviewer_DEPENDENCIES = \
-	libosmgpsmap.la
-
 mapviewer_LDFLAGS = \
-	-losmgpsmap -lgthread-2.0
+	-lgthread-2.0
 
 mapviewer_LDADD = \
+	libosmgpsmap.la \
 	$(OPENSTREETMAP_GPS_MAP_LIBS)
 
 lib_LTLIBRARIES = \
