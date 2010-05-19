@@ -5,7 +5,11 @@
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" $(OPENSTREETMAP_GPS_MAP_CFLAGS)
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
+	$(GLIB_CFLAGS) \
+	$(GTK_CFLAGS) \
+	$(CAIRO_CFLAGS) \
+	$(SOUP22_CFLAGS) $(SOUP24_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
@@ -20,8 +24,8 @@ mapviewer_LDFLAGS = \
 	-lgthread-2.0
 
 mapviewer_LDADD = \
-	libosmgpsmap.la \
-	$(OPENSTREETMAP_GPS_MAP_LIBS)
+	$(GTK_LIBS) \
+	libosmgpsmap.la
 
 lib_LTLIBRARIES = \
 	libosmgpsmap.la
@@ -45,7 +49,10 @@ libosmgpsmap_la_LDFLAGS = \
 	$(no_undefined)
 
 libosmgpsmap_la_LIBADD = \
-	$(OPENSTREETMAP_GPS_MAP_LIBS)
+	$(GLIB_LIBS) \
+	$(GTK_LIBS) \
+	$(CAIRO_LIBS) \
+	$(SOUP22_LIBS) $(SOUP24_LIBS)
 
 libosmgpsmapincdir = $(includedir)/osmgpsmap
 libosmgpsmapinc_HEADERS = \

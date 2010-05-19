@@ -3,6 +3,7 @@ defs_DATA = osmgpsmap.defs
 
 INCLUDES = \
 	$(OSMGPSMAP_CFLAGS) \
+	$(SOUP24_CFLAGS) \
 	$(GTK_CFLAGS) \
 	$(PYGTK_CFLAGS) \
 	$(PYTHON_INCLUDES)
@@ -12,7 +13,7 @@ pkgpyexecdir = $(pyexecdir)/gtk-2.0
 
 pkgpyexec_LTLIBRARIES = osmgpsmap.la
 osmgpsmap_la_LDFLAGS = -module -avoid-version -export-symbols-regex initosmgpsmap
-osmgpsmap_la_LIBADD = $(OSMGPSMAP_LIBS) $(GTK_LIBS) $(PYGTK_LIBS)
+osmgpsmap_la_LIBADD = $(OSMGPSMAP_LIBS) $(SOUP24_LIBS) $(GTK_LIBS) $(PYGTK_LIBS)
 osmgpsmap_la_SOURCES = osmgpsmapmodule.c osmgpsmap.c
 #nodist_osmgpsmap_la_SOURCES = osmgpsmap.c
 

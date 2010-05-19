@@ -48,11 +48,12 @@ AC_MSG_RESULT($PYGTK_H2DEF)
 if test -f ../src/libosmgpsmap.la; then
 	#Because we are building against a non installed lib, the pkgconfig
 	#file cannot tell us to also include/link gtk/soup, so we must manually do it
-	PKG_CHECK_MODULES(OSMGPSMAP, [gtk+-2.0 libsoup-2.4])
+	PKG_CHECK_MODULES(GTK, [gtk+-2.0])
+	PKG_CHECK_MODULES(SOUP24, [libsoup-2.4])
 
 	#and we must link to the local lib
-	OSMGPSMAP_CFLAGS="$OSMGPSMAP_CFLAGS -I\$(top_srcdir)/../src/"
-	OSMGPSMAP_LIBS="$OSMGPSMAP_LIBS \$(top_builddir)/../src/libosmgpsmap.la"
+	OSMGPSMAP_CFLAGS="-I\$(top_srcdir)/../src/"
+	OSMGPSMAP_LIBS="\$(top_builddir)/../src/libosmgpsmap.la"
 else
 	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap)
 fi
