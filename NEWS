@@ -1,6 +1,7 @@
 Changes in 0.7.0
 ======================
-  * TBA.
+  * Build fixes
+  * Provide a notify signal for tiles-queued and zoom
 
 Changes in 0.6.0
 ======================
