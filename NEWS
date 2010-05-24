@@ -2,6 +2,7 @@ Changes in 0.7.0
 ======================
   * Build fixes
   * Provide a notify signal for tiles-queued and zoom
+  * Improvements to changing source and tile-cache after map is constructed
 
 Changes in 0.6.0
 ======================

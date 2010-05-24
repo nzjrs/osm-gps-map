@@ -137,6 +137,7 @@ struct _OsmGpsMapPrivate
     guint fullscreen : 1;
     guint keybindings_enabled : 1;
     guint is_disposed : 1;
+    guint is_constructed : 1;
     guint dragging : 1;
     guint button_down : 1;
 };
@@ -186,7 +187,6 @@ G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  * Drawing function forward defintions
  */
 static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
-static void     inspect_map_uri(OsmGpsMap *map);
 static gchar    *replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
 static void     osm_gps_map_print_images (OsmGpsMap *map);
 static void     osm_gps_map_draw_gps_point (OsmGpsMap *map);
@@ -322,9 +322,8 @@ map_convert_coords_to_quadtree_string(OsmGpsMap *map, gint x, gint y, gint zooml
 
 
 static void
-inspect_map_uri(OsmGpsMap *map)
+inspect_map_uri(OsmGpsMapPrivate *priv)
 {
-    OsmGpsMapPrivate *priv = map->priv;
     priv->uri_format = 0;
     priv->the_google = FALSE;
 
@@ -1323,7 +1322,7 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
             case OSM_GPS_MAP_KEY_RIGHT:
                 priv->map_x += step;
                 center_coord_update(map);
-                osm_gps_map_map_redraw_idle(OSM_GPS_MAP(widget));
+                osm_gps_map_map_redraw_idle(map);
                 handled = TRUE;
                 break;
             default:
@@ -1407,7 +1406,7 @@ osm_gps_map_init (OsmGpsMap *object)
 }
 
 static char*
-osm_gps_map_get_cache_dir(OsmGpsMapPrivate *priv)
+osm_gps_map_get_cache_base_dir(OsmGpsMapPrivate *priv)
 {
     if (priv->tile_base_dir)
         return g_strdup(priv->tile_base_dir);
@@ -1426,11 +1425,12 @@ int g_strcmp0(const char *str1, const char *str2)
 #endif
 
 static void
-osm_gps_map_setup(OsmGpsMapPrivate *priv)
+osm_gps_map_setup(OsmGpsMap *map)
 {
     const char *uri;
+    OsmGpsMapPrivate *priv = map->priv;
 
-   //user can specify a map source ID, or a repo URI as the map source
+   /* user can specify a map source ID, or a repo URI as the map source */
     uri = osm_gps_map_source_get_repo_uri(OSM_GPS_MAP_SOURCE_NULL);
     if ( (priv->map_source == 0) || (strcmp(priv->repo_uri, uri) == 0) ) {
         g_debug("Using null source");
@@ -1440,7 +1440,7 @@ osm_gps_map_setup(OsmGpsMapPrivate *priv)
         gdk_pixbuf_fill(priv->null_tile, 0xcccccc00);
     }
     else if (priv->map_source >= 0) {
-        //check if the source given is valid
+        /* check if the source given is valid */
         uri = osm_gps_map_source_get_repo_uri(priv->map_source);
         if (uri) {
             g_debug("Setting map source from ID");
@@ -1453,14 +1453,14 @@ osm_gps_map_setup(OsmGpsMapPrivate *priv)
             priv->min_zoom = osm_gps_map_source_get_min_zoom(priv->map_source);
         }
     }
+    /* parse the source uri */
+    inspect_map_uri(priv);
 
-    if (priv->tile_dir == NULL)
-        priv->tile_dir = g_strdup(OSM_GPS_MAP_CACHE_DISABLED);
-
+    /* setup the tile cache */
     if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0 ) {
         priv->cache_dir = NULL;
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0 ) {
-        char *base = osm_gps_map_get_cache_dir(priv);
+        char *base = osm_gps_map_get_cache_base_dir(priv);
 #if GLIB_CHECK_VERSION (2, 16, 0)
         char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
 #else
@@ -1470,26 +1470,46 @@ osm_gps_map_setup(OsmGpsMapPrivate *priv)
         g_free(base);
         g_free(md5);
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_FRIENDLY) == 0 ) {
-        char *base = osm_gps_map_get_cache_dir(priv);
+        char *base = osm_gps_map_get_cache_base_dir(priv);
         const char *fname = osm_gps_map_source_get_friendly_name(priv->map_source);
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, fname);
         g_free(base);
     } else {
-        priv->cache_dir = g_strdup(priv->tile_dir);
+        /* the simple case is handled in g_object_set(PROP_TILE_CACHE_DIR) */
     }
     g_debug("Cache dir: %s", priv->cache_dir);
+
+    /* check if we are being called for a second (or more) time in the lifetime
+       of the object, and if so, do some extra cleanup */
+    if ( priv->is_constructed ) {
+        g_debug("Setup called again in map lifetime");
+        /* flush the ram cache */
+        g_hash_table_remove_all(priv->tile_cache);
+
+        /* adjust zoom if necessary */
+        if(priv->map_zoom > priv->max_zoom)
+            osm_gps_map_set_zoom(map, priv->max_zoom);
+
+        if(priv->map_zoom < priv->min_zoom)
+            osm_gps_map_set_zoom(map, priv->min_zoom);
+
+        osm_gps_map_map_redraw_idle(map);
+    }
 }
 
 static GObject *
 osm_gps_map_constructor (GType gtype, guint n_properties, GObjectConstructParam *properties)
 {
-    //Always chain up to the parent constructor
-    GObject *object = 
-        G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
+    GObject *object;
+    OsmGpsMap *map;
 
-    osm_gps_map_setup(OSM_GPS_MAP_PRIVATE(object));
+    /* always chain up to the parent constructor */
+    object = G_OBJECT_CLASS(osm_gps_map_parent_class)->constructor(gtype, n_properties, properties);
 
-    inspect_map_uri(OSM_GPS_MAP(object));
+    map = OSM_GPS_MAP(object);
+
+    osm_gps_map_setup(map);
+    map->priv->is_constructed = TRUE;
 
     return object;
 }
@@ -1603,12 +1623,24 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 g_value_take_boxed(&val, uri);
                 g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
 #endif
-            } else
+            } else {
                 priv->proxy_uri = NULL;
-
+            }
             break;
         case PROP_TILE_CACHE_DIR:
-            priv->tile_dir = g_value_dup_string (value);
+            if ( g_value_get_string(value) ) {
+                priv->tile_dir = g_value_dup_string (value);
+                if ((g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0)    ||
+                    (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0)        ||
+                    (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_FRIENDLY) == 0)) {
+                    /* this case is handled by osm_gps_map_setup */
+                } else {
+                    priv->cache_dir = g_strdup(priv->tile_dir);
+                    g_debug("Cache dir: %s", priv->cache_dir);
+                }
+            } else {
+                priv->tile_dir = g_strdup(OSM_GPS_MAP_CACHE_DISABLED);
+            }
             break;
         case PROP_TILE_CACHE_BASE_DIR:
             priv->tile_base_dir = g_value_dup_string (value);
@@ -1650,21 +1682,11 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                priv->map_source >= OSM_GPS_MAP_SOURCE_NULL &&
                priv->map_source <= OSM_GPS_MAP_SOURCE_LAST) {
 
+                if (!priv->is_constructed)
+                    g_critical("Map source setup called twice");
+
                 /* we now have to switch the entire map */
-
-                /* flush the ram cache */
-                g_hash_table_remove_all(priv->tile_cache);
-
-                osm_gps_map_setup(priv);
-
-                inspect_map_uri(map);
-
-                /* adjust zoom if necessary */
-                if(priv->map_zoom > priv->max_zoom) 
-                    osm_gps_map_set_zoom(map, priv->max_zoom);
-
-                if(priv->map_zoom < priv->min_zoom)
-                    osm_gps_map_set_zoom(map, priv->min_zoom);
+                osm_gps_map_setup(map);
 
             } } break;
         case PROP_IMAGE_FORMAT:
@@ -2104,7 +2126,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                           "tile cache",
                                                           "osm local tile cache dir",
                                                           OSM_GPS_MAP_CACHE_AUTO,
-                                                          G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                                          G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
                                      PROP_TILE_CACHE_BASE_DIR,

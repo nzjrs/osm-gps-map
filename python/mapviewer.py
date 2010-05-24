@@ -105,9 +105,8 @@ class UI(gtk.Window):
         self.repouri_entry.set_text(self.osm.props.repo_uri)
         self.image_format_entry = gtk.Entry()
         self.image_format_entry.set_text(self.osm.props.image_format)
-        gobtn = gtk.Button("Load Map URI")
-        gobtn.connect("clicked", self.load_map_clicked)
-        exp = gtk.Label(
+
+        lbl = gtk.Label(
 """
 Enter an repository URL to fetch map tiles from in the box below. Special metacharacters may be included in this url
 
@@ -120,12 +119,12 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
 \t#W\tQuadtree encoded tile (1234)
 \t#U\tEncoding not implemeted
 \t#R\tRandom integer, 0-4""")
-        exp.props.xalign = 0
-        exp.props.use_markup = True
-        exp.props.wrap = True
+        lbl.props.xalign = 0
+        lbl.props.use_markup = True
+        lbl.props.wrap = True
 
         ex.add(vb)
-        vb.pack_start(exp, False)
+        vb.pack_start(lbl, False)
 
         hb = gtk.HBox()
         hb.pack_start(gtk.Label("URI: "), False)
@@ -137,13 +136,26 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         hb.pack_start(self.image_format_entry, True)
         vb.pack_start(hb, False)
 
+        gobtn = gtk.Button("Load Map URI")
+        gobtn.connect("clicked", self.load_map_clicked)
         vb.pack_start(gobtn, False)
 
+        cb = gtk.CheckButton("Disable Cache")
+        cb.props.active = False
+        cb.connect("toggled", self.disable_cache_toggled)
+
+        self.vbox.pack_end(cb, False)
         self.vbox.pack_end(ex, False)
         self.vbox.pack_end(self.latlon_entry, False)
         self.vbox.pack_end(hbox, False)
 
         gobject.timeout_add(500, self.print_tiles)
+
+    def disable_cache_toggled(self, btn):
+        if btn.props.active:
+            self.osm.props.tile_cache = osmgpsmap.CACHE_DISABLED
+        else:
+            self.osm.props.tile_cache = osmgpsmap.CACHE_AUTO
 
     def load_map_clicked(self, button):
         uri = self.repouri_entry.get_text()
