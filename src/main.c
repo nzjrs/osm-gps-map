@@ -25,16 +25,18 @@
 #include "osm-gps-map.h"
 #include "osm-gps-map-osd.h"
 
-static OsmGpsMapSource_t map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
-static gboolean default_cache = FALSE;
-static gboolean no_cache = FALSE;
-static gboolean debug = FALSE;
+static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
+static gboolean opt_default_cache = FALSE;
+static gboolean opt_no_cache = FALSE;
+static gboolean opt_debug = FALSE;
+static char *opt_cache_base_dir = NULL;
 static GOptionEntry entries[] =
 {
-  { "default-cache", 'D', 0, G_OPTION_ARG_NONE, &default_cache, "Store maps in default cache", NULL },
-  { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &no_cache, "Disable cache", NULL },
-  { "debug", 'd', 0, G_OPTION_ARG_NONE, &debug, "Enable debugging", NULL },
-  { "map", 'm', 0, G_OPTION_ARG_INT, &map_provider, "Map source", "N" },
+  { "default-cache", 'D', 0, G_OPTION_ARG_NONE, &opt_default_cache, "Store maps using default cache style (md5)", NULL },
+  { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &opt_no_cache, "Disable cache", NULL },
+  { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
+  { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
+  { "map", 'm', 0, G_OPTION_ARG_INT, &opt_map_provider, "Map source", "N" },
   { NULL }
 };
 
@@ -189,7 +191,7 @@ main (int argc, char **argv)
     OsmGpsMapLayer *osd;
     const char *repo_uri;
     const char *friendly_name;
-    char *cachedir;
+    char *cachedir, *cachebasedir;
     GError *error = NULL;
     GOptionContext *context;
     timeout_cb_t *data;
@@ -208,26 +210,27 @@ main (int argc, char **argv)
 
     /* Only use the repo_uri to check if the user has supplied a
     valid map source ID */
-    repo_uri = osm_gps_map_source_get_repo_uri(map_provider);
+    repo_uri = osm_gps_map_source_get_repo_uri(opt_map_provider);
     if ( repo_uri == NULL ) {
         usage(context);
         return 2;
     }
 
-    friendly_name = osm_gps_map_source_get_friendly_name(map_provider);
+    friendly_name = osm_gps_map_source_get_friendly_name(opt_map_provider);
+    cachebasedir = osm_gps_map_get_default_cache_directory();
 
-    if (default_cache) {
-        cachedir = OSM_GPS_MAP_CACHE_AUTO;
-    } else if (no_cache) {
-        cachedir = OSM_GPS_MAP_CACHE_DISABLED;
+    if (opt_cache_base_dir && g_file_test(opt_cache_base_dir, G_FILE_TEST_IS_DIR)) {
+        cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
+        cachebasedir = g_strdup(opt_cache_base_dir);
+    } else if (opt_default_cache) {
+        cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
+    } else if (opt_no_cache) {
+        cachedir = g_strdup(OSM_GPS_MAP_CACHE_DISABLED);
     } else {
-        char *mapcachedir;
-        mapcachedir = osm_gps_map_get_default_cache_directory();
-        cachedir = g_build_filename(mapcachedir,friendly_name,NULL);
-        g_free(mapcachedir);
+        cachedir = g_build_filename(cachebasedir,friendly_name,NULL);
     }
 
-    if (debug)
+    if (opt_debug)
         gdk_window_set_debug_updates(TRUE);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -236,11 +239,12 @@ main (int argc, char **argv)
     STAR_IMAGE = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
 
     g_debug("Map Cache Dir: %s", cachedir);
-    g_debug("Map Provider: %s (%d)", friendly_name, map_provider);
+    g_debug("Map Provider: %s (%d)", friendly_name, opt_map_provider);
 
     map = g_object_new (OSM_TYPE_GPS_MAP,
-                        "map-source",map_provider,
+                        "map-source",opt_map_provider,
                         "tile-cache",cachedir,
+                        "tile-cache-base", cachebasedir,
                         "proxy-uri",g_getenv("http_proxy"),
                         NULL);
 
@@ -256,6 +260,9 @@ main (int argc, char **argv)
                         NULL);
     osm_gps_map_add_layer(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
+
+    g_free(cachedir);
+    g_free(cachebasedir);
 
     //Enable keyboard navigation
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_F11);
