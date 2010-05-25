@@ -6,11 +6,13 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
 	<bookinfo>
-		<title>Totem Playlist Parser Reference Manual</title>
+		<title>OsmGpsMap Reference Manual</title>
+<!--
 		<releaseinfo>
 			for totem-pl-parser &version;. The latest version of this documentation can be found online at
 			<ulink role="online-location" url="http://library.gnome.org/devel/totem-pl-parser/">http://library.gnome.org/devel/totem-pl-parser/</ulink>.
 		</releaseinfo>
+-->
 	</bookinfo>
 
 	<chapter id="api-reference">
