@@ -193,7 +193,6 @@ G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
 static gchar    *replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
 static void     osm_gps_map_print_images (OsmGpsMap *map);
-static void     osm_gps_map_draw_gps_point (OsmGpsMap *map);
 static void     osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y);
 #if USE_LIBSOUP22
 static void     osm_gps_map_tile_download_complete (SoupMessage *msg, gpointer user_data);
@@ -567,78 +566,74 @@ osm_gps_map_print_images (OsmGpsMap *map)
 }
 
 static void
-osm_gps_map_draw_gps_point (OsmGpsMap *map)
+osm_gps_map_draw_gps_point (OsmGpsMap *map, GdkDrawable *drawable)
 {
     OsmGpsMapPrivate *priv = map->priv;
+    cairo_t *cr;
+    int map_x0, map_y0;
+    int x, y;
+    int r, r2, mr;
 
-    //incase we get called before we have got a gps point
-    if (priv->gps_valid) {
-        int map_x0, map_y0;
-        int x, y;
-        int r = priv->ui_gps_point_inner_radius;
-        int r2 = priv->ui_gps_point_outer_radius;
-        int mr = MAX(3*r,r2);
+    r = priv->ui_gps_point_inner_radius;
+    r2 = priv->ui_gps_point_outer_radius;
+    mr = MAX(3*r,r2);
+    map_x0 = priv->map_x - EXTRA_BORDER;
+    map_y0 = priv->map_y - EXTRA_BORDER;
+    x = lon2pixel(priv->map_zoom, priv->gps->rlon) - map_x0;
+    y = lat2pixel(priv->map_zoom, priv->gps->rlat) - map_y0;
 
-        map_x0 = priv->map_x - EXTRA_BORDER;
-        map_y0 = priv->map_y - EXTRA_BORDER;
-        x = lon2pixel(priv->map_zoom, priv->gps->rlon) - map_x0;
-        y = lat2pixel(priv->map_zoom, priv->gps->rlat) - map_y0;
-        cairo_t *cr;
-        cairo_pattern_t *pat;
+    cr = gdk_cairo_create(drawable);
 
-        cr = gdk_cairo_create(priv->pixmap);
-
-        // draw transparent area
-        if (r2 > 0) {
-            cairo_set_line_width (cr, 1.5);
-            cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
-            cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
-            cairo_fill (cr);
-            // draw transparent area border
-            cairo_set_source_rgba (cr, 0.55, 0.55, 0.55, 0.4);
-            cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
-            cairo_stroke(cr);
-        }
-
-        // draw ball gradient
-        if (r > 0) {
-            // draw direction arrow
-            if(!isnan(priv->gps_heading)) 
-            {
-                cairo_move_to (cr, x-r*cos(priv->gps_heading), y-r*sin(priv->gps_heading));
-                cairo_line_to (cr, x+3*r*sin(priv->gps_heading), y-3*r*cos(priv->gps_heading));
-                cairo_line_to (cr, x+r*cos(priv->gps_heading), y+r*sin(priv->gps_heading));
-                cairo_close_path (cr);
-
-                cairo_set_source_rgba (cr, 0.3, 0.3, 1.0, 0.5);
-                cairo_fill_preserve (cr);
-
-                cairo_set_line_width (cr, 1.0);
-                cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.5);
-                cairo_stroke(cr);
-            }
-
-            pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
-            cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
-            cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
-            cairo_set_source (cr, pat);
-            cairo_arc (cr, x, y, r, 0, 2 * M_PI);
-            cairo_fill (cr);
-            cairo_pattern_destroy (pat);
-            // draw ball border
-            cairo_set_line_width (cr, 1.0);
-            cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
-            cairo_arc (cr, x, y, r, 0, 2 * M_PI);
-            cairo_stroke(cr);
-        }
-
-        cairo_destroy(cr);
-        gtk_widget_queue_draw_area (GTK_WIDGET(map),
-                                    x-mr,
-                                    y-mr,
-                                    mr*2,
-                                    mr*2);
+    /* draw transparent area */
+    if (r2 > 0) {
+        cairo_set_line_width (cr, 1.5);
+        cairo_set_source_rgba (cr, 0.75, 0.75, 0.75, 0.4);
+        cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
+        cairo_fill (cr);
+        /* draw transparent area border */
+        cairo_set_source_rgba (cr, 0.55, 0.55, 0.55, 0.4);
+        cairo_arc (cr, x, y, r2, 0, 2 * M_PI);
+        cairo_stroke(cr);
     }
+
+    /* draw ball gradient */
+    if (r > 0) {
+        cairo_pattern_t *pat;
+        /* draw direction arrow */
+        if(!isnan(priv->gps_heading)) {
+            cairo_move_to (cr, x-r*cos(priv->gps_heading), y-r*sin(priv->gps_heading));
+            cairo_line_to (cr, x+3*r*sin(priv->gps_heading), y-3*r*cos(priv->gps_heading));
+            cairo_line_to (cr, x+r*cos(priv->gps_heading), y+r*sin(priv->gps_heading));
+            cairo_close_path (cr);
+
+            cairo_set_source_rgba (cr, 0.3, 0.3, 1.0, 0.5);
+            cairo_fill_preserve (cr);
+
+            cairo_set_line_width (cr, 1.0);
+            cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.5);
+            cairo_stroke(cr);
+        }
+
+        pat = cairo_pattern_create_radial (x-(r/5), y-(r/5), (r/5), x,  y, r);
+        cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1.0);
+        cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 1, 1.0);
+        cairo_set_source (cr, pat);
+        cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+        cairo_fill (cr);
+        cairo_pattern_destroy (pat);
+        /* draw ball border */
+        cairo_set_line_width (cr, 1.0);
+        cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
+        cairo_arc (cr, x, y, r, 0, 2 * M_PI);
+        cairo_stroke(cr);
+    }
+
+    cairo_destroy(cr);
+    gtk_widget_queue_draw_area (GTK_WIDGET(map),
+                                x-mr,
+                                y-mr,
+                                mr*2,
+                                mr*2);
 }
 
 static void
@@ -1222,8 +1217,14 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_fill_tiles_pixel(map);
 
     osm_gps_map_print_tracks(map);
-    osm_gps_map_draw_gps_point(map);
     osm_gps_map_print_images(map);
+
+    /* draw the gps point using the appropriate virtual private method */
+    if (priv->gps_valid) {
+        OsmGpsMapClass *klass = OSM_GPS_MAP_GET_CLASS(map);
+        if (klass->draw_gps_point)
+            klass->draw_gps_point (map, priv->pixmap);
+    }
 
     if (priv->layers) {
         GSList *list;
@@ -2081,6 +2082,9 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->button_release_event = osm_gps_map_button_release;
     widget_class->motion_notify_event = osm_gps_map_motion_notify;
     widget_class->scroll_event = osm_gps_map_scroll_event;
+
+    /* default implementation of draw_gps_point */
+    klass->draw_gps_point = osm_gps_map_draw_gps_point;
 
     g_object_class_install_property (object_class,
                                      PROP_AUTO_CENTER,

@@ -330,6 +330,16 @@
   )
 )
 
+(define-virtual draw_gps_point
+  (of-object "OsmGpsMap")
+;;  (c-name "osm_gps_map_draw_gps_point")
+  (return-type "none")
+  (parameters
+    '("GdkDrawable*" "drawable")
+  )
+)
+
+
 
 
 ;; From osm-gps-map-osd.h

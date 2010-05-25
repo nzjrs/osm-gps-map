@@ -34,6 +34,11 @@ sys.path.insert(0, libdir)
 import osmgpsmap
 print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap.__version__)
 
+class DummyMapNoGpsPoint(osmgpsmap.GpsMap):
+    def do_draw_gps_point(self, drawable):
+        pass
+gobject.type_register(DummyMapNoGpsPoint)
+
 class DummyLayer(gobject.GObject, osmgpsmap.GpsMapLayer):
     def __init__(self):
         gobject.GObject.__init__(self)
@@ -62,7 +67,10 @@ class UI(gtk.Window):
         self.vbox = gtk.VBox(False, 0)
         self.add(self.vbox)
 
-        self.osm = osmgpsmap.GpsMap()
+        if 0:
+            self.osm = DummyMapNoGpsPoint()
+        else:
+            self.osm = osmgpsmap.GpsMap()
         self.osm.add_layer(
                     osmgpsmap.GpsMapOsd(
                         show_dpad=True,

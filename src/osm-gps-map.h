@@ -48,6 +48,8 @@ typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 struct _OsmGpsMapClass
 {
     GtkDrawingAreaClass parent_class;
+
+    void (*draw_gps_point) (OsmGpsMap *map, GdkDrawable *drawable);
 };
 
 struct _OsmGpsMap
