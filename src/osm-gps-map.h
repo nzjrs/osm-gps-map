@@ -44,6 +44,7 @@ typedef struct _OsmGpsMap OsmGpsMap;
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 
 #include "osm-gps-map-layer.h"
+#include "osm-gps-map-track.h"
 
 struct _OsmGpsMapClass
 {
@@ -57,11 +58,6 @@ struct _OsmGpsMap
     GtkDrawingArea parent_instance;
     OsmGpsMapPrivate *priv;
 };
-
-typedef struct {
-    float rlat;
-    float rlon;
-} coord_t;
 
 typedef enum {
     OSM_GPS_MAP_SOURCE_NULL,
@@ -114,30 +110,37 @@ int         osm_gps_map_source_get_min_zoom         (OsmGpsMapSource_t source);
 int         osm_gps_map_source_get_max_zoom         (OsmGpsMapSource_t source);
 gboolean    osm_gps_map_source_is_valid             (OsmGpsMapSource_t source);
 
-void        osm_gps_map_download_maps               (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end);
-void        osm_gps_map_get_bbox                    (OsmGpsMap *map, coord_t *pt1, coord_t *pt2);
+void        osm_gps_map_download_maps               (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end);
+void        osm_gps_map_get_bbox                    (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2);
 void        osm_gps_map_set_mapcenter               (OsmGpsMap *map, float latitude, float longitude, int zoom);
 void        osm_gps_map_set_center                  (OsmGpsMap *map, float latitude, float longitude);
 int         osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);
 int         osm_gps_map_zoom_in                     (OsmGpsMap *map);
 int         osm_gps_map_zoom_out                    (OsmGpsMap *map);
-void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *track);
-void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track);
-void        osm_gps_map_clear_tracks                (OsmGpsMap *map);
 void        osm_gps_map_add_image                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
 void        osm_gps_map_add_image_with_alignment    (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign);
 gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image);
 void        osm_gps_map_clear_images                (OsmGpsMap *map);
-void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading);
-void        osm_gps_map_clear_gps                   (OsmGpsMap *map);
-coord_t     osm_gps_map_get_co_ordinates            (OsmGpsMap *map, int pixel_x, int pixel_y);
+OsmGpsMapPoint  osm_gps_map_get_co_ordinates        (OsmGpsMap *map, int pixel_x, int pixel_y);
 void        osm_gps_map_screen_to_geographic        (OsmGpsMap *map, gint pixel_x, gint pixel_y, gfloat *latitude, gfloat *longitude);
 void        osm_gps_map_geographic_to_screen        (OsmGpsMap *map, gfloat latitude, gfloat longitude, gint *pixel_x, gint *pixel_y);
 void        osm_gps_map_scroll                      (OsmGpsMap *map, gint dx, gint dy);
 float       osm_gps_map_get_scale                   (OsmGpsMap *map);
 void        osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 void        osm_gps_map_add_layer                   (OsmGpsMap *map, OsmGpsMapLayer *layer);
+void        osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
+void        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
+void        osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
+
+/* Depreciated Functions */
+#define coord_t OsmGpsMapPoint
+void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *track);                                    G_GNUC_DEPRECATED
+void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track);
+void        osm_gps_map_clear_tracks                (OsmGpsMap *map);
+void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading);
+void        osm_gps_map_clear_gps                   (OsmGpsMap *map);
 
 G_END_DECLS
 
 #endif /* _OSM_GPS_MAP_H_ */
+

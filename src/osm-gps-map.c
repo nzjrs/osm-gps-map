@@ -91,9 +91,11 @@ struct _OsmGpsMapPrivate
 
     //gps tracking state
     GSList *trip_history;
-    coord_t *gps;
     float gps_heading;
-    gboolean gps_valid;
+
+    OsmGpsMapPoint *gps;
+    OsmGpsMapTrack *gps_track;
+    gboolean gps_track_used;
 
 #ifdef OSD_DOUBLE_BUFFER
     GdkPixmap *dbuf_pixmap;
@@ -1102,7 +1104,7 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
     map_y0 = priv->map_y - EXTRA_BORDER;
     for(list = trackpoint_list; list != NULL; list = list->next)
     {
-        coord_t *tp = list->data;
+        OsmGpsMapPoint *tp = list->data;
 
         x = lon2pixel(priv->map_zoom, tp->rlon) - map_x0;
         y = lat2pixel(priv->map_zoom, tp->rlat) - map_y0;
@@ -1135,14 +1137,18 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 static void
 osm_gps_map_print_tracks (OsmGpsMap *map)
 {
+    GSList *tmp;
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (priv->trip_history_show_enabled)
-        osm_gps_map_print_track (map, priv->trip_history);
+    if (priv->trip_history_show_enabled) {
+        tmp = osm_gps_map_track_get_points (priv->gps_track);
+        if (tmp)
+            osm_gps_map_print_track (map, tmp);
+    }
 
     if (priv->tracks)
     {
-        GSList* tmp = priv->tracks;
+        tmp = priv->tracks;
         while (tmp != NULL)
         {
             osm_gps_map_print_track (map, tmp->data);
@@ -1216,7 +1222,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_print_images(map);
 
     /* draw the gps point using the appropriate virtual private method */
-    if (priv->gps_valid) {
+    if (priv->gps_track_used) {
         OsmGpsMapClass *klass = OSM_GPS_MAP_GET_CLASS(map);
         if (klass->draw_gps_point)
             klass->draw_gps_point (map, priv->pixmap);
@@ -1259,6 +1265,36 @@ center_coord_update(OsmGpsMap *map) {
     priv->center_rlat = pixel2lat(priv->map_zoom, pixel_y);
 
     g_signal_emit_by_name(widget, "changed");
+}
+
+/* Automatically center the map if the current point, i.e the most recent
+ * gps point, approaches the edge, and map_auto_center is set. Does not
+ * request the map be redrawn */
+static void
+maybe_autocenter_map (OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv;
+    GtkAllocation allocation;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
+
+    if(priv->map_auto_center_enabled)   {
+        int pixel_x = lon2pixel(priv->map_zoom, priv->gps->rlon);
+        int pixel_y = lat2pixel(priv->map_zoom, priv->gps->rlat);
+        int x = pixel_x - priv->map_x;
+        int y = pixel_y - priv->map_y;
+        int width = allocation.width;
+        int height = allocation.height;
+        if( x < (width/2 - width/8)     || x > (width/2 + width/8)  ||
+            y < (height/2 - height/8)   || y > (height/2 + height/8)) {
+
+            priv->map_x = pixel_x - allocation.width/2;
+            priv->map_y = pixel_y - allocation.height/2;
+            center_coord_update(map);
+        }
+    }
 }
 
 static gboolean 
@@ -1335,6 +1371,18 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
 }
 
 static void
+on_gps_point_added (OsmGpsMapTrack *track, OsmGpsMapPoint *point, OsmGpsMap *map)
+{
+    gdouble lat, lon;
+
+    osm_gps_map_point_as_degrees(point, &lat, &lon);
+    g_debug("GPS ADDED: %f %f", lat, lon);
+
+    osm_gps_map_map_redraw_idle (map);
+    maybe_autocenter_map (map);
+}
+
+static void
 osm_gps_map_init (OsmGpsMap *object)
 {
     int i;
@@ -1346,9 +1394,13 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->pixmap = NULL;
 
     priv->trip_history = NULL;
-    priv->gps = g_new0(coord_t, 1);
-    priv->gps_valid = FALSE;
+    priv->gps = osm_gps_map_point_new_radians(0.0, 0.0);
+    priv->gps_track_used = FALSE;
     priv->gps_heading = OSM_GPS_MAP_INVALID;
+
+    priv->gps_track = osm_gps_map_track_new();
+    g_signal_connect(G_OBJECT(priv->gps_track), "point-added",
+                            G_CALLBACK(on_gps_point_added), object);
 
     priv->tracks = NULL;
     priv->images = NULL;
@@ -1528,6 +1580,8 @@ osm_gps_map_dispose (GObject *object)
 
     soup_session_abort(priv->soup_session);
     g_object_unref(priv->soup_session);
+
+    g_object_unref(priv->gps_track);
 
     g_hash_table_destroy(priv->tile_queue);
     g_hash_table_destroy(priv->missing_tiles);
@@ -2607,7 +2661,7 @@ osm_gps_map_source_is_valid(OsmGpsMapSource_t source)
 }
 
 void
-osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_start, int zoom_end)
+osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end)
 {
     int i,j,zoom,num_tiles;
     OsmGpsMapPrivate *priv = map->priv;
@@ -2656,7 +2710,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, coord_t *pt1, coord_t *pt2, int zoom_
 }
 
 void
-osm_gps_map_get_bbox (OsmGpsMap *map, coord_t *pt1, coord_t *pt2)
+osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
 {
     OsmGpsMapPrivate *priv = map->priv;
 
@@ -2857,73 +2911,24 @@ osm_gps_map_clear_images (OsmGpsMap *map)
 }
 
 void
-osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
-{
-    int pixel_x, pixel_y;
-    OsmGpsMapPrivate *priv;
-
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
-    priv = map->priv;
-
-    priv->gps->rlat = deg2rad(latitude);
-    priv->gps->rlon = deg2rad(longitude);
-    priv->gps_valid = TRUE;
-    priv->gps_heading = deg2rad(heading);
-
-    pixel_x = lon2pixel(priv->map_zoom, priv->gps->rlon);
-    pixel_y = lat2pixel(priv->map_zoom, priv->gps->rlat);
-
-    /* if trip marker add to list of gps points. */
-    if (priv->trip_history_record_enabled) {
-        coord_t *tp = g_new0(coord_t,1);
-        tp->rlat = priv->gps->rlat;
-        tp->rlon = priv->gps->rlon;
-        priv->trip_history = g_slist_append(priv->trip_history, tp);
-    }
-
-    /* dont draw anything if we are dragging */
-    if (priv->is_dragging) {
-        g_debug("Dragging");
-        return;
-    }
-
-    /* automatically center the map if the track approaches the edge */
-    if(priv->map_auto_center_enabled)   {
-        int x = pixel_x - priv->map_x;
-        int y = pixel_y - priv->map_y;
-        int w = GTK_WIDGET(map)->allocation.width;
-        int h = GTK_WIDGET(map)->allocation.height;
-        float lmid = 0.5 - priv->map_auto_center_threshold / 2.0;
-        float umid = 0.5 + priv->map_auto_center_threshold / 2.0;
-        if( x < (int)(w * lmid) || x > (int)(w * umid)  ||
-            y < (int)(h * lmid) || y > (int)(h * umid)) {
-
-            priv->map_x = pixel_x - w/2;
-            priv->map_y = pixel_y - h/2;
-            center_coord_update(map);
-        }
-    }
-
-    /* redraw the map and adjust the map center if changed */
-    osm_gps_map_map_redraw_idle(map);
-}
-
-void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
     osm_gps_map_free_trip(map);
     osm_gps_map_map_redraw_idle(map);
 }
 
-coord_t
+OsmGpsMapPoint
 osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 {
-    coord_t coord;
-    OsmGpsMapPrivate *priv = map->priv;
+    OsmGpsMapPrivate *priv;
+    OsmGpsMapPoint point = {0,};
 
-    coord.rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
-    coord.rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
-    return coord;
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), point);
+    priv = map->priv;
+
+    point.rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
+    point.rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
+    return point;
 }
 
 GtkWidget *
@@ -3085,3 +3090,47 @@ osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
     map->priv->layers = g_slist_append(map->priv->layers, layer);
 }
 
+void
+osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
+{
+
+}
+
+void
+osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
+{
+
+}
+
+void
+osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float heading)
+{
+    OsmGpsMapPoint *point;
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    /* update the current point */
+    priv->gps->rlat = deg2rad(latitude);
+    priv->gps->rlon = deg2rad(longitude);
+    priv->gps_track_used = TRUE;
+    priv->gps_heading = deg2rad(heading);
+
+    /* If trip marker add to list of gps points */
+    if (priv->trip_history_record_enabled) {
+        point = osm_gps_map_point_new_degrees(latitude, longitude);
+        /* this will cause a redraw to be scheduled */
+        osm_gps_map_track_add_point(map->priv->gps_track, point);
+    } else {
+        osm_gps_map_map_redraw_idle (map);
+        maybe_autocenter_map (map);
+    }
+}
+
+/******************** DEPRECIATED COMPATIBILITY CODE **************************/
+void
+osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
+{
+    osm_gps_map_gps_add (map, latitude, longitude, heading);
+}

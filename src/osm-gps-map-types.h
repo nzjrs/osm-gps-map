@@ -31,6 +31,7 @@
 #include <libsoup/soup.h>
 #endif
 #include "osm-gps-map.h"
+#include "osm-gps-map-track.h"
 
 #define TILESIZE 256
 #define MAX_ZOOM 20
@@ -91,7 +92,7 @@ typedef struct {
 } tile_t;
 
 typedef struct {
-    coord_t pt;
+    OsmGpsMapPoint pt;
     GdkPixbuf *image;
     int w;
     int h;

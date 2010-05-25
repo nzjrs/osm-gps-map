@@ -24,6 +24,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "osm-gps-map.h"
 #include "osm-gps-map-osd.h"
+#include "osm-gps-map-track.h"
 
 static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean opt_default_cache = FALSE;
@@ -68,7 +69,7 @@ on_timeout_check_tiles_in_queue(gpointer user_data)
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-    coord_t coord;
+    OsmGpsMapPoint coord;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
 
     if (    ((event->button == 1) || (event->button == 3)) 
@@ -76,10 +77,10 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     {
         g_debug("Double clicked %f %f", event->x, event->y);
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
-        osm_gps_map_draw_gps (map,
-                              RAD2DEG(coord.rlat),
-                              RAD2DEG(coord.rlon),
-                              (event->button == 1 ? OSM_GPS_MAP_INVALID : g_random_double_range(0,360)));
+        osm_gps_map_gps_add (map,
+                             RAD2DEG(coord.rlat),
+                             RAD2DEG(coord.rlon),
+                             (event->button == 1 ? OSM_GPS_MAP_INVALID : g_random_double_range(0,360)));
     }
 
     if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
@@ -140,7 +141,7 @@ gboolean
 on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     int zoom,max_zoom;
-    coord_t pt1, pt2;
+    OsmGpsMapPoint pt1, pt2;
     timeout_cb_t *data;
 
     data = (timeout_cb_t *)user_data;
@@ -260,6 +261,10 @@ main (int argc, char **argv)
                         NULL);
     osm_gps_map_add_layer(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
+
+    //TEST THE TRACK STUFF
+    OsmGpsMapTrack *track = osm_gps_map_track_new();
+    osm_gps_map_track_add(OSM_GPS_MAP(map), track);
 
     g_free(cachedir);
     g_free(cachebasedir);

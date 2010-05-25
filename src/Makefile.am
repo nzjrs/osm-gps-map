@@ -33,6 +33,7 @@ libosmgpsmap_la_SOURCES = \
 	osm-gps-map.c \
 	osm-gps-map-osd.c \
 	osm-gps-map-layer.c \
+	osm-gps-map-track.c \
 	osd-utils.c
 
 libosmgpsmap_la_CFLAGS = \
