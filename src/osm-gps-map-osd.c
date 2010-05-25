@@ -46,6 +46,7 @@ enum
 typedef struct _OsdScale {
     cairo_surface_t *surface;
     int zoom;
+    float lat;
 } OsdScale_t;
 
 typedef struct _OsdCoordinates {
@@ -247,6 +248,7 @@ osm_gps_map_osd_constructor (GType gtype, guint n_properties, GObjectConstructPa
     priv->scale = g_new0(OsdScale_t, 1);
     priv->scale->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, OSD_SCALE_W, OSD_SCALE_H);
     priv->scale->zoom = -1;
+    priv->scale->lat = 360.0; /* init to an invalid lat so we get re-rendered */
 
     priv->coordinates = g_new0(OsdCoordinates_t, 1);
     priv->coordinates->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, OSD_COORDINATES_W, OSD_COORDINATES_H);
@@ -588,13 +590,15 @@ scale_render(OsmGpsMapOsd *self, OsmGpsMap *map)
     if(!scale->surface)
         return;
 
-    /* this only needs to be rendered if the zoom has changed */
+    /* this only needs to be rendered if the zoom or latitude has changed */
     gint zoom;
-    g_object_get(G_OBJECT(map), "zoom", &zoom, NULL);
-    if(zoom == scale->zoom)
+    gfloat lat;
+    g_object_get(G_OBJECT(map), "zoom", &zoom, "latitude", &lat, NULL);
+    if(zoom == scale->zoom && lat == scale->lat)
         return;
 
     scale->zoom = zoom;
+    scale->lat = lat;
 
     float m_per_pix = osm_gps_map_get_scale(map);
 
