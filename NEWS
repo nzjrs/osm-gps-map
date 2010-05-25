@@ -1,5 +1,7 @@
 Changes in 0.7.0
 ======================
+  * Map auto center threshold is now adjustable via the auto-center-threshold
+    property.
   * Build fixes
   * Provide a notify signal for tiles-queued and zoom
   * Improvements to changing source and tile-cache after map is constructed

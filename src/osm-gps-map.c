@@ -56,10 +56,13 @@ struct _OsmGpsMapPrivate
     int map_zoom;
     int max_zoom;
     int min_zoom;
-    gboolean map_auto_center;
-    gboolean map_auto_download;
     int map_x;
     int map_y;
+    gboolean map_auto_download;
+
+    /* Controls auto centering the map when a new GPS position arrives */
+    gfloat map_auto_center_threshold;
+    gboolean map_auto_center_enabled;
 
     /* Latitude and longitude of the center of the map, in radians */
     gfloat center_rlat;
@@ -179,6 +182,7 @@ enum
     PROP_MAP_SOURCE,
     PROP_IMAGE_FORMAT,
     PROP_DRAG_LIMIT,
+    PROP_AUTO_CENTER_THRESHOLD,
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -1594,7 +1598,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
     switch (prop_id)
     {
         case PROP_AUTO_CENTER:
-            priv->map_auto_center = g_value_get_boolean (value);
+            priv->map_auto_center_enabled = g_value_get_boolean (value);
             break;
         case PROP_RECORD_TRIP_HISTORY:
             priv->record_trip_history = g_value_get_boolean (value);
@@ -1695,6 +1699,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_DRAG_LIMIT:
             priv->drag_limit = g_value_get_int (value);
             break;
+        case PROP_AUTO_CENTER_THRESHOLD:
+            priv->map_auto_center_threshold = g_value_get_float (value);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
             break;
@@ -1711,7 +1718,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
     switch (prop_id)
     {
         case PROP_AUTO_CENTER:
-            g_value_set_boolean(value, priv->map_auto_center);
+            g_value_set_boolean(value, priv->map_auto_center_enabled);
             break;
         case PROP_RECORD_TRIP_HISTORY:
             g_value_set_boolean(value, priv->record_trip_history);
@@ -1778,6 +1785,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_DRAG_LIMIT:
             g_value_set_int(value, priv->drag_limit);
+            break;
+        case PROP_AUTO_CENTER_THRESHOLD:
+            g_value_set_float(value, priv->map_auto_center_threshold);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1903,7 +1913,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 
     priv->dragging = TRUE;
 
-    if (priv->map_auto_center)
+    if (priv->map_auto_center_enabled)
         g_object_set(G_OBJECT(widget), "auto-center", FALSE, NULL);
 
     priv->drag_mouse_dx = x - priv->drag_start_mouse_x;
@@ -2079,6 +2089,16 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                            "map auto center",
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_AUTO_CENTER_THRESHOLD,
+                                     g_param_spec_float ("auto-center-threshold",
+                                                         "auto center threshold",
+                                                         "the amount of the window the gps point must move before auto centering",
+                                                         0.0, /* minimum property value */
+                                                         1.0, /* maximum property value */
+                                                         0.25,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
                                      PROP_RECORD_TRIP_HISTORY,
@@ -2732,11 +2752,10 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
     priv->gps_valid = TRUE;
     priv->gps_heading = deg2rad(heading);
 
-    // pixel_x,y, offsets
     pixel_x = lon2pixel(priv->map_zoom, priv->gps->rlon);
     pixel_y = lat2pixel(priv->map_zoom, priv->gps->rlat);
 
-    //If trip marker add to list of gps points.
+    /* if trip marker add to list of gps points. */
     if (priv->record_trip_history) {
         coord_t *tp = g_new0(coord_t,1);
         tp->rlat = priv->gps->rlat;
@@ -2744,29 +2763,30 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
         priv->trip_history = g_slist_append(priv->trip_history, tp);
     }
 
-    // dont draw anything if we are dragging
+    /* dont draw anything if we are dragging */
     if (priv->dragging) {
         g_debug("Dragging");
         return;
     }
 
-    //Automatically center the map if the track approaches the edge
-    if(priv->map_auto_center)   {
+    /* automatically center the map if the track approaches the edge */
+    if(priv->map_auto_center_enabled)   {
         int x = pixel_x - priv->map_x;
         int y = pixel_y - priv->map_y;
-        int width = GTK_WIDGET(map)->allocation.width;
-        int height = GTK_WIDGET(map)->allocation.height;
-        if( x < (width/2 - width/8)     || x > (width/2 + width/8)  ||
-            y < (height/2 - height/8)   || y > (height/2 + height/8)) {
+        int w = GTK_WIDGET(map)->allocation.width;
+        int h = GTK_WIDGET(map)->allocation.height;
+        float lmid = 0.5 - priv->map_auto_center_threshold / 2.0;
+        float umid = 0.5 + priv->map_auto_center_threshold / 2.0;
+        if( x < (int)(w * lmid) || x > (int)(w * umid)  ||
+            y < (int)(h * lmid) || y > (int)(h * umid)) {
 
-            priv->map_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
-            priv->map_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
+            priv->map_x = pixel_x - w/2;
+            priv->map_y = pixel_y - h/2;
             center_coord_update(map);
         }
     }
 
-    // this redraws the map (including the gps track, and adjusts the
-    // map center if it was changed
+    /* redraw the map and adjust the map center if changed */
     osm_gps_map_map_redraw_idle(map);
 }
 

@@ -248,6 +248,7 @@
   (return-type "GtkWidget*")
   (properties
     '("auto_center" (optional))
+    '("auto_center_threshold" (optional))
     '("record_trip_history" (optional))
     '("show_trip-history" (optional))
     '("auto_download" (optional))
