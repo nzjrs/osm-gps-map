@@ -22,9 +22,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+
 #include "osm-gps-map.h"
-#include "osm-gps-map-osd.h"
-#include "osm-gps-map-track.h"
 
 static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean opt_default_cache = FALSE;

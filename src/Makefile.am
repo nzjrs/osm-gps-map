@@ -30,11 +30,13 @@ lib_LTLIBRARIES = \
 
 libosmgpsmap_la_SOURCES = \
 	converter.c \
-	osm-gps-map.c \
+	osm-gps-map-widget.c \
+	osm-gps-map-source.c \
 	osm-gps-map-osd.c \
 	osm-gps-map-layer.c \
 	osm-gps-map-track.c \
 	osm-gps-map-image.c \
+	osm-gps-map-compat.c \
 	osd-utils.c
 
 libosmgpsmap_la_CFLAGS = \
