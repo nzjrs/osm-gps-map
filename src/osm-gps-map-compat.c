@@ -28,9 +28,10 @@ osm_gps_map_clear_gps (OsmGpsMap *map)
  * Deprecated: Use osm_gps_map_track_add() instead.
  **/
 void
-osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
+osm_gps_map_add_track (OsmGpsMap *map, GSList *list)
 {
-    ;
+    OsmGpsMapTrack *track = g_object_new (OSM_TYPE_GPS_MAP_TRACK, "track", list, NULL);
+    osm_gps_map_track_add (map, track);
 }
 
 /**
@@ -42,7 +43,7 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
 void
 osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
 {
-    ;
+    g_critical("PLEASE UPDATE TO NEW API");
 }
 
 /**
@@ -92,5 +93,6 @@ osm_gps_map_clear_images (OsmGpsMap *map)
 gboolean
 osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 {
+    g_critical("PLEASE UPDATE TO NEW API");
     return FALSE;
 }

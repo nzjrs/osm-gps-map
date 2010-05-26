@@ -1,5 +1,7 @@
 /* osm-gps-map-track.c */
 
+#include <gdk/gdk.h>
+
 #include "converter.h"
 #include "osm-gps-map-track.h"
 
@@ -10,6 +12,7 @@ enum
     PROP_0,
     PROP_VISIBLE,
     PROP_TRACK,
+    PROP_LINE_WIDTH,
 };
 
 enum
@@ -24,6 +27,7 @@ struct _OsmGpsMapTrackPrivate
 {
     GSList *track;
     gboolean visible;
+    gfloat linewidth;
 };
 
 
@@ -39,6 +43,12 @@ osm_gps_map_track_get_property (GObject    *object,
     {
         case PROP_VISIBLE:
             g_value_set_boolean(value, priv->visible);
+            break;
+        case PROP_TRACK:
+            g_value_set_pointer(value, priv->track);
+            break;
+        case PROP_LINE_WIDTH:
+            g_value_set_float(value, priv->linewidth);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -57,6 +67,12 @@ osm_gps_map_track_set_property (GObject      *object,
     {
         case PROP_VISIBLE:
             priv->visible = g_value_get_boolean (value);
+            break;
+        case PROP_TRACK:
+            priv->track = g_value_get_pointer (value);
+            break;
+        case PROP_LINE_WIDTH:
+            priv->linewidth = g_value_get_float (value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -104,6 +120,23 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_TRACK,
+                                     g_param_spec_pointer ("track",
+                                                           "track",
+                                                           "list of points for the track",
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+    g_object_class_install_property (object_class,
+                                     PROP_LINE_WIDTH,
+                                     g_param_spec_float ("line-width",
+                                                         "line-width",
+                                                         "width of the lines drawn for the track",
+                                                         0.0,       /* minimum property value */
+                                                         100.0,     /* maximum property value */
+                                                         4.0,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
@@ -126,9 +159,6 @@ static void
 osm_gps_map_track_init (OsmGpsMapTrack *self)
 {
     self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackPrivate);
-
-    self->priv->track = NULL;
-    self->priv->visible = TRUE;
 }
 
 void

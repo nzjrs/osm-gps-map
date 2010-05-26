@@ -33,8 +33,21 @@ osm_gps_map_image_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
+    OsmGpsMapImagePrivate *priv = OSM_GPS_MAP_IMAGE(object)->priv;
     switch (property_id)
     {
+        case PROP_PIXBUF:
+            g_value_set_object (value, priv->pixbuf);
+            break;
+        case PROP_X_ALIGN:
+            g_value_set_float (value, priv->xalign);
+            break;
+        case PROP_Y_ALIGN:
+            g_value_set_float (value, priv->yalign);
+            break;
+        case PROP_POINT:
+            g_value_set_boxed (value, priv->pt);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -50,7 +63,6 @@ osm_gps_map_image_set_property (GObject      *object,
     switch (property_id)
     {
         case PROP_PIXBUF:
-            g_debug("PB");
             if (priv->pixbuf)
                 g_object_unref (priv->pixbuf);
             priv->pixbuf = g_value_dup_object (value);
@@ -65,7 +77,6 @@ osm_gps_map_image_set_property (GObject      *object,
             break;
         case PROP_POINT:
             priv->pt = g_value_dup_boxed (value);
-            g_debug("P %f %f", priv->pt->rlat, priv->pt->rlon);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);

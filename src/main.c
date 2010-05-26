@@ -75,7 +75,8 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 
     if (event->type == GDK_3BUTTON_PRESS) {
         if (event->button == 1) {
-            osm_gps_map_image_remove (map, g_last_image);
+            if (g_last_image)
+                osm_gps_map_image_remove (map, g_last_image);
         }
         if (event->button == 3) {
             osm_gps_map_track_remove(map, othertrack);

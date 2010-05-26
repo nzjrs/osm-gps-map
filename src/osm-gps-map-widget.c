@@ -127,7 +127,6 @@ struct _OsmGpsMapPrivate
     guint drag_expose_source;
 
     /* for customizing the redering of the gps track */
-    int ui_gps_track_width;
     int ui_gps_point_inner_radius;
     int ui_gps_point_outer_radius;
 
@@ -1053,11 +1052,15 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track)
     GSList *pt,*points;
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-    int lw = priv->ui_gps_track_width;
+    gfloat lw;
     int map_x0, map_y0;
     cairo_t *cr;
 
-    points = osm_gps_map_track_get_points (track);
+    g_object_get (track,
+            "track", &points,
+            "line-width", &lw,
+            NULL);
+
     if (points == NULL)
         return;
 
@@ -1337,12 +1340,15 @@ static void
 on_gps_point_added (OsmGpsMapTrack *track, OsmGpsMapPoint *point, OsmGpsMap *map)
 {
     gdouble lat, lon;
-
     osm_gps_map_point_as_degrees(point, &lat, &lon);
-    g_debug("GPS ADDED: %f %f", lat, lon);
-
     osm_gps_map_map_redraw_idle (map);
     maybe_autocenter_map (map);
+}
+
+static void
+on_track_changed (OsmGpsMapTrack *track, GParamSpec *pspec, OsmGpsMap *map)
+{
+    osm_gps_map_map_redraw_idle (map);
 }
 
 static void
@@ -1362,8 +1368,10 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->gps_heading = OSM_GPS_MAP_INVALID;
 
     priv->gps_track = osm_gps_map_track_new();
-    g_signal_connect(G_OBJECT(priv->gps_track), "point-added",
-                            G_CALLBACK(on_gps_point_added), object);
+    g_signal_connect(priv->gps_track, "point-added",
+                    G_CALLBACK(on_gps_point_added), object);
+    g_signal_connect(priv->gps_track, "notify",
+                    G_CALLBACK(on_track_changed), object);
 
     priv->tracks = NULL;
     priv->images = NULL;
@@ -1416,9 +1424,9 @@ osm_gps_map_init (OsmGpsMap *object)
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 
-    //Setup signal handlers
-    g_signal_connect(G_OBJECT(object), "key_press_event",
-                            G_CALLBACK(on_window_key_press), priv);
+    /* setup signal handlers */
+    g_signal_connect(object, "key_press_event",
+                    G_CALLBACK(on_window_key_press), priv);
 }
 
 static char*
@@ -1683,7 +1691,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             center_coord_update(map);
             break;
         case PROP_GPS_TRACK_WIDTH:
-            priv->ui_gps_track_width = g_value_get_int (value);
+            g_object_set (priv->gps_track,
+                    "line-width", g_value_get_float (value),
+                    NULL);
             break;
         case PROP_GPS_POINT_R1:
             priv->ui_gps_point_inner_radius = g_value_get_int (value);
@@ -1781,9 +1791,11 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
         case PROP_TILES_QUEUED:
             g_value_set_int(value, g_hash_table_size(priv->tile_queue));
             break;
-        case PROP_GPS_TRACK_WIDTH:
-            g_value_set_int(value, priv->ui_gps_track_width);
-            break;
+        case PROP_GPS_TRACK_WIDTH: {
+            gfloat f;
+            g_object_get (priv->gps_track, "line-width", &f, NULL);
+            g_value_set_float (value, f);
+            } break;
         case PROP_GPS_POINT_R1:
             g_value_set_int(value, priv->ui_gps_point_inner_radius);
             break;
@@ -2369,13 +2381,13 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 
     g_object_class_install_property (object_class,
                                      PROP_GPS_TRACK_WIDTH,
-                                     g_param_spec_int ("gps-track-width",
-                                                       "gps-track-width",
-                                                       "The width of the lines drawn for the gps track",
-                                                       1,           /* minimum property value */
-                                                       G_MAXINT,    /* maximum property value */
-                                                       4,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+                                     g_param_spec_float ("gps-track-width",
+                                                         "gps-track-width",
+                                                         "The width of the lines drawn for the gps track",
+                                                         1.0,       /* minimum property value */
+                                                         100.0,     /* maximum property value */
+                                                         4.0,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
                                      PROP_GPS_POINT_R1,
@@ -2763,8 +2775,10 @@ osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
     priv = map->priv;
 
     g_object_ref(track);
-    g_signal_connect(G_OBJECT(track), "point-added",
-                            G_CALLBACK(on_gps_point_added), map);
+    g_signal_connect(track, "point-added",
+                    G_CALLBACK(on_gps_point_added), map);
+    g_signal_connect(track, "notify",
+                    G_CALLBACK(on_track_changed), map);
 
     priv->tracks = g_slist_append(priv->tracks, track);
     osm_gps_map_map_redraw_idle(map);
@@ -2802,8 +2816,10 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
 
     g_object_unref(priv->gps_track);
     priv->gps_track = osm_gps_map_track_new();
-    g_signal_connect(G_OBJECT(priv->gps_track), "point-added",
-                            G_CALLBACK(on_gps_point_added), map);
+    g_signal_connect(priv->gps_track, "point-added",
+                    G_CALLBACK(on_gps_point_added), map);
+    g_signal_connect(priv->gps_track, "notify",
+                    G_CALLBACK(on_track_changed), map);
     osm_gps_map_map_redraw_idle(map);
 }
 
@@ -2846,6 +2862,12 @@ osm_gps_map_image_add (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
     return osm_gps_map_image_add_with_alignment (map, latitude, longitude, image, 0.5, 0.5);
 }
 
+static void
+on_image_changed (OsmGpsMapImage *image, GParamSpec *pspec, OsmGpsMap *map)
+{
+    osm_gps_map_map_redraw_idle (map);
+}
+
 OsmGpsMapImage *
 osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
@@ -2855,9 +2877,12 @@ osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float long
     g_return_val_if_fail (OSM_IS_GPS_MAP (map), NULL);
     pt.rlat = deg2rad(latitude);
     pt.rlon = deg2rad(longitude);
-    im = g_object_new (OSM_TYPE_GPS_MAP_IMAGE, "pixbuf", image, "x-align", xalign, "y-align", yalign, "point", &pt, NULL);
-    map->priv->images = g_slist_append(map->priv->images, im);
 
+    im = g_object_new (OSM_TYPE_GPS_MAP_IMAGE, "pixbuf", image, "x-align", xalign, "y-align", yalign, "point", &pt, NULL);
+    g_signal_connect(im, "notify",
+                    G_CALLBACK(on_image_changed), map);
+
+    map->priv->images = g_slist_append(map->priv->images, im);
     osm_gps_map_map_redraw_idle(map);
     return im;
 }
