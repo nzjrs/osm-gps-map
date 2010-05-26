@@ -2930,6 +2930,18 @@ osm_gps_map_new (void)
     return g_object_new (OSM_TYPE_GPS_MAP, NULL);
 }
 
+/**
+ * osm_gps_map_screen_to_geographic:
+ * @map:
+ * @pixel_x: pixel location on map, x axis
+ * @pixel_y: pixel location on map, y axis
+ * @latitude: (out):latitude in degrees
+ * @longitude: (out): longitude in degrees
+ *
+ * Convert the given pixel location on the map into corresponding
+ * latitude and longitude (in degrees)
+ *
+ **/
 void
 osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
                                   gfloat *latitude, gfloat *longitude)
@@ -2945,6 +2957,18 @@ osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
         *longitude = rad2deg(pixel2lon(priv->map_zoom, priv->map_x + pixel_x));
 }
 
+/**
+ * osm_gps_map_geographic_to_screen:
+ * @map:
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @pixel_x: (out): pixel location on map, x axis
+ * @pixel_y: (out): pixel location on map, y axis
+ *
+ * Convert the given latitude and longitude (in degrees) to the corresponding
+ * pixel locations on the map.
+ *
+ **/
 void
 osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                   gfloat latitude, gfloat longitude,
@@ -2963,6 +2987,15 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
             priv->map_y + priv->drag_mouse_dy;
 }
 
+/**
+ * osm_gps_map_scroll:
+ * @map:
+ * @dx:
+ * @dy:
+ *
+ * Scrolls the map by @dx, @dy pixels (positive north, east)
+ *
+ **/
 void
 osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
 {
@@ -2978,8 +3011,15 @@ osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
     osm_gps_map_map_redraw_idle (map);
 }
 
+/**
+ * osm_gps_map_get_scale:
+ * @map:
+ *
+ * Returns: the scale of the map at the center, in meters/pixel.
+ *
+ **/
 float
-osm_gps_map_get_scale(OsmGpsMap *map)
+osm_gps_map_get_scale (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv;
 
@@ -2989,8 +3029,17 @@ osm_gps_map_get_scale(OsmGpsMap *map)
     return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
 }
 
-char *
-osm_gps_map_get_default_cache_directory(void)
+/**
+ * osm_gps_map_get_default_cache_directory:
+ *
+ * Returns: the default cache directory for the library, that is the base
+ * directory to which the full cache path is appended. If
+ * #OsmGpsMap:tile-cache-base is omitted from the constructor then this value
+ * is used.
+ *
+ **/
+gchar *
+osm_gps_map_get_default_cache_directory (void)
 {
     return g_build_filename(
                         g_get_user_cache_dir(),
@@ -2998,8 +3047,19 @@ osm_gps_map_get_default_cache_directory(void)
                         NULL);
 }
 
+/**
+ * osm_gps_map_set_keyboard_shortcut:
+ * @key: a #OsmGpsMapKey_t
+ * @keyval:
+ *
+ * Associates a keyboard shortcut with the supplied @keyval
+ * (as returned by #gdk_keyval_from_name or simiar). The action given in @key
+ * will be triggered when the corresponding @keyval is pressed. By default
+ * no keyboard shortcuts are associated.
+ *
+ **/
 void
-osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval)
+osm_gps_map_set_keyboard_shortcut (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     g_return_if_fail(key < OSM_GPS_MAP_KEY_MAX);
@@ -3008,6 +3068,11 @@ osm_gps_map_set_keyboard_shortcut(OsmGpsMap *map, OsmGpsMapKey_t key, guint keyv
     map->priv->keybindings_enabled = TRUE;
 }
 
+/**
+ * osm_gps_map_add_layer:
+ * @layer: a #OsmGpsMapLayer object
+ *
+ **/
 void
 osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
 {

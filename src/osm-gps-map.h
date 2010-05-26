@@ -105,7 +105,7 @@ GType       osm_gps_map_get_type                    (void) G_GNUC_CONST;
 
 GtkWidget*  osm_gps_map_new                         (void);
 
-char*       osm_gps_map_get_default_cache_directory (void);
+gchar*      osm_gps_map_get_default_cache_directory (void);
 
 const char* osm_gps_map_source_get_friendly_name    (OsmGpsMapSource_t source);
 const char* osm_gps_map_source_get_repo_uri         (OsmGpsMapSource_t source);
