@@ -58,11 +58,9 @@ struct _OsmGpsMapPrivate
     int min_zoom;
     int map_x;
     int map_y;
-    gboolean map_auto_download;
 
     /* Controls auto centering the map when a new GPS position arrives */
     gfloat map_auto_center_threshold;
-    gboolean map_auto_center_enabled;
 
     /* Latitude and longitude of the center of the map, in radians */
     gfloat center_rlat;
@@ -90,12 +88,8 @@ struct _OsmGpsMapPrivate
     char *repo_uri;
     char *image_format;
     int uri_format;
-    //flag indicating if the map source is located on the google
-    gboolean the_google;
 
     //gps tracking state
-    gboolean record_trip_history;
-    gboolean show_trip_history;
     GSList *trip_history;
     coord_t *gps;
     float gps_heading;
@@ -127,22 +121,30 @@ struct _OsmGpsMapPrivate
     int drag_start_map_x;
     int drag_start_map_y;
     int drag_limit;
-    guint drag_expose;
+    guint drag_expose_source;
 
-    //for customizing the redering of the gps track
+    /* for customizing the redering of the gps track */
     int ui_gps_track_width;
     int ui_gps_point_inner_radius;
     int ui_gps_point_outer_radius;
 
-    //For storing keybindings
+    /* For storing keybindings */
     guint keybindings[OSM_GPS_MAP_KEY_MAX];
 
-    guint fullscreen : 1;
+    /* flags controlling which features are enabled */
     guint keybindings_enabled : 1;
+    guint map_auto_download_enabled : 1;
+    guint map_auto_center_enabled : 1;
+    guint trip_history_record_enabled : 1;
+    guint trip_history_show_enabled : 1;
+
+    /* state flags */
     guint is_disposed : 1;
     guint is_constructed : 1;
-    guint dragging : 1;
-    guint button_down : 1;
+    guint is_dragging : 1;
+    guint is_button_down : 1;
+    guint is_fullscreen : 1;
+    guint is_google : 1;
 };
 
 #define OSM_GPS_MAP_PRIVATE(o)  (OSM_GPS_MAP (o)->priv)
@@ -328,7 +330,7 @@ static void
 inspect_map_uri(OsmGpsMapPrivate *priv)
 {
     priv->uri_format = 0;
-    priv->the_google = FALSE;
+    priv->is_google = FALSE;
 
     if (g_strrstr(priv->repo_uri, URI_MARKER_X))
         priv->uri_format |= URI_HAS_X;
@@ -355,9 +357,9 @@ inspect_map_uri(OsmGpsMapPrivate *priv)
         priv->uri_format |= URI_HAS_R;
 
     if (g_strrstr(priv->repo_uri, "google.com"))
-        priv->the_google = TRUE;
+        priv->is_google = TRUE;
 
-    g_debug("URI Format: 0x%X (google: %X)", priv->uri_format, priv->the_google);
+    g_debug("URI Format: 0x%X (google: %X)", priv->uri_format, priv->is_google);
 
 }
 
@@ -829,7 +831,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 
         msg = soup_message_new (SOUP_METHOD_GET, dl->uri);
         if (msg) {
-            if (priv->the_google) {
+            if (priv->is_google) {
                 //Set maps.google.com as the referrer
                 g_debug("Setting Google Referrer");
                 soup_message_headers_append(msg->request_headers, "Referer", "http://maps.google.com/");
@@ -994,7 +996,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
     }
     else
     {
-        if (priv->map_auto_download)
+        if (priv->map_auto_download_enabled)
             osm_gps_map_download_tile(map, zoom, x, y, TRUE);
 
         /* try to render the tile by scaling cached tiles from other zoom
@@ -1135,7 +1137,7 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (priv->show_trip_history)
+    if (priv->trip_history_show_enabled)
         osm_gps_map_print_track (map, priv->trip_history);
 
     if (priv->tracks)
@@ -1191,7 +1193,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
      * change it while we are dragging, we will end up showing it in the wrong
      * place. This could be fixed by carefully recompute the coordinates, but
      * for now it's easier just to disable redrawing the map while dragging */
-    if (priv->dragging)
+    if (priv->is_dragging)
         return FALSE;
 
     /* undo all offsets that may have happened when dragging */
@@ -1284,12 +1286,12 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
         switch(i) {
             case OSM_GPS_MAP_KEY_FULLSCREEN: {
                 GtkWidget *toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-                if(!priv->fullscreen)
+                if(!priv->is_fullscreen)
                     gtk_window_fullscreen(GTK_WINDOW(toplevel));
                 else
                     gtk_window_unfullscreen(GTK_WINDOW(toplevel));
 
-                priv->fullscreen = !priv->fullscreen;
+                priv->is_fullscreen = !priv->is_fullscreen;
                 handled = TRUE;
                 } break;
             case OSM_GPS_MAP_KEY_ZOOMIN:
@@ -1359,7 +1361,7 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->drag_start_mouse_y = 0;
 
     priv->uri_format = 0;
-    priv->the_google = FALSE;
+    priv->is_google = FALSE;
 
     priv->map_source = -1;
 
@@ -1547,8 +1549,8 @@ osm_gps_map_dispose (GObject *object)
     if (priv->idle_map_redraw != 0)
         g_source_remove (priv->idle_map_redraw);
 
-    if (priv->drag_expose != 0)
-        g_source_remove (priv->drag_expose);
+    if (priv->drag_expose_source != 0)
+        g_source_remove (priv->drag_expose_source);
 
     g_free(priv->gps);
 
@@ -1596,13 +1598,13 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             priv->map_auto_center_enabled = g_value_get_boolean (value);
             break;
         case PROP_RECORD_TRIP_HISTORY:
-            priv->record_trip_history = g_value_get_boolean (value);
+            priv->trip_history_record_enabled = g_value_get_boolean (value);
             break;
         case PROP_SHOW_TRIP_HISTORY:
-            priv->show_trip_history = g_value_get_boolean (value);
+            priv->trip_history_show_enabled = g_value_get_boolean (value);
             break;
         case PROP_AUTO_DOWNLOAD:
-            priv->map_auto_download = g_value_get_boolean (value);
+            priv->map_auto_download_enabled = g_value_get_boolean (value);
             break;
         case PROP_REPO_URI:
             priv->repo_uri = g_value_dup_string (value);
@@ -1716,13 +1718,13 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             g_value_set_boolean(value, priv->map_auto_center_enabled);
             break;
         case PROP_RECORD_TRIP_HISTORY:
-            g_value_set_boolean(value, priv->record_trip_history);
+            g_value_set_boolean(value, priv->trip_history_record_enabled);
             break;
         case PROP_SHOW_TRIP_HISTORY:
-            g_value_set_boolean(value, priv->show_trip_history);
+            g_value_set_boolean(value, priv->trip_history_show_enabled);
             break;
         case PROP_AUTO_DOWNLOAD:
-            g_value_set_boolean(value, priv->map_auto_download);
+            g_value_set_boolean(value, priv->map_auto_download_enabled);
             break;
         case PROP_REPO_URI:
             g_value_set_string(value, priv->repo_uri);
@@ -1818,7 +1820,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
         }
     }
 
-    priv->button_down = TRUE;
+    priv->is_button_down = TRUE;
     priv->drag_counter = 0;
     priv->drag_start_mouse_x = (int) event->x;
     priv->drag_start_mouse_y = (int) event->y;
@@ -1834,12 +1836,12 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-    if(!priv->button_down)
+    if(!priv->is_button_down)
         return FALSE;
 
-    if (priv->dragging)
+    if (priv->is_dragging)
     {
-        priv->dragging = FALSE;
+        priv->is_dragging = FALSE;
 
         priv->map_x = priv->drag_start_map_x;
         priv->map_y = priv->drag_start_map_y;
@@ -1853,7 +1855,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
     }
 
     priv->drag_counter = -1;
-    priv->button_down = 0;
+    priv->is_button_down = FALSE;
 
     return FALSE;
 }
@@ -1866,7 +1868,7 @@ osm_gps_map_map_expose (GtkWidget *widget)
 {
     OsmGpsMapPrivate *priv = OSM_GPS_MAP(widget)->priv;
 
-    priv->drag_expose = 0;
+    priv->drag_expose_source = 0;
     osm_gps_map_expose (widget, NULL);
     return FALSE;
 }
@@ -1878,7 +1880,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     GdkModifierType state;
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
 
-    if(!priv->button_down)
+    if(!priv->is_button_down)
         return FALSE;
 
     if (event->is_hint)
@@ -1906,7 +1908,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 
     priv->drag_counter++;
 
-    priv->dragging = TRUE;
+    priv->is_dragging = TRUE;
 
     if (priv->map_auto_center_enabled)
         g_object_set(G_OBJECT(widget), "auto-center", FALSE, NULL);
@@ -1915,8 +1917,8 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     priv->drag_mouse_dy = y - priv->drag_start_mouse_y;
 
     /* instead of redrawing directly just add an idle function */
-    if (!priv->drag_expose)
-        priv->drag_expose = 
+    if (!priv->drag_expose_source)
+        priv->drag_expose_source = 
             g_idle_add ((GSourceFunc)osm_gps_map_map_expose, widget);
 
     return FALSE;
@@ -2872,7 +2874,7 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
     pixel_y = lat2pixel(priv->map_zoom, priv->gps->rlat);
 
     /* if trip marker add to list of gps points. */
-    if (priv->record_trip_history) {
+    if (priv->trip_history_record_enabled) {
         coord_t *tp = g_new0(coord_t,1);
         tp->rlat = priv->gps->rlat;
         tp->rlon = priv->gps->rlon;
@@ -2880,7 +2882,7 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
     }
 
     /* dont draw anything if we are dragging */
-    if (priv->dragging) {
+    if (priv->is_dragging) {
         g_debug("Dragging");
         return;
     }
