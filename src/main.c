@@ -43,28 +43,8 @@ static GOptionEntry entries[] =
 static GdkPixbuf *g_start_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 
-typedef struct {
-    OsmGpsMap *map;
-    GtkWidget *entry;
-} timeout_cb_t;
-
 #define DEG2RAD(deg) (deg * M_PI / 180.0)
 #define RAD2DEG(rad) (rad / M_PI * 180.0)
-
-gboolean
-on_timeout_check_tiles_in_queue(gpointer user_data)
-{
-    gchar *msg;
-    int remaining;
-    timeout_cb_t *data = (timeout_cb_t *)user_data;
-    g_object_get(data->map, "tiles-queued", &remaining,NULL);
-
-    msg = g_strdup_printf("%d tiles queued",remaining);
-    gtk_entry_set_text(GTK_ENTRY(data->entry), msg);
-    g_free(msg);
-
-    return remaining > 0;
-}
 
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -156,27 +136,49 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 gboolean
 on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
 {
+    OsmGpsMap *map = OSM_GPS_MAP(user_data);
     int zoom,max_zoom;
     OsmGpsMapPoint pt1, pt2;
-    timeout_cb_t *data;
-
-    data = (timeout_cb_t *)user_data;
-    osm_gps_map_get_bbox(data->map, &pt1, &pt2);
-    g_object_get(data->map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
-    osm_gps_map_download_maps(data->map, &pt1, &pt2, zoom, max_zoom);
-    g_timeout_add(500, on_timeout_check_tiles_in_queue, user_data);
-
+    osm_gps_map_get_bbox(map, &pt1, &pt2);
+    g_object_get(map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
+    osm_gps_map_download_maps(map, &pt1, &pt2, zoom, max_zoom);
     return FALSE;
 }
 
-void
+static void
+on_tiles_queued_changed (OsmGpsMap *image, GParamSpec *pspec, gpointer user_data)
+{
+    gchar *s;
+    int tiles;
+    GtkLabel *label = GTK_LABEL(user_data);
+    g_object_get(image, "tiles-queued", &tiles, NULL);
+    s = g_strdup_printf("%d", tiles);
+    gtk_label_set_text(label, s);
+    g_free(s);
+}
+
+static void
+on_gps_alpha_changed (GtkAdjustment *adjustment, gpointer user_data)
+{
+    OsmGpsMap *map = OSM_GPS_MAP(user_data);
+    g_debug("CHANGED: %.1f", gtk_adjustment_get_value(adjustment));
+}
+
+static void
+on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
+{
+    OsmGpsMap *map = OSM_GPS_MAP(user_data);
+    g_debug("COLOR CHANGED");
+}
+
+static void
 on_close (GtkWidget *widget, gpointer user_data)
 {
     gtk_widget_destroy(widget);
     gtk_main_quit();
 }
 
-void
+static void
 usage (GOptionContext *context)
 {
     int i;
@@ -196,14 +198,8 @@ usage (GOptionContext *context)
 int
 main (int argc, char **argv)
 {
-    GtkWidget *vbox;
-    GtkWidget *bbox;
-    GtkWidget *entry;
-    GtkWidget *window;
-    GtkWidget *zoomInbutton;
-    GtkWidget *zoomOutbutton;
-    GtkWidget *homeButton;
-    GtkWidget *cacheButton;
+    GtkBuilder *builder;
+    GtkWidget *widget;
     OsmGpsMap *map;
     OsmGpsMapLayer *osd;
     OsmGpsMapTrack *rightclicktrack;
@@ -212,7 +208,6 @@ main (int argc, char **argv)
     char *cachedir, *cachebasedir;
     GError *error = NULL;
     GOptionContext *context;
-    timeout_cb_t *data;
 
     g_thread_init(NULL);
     gtk_init (&argc, &argv);
@@ -251,11 +246,6 @@ main (int argc, char **argv)
     if (opt_debug)
         gdk_window_set_debug_updates(TRUE);
 
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
-
-    g_start_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
-
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", friendly_name, opt_map_provider);
 
@@ -293,52 +283,50 @@ main (int argc, char **argv)
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_Left);
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
 
-    vbox = gtk_vbox_new (FALSE, 2);
-    gtk_container_add (GTK_CONTAINER (window), vbox);
+    //Build the UI
+    g_start_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
 
-    //Add the map to the box
-    gtk_box_pack_start (GTK_BOX(vbox), GTK_WIDGET(map), TRUE, TRUE, 0);
-    //And add a box for the buttons
-    bbox = gtk_hbox_new (TRUE, 0);
-    gtk_box_pack_start (GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
-    //And add the lat/long entry
-    entry = gtk_entry_new();
-    gtk_box_pack_start (GTK_BOX(vbox), entry, FALSE, TRUE, 0);
+    builder = gtk_builder_new();
+    gtk_builder_add_from_file (builder, "mapviewer.ui", NULL);
 
-    //Add buttons to the bbox
-    zoomInbutton = gtk_button_new_from_stock (GTK_STOCK_ZOOM_IN);
-    g_signal_connect (G_OBJECT (zoomInbutton), "clicked",
-                      G_CALLBACK (on_zoom_in_clicked_event), (gpointer) map);
-    gtk_box_pack_start (GTK_BOX(bbox), zoomInbutton, FALSE, TRUE, 0);
+    gtk_box_pack_start (
+                GTK_BOX(gtk_builder_get_object(builder, "map_box")),
+                GTK_WIDGET(map), TRUE, TRUE, 0);
 
-    zoomOutbutton = gtk_button_new_from_stock (GTK_STOCK_ZOOM_OUT);
-    g_signal_connect (G_OBJECT (zoomOutbutton), "clicked",
-                      G_CALLBACK (on_zoom_out_clicked_event), (gpointer) map);
-    gtk_box_pack_start (GTK_BOX(bbox), zoomOutbutton, FALSE, TRUE, 0);
-
-    homeButton = gtk_button_new_from_stock (GTK_STOCK_HOME);
-    g_signal_connect (G_OBJECT (homeButton), "clicked",
-                      G_CALLBACK (on_home_clicked_event), (gpointer) map);
-    gtk_box_pack_start (GTK_BOX(bbox), homeButton, FALSE, TRUE, 0);
-
-    data = g_new0(timeout_cb_t, 1);
-    data->map = map;
-    data->entry = entry;
-    cacheButton = gtk_button_new_with_label ("Cache");
-    g_signal_connect (G_OBJECT (cacheButton), "clicked",
-                      G_CALLBACK (on_cache_clicked_event), (gpointer) data);
-    gtk_box_pack_start (GTK_BOX(bbox), cacheButton, FALSE, TRUE, 0);
+    //Connect the buttons
+    g_signal_connect (
+                gtk_builder_get_object(builder, "zoom_in_button"), "clicked",
+                G_CALLBACK (on_zoom_in_clicked_event), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "zoom_out_button"), "clicked",
+                G_CALLBACK (on_zoom_out_clicked_event), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "home_button"), "clicked",
+                G_CALLBACK (on_home_clicked_event), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "cache_button"), "clicked",
+                G_CALLBACK (on_cache_clicked_event), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "gps_alpha_adjustment"), "value-changed",
+                G_CALLBACK (on_gps_alpha_changed), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
+                G_CALLBACK (on_gps_color_changed), (gpointer) map);
 
     //Connect to map events
     g_signal_connect (G_OBJECT (map), "button-press-event",
-                      G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
+                G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
     g_signal_connect (G_OBJECT (map), "button-release-event",
-                      G_CALLBACK (on_button_release_event), (gpointer) entry);
+                G_CALLBACK (on_button_release_event),
+                (gpointer) gtk_builder_get_object(builder, "text_entry"));
+    g_signal_connect (G_OBJECT (map), "notify::tiles-queued",
+                G_CALLBACK (on_tiles_queued_changed),
+                (gpointer) gtk_builder_get_object(builder, "cache_label"));
 
-    g_signal_connect (window, "destroy",
+    widget = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
+    g_signal_connect (widget, "destroy",
                       G_CALLBACK (on_close), (gpointer) map);
-
-    gtk_widget_show_all (window);
+    gtk_widget_show_all (widget);
 
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
     gtk_main ();
