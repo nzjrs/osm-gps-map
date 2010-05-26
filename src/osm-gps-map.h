@@ -129,16 +129,19 @@ float       osm_gps_map_get_scale                   (OsmGpsMap *map);
 void        osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 void        osm_gps_map_add_layer                   (OsmGpsMap *map, OsmGpsMapLayer *layer);
 void        osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
-void        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
+void        osm_gps_map_track_remove_all            (OsmGpsMap *map);
+gboolean    osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
 void        osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
+void        osm_gps_map_gps_clear                   (OsmGpsMap *map);
+OsmGpsMapTrack *osm_gps_map_gps_get_track           (OsmGpsMap *map);
 
 /* Depreciated Functions */
 #define coord_t OsmGpsMapPoint
-void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *track);                                    G_GNUC_DEPRECATED
-void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track);
-void        osm_gps_map_clear_tracks                (OsmGpsMap *map);
-void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading);
-void        osm_gps_map_clear_gps                   (OsmGpsMap *map);
+void        osm_gps_map_add_track                   (OsmGpsMap *map, GSList *track)                                     G_GNUC_DEPRECATED;
+void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old_track, GSList *new_track)              G_GNUC_DEPRECATED;
+void        osm_gps_map_clear_tracks                (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
+void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading)    G_GNUC_DEPRECATED;
+void        osm_gps_map_clear_gps                   (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
 
 G_END_DECLS
 

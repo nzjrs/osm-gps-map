@@ -71,16 +71,20 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 {
     OsmGpsMapPoint coord;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
 
-    if (    ((event->button == 1) || (event->button == 3)) 
-            && (event->type == GDK_2BUTTON_PRESS) )
-    {
-        g_debug("Double clicked %f %f", event->x, event->y);
+    if (event->type == GDK_2BUTTON_PRESS) {
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
-        osm_gps_map_gps_add (map,
-                             RAD2DEG(coord.rlat),
-                             RAD2DEG(coord.rlon),
-                             (event->button == 1 ? OSM_GPS_MAP_INVALID : g_random_double_range(0,360)));
+        if (event->button == 1) {
+            osm_gps_map_gps_add (map,
+                                 RAD2DEG(coord.rlat),
+                                 RAD2DEG(coord.rlon),
+                                 g_random_double_range(0,360));
+        }
+        if (event->button == 3) {
+            OsmGpsMapPoint *pt = g_boxed_copy(OSM_TYPE_GPS_MAP_POINT, &coord);
+            osm_gps_map_track_add_point(othertrack, pt);
+        }
     }
 
     if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
@@ -190,6 +194,7 @@ main (int argc, char **argv)
     GtkWidget *cacheButton;
     OsmGpsMap *map;
     OsmGpsMapLayer *osd;
+    OsmGpsMapTrack *rightclicktrack;
     const char *repo_uri;
     const char *friendly_name;
     char *cachedir, *cachebasedir;
@@ -262,9 +267,9 @@ main (int argc, char **argv)
     osm_gps_map_add_layer(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
-    //TEST THE TRACK STUFF
-    OsmGpsMapTrack *track = osm_gps_map_track_new();
-    osm_gps_map_track_add(OSM_GPS_MAP(map), track);
+    //Add a second track for right clicks
+    rightclicktrack = osm_gps_map_track_new();
+    osm_gps_map_track_add(OSM_GPS_MAP(map), rightclicktrack);
 
     g_free(cachedir);
     g_free(cachebasedir);
@@ -314,7 +319,7 @@ main (int argc, char **argv)
 
     //Connect to map events
     g_signal_connect (G_OBJECT (map), "button-press-event",
-                      G_CALLBACK (on_button_press_event), (gpointer) entry);
+                      G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
     g_signal_connect (G_OBJECT (map), "button-release-event",
                       G_CALLBACK (on_button_release_event), (gpointer) entry);
 

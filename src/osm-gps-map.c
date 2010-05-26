@@ -466,25 +466,6 @@ osm_gps_map_free_trip (OsmGpsMap *map)
     }
 }
 
-/* clears the tracks and all resources */
-static void
-osm_gps_map_free_tracks (OsmGpsMap *map)
-{
-    OsmGpsMapPrivate *priv = map->priv;
-    if (priv->tracks)
-    {
-        GSList* tmp = priv->tracks;
-        while (tmp != NULL)
-        {
-            g_slist_foreach(tmp->data, (GFunc) g_free, NULL);
-            g_slist_free(tmp->data);
-            tmp = g_slist_next(tmp);
-        }
-        g_slist_free(priv->tracks);
-        priv->tracks = NULL;
-    }
-}
-
 /* free the poi image lists */
 static void
 osm_gps_map_free_images (OsmGpsMap *map)
@@ -1083,16 +1064,20 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 }
 
 static void
-osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
+osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
     OsmGpsMapPrivate *priv = map->priv;
 
-    GSList *list;
+    GSList *pt,*points;
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     int lw = priv->ui_gps_track_width;
     int map_x0, map_y0;
     cairo_t *cr;
+
+    points = osm_gps_map_track_get_points (track);
+    if (points == NULL)
+        return;
 
     cr = gdk_cairo_create(priv->pixmap);
     cairo_set_line_width (cr, lw);
@@ -1102,15 +1087,15 @@ osm_gps_map_print_track (OsmGpsMap *map, GSList *trackpoint_list)
 
     map_x0 = priv->map_x - EXTRA_BORDER;
     map_y0 = priv->map_y - EXTRA_BORDER;
-    for(list = trackpoint_list; list != NULL; list = list->next)
+    for(pt = points; pt != NULL; pt = pt->next)
     {
-        OsmGpsMapPoint *tp = list->data;
+        OsmGpsMapPoint *tp = pt->data;
 
         x = lon2pixel(priv->map_zoom, tp->rlon) - map_x0;
         y = lat2pixel(priv->map_zoom, tp->rlat) - map_y0;
 
-        // first time through loop
-        if (list == trackpoint_list) {
+        /* first time through loop */
+        if (pt == points) {
             cairo_move_to(cr, x, y);
         }
 
@@ -1141,17 +1126,13 @@ osm_gps_map_print_tracks (OsmGpsMap *map)
     OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->trip_history_show_enabled) {
-        tmp = osm_gps_map_track_get_points (priv->gps_track);
-        if (tmp)
-            osm_gps_map_print_track (map, tmp);
+        osm_gps_map_print_track (map, priv->gps_track);
     }
 
-    if (priv->tracks)
-    {
+    if (priv->tracks) {
         tmp = priv->tracks;
-        while (tmp != NULL)
-        {
-            osm_gps_map_print_track (map, tmp->data);
+        while (tmp != NULL) {
+            osm_gps_map_print_track (map, OSM_GPS_MAP_TRACK(tmp->data));
             tmp = g_slist_next(tmp);
         }
     }
@@ -1590,6 +1571,7 @@ osm_gps_map_dispose (GObject *object)
     /* images and layers contain GObjects which need unreffing, so free here */
     osm_gps_map_free_images(map);
     osm_gps_map_free_layers(map);
+    osm_gps_map_track_remove_all(map);
 
     if(priv->pixmap)
         g_object_unref (priv->pixmap);
@@ -1634,7 +1616,6 @@ osm_gps_map_finalize (GObject *object)
 
     /* trip and tracks contain simple non GObject types, so free them here */
     osm_gps_map_free_trip(map);
-    osm_gps_map_free_tracks(map);
 
     G_OBJECT_CLASS (osm_gps_map_parent_class)->finalize (object);
 }
@@ -1701,7 +1682,6 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             priv->tile_base_dir = g_value_dup_string (value);
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-             g_warning("GObject property tile-cache-is-full-path depreciated");
              break;
         case PROP_ZOOM:
             priv->map_zoom = g_value_get_int (value);
@@ -2309,7 +2289,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                       PROP_TILE_CACHE_DIR_IS_FULL_PATH,
                                       g_param_spec_boolean ("tile-cache-is-full-path",
                                                             "tile cache is full path",
-                                                            NULL,
+                                                            "",
                                                             FALSE,
                                                             G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -2799,52 +2779,6 @@ osm_gps_map_zoom_out (OsmGpsMap *map)
 }
 
 void
-osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
-{
-    OsmGpsMapPrivate *priv;
-
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
-    priv = map->priv;
-
-    if (track) {
-        priv->tracks = g_slist_append(priv->tracks, track);
-        osm_gps_map_map_redraw_idle(map);
-    }
-}
-
-void
-osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
-{
-    OsmGpsMapPrivate *priv;
-
-    if(!old_track) {
-        osm_gps_map_add_track (map, new_track);
-        return;
-    }
-
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
-    priv = map->priv;
-
-    GSList *old = g_slist_find(priv->tracks, old_track);
-    if(!old) {
-        g_warning("track to be replaced not found");
-        return;
-    }
-
-    old->data = new_track;
-    osm_gps_map_map_redraw_idle(map);
-}
-
-void
-osm_gps_map_clear_tracks (OsmGpsMap *map)
-{
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
-
-    osm_gps_map_free_tracks(map);
-    osm_gps_map_map_redraw_idle(map);
-}
-
-void
 osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
     g_return_if_fail (OSM_IS_GPS_MAP (map));
@@ -2907,13 +2841,6 @@ osm_gps_map_clear_images (OsmGpsMap *map)
     g_return_if_fail (OSM_IS_GPS_MAP (map));
 
     osm_gps_map_free_images(map);
-    osm_gps_map_map_redraw_idle(map);
-}
-
-void
-osm_gps_map_clear_gps (OsmGpsMap *map)
-{
-    osm_gps_map_free_trip(map);
     osm_gps_map_map_redraw_idle(map);
 }
 
@@ -3093,13 +3020,74 @@ osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
 void
 osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
+    OsmGpsMapPrivate *priv;
 
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    g_object_ref(track);
+    g_signal_connect(G_OBJECT(track), "point-added",
+                            G_CALLBACK(on_gps_point_added), map);
+
+    priv->tracks = g_slist_append(priv->tracks, track);
+    osm_gps_map_map_redraw_idle(map);
 }
 
 void
+osm_gps_map_track_remove_all (OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    g_slist_foreach(priv->tracks, (GFunc) g_object_unref, NULL);
+    g_slist_free(priv->tracks);
+    priv->tracks = NULL;
+
+    osm_gps_map_map_redraw_idle(map);
+}
+
+gboolean
 osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
+    GSList *data;
+    OsmGpsMapPrivate *priv;
 
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), FALSE);
+    g_return_val_if_fail (track != NULL, FALSE);
+    priv = map->priv;
+
+    data = g_slist_find(priv->tracks, track);
+    if (data) {
+        g_object_unref(track);
+        priv->tracks = g_slist_delete_link(priv->tracks, data);
+    }
+
+    osm_gps_map_map_redraw_idle(map);
+    return data != NULL;
+}
+
+void
+osm_gps_map_gps_clear (OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    priv = map->priv;
+
+    g_object_unref(priv->gps_track);
+    priv->gps_track = osm_gps_map_track_new();
+    g_signal_connect(G_OBJECT(priv->gps_track), "point-added",
+                            G_CALLBACK(on_gps_point_added), map);
+    osm_gps_map_map_redraw_idle(map);
+}
+
+OsmGpsMapTrack *
+osm_gps_map_gps_get_track(OsmGpsMap *map)
+{
+    g_return_val_if_fail (OSM_IS_GPS_MAP (map), NULL);
+    return map->priv->gps_track;
 }
 
 void
@@ -3121,16 +3109,66 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
     if (priv->trip_history_record_enabled) {
         point = osm_gps_map_point_new_degrees(latitude, longitude);
         /* this will cause a redraw to be scheduled */
-        osm_gps_map_track_add_point(map->priv->gps_track, point);
+        osm_gps_map_track_add_point (priv->gps_track, point);
     } else {
         osm_gps_map_map_redraw_idle (map);
         maybe_autocenter_map (map);
     }
 }
 
-/******************** DEPRECIATED COMPATIBILITY CODE **************************/
+/**
+ * osm_gps_map_draw_gps:
+ *
+ * Deprecated: Use osm_gps_map_gps_add() instead.
+ **/
 void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
     osm_gps_map_gps_add (map, latitude, longitude, heading);
 }
+
+/**
+ * osm_gps_map_clear_gps:
+ *
+ * Deprecated: Use osm_gps_map_gps_clear() instead.
+ **/
+void
+osm_gps_map_clear_gps (OsmGpsMap *map)
+{
+    osm_gps_map_gps_clear (map);
+}
+
+/**
+ * osm_gps_map_add_track:
+ *
+ * Deprecated: Use osm_gps_map_track_add() instead.
+ **/
+void
+osm_gps_map_add_track (OsmGpsMap *map, GSList *track)
+{
+    ;
+}
+
+/**
+ * osm_gps_map_replace_track:
+ *
+ * Deprecated: Use osm_gps_map_track_remove() and osm_gps_map_track_add() or just
+ * edit the #OsmGpsMapTrack object directly
+ **/
+void
+osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
+{
+    ;
+}
+
+/**
+ * osm_gps_map_clear_tracks:
+ *
+ * Deprecated: Use osm_gps_map_track_remove_all() instead.
+ **/
+void
+osm_gps_map_clear_tracks (OsmGpsMap *map)
+{
+    osm_gps_map_track_remove_all (map);
+}
+
