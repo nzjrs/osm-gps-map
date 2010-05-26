@@ -45,6 +45,7 @@ typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 
 #include "osm-gps-map-layer.h"
 #include "osm-gps-map-track.h"
+#include "osm-gps-map-image.h"
 
 struct _OsmGpsMapClass
 {
@@ -117,10 +118,6 @@ void        osm_gps_map_set_center                  (OsmGpsMap *map, float latit
 int         osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);
 int         osm_gps_map_zoom_in                     (OsmGpsMap *map);
 int         osm_gps_map_zoom_out                    (OsmGpsMap *map);
-void        osm_gps_map_add_image                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
-void        osm_gps_map_add_image_with_alignment    (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign);
-gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image);
-void        osm_gps_map_clear_images                (OsmGpsMap *map);
 OsmGpsMapPoint  osm_gps_map_get_co_ordinates        (OsmGpsMap *map, int pixel_x, int pixel_y);
 void        osm_gps_map_screen_to_geographic        (OsmGpsMap *map, gint pixel_x, gint pixel_y, gfloat *latitude, gfloat *longitude);
 void        osm_gps_map_geographic_to_screen        (OsmGpsMap *map, gfloat latitude, gfloat longitude, gint *pixel_x, gint *pixel_y);
@@ -134,6 +131,10 @@ gboolean    osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTr
 void        osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
 void        osm_gps_map_gps_clear                   (OsmGpsMap *map);
 OsmGpsMapTrack *osm_gps_map_gps_get_track           (OsmGpsMap *map);
+OsmGpsMapImage *osm_gps_map_image_add               (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
+OsmGpsMapImage *osm_gps_map_image_add_with_alignment(OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign);
+gboolean    osm_gps_map_image_remove                (OsmGpsMap *map, OsmGpsMapImage *image);
+void        osm_gps_map_image_remove_all            (OsmGpsMap *map);
 
 /* Depreciated Functions */
 #define coord_t OsmGpsMapPoint
@@ -142,6 +143,10 @@ void        osm_gps_map_replace_track               (OsmGpsMap *map, GSList *old
 void        osm_gps_map_clear_tracks                (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
 void        osm_gps_map_draw_gps                    (OsmGpsMap *map, float latitude, float longitude, float heading)    G_GNUC_DEPRECATED;
 void        osm_gps_map_clear_gps                   (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
+void        osm_gps_map_add_image                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image) G_GNUC_DEPRECATED;
+void        osm_gps_map_add_image_with_alignment    (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign) G_GNUC_DEPRECATED;
+gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image)                                  G_GNUC_DEPRECATED;
+void        osm_gps_map_clear_images                (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
 
 G_END_DECLS
 

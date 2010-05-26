@@ -91,13 +91,4 @@ typedef struct {
     int zoom;
 } tile_t;
 
-typedef struct {
-    OsmGpsMapPoint pt;
-    GdkPixbuf *image;
-    int w;
-    int h;
-    int xoffset;
-    int yoffset;
-} image_t;
-
 #endif /* _OSM_GPS_MAP_TYPES_H_ */

@@ -41,7 +41,8 @@ static GOptionEntry entries[] =
   { NULL }
 };
 
-static GdkPixbuf *STAR_IMAGE;
+static GdkPixbuf *g_start_image = NULL;
+static OsmGpsMapImage *g_last_image = NULL;
 
 typedef struct {
     OsmGpsMap *map;
@@ -73,6 +74,15 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
 
+    if (event->type == GDK_3BUTTON_PRESS) {
+        if (event->button == 1) {
+            osm_gps_map_image_remove (map, g_last_image);
+        }
+        if (event->button == 3) {
+            osm_gps_map_track_remove(map, othertrack);
+        }
+    }
+
     if (event->type == GDK_2BUTTON_PRESS) {
         coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
         if (event->button == 1) {
@@ -87,13 +97,15 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
         }
     }
 
-    if ( (event->button == 2) && (event->type == GDK_BUTTON_PRESS) )
-    {
-        coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
-        osm_gps_map_add_image (map,
-                               RAD2DEG(coord.rlat),
-                               RAD2DEG(coord.rlon),
-                               STAR_IMAGE);
+    if (event->type == GDK_BUTTON_PRESS) {
+        if (event->button == 2) {
+            coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
+            g_last_image = osm_gps_map_image_add (
+                                    map,
+                                    RAD2DEG(coord.rlat),
+                                    RAD2DEG(coord.rlon),
+                                    g_start_image);
+        }
     }
     return FALSE;
 }
@@ -242,7 +254,7 @@ main (int argc, char **argv)
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
 
-    STAR_IMAGE = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
+    g_start_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
 
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", friendly_name, opt_map_provider);
