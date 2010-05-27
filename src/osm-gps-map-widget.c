@@ -488,7 +488,6 @@ static void
 osm_gps_map_print_images (OsmGpsMap *map)
 {
     GSList *list;
-    int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     int map_x0, map_y0;
     OsmGpsMapPrivate *priv = map->priv;
@@ -497,25 +496,24 @@ osm_gps_map_print_images (OsmGpsMap *map)
     map_y0 = priv->map_y - EXTRA_BORDER;
     for(list = priv->images; list != NULL; list = list->next)
     {
-        int w,h;
+        GdkRectangle loc;
         OsmGpsMapImage *im = OSM_GPS_MAP_IMAGE(list->data);
         const OsmGpsMapPoint *pt = osm_gps_map_image_get_point(im);
 
         /* pixel_x,y, offsets */
-        x = lon2pixel(priv->map_zoom, pt->rlon) - map_x0;
-        y = lat2pixel(priv->map_zoom, pt->rlat) - map_y0;
+        loc.x = lon2pixel(priv->map_zoom, pt->rlon) - map_x0;
+        loc.y = lat2pixel(priv->map_zoom, pt->rlat) - map_y0;
 
         osm_gps_map_image_draw (
                          im,
                          priv->pixmap,
                          priv->gc_map,
-                         x,y,
-                         &w, &h);
+                         &loc);
 
-        max_x = MAX(x+w,max_x);
-        min_x = MIN(x-w,min_x);
-        max_y = MAX(y+h,max_y);
-        min_y = MIN(y-h,min_y);
+        max_x = MAX(loc.x + loc.width, max_x);
+        min_x = MIN(loc.x - loc.width, min_x);
+        max_y = MAX(loc.y + loc.height, max_y);
+        min_y = MIN(loc.y - loc.height, min_y);
     }
 
     gtk_widget_queue_draw_area (

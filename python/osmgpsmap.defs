@@ -407,10 +407,7 @@
   (parameters
     '("GdkDrawable*" "drawable")
     '("GdkGC*" "gc")
-    '("gint" "x")
-    '("gint" "y")
-    '("gint*" "w")
-    '("gint*" "h")
+    '("GdkRectangle*" "rect")
   )
 )
 

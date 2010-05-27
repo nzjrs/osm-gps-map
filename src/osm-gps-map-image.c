@@ -162,7 +162,7 @@ osm_gps_map_image_new (void)
 }
 
 void
-osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint *w, gint *h)
+osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc, GdkRectangle *rect)
 {
     OsmGpsMapImagePrivate *priv;
     int xoffset, yoffset;
@@ -177,11 +177,13 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc
                      gc,
                      priv->pixbuf,
                      0,0,
-                     x-xoffset,y-yoffset,
-                     priv->w,priv->h,
+                     rect->x - xoffset,
+                     rect->y - yoffset,
+                     priv->w,
+                     priv->h,
                      GDK_RGB_DITHER_NONE, 0, 0);
-    *w = priv->w;
-    *h = priv->w;
+    rect->width = priv->w;
+    rect->height = priv->w;
 }
 
 const OsmGpsMapPoint *
