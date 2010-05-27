@@ -13,6 +13,8 @@ enum
     PROP_VISIBLE,
     PROP_TRACK,
     PROP_LINE_WIDTH,
+    PROP_ALPHA,
+    PROP_COLOR
 };
 
 enum
@@ -28,8 +30,14 @@ struct _OsmGpsMapTrackPrivate
     GSList *track;
     gboolean visible;
     gfloat linewidth;
+    gfloat alpha;
+    GdkColor color;
 };
 
+#define DEFAULT_R   (60000)
+#define DEFAULT_G   (0)
+#define DEFAULT_B   (0)
+#define DEFAULT_A   (0.6)
 
 static void
 osm_gps_map_track_get_property (GObject    *object,
@@ -49,6 +57,12 @@ osm_gps_map_track_get_property (GObject    *object,
             break;
         case PROP_LINE_WIDTH:
             g_value_set_float(value, priv->linewidth);
+            break;
+        case PROP_ALPHA:
+            g_value_set_float(value, priv->alpha);
+            break;
+        case PROP_COLOR:
+            g_value_set_boxed(value, &priv->color);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -74,6 +88,15 @@ osm_gps_map_track_set_property (GObject      *object,
         case PROP_LINE_WIDTH:
             priv->linewidth = g_value_get_float (value);
             break;
+        case PROP_ALPHA:
+            priv->alpha = g_value_get_float (value);
+            break;
+        case PROP_COLOR: {
+            GdkColor *c = g_value_get_boxed (value);
+            priv->color.red = c->red;
+            priv->color.green = c->green;
+            priv->color.blue = c->blue;
+            } break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -137,6 +160,24 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                          4.0,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_ALPHA,
+                                     g_param_spec_float ("alpha",
+                                                         "alpha",
+                                                         "alpha transparency of the track",
+                                                         0.0,       /* minimum property value */
+                                                         1.0,       /* maximum property value */
+                                                         DEFAULT_A,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_COLOR,
+                                     g_param_spec_boxed ("color",
+                                                         "color",
+                                                         "color of the track",
+                                                         GDK_TYPE_COLOR,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
@@ -159,6 +200,10 @@ static void
 osm_gps_map_track_init (OsmGpsMapTrack *self)
 {
     self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackPrivate);
+
+    self->priv->color.red = DEFAULT_R;
+    self->priv->color.green = DEFAULT_G;
+    self->priv->color.blue = DEFAULT_B;
 }
 
 void
@@ -177,6 +222,17 @@ osm_gps_map_track_get_points (OsmGpsMapTrack *track)
     g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
     return track->priv->track;
 }
+
+void
+osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkColor *color, gfloat *alpha)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    color->red = track->priv->color.red;
+    color->green = track->priv->color.green;
+    color->blue = track->priv->color.blue;
+    *alpha = track->priv->alpha;
+}
+
 
 OsmGpsMapTrack *
 osm_gps_map_track_new (void)

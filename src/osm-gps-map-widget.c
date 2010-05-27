@@ -1052,21 +1052,23 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track)
     GSList *pt,*points;
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
-    gfloat lw;
+    gfloat lw, alpha;
     int map_x0, map_y0;
     cairo_t *cr;
+    GdkColor color;
 
     g_object_get (track,
             "track", &points,
             "line-width", &lw,
             NULL);
+    osm_gps_map_track_get_color(track, &color, &alpha);
 
     if (points == NULL)
         return;
 
     cr = gdk_cairo_create(priv->pixmap);
     cairo_set_line_width (cr, lw);
-    cairo_set_source_rgba (cr, 60000.0/65535.0, 0.0, 0.0, 0.6);
+    cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
 

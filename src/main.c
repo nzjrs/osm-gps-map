@@ -40,7 +40,7 @@ static GOptionEntry entries[] =
   { NULL }
 };
 
-static GdkPixbuf *g_start_image = NULL;
+static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 
 #define DEG2RAD(deg) (deg * M_PI / 180.0)
@@ -84,7 +84,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                     map,
                                     RAD2DEG(coord.rlat),
                                     RAD2DEG(coord.rlon),
-                                    g_start_image);
+                                    g_star_image);
         }
     }
     return FALSE;
@@ -161,14 +161,35 @@ static void
 on_gps_alpha_changed (GtkAdjustment *adjustment, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    g_debug("CHANGED: %.1f", gtk_adjustment_get_value(adjustment));
+    OsmGpsMapTrack *track = osm_gps_map_gps_get_track (map);
+    float f = gtk_adjustment_get_value(adjustment);
+    g_object_set (track, "alpha", f, NULL);}
+
+static void
+on_gps_width_changed (GtkAdjustment *adjustment, gpointer user_data)
+{
+    OsmGpsMap *map = OSM_GPS_MAP(user_data);
+    OsmGpsMapTrack *track = osm_gps_map_gps_get_track (map);
+    float f = gtk_adjustment_get_value(adjustment);
+    g_object_set (track, "line-width", f, NULL);
+}
+
+static void
+on_star_align_changed (GtkAdjustment *adjustment, gpointer user_data)
+{
+    const char *propname = user_data;
+    float f = gtk_adjustment_get_value(adjustment);
+    if (g_last_image)
+        g_object_set (g_last_image, propname, f, NULL);
 }
 
 static void
 on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
 {
-    OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    g_debug("COLOR CHANGED");
+    GdkColor c;
+    OsmGpsMapTrack *track = OSM_GPS_MAP_TRACK(user_data);
+    gtk_color_button_get_color (widget, &c);
+    g_object_set(track, "color", &c, NULL);
 }
 
 static void
@@ -284,7 +305,7 @@ main (int argc, char **argv)
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
 
     //Build the UI
-    g_start_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
+    g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
 
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "mapviewer.ui", NULL);
@@ -293,7 +314,29 @@ main (int argc, char **argv)
                 GTK_BOX(gtk_builder_get_object(builder, "map_box")),
                 GTK_WIDGET(map), TRUE, TRUE, 0);
 
-    //Connect the buttons
+    //Init values
+    float lw,a;
+    GdkColor c;
+    OsmGpsMapTrack *gpstrack = osm_gps_map_gps_get_track (map);
+    g_object_get (gpstrack, "line-width", &lw, NULL);
+    osm_gps_map_track_get_color(gpstrack, &c, &a);
+    gtk_adjustment_set_value (
+                GTK_ADJUSTMENT(gtk_builder_get_object(builder, "gps_width_adjustment")),
+                lw);
+    gtk_adjustment_set_value (
+                GTK_ADJUSTMENT(gtk_builder_get_object(builder, "gps_alpha_adjustment")),
+                a);
+    gtk_adjustment_set_value (
+                GTK_ADJUSTMENT(gtk_builder_get_object(builder, "star_xalign_adjustment")),
+                0.5);
+    gtk_adjustment_set_value (
+                GTK_ADJUSTMENT(gtk_builder_get_object(builder, "star_yalign_adjustment")),
+                0.5);
+    gtk_color_button_set_color (
+                GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "gps_colorbutton")),
+                &c);
+
+    //Connect to signals
     g_signal_connect (
                 gtk_builder_get_object(builder, "zoom_in_button"), "clicked",
                 G_CALLBACK (on_zoom_in_clicked_event), (gpointer) map);
@@ -310,10 +353,17 @@ main (int argc, char **argv)
                 gtk_builder_get_object(builder, "gps_alpha_adjustment"), "value-changed",
                 G_CALLBACK (on_gps_alpha_changed), (gpointer) map);
     g_signal_connect (
+                gtk_builder_get_object(builder, "gps_width_adjustment"), "value-changed",
+                G_CALLBACK (on_gps_width_changed), (gpointer) map);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "star_xalign_adjustment"), "value-changed",
+                G_CALLBACK (on_star_align_changed), (gpointer) "x-align");
+    g_signal_connect (
+                gtk_builder_get_object(builder, "star_yalign_adjustment"), "value-changed",
+                G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
+    g_signal_connect (
                 gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
-                G_CALLBACK (on_gps_color_changed), (gpointer) map);
-
-    //Connect to map events
+                G_CALLBACK (on_gps_color_changed), (gpointer) gpstrack);
     g_signal_connect (G_OBJECT (map), "button-press-event",
                 G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
     g_signal_connect (G_OBJECT (map), "button-release-event",

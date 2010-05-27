@@ -5,6 +5,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,7 @@ GType osm_gps_map_point_get_type (void) G_GNUC_CONST;
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
 void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, OsmGpsMapPoint *point);
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
+void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkColor *color, gfloat *alpha);
 
 OsmGpsMapPoint *    osm_gps_map_point_new_degrees   (gdouble lat, gdouble lon);
 OsmGpsMapPoint *    osm_gps_map_point_new_radians   (gdouble rlat, gdouble rlon);
