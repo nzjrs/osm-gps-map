@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 typedef struct _OsmGpsMapLayer          OsmGpsMapLayer;             /* dummy object */
 typedef struct _OsmGpsMapLayerIface     OsmGpsMapLayerIface;
 
-#include "osm-gps-map.h"
+#include "osm-gps-map-widget.h"
 
 struct _OsmGpsMapLayerIface {
     GTypeInterface parent;

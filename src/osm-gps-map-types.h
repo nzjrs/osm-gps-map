@@ -30,8 +30,7 @@
 #if USE_LIBSOUP22
 #include <libsoup/soup.h>
 #endif
-#include "osm-gps-map.h"
-#include "osm-gps-map-track.h"
+#include "osm-gps-map-widget.h"
 
 #define TILESIZE 256
 #define MAX_ZOOM 20
@@ -66,13 +65,6 @@
 #define OSM_EQ_RADIUS   (6378137.0)
 
 typedef struct {
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-} bbox_pixel_t;
-
-typedef struct {
     /* The details of the tile to download */
     char *uri;
     char *folder;
@@ -85,10 +77,15 @@ typedef struct {
 #endif
 } tile_download_t;
 
-typedef struct {
-    int x;
-    int y;
-    int zoom;
-} tile_t;
+/* strcmp0 was introduced with glib 2.16 */
+#if ! GLIB_CHECK_VERSION (2, 16, 0)
+int g_strcmp0(const char *str1, const char *str2)
+{
+    if( str1 == NULL && str2 == NULL ) return 0;
+    if( str1 == NULL ) return -1;
+    if( str2 == NULL ) return 1;
+    return strcmp(str1, str2);
+}
+#endif
 
 #endif /* _OSM_GPS_MAP_TYPES_H_ */

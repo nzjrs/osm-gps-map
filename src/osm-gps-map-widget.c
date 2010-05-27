@@ -1439,17 +1439,6 @@ osm_gps_map_get_cache_base_dir(OsmGpsMapPrivate *priv)
     return osm_gps_map_get_default_cache_directory();
 }
 
-/* strcmp0 was introduced with glib 2.16 */
-#if ! GLIB_CHECK_VERSION (2, 16, 0)
-int g_strcmp0(const char *str1, const char *str2)
-{
-    if( str1 == NULL && str2 == NULL ) return 0;
-    if( str1 == NULL ) return -1;
-    if( str2 == NULL ) return 1;
-    return strcmp(str1, str2);
-}
-#endif
-
 static void
 osm_gps_map_setup(OsmGpsMap *map)
 {
