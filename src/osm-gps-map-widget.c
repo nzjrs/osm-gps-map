@@ -1341,8 +1341,6 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
 static void
 on_gps_point_added (OsmGpsMapTrack *track, OsmGpsMapPoint *point, OsmGpsMap *map)
 {
-    gdouble lat, lon;
-    osm_gps_map_point_as_degrees(point, &lat, &lon);
     osm_gps_map_map_redraw_idle (map);
     maybe_autocenter_map (map);
 }

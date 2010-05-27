@@ -137,8 +137,7 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                   gint *pixel_x, gint *pixel_y)
 {
     OsmGpsMapPoint p;
-    p.rlat = deg2rad(latitude);
-    p.rlon = deg2rad(longitude);
+    osm_gps_map_point_set_degrees(&p, latitude, longitude);
     osm_gps_map_convert_geographic_to_screen(map, &p, pixel_x, pixel_y);
 }
 

@@ -50,6 +50,7 @@ gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     OsmGpsMapPoint coord;
+    float lat, lon;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
 
@@ -64,11 +65,12 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     }
 
     if (event->type == GDK_2BUTTON_PRESS) {
-        coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
+        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, &coord);
+        osm_gps_map_point_get_degrees(&coord, &lat, &lon);
         if (event->button == 1) {
             osm_gps_map_gps_add (map,
-                                 RAD2DEG(coord.rlat),
-                                 RAD2DEG(coord.rlon),
+                                 lat,
+                                 lon,
                                  g_random_double_range(0,360));
         }
         if (event->button == 3) {
@@ -79,11 +81,12 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 
     if (event->type == GDK_BUTTON_PRESS) {
         if (event->button == 2) {
-            coord = osm_gps_map_get_co_ordinates(map, (int)event->x, (int)event->y);
+        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, &coord);
+        osm_gps_map_point_get_degrees(&coord, &lat, &lon);
             g_last_image = osm_gps_map_image_add (
                                     map,
-                                    RAD2DEG(coord.rlat),
-                                    RAD2DEG(coord.rlon),
+                                    lat,
+                                    lon,
                                     g_star_image);
         }
     }

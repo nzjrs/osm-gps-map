@@ -15,16 +15,18 @@ typedef struct _OsmGpsMapPoint OsmGpsMapPoint;
 struct _OsmGpsMapPoint
 {
     /* radians */
-    gdouble  rlat;
-    gdouble  rlon;
+    float  rlat;
+    float  rlon;
 };
 
 GType osm_gps_map_point_get_type (void) G_GNUC_CONST;
 
-OsmGpsMapPoint *    osm_gps_map_point_new_degrees   (gdouble lat, gdouble lon);
-OsmGpsMapPoint *    osm_gps_map_point_new_radians   (gdouble rlat, gdouble rlon);
-void                osm_gps_map_point_as_degrees    (OsmGpsMapPoint *point, gdouble *lat, gdouble *lon);
-void                osm_gps_map_point_as_radians    (OsmGpsMapPoint *point, gdouble *rlat, gdouble *rlon);
+OsmGpsMapPoint *    osm_gps_map_point_new_degrees   (float lat, float lon);
+OsmGpsMapPoint *    osm_gps_map_point_new_radians   (float rlat, float rlon);
+void                osm_gps_map_point_get_degrees   (OsmGpsMapPoint *point, float *lat, float *lon);
+void                osm_gps_map_point_get_radians   (OsmGpsMapPoint *point, float *rlat, float *rlon);
+void                osm_gps_map_point_set_degrees   (OsmGpsMapPoint *point, float lat, float lon);
+void                osm_gps_map_point_set_radians   (OsmGpsMapPoint *point, float rlat, float rlon);
 
 G_END_DECLS
 

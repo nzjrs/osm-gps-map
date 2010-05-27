@@ -4,7 +4,7 @@
 #include "osm-gps-map-point.h"
 
 OsmGpsMapPoint *
-osm_gps_map_point_new_degrees(gdouble lat, gdouble lon)
+osm_gps_map_point_new_degrees(float lat, float lon)
 {
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = deg2rad(lat);
@@ -13,7 +13,7 @@ osm_gps_map_point_new_degrees(gdouble lat, gdouble lon)
 }
 
 OsmGpsMapPoint *
-osm_gps_map_point_new_radians(gdouble rlat, gdouble rlon)
+osm_gps_map_point_new_radians(float rlat, float rlon)
 {
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = rlat;
@@ -22,17 +22,31 @@ osm_gps_map_point_new_radians(gdouble rlat, gdouble rlon)
 }
 
 void
-osm_gps_map_point_as_degrees(OsmGpsMapPoint *point, gdouble *lat, gdouble *lon)
+osm_gps_map_point_get_degrees(OsmGpsMapPoint *point, float *lat, float *lon)
 {
     *lat = rad2deg(point->rlat);
     *lon = rad2deg(point->rlon);
 }
 
 void
-osm_gps_map_point_as_radians(OsmGpsMapPoint *point, gdouble *rlat, gdouble *rlon)
+osm_gps_map_point_get_radians(OsmGpsMapPoint *point, float *rlat, float *rlon)
 {
     *rlat = point->rlat;
     *rlon = point->rlon;
+}
+
+void
+osm_gps_map_point_set_degrees(OsmGpsMapPoint *point, float lat, float lon)
+{
+    point->rlat = deg2rad(lat);
+    point->rlon = deg2rad(lon);
+}
+
+void
+osm_gps_map_point_set_radians(OsmGpsMapPoint *point, float rlat, float rlon)
+{
+    point->rlat = rlat;
+    point->rlon = rlon;
 }
 
 static OsmGpsMapPoint *
