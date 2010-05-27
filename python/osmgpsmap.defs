@@ -497,7 +497,6 @@
   (return-type "none")
   (parameters
     '("GdkColor*" "color")
-    '("gfloat*" "alpha")
   )
 )
 

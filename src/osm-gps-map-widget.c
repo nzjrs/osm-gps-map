@@ -1058,8 +1058,9 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track)
     g_object_get (track,
             "track", &points,
             "line-width", &lw,
+            "alpha", &alpha,
             NULL);
-    osm_gps_map_track_get_color(track, &color, &alpha);
+    osm_gps_map_track_get_color(track, &color);
 
     if (points == NULL)
         return;

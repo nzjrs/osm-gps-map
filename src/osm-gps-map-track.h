@@ -39,7 +39,7 @@ GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
 void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, OsmGpsMapPoint *point);
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
-void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkColor *color, gfloat *alpha);
+void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkColor *color);
 
 G_END_DECLS
 

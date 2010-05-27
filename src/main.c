@@ -320,8 +320,8 @@ main (int argc, char **argv)
     float lw,a;
     GdkColor c;
     OsmGpsMapTrack *gpstrack = osm_gps_map_gps_get_track (map);
-    g_object_get (gpstrack, "line-width", &lw, NULL);
-    osm_gps_map_track_get_color(gpstrack, &c, &a);
+    g_object_get (gpstrack, "line-width", &lw, "alpha", &a, NULL);
+    osm_gps_map_track_get_color(gpstrack, &c);
     gtk_adjustment_set_value (
                 GTK_ADJUSTMENT(gtk_builder_get_object(builder, "gps_width_adjustment")),
                 lw);

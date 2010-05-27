@@ -224,13 +224,12 @@ osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 }
 
 void
-osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkColor *color, gfloat *alpha)
+osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkColor *color)
 {
     g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;
-    *alpha = track->priv->alpha;
 }
 
 
