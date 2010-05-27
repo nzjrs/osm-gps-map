@@ -308,7 +308,9 @@ main (int argc, char **argv)
     g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
 
     builder = gtk_builder_new();
-    gtk_builder_add_from_file (builder, "mapviewer.ui", NULL);
+    gtk_builder_add_from_file (builder, "mapviewer.ui", &error);
+    if (error)
+        g_error ("ERROR: %s\n", error->message);
 
     gtk_box_pack_start (
                 GTK_BOX(gtk_builder_get_object(builder, "map_box")),
