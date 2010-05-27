@@ -13,6 +13,14 @@
 		<title>API Reference</title>
 		<xi:include href="xml/osm-gps-map.xml"/>
 		<xi:include href="xml/osm-gps-map-layer.xml"/>
+		<xi:include href="xml/osm-gps-map-image.xml"/>
+		<xi:include href="xml/osm-gps-map-track.xml"/>
+		<xi:include href="xml/osm-gps-map-point.xml"/>
+	</chapter>
+
+	<chapter id="api-reference-deprecated">
+		<title>Deprecated API</title>
+		<xi:include href="xml/osm-gps-map-deprecated.xml"/>
 	</chapter>
 
 	<index id="api-index-full">
