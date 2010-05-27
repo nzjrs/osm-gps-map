@@ -16,6 +16,10 @@ void        osm_gps_map_add_image                   (OsmGpsMap *map, float latit
 void        osm_gps_map_add_image_with_alignment    (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign) G_GNUC_DEPRECATED;
 gboolean    osm_gps_map_remove_image                (OsmGpsMap *map, GdkPixbuf *image)                                  G_GNUC_DEPRECATED;
 void        osm_gps_map_clear_images                (OsmGpsMap *map)                                                    G_GNUC_DEPRECATED;
+void        osm_gps_map_add_layer                   (OsmGpsMap *map, OsmGpsMapLayer *layer)                             G_GNUC_DEPRECATED;
+void        osm_gps_map_screen_to_geographic        (OsmGpsMap *map, gint pixel_x, gint pixel_y, gfloat *latitude, gfloat *longitude) G_GNUC_DEPRECATED;
+void        osm_gps_map_geographic_to_screen        (OsmGpsMap *map, gfloat latitude, gfloat longitude, gint *pixel_x, gint *pixel_y) G_GNUC_DEPRECATED;
+OsmGpsMapPoint  osm_gps_map_get_co_ordinates        (OsmGpsMap *map, int pixel_x, int pixel_y) G_GNUC_DEPRECATED;
 
 G_END_DECLS
 

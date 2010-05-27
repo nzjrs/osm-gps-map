@@ -1,3 +1,4 @@
+#include "converter.h"
 #include "osm-gps-map-compat.h"
 
 /**
@@ -95,4 +96,61 @@ osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 {
     g_critical("PLEASE UPDATE TO NEW API");
     return FALSE;
+}
+
+/**
+ * osm_gps_map_add_layer:
+ *
+ * Deprecated: Use osm_gps_map_layer_add() instead.
+ **/
+void
+osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
+{
+    osm_gps_map_layer_add (map, layer);
+}
+
+/**
+ * osm_gps_map_screen_to_geographic:
+ *
+ * Deprecated: Use osm_gps_map_convert_screen_to_geographic() instead.
+ **/
+void
+osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
+                                  gfloat *latitude, gfloat *longitude)
+{
+    OsmGpsMapPoint p;
+    osm_gps_map_convert_screen_to_geographic(map, pixel_x, pixel_y, &p);
+    if (latitude)
+        *latitude = rad2deg(p.rlat);
+    if (longitude)
+        *longitude = rad2deg(p.rlon);
+}
+
+/**
+ * osm_gps_map_geographic_to_screen:
+ *
+ * Deprecated: Use osm_gps_map_convert_geographic_to_screen() instead.
+ **/
+void
+osm_gps_map_geographic_to_screen (OsmGpsMap *map,
+                                  gfloat latitude, gfloat longitude,
+                                  gint *pixel_x, gint *pixel_y)
+{
+    OsmGpsMapPoint p;
+    p.rlat = deg2rad(latitude);
+    p.rlon = deg2rad(longitude);
+    osm_gps_map_convert_geographic_to_screen(map, &p, pixel_x, pixel_y);
+}
+
+/**
+ * osm_gps_map_get_co_ordinates:
+ *
+ * Deprecated: Use osm_gps_map_convert_screen_to_geographic() instead.
+ **/
+OsmGpsMapPoint
+osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
+{
+    OsmGpsMapPoint p;
+    osm_gps_map_convert_screen_to_geographic(map, pixel_x, pixel_y, &p);
+    return p;
 }
