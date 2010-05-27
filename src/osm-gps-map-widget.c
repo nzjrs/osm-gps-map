@@ -2708,6 +2708,10 @@ osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
     return data != NULL;
 }
 
+/**
+ * osm_gps_map_gps_clear:
+ *
+ **/
 void
 osm_gps_map_gps_clear (OsmGpsMap *map)
 {
@@ -2725,13 +2729,26 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
     osm_gps_map_map_redraw_idle(map);
 }
 
+/**
+ * osm_gps_map_gps_get_track:
+ *
+ * Returns: (transfer none): The #OsmGpsMapTrack of the internal GPS track, 
+ * i.e. that which is modified when calling osm_gps_map_gps_add(). You must 
+ * not free this.
+ **/
 OsmGpsMapTrack *
-osm_gps_map_gps_get_track(OsmGpsMap *map)
+osm_gps_map_gps_get_track (OsmGpsMap *map)
 {
     g_return_val_if_fail (OSM_IS_GPS_MAP (map), NULL);
     return map->priv->gps_track;
 }
 
+/**
+ * osm_gps_map_gps_add:
+ * @latitude: degrees
+ * @longitude: degrees
+ * @heading: degrees or #OSM_GPS_MAP_INVALID to disable showing heading
+ **/
 void
 osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
@@ -2758,6 +2775,11 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
     }
 }
 
+/**
+ * osm_gps_map_image_add:
+ *
+ * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ **/
 OsmGpsMapImage *
 osm_gps_map_image_add (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
 {
@@ -2770,6 +2792,11 @@ on_image_changed (OsmGpsMapImage *image, GParamSpec *pspec, OsmGpsMap *map)
     osm_gps_map_map_redraw_idle (map);
 }
 
+/**
+ * osm_gps_map_image_add_with_alignment:
+ *
+ * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ **/
 OsmGpsMapImage *
 osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
@@ -2789,6 +2816,10 @@ osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float long
     return im;
 }
 
+/**
+ * osm_gps_map_image_remove:
+ *
+ **/
 gboolean
 osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
 {
@@ -2802,6 +2833,10 @@ osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
     return data != NULL;
 }
 
+/**
+ * osm_gps_map_image_remove_all:
+ *
+ **/
 void
 osm_gps_map_image_remove_all (OsmGpsMap *map)
 {
