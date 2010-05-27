@@ -1,4 +1,7 @@
 ;; -*- scheme -*-
+
+(include "osmgpsmap-compat.defs")
+
 ; object definitions ...
 (define-object GpsMap
   (in-module "Osm")
@@ -7,12 +10,46 @@
   (gtype-id "OSM_TYPE_GPS_MAP")
 )
 
+(define-object GpsMapImage
+  (in-module "Osm")
+  (parent "GObject")
+  (c-name "OsmGpsMapImage")
+  (gtype-id "OSM_TYPE_GPS_MAP_IMAGE")
+)
+
+(define-interface GpsMapLayer
+  (in-module "Osm")
+  (c-name "OsmGpsMapLayer")
+  (gtype-id "OSM_TYPE_GPS_MAP_LAYER")
+  (prerequisite "GObject")
+)
+
 (define-object GpsMapOsd
   (in-module "Osm")
   (parent "GObject")
   (c-name "OsmGpsMapOsd")
   (gtype-id "OSM_TYPE_GPS_MAP_OSD")
 )
+
+(define-object GpsMapTrack
+  (in-module "Osm")
+  (parent "GObject")
+  (c-name "OsmGpsMapTrack")
+  (gtype-id "OSM_TYPE_GPS_MAP_TRACK")
+)
+
+(define-boxed Point
+  (in-module "Osm")
+  (c-name "OsmGpsMapPoint")
+  (gtype-id "OSM_TYPE_GPS_MAP_POINT")
+  (copy-func "osm_gps_map_point_copy")
+  (release-func "g_free")
+  (fields
+    '("gfloat" "rlat")
+    '("gfloat" "rlon")
+  )
+)
+
 
 ;; Enumerations and flags ...
 (define-enum MapSource
@@ -50,17 +87,493 @@
   )
 )
 
-;; From osm-gps-map.h
+;; From osm-gps-map-widget.h
 
 (define-function osm_gps_map_get_type
   (c-name "osm_gps_map_get_type")
   (return-type "GType")
 )
 
+(define-function osm_gps_map_new
+  (c-name "osm_gps_map_new")
+  (is-constructor-of "OsmGpsMap")
+  (return-type "GtkWidget*")
+  (properties
+    '("auto_center" (optional))
+    '("auto_center_threshold" (optional))
+    '("record_trip_history" (optional))
+    '("show_trip-history" (optional))
+    '("auto_download" (optional))
+    '("repo_uri" (optional))
+    '("proxy_uri" (optional))
+    '("tile_cache" (optional))
+    '("tile_cache_base" (optional))
+    '("tile_cache_is_full_path" (optional))
+    '("zoom" (optional))
+    '("max_zoom" (optional))
+    '("min_zoom" (optional))
+    '("map_x" (optional))
+    '("map_y" (optional))
+    '("gps_track_width" (optional))
+    '("gps_track_point_radius" (optional))
+    '("gps_track_highlight_radius" (optional))
+    '("map_source" (optional))
+    '("image_format" (optional))
+    '("drag_limit" (optional))
+  )
+)
+
 (define-function get_default_cache_directory
   (c-name "osm_gps_map_get_default_cache_directory")
-  (return-type "char*")
+  (return-type "gchar*")
 )
+
+(define-virtual draw_gps_point
+  (of-object "OsmGpsMap")
+  (return-type "none")
+  (parameters
+    '("GdkDrawable*" "drawable")
+  )
+)
+
+(define-method download_maps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_download_maps")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapPoint*" "pt1")
+    '("OsmGpsMapPoint*" "pt2")
+    '("int" "zoom_start")
+    '("int" "zoom_end")
+  )
+)
+
+(define-method get_bbox
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_bbox")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapPoint*" "pt1")
+    '("OsmGpsMapPoint*" "pt2")
+  )
+)
+
+(define-method set_mapcenter
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_mapcenter")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("int" "zoom")
+  )
+)
+
+(define-method set_center
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_center")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+  )
+)
+
+(define-method set_zoom
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_zoom")
+  (return-type "int")
+  (parameters
+    '("int" "zoom")
+  )
+)
+
+(define-method zoom_in
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_zoom_in")
+  (return-type "int")
+)
+
+(define-method zoom_out
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_zoom_out")
+  (return-type "int")
+)
+
+(define-method scroll
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_scroll")
+  (return-type "none")
+  (parameters
+    '("gint" "dx")
+    '("gint" "dy")
+  )
+)
+
+(define-method get_scale
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_scale")
+  (return-type "float")
+)
+
+(define-method set_keyboard_shortcut
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_keyboard_shortcut")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapKey_t" "key")
+    '("guint" "keyval")
+  )
+)
+
+(define-method track_add
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_track_add")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapTrack*" "track")
+  )
+)
+
+(define-method track_remove_all
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_track_remove_all")
+  (return-type "none")
+)
+
+(define-method track_remove
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_track_remove")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMapTrack*" "track")
+  )
+)
+
+(define-method gps_add
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_gps_add")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("float" "heading")
+  )
+)
+
+(define-method gps_clear
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_gps_clear")
+  (return-type "none")
+)
+
+(define-method gps_get_track
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_gps_get_track")
+  (return-type "OsmGpsMapTrack*")
+)
+
+(define-method image_add
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_image_add")
+  (return-type "OsmGpsMapImage*")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("GdkPixbuf*" "image")
+  )
+)
+
+(define-method image_add_with_alignment
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_image_add_with_alignment")
+  (return-type "OsmGpsMapImage*")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("GdkPixbuf*" "image")
+    '("float" "xalign")
+    '("float" "yalign")
+  )
+)
+
+(define-method image_remove
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_image_remove")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMapImage*" "image")
+  )
+)
+
+(define-method image_remove_all
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_image_remove_all")
+  (return-type "none")
+)
+
+(define-method layer_add
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_layer_add")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapLayer*" "layer")
+  )
+)
+
+(define-method layer_remove
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_layer_remove")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMapLayer*" "layer")
+  )
+)
+
+(define-method layer_remove_all
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_layer_remove_all")
+  (return-type "none")
+)
+
+(define-method convert_screen_to_geographic
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_convert_screen_to_geographic")
+  (return-type "none")
+  (parameters
+    '("gint" "pixel_x")
+    '("gint" "pixel_y")
+    '("OsmGpsMapPoint*" "pt")
+  )
+)
+
+(define-method convert_geographic_to_screen
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_convert_geographic_to_screen")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapPoint*" "pt")
+    '("gint*" "pixel_x")
+    '("gint*" "pixel_y")
+  )
+)
+
+
+
+;; From osm-gps-map-osd.h
+
+(define-function osm_gps_map_osd_get_type
+  (c-name "osm_gps_map_osd_get_type")
+  (return-type "GType")
+)
+
+(define-function osm_gps_map_osd_new
+  (c-name "osm_gps_map_osd_new")
+  (is-constructor-of "OsmGpsMapOsd")
+  (return-type "OsmGpsMapOsd*")
+  (properties
+    '("osd_x" (optional))
+    '("osd_y" (optional))
+    '("dpad_radius" (optional))
+    '("show_scale" (optional))
+    '("show_coordinates" (optional))
+    '("show_crosshair" (optional))
+    '("show_dpad" (optional))
+    '("show_zoom" (optional))
+    '("show_gps_in_dpad" (optional))
+    '("show_gps_in_zoom" (optional))
+  )
+)
+
+
+
+;; From osm-gps-map-image.h
+
+(define-function osm_gps_map_image_get_type
+  (c-name "osm_gps_map_image_get_type")
+  (return-type "GType")
+)
+
+(define-function osm_gps_map_image_new
+  (c-name "osm_gps_map_image_new")
+  (is-constructor-of "OsmGpsMapImage")
+  (return-type "OsmGpsMapImage*")
+)
+
+(define-method draw
+  (of-object "OsmGpsMapImage")
+  (c-name "osm_gps_map_image_draw")
+  (return-type "none")
+  (parameters
+    '("GdkDrawable*" "drawable")
+    '("GdkGC*" "gc")
+    '("gint" "x")
+    '("gint" "y")
+    '("gint*" "w")
+    '("gint*" "h")
+  )
+)
+
+(define-method get_point
+  (of-object "OsmGpsMapImage")
+  (c-name "osm_gps_map_image_get_point")
+  (return-type "const-OsmGpsMapPoint*")
+)
+
+
+
+;; From osm-gps-map-layer.h
+
+(define-function osm_gps_map_layer_get_type
+  (c-name "osm_gps_map_layer_get_type")
+  (return-type "GType")
+)
+
+(define-virtual render
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_render")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMap*" "map")
+  )
+)
+
+(define-virtual draw
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_draw")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMap*" "map")
+    '("GdkDrawable*" "drawable")
+  )
+)
+
+(define-virtual busy
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_busy")
+  (return-type "gboolean")
+)
+
+(define-virtual button_press
+  (of-object "OsmGpsMapLayer")
+  (c-name "osm_gps_map_layer_button_press")
+  (return-type "gboolean")
+  (parameters
+    '("OsmGpsMap*" "map")
+    '("GdkEventButton*" "event")
+  )
+)
+
+
+
+;; From osm-gps-map-track.h
+
+(define-function osm_gps_map_track_get_type
+  (c-name "osm_gps_map_track_get_type")
+  (return-type "GType")
+)
+
+(define-function osm_gps_map_track_new
+  (c-name "osm_gps_map_track_new")
+  (is-constructor-of "OsmGpsMapTrack")
+  (return-type "OsmGpsMapTrack*")
+)
+
+(define-method add_point
+  (of-object "OsmGpsMapTrack")
+  (c-name "osm_gps_map_track_add_point")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapPoint*" "point")
+  )
+)
+
+(define-method get_points
+  (of-object "OsmGpsMapTrack")
+  (c-name "osm_gps_map_track_get_points")
+  (return-type "GSList*")
+)
+
+(define-method get_color
+  (of-object "OsmGpsMapTrack")
+  (c-name "osm_gps_map_track_get_color")
+  (return-type "none")
+  (parameters
+    '("GdkColor*" "color")
+    '("gfloat*" "alpha")
+  )
+)
+
+
+
+;; From osm-gps-map-point.h
+
+(define-function osm_gps_map_point_get_type
+  (c-name "osm_gps_map_point_get_type")
+  (return-type "GType")
+)
+
+(define-function point_new_degrees
+  (c-name "osm_gps_map_point_new_degrees")
+  (return-type "OsmGpsMapPoint*")
+  (parameters
+    '("float" "lat")
+    '("float" "lon")
+  )
+)
+
+(define-function point_new_radians
+  (c-name "osm_gps_map_point_new_radians")
+  (return-type "OsmGpsMapPoint*")
+  (parameters
+    '("float" "rlat")
+    '("float" "rlon")
+  )
+)
+
+(define-method get_degrees
+  (of-object "OsmGpsMapPoint")
+  (c-name "osm_gps_map_point_get_degrees")
+  (return-type "none")
+  (parameters
+    '("float*" "lat")
+    '("float*" "lon")
+  )
+)
+
+(define-method get_radians
+  (of-object "OsmGpsMapPoint")
+  (c-name "osm_gps_map_point_get_radians")
+  (return-type "none")
+  (parameters
+    '("float*" "rlat")
+    '("float*" "rlon")
+  )
+)
+
+(define-method set_degrees
+  (of-object "OsmGpsMapPoint")
+  (c-name "osm_gps_map_point_set_degrees")
+  (return-type "none")
+  (parameters
+    '("float" "lat")
+    '("float" "lon")
+  )
+)
+
+(define-method set_radians
+  (of-object "OsmGpsMapPoint")
+  (c-name "osm_gps_map_point_set_radians")
+  (return-type "none")
+  (parameters
+    '("float" "rlat")
+    '("float" "rlon")
+  )
+)
+
+
+
+;; From osm-gps-map-source.h
 
 (define-function source_get_friendly_name
   (c-name "osm_gps_map_source_get_friendly_name")
@@ -110,310 +623,4 @@
   )
 )
 
-(define-method download_maps
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_download_maps")
-  (return-type "none")
-  (parameters
-    '("coord_t*" "pt1")
-    '("coord_t*" "pt2")
-    '("int" "zoom_start")
-    '("int" "zoom_end")
-  )
-)
 
-(define-method get_bbox
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_get_bbox")
-  (return-type "none")
-  (parameters
-    '("coord_t*" "pt1")
-    '("coord_t*" "pt2")
-  )
-)
-
-(define-method set_mapcenter
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_set_mapcenter")
-  (return-type "none")
-  (parameters
-    '("float" "latitude")
-    '("float" "longitude")
-    '("int" "zoom")
-  )
-)
-
-(define-method set_center
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_set_center")
-  (return-type "none")
-  (parameters
-    '("float" "latitude")
-    '("float" "longitude")
-  )
-)
-
-(define-method set_zoom
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_set_zoom")
-  (return-type "int")
-  (parameters
-    '("int" "zoom")
-  )
-)
-
-(define-method zoom_in
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_zoom_in")
-  (return-type "int")
-)
-
-(define-method zoom_out
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_zoom_out")
-  (return-type "int")
-)
-
-(define-method add_track
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_add_track")
-  (return-type "none")
-  (parameters
-    '("GSList*" "track")
-  )
-)
-
-(define-method clear_tracks
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_clear_tracks")
-  (return-type "none")
-)
-
-(define-method add_image
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_add_image")
-  (return-type "none")
-  (parameters
-    '("float" "latitude")
-    '("float" "longitude")
-    '("GdkPixbuf*" "image")
-  )
-)
-
-(define-method remove_image
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_remove_image")
-  (return-type "gboolean")
-  (parameters
-    '("GdkPixbuf*" "image")
-  )
-)
-
-(define-method clear_images
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_clear_images")
-  (return-type "none")
-)
-
-(define-method draw_gps
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_draw_gps")
-  (return-type "none")
-  (parameters
-    '("float" "latitude")
-    '("float" "longitude")
-    '("float" "heading")
-  )
-)
-
-(define-method clear_gps
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_clear_gps")
-  (return-type "none")
-)
-
-(define-method get_co_ordinates
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_get_co_ordinates")
-  (return-type "coord_t")
-  (parameters
-    '("int" "pixel_x")
-    '("int" "pixel_y")
-  )
-)
-
-(define-function osm_gps_map_new
-  (c-name "osm_gps_map_new")
-  (is-constructor-of "OsmGpsMap")
-  (return-type "GtkWidget*")
-  (properties
-    '("auto_center" (optional))
-    '("auto_center_threshold" (optional))
-    '("record_trip_history" (optional))
-    '("show_trip-history" (optional))
-    '("auto_download" (optional))
-    '("repo_uri" (optional))
-    '("proxy_uri" (optional))
-    '("tile_cache" (optional))
-    '("tile_cache_base" (optional))
-    '("tile_cache_is_full_path" (optional))
-    '("zoom" (optional))
-    '("max_zoom" (optional))
-    '("min_zoom" (optional))
-    '("map_x" (optional))
-    '("map_y" (optional))
-    '("gps_track_width" (optional))
-    '("gps_track_point_radius" (optional))
-    '("gps_track_highlight_radius" (optional))
-    '("map_source" (optional))
-    '("image_format" (optional))
-    '("drag_limit" (optional))
-  )
-)
-
-(define-method screen_to_geographic
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_screen_to_geographic")
-  (return-type "none")
-  (parameters
-    '("int" "pixel_x")
-    '("int" "pixel_y")
-    '("float*" "latitude")
-    '("float*" "longitude")
-  )
-)
-
-(define-method geographic_to_screen
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_geographic_to_screen")
-  (return-type "none")
-  (parameters
-    '("float" "latitude")
-    '("float" "longitude")
-    '("int*" "pixel_x")
-    '("int*" "pixel_y")
-  )
-)
-
-(define-method scroll
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_scroll")
-  (return-type "none")
-  (parameters
-    '("gint" "dx")
-    '("gint" "dy")
-  )
-)
-
-(define-method get_scale
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_get_scale")
-  (return-type "float")
-)
-
-(define-method set_keyboard_shortcut
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_set_keyboard_shortcut")
-  (return-type "none")
-  (parameters
-    '("OsmGpsMapKey_t" "key")
-    '("guint" "keyval")
-  )
-)
-
-(define-method add_layer
-  (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_add_layer")
-  (return-type "none")
-  (parameters
-    '("OsmGpsMapLayer*" "layer")
-  )
-)
-
-(define-virtual draw_gps_point
-  (of-object "OsmGpsMap")
-;;  (c-name "osm_gps_map_draw_gps_point")
-  (return-type "none")
-  (parameters
-    '("GdkDrawable*" "drawable")
-  )
-)
-
-
-
-
-;; From osm-gps-map-osd.h
-
-(define-function osm_gps_map_osd_get_type
-  (c-name "osm_gps_map_osd_get_type")
-  (return-type "GType")
-)
-
-(define-function osm_gps_map_osd_new
-  (c-name "osm_gps_map_osd_new")
-  (is-constructor-of "OsmGpsMapOsd")
-  (return-type "OsmGpsMapOsd*")
-  (properties
-    '("osd_x" (optional))
-    '("osd_y" (optional))
-    '("dpad_radius" (optional))
-    '("show_scale" (optional))
-    '("show_coordinates" (optional))
-    '("show_crosshair" (optional))
-    '("show_dpad" (optional))
-    '("show_zoom" (optional))
-    '("show_gps_in_dpad" (optional))
-    '("show_gps_in_zoom" (optional))
-  )
-)
-
-
-
-;; From osm-gps-map-layer.h
-
-(define-interface GpsMapLayer
-  (in-module "Osm")
-  (c-name "OsmGpsMapLayer")
-  (gtype-id "OSM_TYPE_GPS_MAP_LAYER")
-  (prerequisite "GObject")
-)
-
-(define-function osm_gps_map_layer_get_type
-  (c-name "osm_gps_map_layer_get_type")
-  (return-type "GType")
-)
-
-(define-virtual render
-  (of-object "OsmGpsMapLayer")
-  (c-name "osm_gps_map_layer_render")
-  (return-type "none")
-  (parameters
-    '("OsmGpsMap*" "map")
-  )
-)
-
-(define-virtual draw
-  (of-object "OsmGpsMapLayer")
-  (c-name "osm_gps_map_layer_draw")
-  (return-type "none")
-  (parameters
-    '("OsmGpsMap*" "map")
-    '("GdkDrawable*" "drawable")
-  )
-)
-
-(define-virtual busy
-  (of-object "OsmGpsMapLayer")
-  (c-name "osm_gps_map_layer_busy")
-  (return-type "gboolean")
-)
-
-(define-virtual button_press
-  (of-object "OsmGpsMapLayer")
-  (c-name "osm_gps_map_layer_button_press")
-  (return-type "gboolean")
-  (parameters
-    '("OsmGpsMap*" "map")
-    '("GdkEventButton*" "event")
-  )
-)

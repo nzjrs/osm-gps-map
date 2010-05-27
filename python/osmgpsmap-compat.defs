@@ -1,0 +1,102 @@
+;; -*- scheme -*-
+(define-method add_track
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_add_track")
+  (return-type "none")
+  (parameters
+    '("GSList*" "track")
+  )
+)
+
+(define-method clear_tracks
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_tracks")
+  (return-type "none")
+)
+
+(define-method add_image
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_add_image")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("GdkPixbuf*" "image")
+  )
+)
+
+(define-method remove_image
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_remove_image")
+  (return-type "gboolean")
+  (parameters
+    '("GdkPixbuf*" "image")
+  )
+)
+
+(define-method clear_images
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_images")
+  (return-type "none")
+)
+
+(define-method draw_gps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_draw_gps")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("float" "heading")
+  )
+)
+
+(define-method clear_gps
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_clear_gps")
+  (return-type "none")
+)
+
+(define-method add_layer
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_add_layer")
+  (return-type "none")
+  (parameters
+    '("OsmGpsMapLayer*" "layer")
+  )
+)
+
+(define-method get_co_ordinates
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_co_ordinates")
+  (return-type "coord_t")
+  (parameters
+    '("int" "pixel_x")
+    '("int" "pixel_y")
+  )
+)
+
+(define-method screen_to_geographic
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_screen_to_geographic")
+  (return-type "none")
+  (parameters
+    '("int" "pixel_x")
+    '("int" "pixel_y")
+    '("float*" "latitude")
+    '("float*" "longitude")
+  )
+)
+
+(define-method geographic_to_screen
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_geographic_to_screen")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("int*" "pixel_x")
+    '("int*" "pixel_y")
+  )
+)
+

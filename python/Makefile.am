@@ -1,5 +1,5 @@
 defsdir = $(datadir)/pygtk/2.0/defs
-defs_DATA = osmgpsmap.defs
+defs_DATA = osmgpsmap.defs osmgpsmap-compat.defs
 
 INCLUDES = \
 	$(OSMGPSMAP_CFLAGS) \
@@ -36,7 +36,7 @@ osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 	&& rm -f gen-$*.c
 
 update-defs:
-	$(PYGTK_H2DEF) ../src/osm-gps-map.h ../src/osm-gps-map-osd.h ../src/osm-gps-map-layer.h > osmgpsmap-new.defs
+	$(PYGTK_H2DEF) ../src/osm-gps-map-{widget,osd,image,layer,track,point,source}.h  > osmgpsmap-new.defs
 	
 release: dist
 	scp @PACKAGE@-@VERSION@.tar.gz root@greenbirdsystems.com:/var/www/johnstowers.co.nz/files/osm-gps-map/
