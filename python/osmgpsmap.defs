@@ -257,7 +257,7 @@
   (parameters
     '("float" "latitude")
     '("float" "longitude")
-    '("float" "heading")
+    '("float" "heading" (default "OSM_GPS_MAP_INVALID"))
   )
 )
 
@@ -271,12 +271,14 @@
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_gps_get_track")
   (return-type "OsmGpsMapTrack*")
+  (caller-owns-return #f)
 )
 
 (define-method image_add
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_image_add")
   (return-type "OsmGpsMapImage*")
+  (caller-owns-return #t)
   (parameters
     '("float" "latitude")
     '("float" "longitude")
@@ -288,6 +290,7 @@
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_image_add_with_alignment")
   (return-type "OsmGpsMapImage*")
+  (caller-owns-return #t)
   (parameters
     '("float" "latitude")
     '("float" "longitude")
