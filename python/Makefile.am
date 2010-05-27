@@ -27,7 +27,7 @@ EXTRA_DIST = \
 osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 .defs.c:
 	(cd $(srcdir)\
-	 && pygtk-codegen-2.0 \
+	 && $(PYTHON) $(CODEGENDIR)/codegen.py \
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
 	    --register $(PYGTK_DEFSDIR)/gdk-base-types.defs \
 		--override $*.override \
@@ -36,7 +36,7 @@ osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 	&& rm -f gen-$*.c
 
 update-defs:
-	$(PYGTK_H2DEF) ../src/osm-gps-map-{widget,osd,image,layer,track,point,source}.h  > osmgpsmap-new.defs
+	$(PYTHON) $(CODEGENDIR)/h2def.py ../src/osm-gps-map-{widget,osd,image,layer,track,point,source}.h  > osmgpsmap-new.defs
 	
 release: dist
 	scp @PACKAGE@-@VERSION@.tar.gz root@greenbirdsystems.com:/var/www/johnstowers.co.nz/files/osm-gps-map/

@@ -28,22 +28,17 @@ fi
 AM_PATH_PYTHON()
 AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([install python-devel]))
 
-PKG_CHECK_MODULES(PYGTK, [pygtk-2.0 >= 2.10.0])
+PKG_CHECK_MODULES(PYGTK, [pygtk-2.0 >= 2.10.0 pygobject-2.0 >= 2.16.0])
 
-AC_MSG_CHECKING(for pygtk defs)
+AC_MSG_CHECKING([for pygtk defs])
 PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 AC_SUBST(PYGTK_DEFSDIR)
 AC_MSG_RESULT($PYGTK_DEFSDIR)
 
-AC_MSG_CHECKING(for pygtk codegen)
-PYGTK_CODEGEN="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/codegen.py"
-AC_SUBST(PYGTK_CODEGEN)
-AC_MSG_RESULT($PYGTK_CODEGEN)
-
-AC_MSG_CHECKING(for pygtk h2def)
-PYGTK_H2DEF="$PYTHON `$PKG_CONFIG --variable=codegendir pygtk-2.0`/h2def.py"
-AC_SUBST(PYGTK_H2DEF)
-AC_MSG_RESULT($PYGTK_H2DEF)
+AC_MSG_CHECKING([for codegen])
+CODEGENDIR=`$PKG_CONFIG --variable codegendir pygobject-2.0`
+AC_SUBST([CODEGENDIR])
+AC_MSG_RESULT($CODEGENDIR)
 
 if test -f ../src/libosmgpsmap.la; then
 	#Because we are building against a non installed lib, the pkgconfig
