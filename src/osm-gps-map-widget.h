@@ -44,6 +44,7 @@ typedef struct _OsmGpsMap OsmGpsMap;
 typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 
 #include "osm-gps-map-layer.h"
+#include "osm-gps-map-point.h"
 #include "osm-gps-map-track.h"
 #include "osm-gps-map-image.h"
 

@@ -6,6 +6,8 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 
+#include "osm-gps-map-point.h"
+
 G_BEGIN_DECLS
 
 #define OSM_TYPE_GPS_MAP_IMAGE              osm_gps_map_image_get_type()
