@@ -9,6 +9,7 @@
 void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_gps_add (map, latitude, longitude, heading);
 }
 
@@ -20,6 +21,7 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 void
 osm_gps_map_clear_gps (OsmGpsMap *map)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_gps_clear (map);
 }
 
@@ -31,7 +33,9 @@ osm_gps_map_clear_gps (OsmGpsMap *map)
 void
 osm_gps_map_add_track (OsmGpsMap *map, GSList *list)
 {
-    OsmGpsMapTrack *track = g_object_new (OSM_TYPE_GPS_MAP_TRACK, "track", list, NULL);
+    OsmGpsMapTrack *track;
+    g_critical("%s is deprecated", G_STRFUNC);
+    track = g_object_new (OSM_TYPE_GPS_MAP_TRACK, "track", list, NULL);
     osm_gps_map_track_add (map, track);
 }
 
@@ -44,7 +48,7 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *list)
 void
 osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
 {
-    g_critical("PLEASE UPDATE TO NEW API");
+    g_critical("%s is deprecated", G_STRFUNC);
 }
 
 /**
@@ -55,6 +59,7 @@ osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
 void
 osm_gps_map_clear_tracks (OsmGpsMap *map)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_track_remove_all (map);
 }
 
@@ -66,6 +71,7 @@ osm_gps_map_clear_tracks (OsmGpsMap *map)
 void
 osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_image_add_with_alignment (map, latitude, longitude, image, xalign, yalign);
 }
 
@@ -77,6 +83,7 @@ osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float long
 void
 osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_image_add_with_alignment (map, latitude, longitude, image, 0.5, 0.5);
 }
 
@@ -88,13 +95,19 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 void
 osm_gps_map_clear_images (OsmGpsMap *map)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_image_remove_all (map);
 }
 
+/**
+ * osm_gps_map_remove_image:
+ *
+ * Deprecated: Use osm_gps_map_image_remove() instead.
+ **/
 gboolean
 osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 {
-    g_critical("PLEASE UPDATE TO NEW API");
+    g_critical("%s is deprecated", G_STRFUNC);
     return FALSE;
 }
 
@@ -106,6 +119,7 @@ osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 void
 osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
 {
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_layer_add (map, layer);
 }
 
@@ -119,6 +133,7 @@ osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
                                   gfloat *latitude, gfloat *longitude)
 {
     OsmGpsMapPoint p;
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_convert_screen_to_geographic(map, pixel_x, pixel_y, &p);
     if (latitude)
         *latitude = rad2deg(p.rlat);
@@ -137,6 +152,7 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
                                   gint *pixel_x, gint *pixel_y)
 {
     OsmGpsMapPoint p;
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_point_set_degrees(&p, latitude, longitude);
     osm_gps_map_convert_geographic_to_screen(map, &p, pixel_x, pixel_y);
 }
@@ -150,6 +166,7 @@ OsmGpsMapPoint
 osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
 {
     OsmGpsMapPoint p;
+    g_critical("%s is deprecated", G_STRFUNC);
     osm_gps_map_convert_screen_to_geographic(map, pixel_x, pixel_y, &p);
     return p;
 }

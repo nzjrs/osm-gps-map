@@ -43,9 +43,6 @@ static GOptionEntry entries[] =
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 
-#define DEG2RAD(deg) (deg * M_PI / 180.0)
-#define RAD2DEG(rad) (rad / M_PI * 180.0)
-
 gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
