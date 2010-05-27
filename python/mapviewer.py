@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
 
-import math
 import sys
 import os.path
 import gtk.gdk
@@ -71,11 +70,11 @@ class UI(gtk.Window):
             self.osm = DummyMapNoGpsPoint()
         else:
             self.osm = osmgpsmap.GpsMap()
-        self.osm.add_layer(
+        self.osm.layer_add(
                     osmgpsmap.GpsMapOsd(
                         show_dpad=True,
                         show_zoom=True))
-        self.osm.add_layer(
+        self.osm.layer_add(
                     DummyLayer())
 
         self.osm.connect('button_release_event', self.map_clicked)
@@ -217,11 +216,10 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 )
             )
         elif event.button == 2:
-            rlat, rlon = self.osm.get_co_ordinates(event.x, event.y)
-            self.osm.draw_gps(
-                    math.degrees(rlat),
-                    math.degrees(rlon),
-                    osmgpsmap.INVALID);
+            p = osmgpsmap.point_new_degrees(0,0)
+            self.osm.convert_screen_to_geographic(event.x, event.y, p)
+            lat,lon = p.get_degrees()
+            self.osm.gps_add(lat, lon, heading=osmgpsmap.INVALID);
  
 
 if __name__ == "__main__":

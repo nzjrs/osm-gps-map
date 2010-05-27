@@ -29,7 +29,7 @@ osmgpsmap.c: osmgpsmap.defs osmgpsmap.override
 	(cd $(srcdir)\
 	 && $(PYTHON) $(CODEGENDIR)/codegen.py \
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
-	    --register $(PYGTK_DEFSDIR)/gdk-base-types.defs \
+	    --register $(PYGTK_DEFSDIR)/gdk-types.defs \
 		--override $*.override \
 		--prefix py$* $*.defs) > gen-$*.c \
 	&& cp gen-$*.c $*.c \
