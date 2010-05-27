@@ -358,6 +358,16 @@
   )
 )
 
+(define-method get_event_location
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_get_event_location")
+  (return-type "OsmGpsMapPoint*")
+  (caller-owns-return #t)
+  (parameters
+    '("GdkEventButton*" "event")
+  )
+)
+
 
 
 ;; From osm-gps-map-osd.h

@@ -160,7 +160,8 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
 /**
  * osm_gps_map_get_co_ordinates:
  *
- * Deprecated: Use osm_gps_map_convert_screen_to_geographic() instead.
+ * Deprecated: Use osm_gps_map_convert_screen_to_geographic() or 
+ * osm_gps_map_get_event_location() instead.
  **/
 OsmGpsMapPoint
 osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)

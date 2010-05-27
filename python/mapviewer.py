@@ -216,11 +216,9 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 )
             )
         elif event.button == 2:
-            p = osmgpsmap.point_new_degrees(0,0)
-            self.osm.convert_screen_to_geographic(event.x, event.y, p)
+            p = self.osm.get_event_location(event)
             lat,lon = p.get_degrees()
             self.osm.gps_add(lat, lon, heading=osmgpsmap.INVALID);
- 
 
 if __name__ == "__main__":
     u = UI()

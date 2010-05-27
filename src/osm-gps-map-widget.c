@@ -2908,3 +2908,21 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
         *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy;
 }
 
+/**
+ * osm_gps_map_get_event_location:
+ * @map:
+ * @event: A #GtkEventButton that occured on the map
+ *
+ * A convenience function for getting the geographic location of events,
+ * such as mouse clicks, on the map
+ *
+ * Returns: (transfer full): The point on the globe corresponding to the click
+ **/
+OsmGpsMapPoint *
+osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
+{
+    OsmGpsMapPoint *p = osm_gps_map_point_new_degrees(0.0,0.0);
+    osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, p);
+    return p;
+}
+
