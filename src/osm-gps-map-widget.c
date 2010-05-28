@@ -42,6 +42,7 @@
 #include "osm-gps-map-source.h"
 #include "osm-gps-map-types.h"
 #include "osm-gps-map-widget.h"
+#include "osm-gps-map-compat.h"
 
 #define ENABLE_DEBUG                (0)
 #define EXTRA_BORDER                (TILESIZE / 2)
@@ -2973,5 +2974,73 @@ osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
     OsmGpsMapPoint *p = osm_gps_map_point_new_degrees(0.0,0.0);
     osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, p);
     return p;
+}
+
+/**
+ * osm_gps_map_remove_image: (skip)
+ *
+ * Deprecated: Use osm_gps_map_image_remove() instead.
+ **/
+gboolean
+osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
+{
+    GSList *tmp;
+    OsmGpsMapImage *im;
+
+    g_critical("%s is deprecated", G_STRFUNC);
+
+    im = NULL;
+    tmp = map->priv->images;
+    while (tmp != NULL) {
+        GdkPixbuf *p;
+        im = tmp->data;
+        /* g_object_get ref's the pixbuf */
+        g_object_get (im, "pixbuf", &p, NULL);
+        if (p == image) {
+            g_object_unref (p);
+            break;
+        }
+        g_object_unref (p);
+        tmp = g_slist_next(tmp);
+    }
+
+    /* we found the image */
+    if (tmp && im)
+        return osm_gps_map_image_remove (map, im);
+
+    return FALSE;
+}
+
+/**
+ * osm_gps_map_replace_track: (skip)
+ *
+ * Deprecated: Use osm_gps_map_track_remove() and osm_gps_map_track_add() or just
+ * edit the #OsmGpsMapTrack object directly
+ **/
+void
+osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
+{
+    GSList *tmp;
+    OsmGpsMapTrack *track;
+
+    g_critical("%s is deprecated", G_STRFUNC);
+
+    track = NULL;
+    tmp = map->priv->tracks;
+    while (tmp != NULL) {
+        GSList *l;
+        track = tmp->data;
+        g_object_get (track, "track", &l, NULL);
+        if (l == old_track)
+            break;
+        tmp = g_slist_next(tmp);
+    }
+
+    /* we found the track */
+    if (tmp && track) {
+        osm_gps_map_track_remove (map, track);
+        track = g_object_new (OSM_TYPE_GPS_MAP_TRACK, "track", new_track, NULL);
+        osm_gps_map_track_add (map, track);
+    }
 }
 
