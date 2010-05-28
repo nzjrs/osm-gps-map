@@ -43,7 +43,7 @@ static GOptionEntry entries[] =
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 
-gboolean
+static gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     OsmGpsMapPoint coord;
@@ -90,7 +90,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     return FALSE;
 }
 
-gboolean
+static gboolean
 on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     float lat,lon;
@@ -105,7 +105,7 @@ on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user
     return FALSE;
 }
 
-gboolean
+static gboolean
 on_zoom_in_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     int zoom;
@@ -115,7 +115,7 @@ on_zoom_in_clicked_event (GtkWidget *widget, gpointer user_data)
     return FALSE;
 }
 
-gboolean
+static gboolean
 on_zoom_out_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     int zoom;
@@ -125,7 +125,7 @@ on_zoom_out_clicked_event (GtkWidget *widget, gpointer user_data)
     return FALSE;
 }
 
-gboolean
+static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
@@ -133,7 +133,7 @@ on_home_clicked_event (GtkWidget *widget, gpointer user_data)
     return FALSE;
 }
 
-gboolean
+static gboolean
 on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
