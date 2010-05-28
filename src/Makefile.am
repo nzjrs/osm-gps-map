@@ -1,48 +1,25 @@
 ## Process this file with automake to produce Makefile.in
+lib_LTLIBRARIES = libosmgpsmap.la
 
-AM_CPPFLAGS = \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
-	$(GLIB_CFLAGS) \
-	$(GTK_CFLAGS) \
-	$(CAIRO_CFLAGS) \
-	$(SOUP22_CFLAGS) $(SOUP24_CFLAGS)
+OSMGPSMAP_CFLAGS =          \
+	$(GLIB_CFLAGS)          \
+	$(GTK_CFLAGS)           \
+	$(CAIRO_CFLAGS)         \
+	$(SOUP22_CFLAGS)        \
+    $(SOUP24_CFLAGS)
 
-AM_CFLAGS =\
-	 -Wall\
-	 -g
+OSMGPSMAP_LIBS =            \
+    $(GLIB_LIBS)            \
+    $(GTK_LIBS)             \
+    $(CAIRO_LIBS)           \
+    $(SOUP22_LIBS)          \
+    $(SOUP24_LIBS)
 
-CLEANFILES =
-
-bin_PROGRAMS = mapviewer
-
-mapviewer_SOURCES = \
-	main.c
-
-mapviewer_LDFLAGS = \
-	-lgthread-2.0
-
-mapviewer_LDADD = \
-	$(GTK_LIBS) \
-	libosmgpsmap.la
-
-lib_LTLIBRARIES = \
-	libosmgpsmap.la
-
-libosmgpsmap_la_SOURCES = \
-	converter.c \
-	osm-gps-map-widget.c \
-	osm-gps-map-source.c \
-	osm-gps-map-osd.c \
-	osm-gps-map-layer.c \
-	osm-gps-map-track.c \
-	osm-gps-map-point.c \
-	osm-gps-map-image.c \
-	osm-gps-map-compat.c \
-	osd-utils.c
-
-libosmgpsmap_la_CFLAGS = \
+## Shared library
+libosmgpsmap_la_CFLAGS =    \
+    $(WARN_CFLAGS)          \
+    $(DISABLE_DEPRECATED)   \
+    $(OSMGPSMAP_CFLAGS)     \
 	-DG_LOG_DOMAIN=\"OsmGpsMap\"
 
 if OS_WIN32
@@ -53,38 +30,76 @@ libosmgpsmap_la_LDFLAGS = \
 	-version-info $(LT_VERSION_INFO)    \
 	$(no_undefined)
 
-libosmgpsmap_la_LIBADD = \
-	$(GLIB_LIBS) \
-	$(GTK_LIBS) \
-	$(CAIRO_LIBS) \
-	$(SOUP22_LIBS) $(SOUP24_LIBS)
+libosmgpsmap_la_LIBADD =    \
+    $(OSMGPSMAP_LIBS)
 
-libosmgpsmapincdir = $(includedir)/osmgpsmap
-libosmgpsmapinc_HEADERS = \
-	osm-gps-map.h \
-	osm-gps-map-layer.h \
-	osm-gps-map-osd.h
-
-noinst_HEADERS = \
-	converter.h \
-	osd-utils.h \
+sources_private_h =         \
+	converter.h             \
+	osd-utils.h             \
 	osm-gps-map-types.h
 
-EXTRA_DIST = \
-	poi.png
+sources_public_h =          \
+    osm-gps-map.h           \
+    osm-gps-map-osd.h       \
+    osm-gps-map-layer.h     \
+    osm-gps-map-track.h     \
+    osm-gps-map-point.h     \
+    osm-gps-map-image.h     \
+    osm-gps-map-source.h    \
+    osm-gps-map-widget.h    \
+    osm-gps-map-compat.h
+
+sources_c =                 \
+    converter.c             \
+    osd-utils.c             \
+    osm-gps-map-osd.c       \
+    osm-gps-map-layer.c     \
+    osm-gps-map-track.c     \
+    osm-gps-map-point.c     \
+    osm-gps-map-image.c     \
+    osm-gps-map-source.c    \
+    osm-gps-map-widget.c    \
+    osm-gps-map-compat.c
+
+libosmgpsmap_la_SOURCES =   \
+	$(sources_public_h)     \
+	$(sources_private_h)    \
+	$(sources_c)
+
+libosmgpsmapincdir = $(includedir)/osmgpsmap
+libosmgpsmapinc_HEADERS = $(sources_public_h)
+
+## Demo Application
+bin_PROGRAMS = mapviewer
+
+mapviewer_SOURCES =         \
+	main.c
+
+mapviewer_CFLAGS =          \
+    $(WARN_CFLAGS)          \
+    $(DISABLE_DEPRECATED)   \
+    $(OSMGPSMAP_CFLAGS)
+
+mapviewer_LDADD =           \
+    $(OSMGPSMAP_LIBS)       \
+	libosmgpsmap.la
+
+## Misc
+CLEANFILES =
+EXTRA_DIST = poi.png
 
 ## GObject Introspection Support
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --add-include-path=$(builddir)
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION
-introspection_sources = $(libosmgpsmap_la_SOURCES)
+introspection_sources = $(sources_c) $(sources_public_h)
 
 OsmGpsMap-1.0.gir: libosmgpsmap.la
 OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-2.0
-OsmGpsMap_1_0_gir_CFLAGS = $(INCLUDES)
+OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
 OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
 OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
 INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
