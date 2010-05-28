@@ -27,7 +27,7 @@ gtk.gdk.threads_init()
 
 #Try static lib first
 mydir = os.path.dirname(os.path.abspath(__file__))
-libdir = os.path.join(mydir, ".libs")
+libdir = os.path.abspath(os.path.join(mydir, "..", "python", ".libs"))
 sys.path.insert(0, libdir)
 
 import osmgpsmap

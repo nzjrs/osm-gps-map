@@ -5,13 +5,12 @@ AC_INIT([osm-gps-map],
         [osm-gps-map])
 AM_INIT_AUTOMAKE([1.10])
 
+AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
-AM_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_MAINTAINER_MODE
 
-AC_PROG_CC
 AM_PROG_CC_C_O
 
 AC_LIBTOOL_WIN32_DLL
@@ -62,6 +61,7 @@ osmgpsmap.pc
 Makefile
 src/Makefile
 docs/Makefile
+examples/Makefile
 docs/reference/Makefile
 docs/reference/version.xml
 ])

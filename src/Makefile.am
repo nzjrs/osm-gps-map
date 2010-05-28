@@ -69,24 +69,8 @@ libosmgpsmap_la_SOURCES =   \
 libosmgpsmapincdir = $(includedir)/osmgpsmap
 libosmgpsmapinc_HEADERS = $(sources_public_h)
 
-## Demo Application
-bin_PROGRAMS = mapviewer
-
-mapviewer_SOURCES =         \
-	main.c
-
-mapviewer_CFLAGS =          \
-    $(WARN_CFLAGS)          \
-    $(DISABLE_DEPRECATED)   \
-    $(OSMGPSMAP_CFLAGS)
-
-mapviewer_LDADD =           \
-    $(OSMGPSMAP_LIBS)       \
-	libosmgpsmap.la
-
 ## Misc
 CLEANFILES =
-EXTRA_DIST = poi.png
 
 ## GObject Introspection Support
 -include $(INTROSPECTION_MAKEFILE)
