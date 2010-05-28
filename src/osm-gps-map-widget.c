@@ -159,6 +159,19 @@ typedef struct
     guint redraw_cycle;
 } OsmCachedTile;
 
+typedef struct {
+    /* The details of the tile to download */
+    char *uri;
+    char *folder;
+    char *filename;
+    OsmGpsMap *map;
+    /* whether to redraw the map when the tile arrives */
+    gboolean redraw;
+#if USE_LIBSOUP22
+    SoupSession *session;
+#endif
+} OsmTileDownload;
+
 enum
 {
     PROP_0,
@@ -632,7 +645,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 #endif
 {
     FILE *file;
-    tile_download_t *dl = (tile_download_t *)user_data;
+    OsmTileDownload *dl = (OsmTileDownload *)user_data;
     OsmGpsMap *map = OSM_GPS_MAP(dl->map);
     OsmGpsMapPrivate *priv = map->priv;
     gboolean file_saved = FALSE;
@@ -758,7 +771,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 {
     SoupMessage *msg;
     OsmGpsMapPrivate *priv = map->priv;
-    tile_download_t *dl = g_new0(tile_download_t,1);
+    OsmTileDownload *dl = g_new0(OsmTileDownload,1);
 
     //calculate the uri to download
     dl->uri = replace_map_uri(map, priv->repo_uri, zoom, x, y);
@@ -1998,11 +2011,12 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 #else
     GdkDrawable *drawable = widget->window;
 #endif
+    GtkStateType state = gtk_widget_get_state (widget);
 
     if (!priv->drag_mouse_dx && !priv->drag_mouse_dy && event)
     {
         gdk_draw_drawable (drawable,
-                           widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                           widget->style->fg_gc[state],
                            priv->pixmap,
                            event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
                            event->area.x, event->area.y,
@@ -2011,7 +2025,7 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
     else
     {
         gdk_draw_drawable (drawable,
-                           widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                           widget->style->fg_gc[state],
                            priv->pixmap,
                            0,0,
                            priv->drag_mouse_dx - EXTRA_BORDER, 
@@ -2064,7 +2078,7 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
             osm_gps_map_layer_draw(layer, map, drawable);
 #ifdef OSD_DOUBLE_BUFFER
             gdk_draw_drawable (widget->window,
-                       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                       widget->style->fg_gc[state],
                        priv->dbuf_pixmap,
                        0,0,0,0,-1,-1);
 #endif

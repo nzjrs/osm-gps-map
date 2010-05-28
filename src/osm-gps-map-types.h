@@ -24,9 +24,9 @@
 #ifndef _OSM_GPS_MAP_TYPES_H_
 #define _OSM_GPS_MAP_TYPES_H_
 
-#include "config.h"
-
+#include <glib.h>
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #if USE_LIBSOUP22
 #include <libsoup/soup.h>
 #endif
@@ -64,21 +64,7 @@
 /* equatorial radius in meters */
 #define OSM_EQ_RADIUS   (6378137.0)
 
-typedef struct {
-    /* The details of the tile to download */
-    char *uri;
-    char *folder;
-    char *filename;
-    OsmGpsMap *map;
-    /* whether to redraw the map when the tile arrives */
-    gboolean redraw;
-#if USE_LIBSOUP22
-    SoupSession *session;
-#endif
-} tile_download_t;
-
-/* strcmp0 was introduced with glib 2.16 */
-#if ! GLIB_CHECK_VERSION (2, 16, 0)
+#if !GLIB_CHECK_VERSION (2, 16, 0)
 int g_strcmp0(const char *str1, const char *str2)
 {
     if( str1 == NULL && str2 == NULL ) return 0;
@@ -87,5 +73,28 @@ int g_strcmp0(const char *str1, const char *str2)
     return strcmp(str1, str2);
 }
 #endif
+
+#if !GTK_CHECK_VERSION (2, 20, 0)
+#define gtk_widget_get_realized(widget)                         (GTK_WIDGET_REALIZED (widget))
+#define gtk_widget_get_mapped(widget)                           (GTK_WIDGET_MAPPED (widget))
+#endif /* GTK < 2.20.0 */
+
+#if !GTK_CHECK_VERSION (2, 18, 0)
+#define gtk_cell_renderer_get_alignment(cell, xalign, yalign)   g_object_get (cell, "xalign", xalign, "yalign", yalign, NULL);
+#define gtk_cell_renderer_get_padding(cell, xpad, ypad)         g_object_get (cell, "xpad", xpad, "ypad", ypad, NULL);
+#define gtk_cell_renderer_set_padding(cell, xpad, ypad)         g_object_set (cell, "xpad", xpad, "ypad", ypad, NULL);
+#define gtk_widget_get_allocation(widget, alloc)                (*(alloc) = (widget)->allocation)
+#define gtk_widget_set_allocation(widget, alloc)                ((widget)->allocation = *(alloc))
+#define gtk_widget_get_app_paintable(widget)                    (GTK_WIDGET_APP_PAINTABLE (widget))
+#define gtk_widget_set_can_default(widget, can_default)         ((can_default) ? (GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_CAN_DEFAULT)))
+#define gtk_widget_set_can_focus(widget, can_focus)             ((can_focus) ? (GTK_WIDGET_SET_FLAGS (w, GTK_CAN_FOCUS)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_CAN_FOCUS)))
+#define gtk_widget_set_double_buffered(widget, double_buffered) ((double_buffered) ? (GTK_WIDGET_SET_FLAGS (w, GTK_DOUBLE_BUFFERED)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_DOUBLE_BUFFERED)))
+#define gtk_widget_is_drawable(widget)                          (GTK_WIDGET_DRAWABLE (widget))
+#define gtk_widget_has_focus(widget)                            (GTK_WIDGET_HAS_FOCUS (widget))
+#define gtk_widget_get_has_window(widget)                       (!GTK_WIDGET_NO_WINDOW (widget))
+#define gtk_widget_get_state(widget)                            ((widget)->state)
+#define gtk_widget_get_visible(widget)                          (GTK_WIDGET_VISIBLE (widget))
+#define gtk_widget_set_window(widget, _window)                  ((widget)->window = _window)
+#endif /* GTK+ < 2.18.0 */
 
 #endif /* _OSM_GPS_MAP_TYPES_H_ */
