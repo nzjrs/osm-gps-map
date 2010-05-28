@@ -1,7 +1,12 @@
 ## Process this file with automake to produce Makefile.in
-## Created by Anjuta
 
 SUBDIRS = src
+DISTCHECK_CONFIGURE_FLAGS =                     \
+    --enable-gtk-doc                            \
+    --enable-maintainer-flags                   \
+    --enable-introspection
+
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 osm_gps_mapdocdir = ${prefix}/doc/osm-gps-map
 osm_gps_mapdoc_DATA =                           \

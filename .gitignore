@@ -6,8 +6,11 @@
 *.deps/
 *.libs/
 *.tar.gz
+*.stamp
+*.bak
 INSTALL
 Makefile
+aclocal.m4
 autom4te.cache/
 compile
 config.guess
@@ -32,4 +35,3 @@ src/Makefile
 src/mapviewer
 stamp-h1
 ChangeLog
-

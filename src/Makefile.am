@@ -13,6 +13,8 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
+CLEANFILES =
+
 bin_PROGRAMS = mapviewer
 
 mapviewer_SOURCES = \
@@ -70,3 +72,28 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
 	poi.png
+
+## GObject Introspection Support
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir)
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+
+if HAVE_INTROSPECTION
+introspection_sources = $(libosmgpsmap_la_SOURCES)
+
+OsmGpsMap-1.0.gir: libosmgpsmap.la
+OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-2.0
+OsmGpsMap_1_0_gir_CFLAGS = $(INCLUDES)
+OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
+OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
+
+girdir = $(datadir)/gir-1.0
+dist_gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepository-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(dist_gir_DATA) $(typelib_DATA)
+endif

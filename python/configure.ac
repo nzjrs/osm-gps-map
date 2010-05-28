@@ -1,7 +1,12 @@
-AC_PREREQ(2.53)
-AC_INIT(python-osmgpsmap, 0.7.0)
-AC_CONFIG_SRCDIR(osmgpsmap.defs)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AC_PREREQ([2.62])
+AC_INIT([python-osmgpsmap],
+        [0.7.0],
+        [http://github.com/nzjrs/osm-gps-map/issues],
+        [python-osmgpsmap])
+AM_INIT_AUTOMAKE([1.10])
+
+AC_CONFIG_SRCDIR([osmgpsmap.defs])
+AC_CONFIG_MACRO_DIR([m4])
 
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET

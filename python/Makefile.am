@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
 defsdir = $(datadir)/pygtk/2.0/defs
 defs_DATA = osmgpsmap.defs osmgpsmap-compat.defs
 

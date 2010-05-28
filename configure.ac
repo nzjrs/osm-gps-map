@@ -1,8 +1,13 @@
-AC_INIT(osm-gps-map, 0.7.0)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AC_PREREQ([2.62])
+AC_INIT([osm-gps-map],
+        [0.7.0],
+        [http://github.com/nzjrs/osm-gps-map/issues],
+        [osm-gps-map])
+AM_INIT_AUTOMAKE([1.10])
 
-AC_CONFIG_SRCDIR(osmgpsmap.pc.in)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_SRCDIR([osmgpsmap.pc.in])
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 AM_MAINTAINER_MODE
 
@@ -51,7 +56,9 @@ AC_SUBST(LT_VERSION_INFO)
 
 CFLAGS="$CFLAGS -Wall -Wswitch-enum"
 
-GTK_DOC_CHECK(1.12)
+GTK_DOC_CHECK([1.12])
+GOBJECT_INTROSPECTION_CHECK([0.6.7])
+
 
 AC_OUTPUT([
 osmgpsmap.pc
