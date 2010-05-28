@@ -140,6 +140,7 @@ struct _OsmGpsMapPrivate
     guint map_auto_center_enabled : 1;
     guint trip_history_record_enabled : 1;
     guint trip_history_show_enabled : 1;
+    guint gps_point_enabled : 1;
 
     /* state flags */
     guint is_disposed : 1;
@@ -176,7 +177,6 @@ typedef struct {
 enum
 {
     PROP_0,
-
     PROP_AUTO_CENTER,
     PROP_RECORD_TRIP_HISTORY,
     PROP_SHOW_TRIP_HISTORY,
@@ -201,6 +201,7 @@ enum
     PROP_IMAGE_FORMAT,
     PROP_DRAG_LIMIT,
     PROP_AUTO_CENTER_THRESHOLD,
+    PROP_SHOW_GPS_POINT
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -1203,7 +1204,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_print_images(map);
 
     /* draw the gps point using the appropriate virtual private method */
-    if (priv->gps_track_used) {
+    if (priv->gps_track_used && priv->gps_point_enabled) {
         OsmGpsMapClass *klass = OSM_GPS_MAP_GET_CLASS(map);
         if (klass->draw_gps_point)
             klass->draw_gps_point (map, priv->pixmap);
@@ -1727,6 +1728,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_AUTO_CENTER_THRESHOLD:
             priv->map_auto_center_threshold = g_value_get_float (value);
             break;
+        case PROP_SHOW_GPS_POINT:
+            priv->gps_point_enabled = g_value_get_boolean (value);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
             break;
@@ -1815,6 +1819,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_AUTO_CENTER_THRESHOLD:
             g_value_set_float(value, priv->map_auto_center_threshold);
+            break;
+        case PROP_SHOW_GPS_POINT:
+            g_value_set_boolean(value, priv->gps_point_enabled);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2139,11 +2146,26 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    /**
+     * OsmGpsMap:show-trip-history:
+     *
+     * Controls whether the current gps point is shown on the map. Note that
+     * for derived classes that implement the draw_gps_point vfunc, if this
+     * property is %FALSE
+     **/
     g_object_class_install_property (object_class,
                                      PROP_SHOW_TRIP_HISTORY,
                                      g_param_spec_boolean ("show-trip-history",
                                                            "show trip history",
                                                            "should the recorded trip history be shown on the map",
+                                                           TRUE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_SHOW_GPS_POINT,
+                                     g_param_spec_boolean ("show-gps-point",
+                                                           "show gps point",
+                                                           "should the current gps point be shown on the map",
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
