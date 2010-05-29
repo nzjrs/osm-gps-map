@@ -2146,13 +2146,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
-    /**
-     * OsmGpsMap:show-trip-history:
-     *
-     * Controls whether the current gps point is shown on the map. Note that
-     * for derived classes that implement the draw_gps_point vfunc, if this
-     * property is %FALSE
-     **/
     g_object_class_install_property (object_class,
                                      PROP_SHOW_TRIP_HISTORY,
                                      g_param_spec_boolean ("show-trip-history",
@@ -2161,6 +2154,13 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    /**
+     * OsmGpsMap:show-gps-point:
+     *
+     * Controls whether the current gps point is shown on the map. Note that
+     * for derived classes that implement the draw_gps_point vfunc, if this
+     * property is %FALSE
+     **/
     g_object_class_install_property (object_class,
                                      PROP_SHOW_GPS_POINT,
                                      g_param_spec_boolean ("show-gps-point",
