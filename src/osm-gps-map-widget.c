@@ -652,52 +652,39 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
     OsmGpsMapPrivate *priv = map->priv;
     gboolean file_saved = FALSE;
 
-    if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code))
-    {
+    if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
         /* save tile into cachedir if one has been specified */
-        if (priv->cache_dir)
-        {
-            if (g_mkdir_with_parents(dl->folder,0700) == 0)
-            {
+        if (priv->cache_dir) {
+            if (g_mkdir_with_parents(dl->folder,0700) == 0) {
                 file = g_fopen(dl->filename, "wb");
-                if (file != NULL)
-                {
+                if (file != NULL) {
                     fwrite (MSG_RESPONSE_BODY(msg), 1, MSG_RESPONSE_LEN(msg), file);
                     file_saved = TRUE;
                     g_debug("Wrote "MSG_RESPONSE_LEN_FORMAT" bytes to %s", MSG_RESPONSE_LEN(msg), dl->filename);
                     fclose (file);
 
                 }
-            }
-            else
-            {
-                g_warning("Error creating tile download directory: %s", 
-                          dl->folder);
+            } else {
+                g_warning("Error creating tile download directory: %s", dl->folder);
                 perror("perror:");
             }
         }
 
-        if (dl->redraw)
-        {
+        if (dl->redraw) {
             GdkPixbuf *pixbuf = NULL;
 
             /* if the file was actually stored on disk, we can simply */
             /* load and decode it from that file */
-            if (priv->cache_dir)
-            {
-                if (file_saved)
-                {
+            if (priv->cache_dir) {
+                if (file_saved) {
                     pixbuf = gdk_pixbuf_new_from_file (dl->filename, NULL);
                 }
-            }
-            else
-            {
+            } else {
                 GdkPixbufLoader *loader;
                 char *extension = strrchr (dl->filename, '.');
 
                 /* parse file directly from memory */
-                if (extension)
-                {
+                if (extension) {
                     loader = gdk_pixbuf_loader_new_with_type (extension+1, NULL);
                     if (!gdk_pixbuf_loader_write (loader, (unsigned char*)MSG_RESPONSE_BODY(msg), MSG_RESPONSE_LEN(msg), NULL))
                     {
@@ -710,16 +697,13 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
                     /* give up loader but keep the pixbuf */
                     g_object_ref(pixbuf);
                     g_object_unref(loader);
-                }
-                else
-                {
+                } else {
                     g_warning("Error: Unable to determine image file format");
                 }
             }
                 
             /* Store the tile into the cache */
-            if (G_LIKELY (pixbuf))
-            {
+            if (G_LIKELY (pixbuf)) {
                 OsmCachedTile *tile = g_slice_new (OsmCachedTile);
                 tile->pixbuf = pixbuf;
                 tile->redraw_cycle = priv->redraw_cycle;
@@ -736,26 +720,20 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
         g_hash_table_remove(priv->tile_queue, dl->uri);
         g_object_notify(G_OBJECT(map), "tiles-queued");
 
-        g_free(dl->uri);
         g_free(dl->folder);
         g_free(dl->filename);
         g_free(dl);
-    }
-    else
-    {
-        g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
-        if (msg->status_code == SOUP_STATUS_NOT_FOUND)
-        {
+    } else {
+        if (msg->status_code == SOUP_STATUS_NOT_FOUND) {
             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
-        }
-        else if (msg->status_code == SOUP_STATUS_CANCELLED)
-        {
-            ;//application exiting
-        }
-        else
-        {
+        } else if (msg->status_code == SOUP_STATUS_CANCELLED) {
+            /* called as application exit or after osm_gps_map_download_cancel_all */
+            g_hash_table_remove(priv->tile_queue, dl->uri);
+            g_object_notify(G_OBJECT(map), "tiles-queued");
+        } else {
+            g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
 #if USE_LIBSOUP22
             soup_session_requeue_message(dl->session, msg);
 #else
@@ -829,6 +807,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 
             g_hash_table_insert (priv->tile_queue, dl->uri, msg);
             g_object_notify (G_OBJECT (map), "tiles-queued");
+            /* the soup session unrefs the message when the download finishes */
             soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
         } else {
             g_warning("Could not create soup message");
@@ -1418,8 +1397,10 @@ osm_gps_map_init (OsmGpsMap *object)
                                             USER_AGENT, NULL);
 
 #endif
-    //Hash table which maps tile d/l URIs to SoupMessage requests
-    priv->tile_queue = g_hash_table_new (g_str_hash, g_str_equal);
+    /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
+       must free the key, the soup session unrefs the message */
+    priv->tile_queue = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                              g_free, NULL);
 
     //Some mapping providers (Google) have varying degrees of tiles at multiple
     //zoom levels
@@ -2480,21 +2461,25 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                   g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
+/**
+ * osm_gps_map_download_maps:
+ *
+ * Downloads all tiles over the supplied zoom range in the rectangular
+ * region specified by pt1 (north west corner) to pt2 (south east corner)
+ *
+ **/
 void
 osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end)
 {
-    int i,j,zoom,num_tiles;
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (pt1 && pt2)
-    {
+    if (pt1 && pt2) {
         gchar *filename;
-        num_tiles = 0;
+        int i,j,zoom;
+        int num_tiles = 0;
         zoom_end = CLAMP(zoom_end, priv->min_zoom, priv->max_zoom);
-        g_debug("Download maps: z:%d->%d",zoom_start, zoom_end);
 
-        for(zoom=zoom_start; zoom<=zoom_end; zoom++)
-        {
+        for(zoom=zoom_start; zoom<=zoom_end; zoom++) {
             int x1,y1,x2,y2;
 
             x1 = (int)floor((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
@@ -2503,30 +2488,47 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
             x2 = (int)floor((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
             y2 = (int)floor((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
 
-            // loop x1-x2
-            for(i=x1; i<=x2; i++)
-            {
-                // loop y1 - y2
-                for(j=y1; j<=y2; j++)
-                {
-                    // x = i, y = j
+            /* loop x1-x2 */
+            for(i=x1; i<=x2; i++) {
+                /* loop y1 - y2 */
+                for(j=y1; j<=y2; j++) {
+                    /* x = i, y = j */
                     filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
                                     priv->cache_dir, G_DIR_SEPARATOR,
                                     zoom, G_DIR_SEPARATOR,
                                     i, G_DIR_SEPARATOR,
                                     j,
                                     priv->image_format);
-                    if (!g_file_test(filename, G_FILE_TEST_EXISTS))
-                    {
+                    if (!g_file_test(filename, G_FILE_TEST_EXISTS)) {
                         osm_gps_map_download_tile(map, zoom, i, j, FALSE);
                         num_tiles++;
                     }
                     g_free(filename);
                 }
             }
-            g_debug("DL @Z:%d = %d tiles",zoom,num_tiles);
+            g_debug("DL @Z:%d = %d tiles", zoom, num_tiles);
         }
     }
+}
+
+static void
+cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
+{
+    soup_session_cancel_message (user_data, value, SOUP_STATUS_CANCELLED);
+}
+
+/**
+ * osm_gps_map_download_cancel_all:
+ *
+ * Cancels all tiles currently being downloaded. Typically used if you wish to
+ * cacel a large number of tiles queued using osm_gps_map_download_maps()
+ *
+ **/
+void
+osm_gps_map_download_cancel_all (OsmGpsMap *map)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+    g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, priv->soup_session);
 }
 
 void
@@ -2539,8 +2541,6 @@ osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
         pt1->rlon = pixel2lon(priv->map_zoom, priv->map_x);
         pt2->rlat = pixel2lat(priv->map_zoom, priv->map_y + GTK_WIDGET(map)->allocation.height);
         pt2->rlon = pixel2lon(priv->map_zoom, priv->map_x + GTK_WIDGET(map)->allocation.width);
-
-        g_debug("BBOX: %f %f %f %f", pt1->rlat, pt1->rlon, pt2->rlat, pt2->rlon);
     }
 }
 

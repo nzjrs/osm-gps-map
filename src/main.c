@@ -137,11 +137,15 @@ static gboolean
 on_cache_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    int zoom,max_zoom;
-    OsmGpsMapPoint pt1, pt2;
-    osm_gps_map_get_bbox(map, &pt1, &pt2);
-    g_object_get(map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
-    osm_gps_map_download_maps(map, &pt1, &pt2, zoom, max_zoom);
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+        int zoom,max_zoom;
+        OsmGpsMapPoint pt1, pt2;
+        osm_gps_map_get_bbox(map, &pt1, &pt2);
+        g_object_get(map, "zoom", &zoom, "max-zoom", &max_zoom, NULL);
+        osm_gps_map_download_maps(map, &pt1, &pt2, zoom, max_zoom);
+    } else {
+        osm_gps_map_download_cancel_all(map);
+    }
     return FALSE;
 }
 
