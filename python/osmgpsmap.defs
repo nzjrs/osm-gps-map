@@ -148,6 +148,12 @@
   )
 )
 
+(define-method download_cancel_all
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_download_cancel_all")
+  (return-type "none")
+)
+
 (define-method get_bbox
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_get_bbox")
