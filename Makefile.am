@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src examples
+SUBDIRS = src examples docs
 DISTCHECK_CONFIGURE_FLAGS =                     \
     --enable-gtk-doc                            \
     --enable-maintainer-flags                   \
