@@ -1,0 +1,545 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>OsmGpsMap Deprecated</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
+<link rel="up" href="api-reference-deprecated.html" title="Deprecated API">
+<link rel="prev" href="api-reference-deprecated.html" title="Deprecated API">
+<link rel="next" href="api-index-full.html" title="Index of all symbols">
+<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="api-reference-deprecated.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api-reference-deprecated.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">OsmGpsMap Reference Manual</th>
+<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libosmgpsmap-OsmGpsMap-Deprecated.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libosmgpsmap-OsmGpsMap-Deprecated.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry" title="OsmGpsMap Deprecated">
+<a name="libosmgpsmap-OsmGpsMap-Deprecated"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libosmgpsmap-OsmGpsMap-Deprecated.top_of_page"></a>OsmGpsMap Deprecated</span></h2>
+<p>OsmGpsMap Deprecated</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv" title="Synopsis">
+<a name="libosmgpsmap-OsmGpsMap-Deprecated.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis"><span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-draw-gps" title="osm_gps_map_draw_gps ()">osm_gps_map_draw_gps</a>                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> heading</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-gps" title="osm_gps_map_clear_gps ()">osm_gps_map_clear_gps</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-track" title="osm_gps_map_add_track ()">osm_gps_map_add_track</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *track</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-replace-track" title="osm_gps_map_replace_track ()">osm_gps_map_replace_track</a>           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *old_track</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *new_track</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-tracks" title="osm_gps_map_clear_tracks ()">osm_gps_map_clear_tracks</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image" title="osm_gps_map_add_image ()">osm_gps_map_add_image</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image-with-alignment" title="osm_gps_map_add_image_with_alignment ()">osm_gps_map_add_image_with_alignment</a>
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> yalign</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-remove-image" title="osm_gps_map_remove_image ()">osm_gps_map_remove_image</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-images" title="osm_gps_map_clear_images ()">osm_gps_map_clear_images</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-layer" title="osm_gps_map_add_layer ()">osm_gps_map_add_layer</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);
+<a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a>      <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-get-co-ordinates" title="osm_gps_map_get_co_ordinates ()">osm_gps_map_get_co_ordinates</a>        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> pixel_x</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> pixel_y</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-screen-to-geographic" title="osm_gps_map_screen_to_geographic ()">osm_gps_map_screen_to_geographic</a>    (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_y</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> *latitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> *longitude</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-geographic-to-screen" title="osm_gps_map_geographic_to_screen ()">osm_gps_map_geographic_to_screen</a>    (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> latitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_y</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-set-mapcenter" title="osm_gps_map_set_mapcenter ()">osm_gps_map_set_mapcenter</a>           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);
+</pre>
+</div>
+<div class="refsect1" title="Description">
+<a name="libosmgpsmap-OsmGpsMap-Deprecated.description"></a><h2>Description</h2>
+<p>
+</p>
+</div>
+<div class="refsect1" title="Details">
+<a name="libosmgpsmap-OsmGpsMap-Deprecated.details"></a><h2>Details</h2>
+<div class="refsect2" title="osm_gps_map_draw_gps ()">
+<a name="osm-gps-map-draw-gps"></a><h3>osm_gps_map_draw_gps ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_draw_gps                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> heading</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_draw_gps</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-add" title="osm_gps_map_gps_add ()"><code class="function">osm_gps_map_gps_add()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>heading</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_clear_gps ()">
+<a name="osm-gps-map-clear-gps"></a><h3>osm_gps_map_clear_gps ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_clear_gps               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_clear_gps</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-clear" title="osm_gps_map_gps_clear ()"><code class="function">osm_gps_map_gps_clear()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_add_track ()">
+<a name="osm-gps-map-add-track"></a><h3>osm_gps_map_add_track ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_add_track               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *track</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_add_track</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-track-add" title="osm_gps_map_track_add ()"><code class="function">osm_gps_map_track_add()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>track</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_replace_track ()">
+<a name="osm-gps-map-replace-track"></a><h3>osm_gps_map_replace_track ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_replace_track           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *old_track</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> *new_track</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_replace_track</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-track-remove" title="osm_gps_map_track_remove ()"><code class="function">osm_gps_map_track_remove()</code></a> and <a class="link" href="OsmGpsMap.html#osm-gps-map-track-add" title="osm_gps_map_track_add ()"><code class="function">osm_gps_map_track_add()</code></a>
+or just edit the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> object directly</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>old_track</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>new_track</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_clear_tracks ()">
+<a name="osm-gps-map-clear-tracks"></a><h3>osm_gps_map_clear_tracks ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_clear_tracks            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_clear_tracks</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-track-remove-all" title="osm_gps_map_track_remove_all ()"><code class="function">osm_gps_map_track_remove_all()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_add_image ()">
+<a name="osm-gps-map-add-image"></a><h3>osm_gps_map_add_image ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_add_image               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_add_image</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()"><code class="function">osm_gps_map_image_add()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_add_image_with_alignment ()">
+<a name="osm-gps-map-add-image-with-alignment"></a><h3>osm_gps_map_add_image_with_alignment ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_add_image_with_alignment
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> yalign</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_add_image_with_alignment</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add-with-alignment" title="osm_gps_map_image_add_with_alignment ()"><code class="function">osm_gps_map_image_add_with_alignment()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>xalign</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>yalign</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_remove_image ()">
+<a name="osm-gps-map-remove-image"></a><h3>osm_gps_map_remove_image ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_remove_image            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_remove_image</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove" title="osm_gps_map_image_remove ()"><code class="function">osm_gps_map_image_remove()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_clear_images ()">
+<a name="osm-gps-map-clear-images"></a><h3>osm_gps_map_clear_images ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_clear_images            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_clear_images</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove-all" title="osm_gps_map_image_remove_all ()"><code class="function">osm_gps_map_image_remove_all()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_add_layer ()">
+<a name="osm-gps-map-add-layer"></a><h3>osm_gps_map_add_layer ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_add_layer               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_add_layer</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-layer-add" title="osm_gps_map_layer_add ()"><code class="function">osm_gps_map_layer_add()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>layer</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_get_co_ordinates ()">
+<a name="osm-gps-map-get-co-ordinates"></a><h3>osm_gps_map_get_co_ordinates ()</h3>
+<pre class="programlisting"><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a>      osm_gps_map_get_co_ordinates        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> pixel_x</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> pixel_y</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_get_co_ordinates</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic" title="osm_gps_map_convert_screen_to_geographic ()"><code class="function">osm_gps_map_convert_screen_to_geographic()</code></a> or 
+<a class="link" href="OsmGpsMap.html#osm-gps-map-get-event-location" title="osm_gps_map_get_event_location ()"><code class="function">osm_gps_map_get_event_location()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_screen_to_geographic ()">
+<a name="osm-gps-map-screen-to-geographic"></a><h3>osm_gps_map_screen_to_geographic ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_screen_to_geographic    (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_y</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> *latitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> *longitude</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_screen_to_geographic</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic" title="osm_gps_map_convert_screen_to_geographic ()"><code class="function">osm_gps_map_convert_screen_to_geographic()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_geographic_to_screen ()">
+<a name="osm-gps-map-geographic-to-screen"></a><h3>osm_gps_map_geographic_to_screen ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_geographic_to_screen    (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> latitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_y</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_geographic_to_screen</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen" title="osm_gps_map_convert_geographic_to_screen ()"><code class="function">osm_gps_map_convert_geographic_to_screen()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_set_mapcenter ()">
+<a name="osm-gps-map-set-mapcenter"></a><h3>osm_gps_map_set_mapcenter ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_set_mapcenter           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">osm_gps_map_set_mapcenter</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-set-center-and-zoom" title="osm_gps_map_set_center_and_zoom ()"><code class="function">osm_gps_map_set_center_and_zoom()</code></a> instead.</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>zoom</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.14</div>
+</body>
+</html>

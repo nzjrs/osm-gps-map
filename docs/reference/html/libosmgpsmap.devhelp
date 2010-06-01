@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="OsmGpsMap Reference Manual" link="index.html" author="" name="libosmgpsmap">
+  <chapters>
+    <sub name="API Reference" link="api-reference.html">
+      <sub name="OsmGpsMap" link="OsmGpsMap.html"/>
+      <sub name="OsmGpsMapLayer" link="OsmGpsMapLayer.html"/>
+      <sub name="OsmGpsMapImage" link="OsmGpsMapImage.html"/>
+      <sub name="OsmGpsMapTrack" link="OsmGpsMapTrack.html"/>
+      <sub name="OsmGpsMapPoint" link="libosmgpsmap-OsmGpsMapPoint.html"/>
+    </sub>
+    <sub name="Deprecated API" link="api-reference-deprecated.html">
+      <sub name="OsmGpsMap Deprecated" link="libosmgpsmap-OsmGpsMap-Deprecated.html"/>
+    </sub>
+    <sub name="Index of all symbols" link="api-index-full.html"/>
+    <sub name="Index of deprecated symbols" link="api-index-deprecated.html"/>
+    <sub name="Annotation glossary" link="annotation-glossary.html">
+      <sub name="Annotation Glossary" link="annotation-glossary.html#annotation-glossary"/>
+    </sub>
+  </chapters>
+  <functions>
+    <function name="OsmGpsMap" link="OsmGpsMap.html#OsmGpsMap-struct"/>
+    <function name="OsmGpsMapClass" link="OsmGpsMap.html#OsmGpsMapClass"/>
+    <function name="OSM_GPS_MAP_INVALID" link="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS"/>
+    <function name="OSM_GPS_MAP_CACHE_DISABLED" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS"/>
+    <function name="OSM_GPS_MAP_CACHE_AUTO" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS"/>
+    <function name="OSM_GPS_MAP_CACHE_FRIENDLY" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"/>
+    <function name="osm_gps_map_get_default_cache_directory ()" link="OsmGpsMap.html#osm-gps-map-get-default-cache-directory"/>
+    <function name="enum OsmGpsMapSource_t" link="OsmGpsMap.html#OsmGpsMapSource-t"/>
+    <function name="osm_gps_map_source_get_friendly_name ()" link="OsmGpsMap.html#osm-gps-map-source-get-friendly-name"/>
+    <function name="osm_gps_map_source_get_repo_uri ()" link="OsmGpsMap.html#osm-gps-map-source-get-repo-uri"/>
+    <function name="osm_gps_map_source_get_image_format ()" link="OsmGpsMap.html#osm-gps-map-source-get-image-format"/>
+    <function name="osm_gps_map_source_get_min_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-min-zoom"/>
+    <function name="osm_gps_map_source_get_max_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-max-zoom"/>
+    <function name="osm_gps_map_source_is_valid ()" link="OsmGpsMap.html#osm-gps-map-source-is-valid"/>
+    <function name="osm_gps_map_download_maps ()" link="OsmGpsMap.html#osm-gps-map-download-maps"/>
+    <function name="osm_gps_map_get_bbox ()" link="OsmGpsMap.html#osm-gps-map-get-bbox"/>
+    <function name="osm_gps_map_set_center ()" link="OsmGpsMap.html#osm-gps-map-set-center"/>
+    <function name="osm_gps_map_set_center_and_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-center-and-zoom"/>
+    <function name="osm_gps_map_set_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-zoom"/>
+    <function name="osm_gps_map_zoom_in ()" link="OsmGpsMap.html#osm-gps-map-zoom-in"/>
+    <function name="osm_gps_map_zoom_out ()" link="OsmGpsMap.html#osm-gps-map-zoom-out"/>
+    <function name="osm_gps_map_scroll ()" link="OsmGpsMap.html#osm-gps-map-scroll"/>
+    <function name="osm_gps_map_get_scale ()" link="OsmGpsMap.html#osm-gps-map-get-scale"/>
+    <function name="enum OsmGpsMapKey_t" link="OsmGpsMap.html#OsmGpsMapKey-t"/>
+    <function name="osm_gps_map_set_keyboard_shortcut ()" link="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut"/>
+    <function name="osm_gps_map_get_event_location ()" link="OsmGpsMap.html#osm-gps-map-get-event-location"/>
+    <function name="osm_gps_map_convert_geographic_to_screen ()" link="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen"/>
+    <function name="osm_gps_map_convert_screen_to_geographic ()" link="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic"/>
+    <function name="osm_gps_map_gps_add ()" link="OsmGpsMap.html#osm-gps-map-gps-add"/>
+    <function name="osm_gps_map_gps_clear ()" link="OsmGpsMap.html#osm-gps-map-gps-clear"/>
+    <function name="osm_gps_map_gps_get_track ()" link="OsmGpsMap.html#osm-gps-map-gps-get-track"/>
+    <function name="osm_gps_map_track_add ()" link="OsmGpsMap.html#osm-gps-map-track-add"/>
+    <function name="osm_gps_map_track_remove ()" link="OsmGpsMap.html#osm-gps-map-track-remove"/>
+    <function name="osm_gps_map_track_remove_all ()" link="OsmGpsMap.html#osm-gps-map-track-remove-all"/>
+    <function name="osm_gps_map_image_add ()" link="OsmGpsMap.html#osm-gps-map-image-add"/>
+    <function name="osm_gps_map_image_add_with_alignment ()" link="OsmGpsMap.html#osm-gps-map-image-add-with-alignment"/>
+    <function name="osm_gps_map_image_remove ()" link="OsmGpsMap.html#osm-gps-map-image-remove"/>
+    <function name="osm_gps_map_image_remove_all ()" link="OsmGpsMap.html#osm-gps-map-image-remove-all"/>
+    <function name="osm_gps_map_layer_add ()" link="OsmGpsMap.html#osm-gps-map-layer-add"/>
+    <function name="osm_gps_map_layer_remove ()" link="OsmGpsMap.html#osm-gps-map-layer-remove"/>
+    <function name="osm_gps_map_layer_remove_all ()" link="OsmGpsMap.html#osm-gps-map-layer-remove-all"/>
+    <function name="The &quot;auto-center&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-center"/>
+    <function name="The &quot;auto-center-threshold&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-center-threshold"/>
+    <function name="The &quot;auto-download&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-download"/>
+    <function name="The &quot;drag-limit&quot; property" link="OsmGpsMap.html#OsmGpsMap--drag-limit"/>
+    <function name="The &quot;gps-track-highlight-radius&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius"/>
+    <function name="The &quot;gps-track-point-radius&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius"/>
+    <function name="The &quot;gps-track-width&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-width"/>
+    <function name="The &quot;image-format&quot; property" link="OsmGpsMap.html#OsmGpsMap--image-format"/>
+    <function name="The &quot;latitude&quot; property" link="OsmGpsMap.html#OsmGpsMap--latitude"/>
+    <function name="The &quot;longitude&quot; property" link="OsmGpsMap.html#OsmGpsMap--longitude"/>
+    <function name="The &quot;map-source&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-source"/>
+    <function name="The &quot;map-x&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-x"/>
+    <function name="The &quot;map-y&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-y"/>
+    <function name="The &quot;max-zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--max-zoom"/>
+    <function name="The &quot;min-zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--min-zoom"/>
+    <function name="The &quot;proxy-uri&quot; property" link="OsmGpsMap.html#OsmGpsMap--proxy-uri"/>
+    <function name="The &quot;record-trip-history&quot; property" link="OsmGpsMap.html#OsmGpsMap--record-trip-history"/>
+    <function name="The &quot;repo-uri&quot; property" link="OsmGpsMap.html#OsmGpsMap--repo-uri"/>
+    <function name="The &quot;show-gps-point&quot; property" link="OsmGpsMap.html#OsmGpsMap--show-gps-point"/>
+    <function name="The &quot;show-trip-history&quot; property" link="OsmGpsMap.html#OsmGpsMap--show-trip-history"/>
+    <function name="The &quot;tile-cache&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache"/>
+    <function name="The &quot;tile-cache-base&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-base"/>
+    <function name="The &quot;tile-cache-is-full-path&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path"/>
+    <function name="The &quot;tiles-queued&quot; property" link="OsmGpsMap.html#OsmGpsMap--tiles-queued"/>
+    <function name="The &quot;zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--zoom"/>
+    <function name="The &quot;changed&quot; signal" link="OsmGpsMap.html#OsmGpsMap-changed"/>
+    <function name="OsmGpsMapLayer" link="OsmGpsMapLayer.html#OsmGpsMapLayer-struct"/>
+    <function name="osm_gps_map_layer_render ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-render"/>
+    <function name="osm_gps_map_layer_draw ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-draw"/>
+    <function name="osm_gps_map_layer_busy ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-busy"/>
+    <function name="osm_gps_map_layer_button_press ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-button-press"/>
+    <function name="OsmGpsMapOsd" link="OsmGpsMapLayer.html#OsmGpsMapOsd-struct"/>
+    <function name="OsmGpsMapOsdClass" link="OsmGpsMapLayer.html#OsmGpsMapOsdClass"/>
+    <function name="osm_gps_map_osd_new ()" link="OsmGpsMapLayer.html#osm-gps-map-osd-new"/>
+    <function name="The &quot;dpad-radius&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius"/>
+    <function name="The &quot;osd-x&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x"/>
+    <function name="The &quot;osd-y&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y"/>
+    <function name="The &quot;show-coordinates&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates"/>
+    <function name="The &quot;show-crosshair&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair"/>
+    <function name="The &quot;show-dpad&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad"/>
+    <function name="The &quot;show-gps-in-dpad&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad"/>
+    <function name="The &quot;show-gps-in-zoom&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom"/>
+    <function name="The &quot;show-scale&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale"/>
+    <function name="The &quot;show-zoom&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom"/>
+    <function name="OsmGpsMapImage" link="OsmGpsMapImage.html#OsmGpsMapImage-struct"/>
+    <function name="OsmGpsMapImageClass" link="OsmGpsMapImage.html#OsmGpsMapImageClass"/>
+    <function name="osm_gps_map_image_draw ()" link="OsmGpsMapImage.html#osm-gps-map-image-draw"/>
+    <function name="osm_gps_map_image_get_point ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-point"/>
+    <function name="osm_gps_map_image_get_type ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-type"/>
+    <function name="osm_gps_map_image_new ()" link="OsmGpsMapImage.html#osm-gps-map-image-new"/>
+    <function name="The &quot;pixbuf&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf"/>
+    <function name="The &quot;point&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--point"/>
+    <function name="The &quot;x-align&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--x-align"/>
+    <function name="The &quot;y-align&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--y-align"/>
+    <function name="OsmGpsMapTrack" link="OsmGpsMapTrack.html#OsmGpsMapTrack-struct"/>
+    <function name="OsmGpsMapTrackClass" link="OsmGpsMapTrack.html#OsmGpsMapTrackClass"/>
+    <function name="osm_gps_map_track_add_point ()" link="OsmGpsMapTrack.html#osm-gps-map-track-add-point"/>
+    <function name="osm_gps_map_track_get_color ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-color"/>
+    <function name="osm_gps_map_track_get_points ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-points"/>
+    <function name="osm_gps_map_track_new ()" link="OsmGpsMapTrack.html#osm-gps-map-track-new"/>
+    <function name="The &quot;alpha&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha"/>
+    <function name="The &quot;color&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--color"/>
+    <function name="The &quot;line-width&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width"/>
+    <function name="The &quot;track&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--track"/>
+    <function name="The &quot;visible&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--visible"/>
+    <function name="The &quot;point-added&quot; signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added"/>
+    <function name="OsmGpsMapPoint" link="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint"/>
+    <function name="osm_gps_map_point_get_degrees ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-get-degrees"/>
+    <function name="osm_gps_map_point_get_radians ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-get-radians"/>
+    <function name="osm_gps_map_point_new_degrees ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-new-degrees"/>
+    <function name="osm_gps_map_point_new_radians ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-new-radians"/>
+    <function name="osm_gps_map_point_set_degrees ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-degrees"/>
+    <function name="osm_gps_map_point_set_radians ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-radians"/>
+    <function name="osm_gps_map_draw_gps ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-draw-gps"/>
+    <function name="osm_gps_map_clear_gps ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-gps"/>
+    <function name="osm_gps_map_add_track ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-track"/>
+    <function name="osm_gps_map_replace_track ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-replace-track"/>
+    <function name="osm_gps_map_clear_tracks ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-tracks"/>
+    <function name="osm_gps_map_add_image ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image"/>
+    <function name="osm_gps_map_add_image_with_alignment ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image-with-alignment"/>
+    <function name="osm_gps_map_remove_image ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-remove-image"/>
+    <function name="osm_gps_map_clear_images ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-images"/>
+    <function name="osm_gps_map_add_layer ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-layer"/>
+    <function name="osm_gps_map_get_co_ordinates ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-get-co-ordinates"/>
+    <function name="osm_gps_map_screen_to_geographic ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-screen-to-geographic"/>
+    <function name="osm_gps_map_geographic_to_screen ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-geographic-to-screen"/>
+    <function name="osm_gps_map_set_mapcenter ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-set-mapcenter"/>
+  </functions>
+</book>

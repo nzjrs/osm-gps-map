@@ -1,0 +1,1433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>OsmGpsMap</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
+<link rel="up" href="api-reference.html" title="API Reference">
+<link rel="prev" href="api-reference.html" title="API Reference">
+<link rel="next" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer">
+<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="api-reference.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="api-reference.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">OsmGpsMap Reference Manual</th>
+<td><a accesskey="n" href="OsmGpsMapLayer.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#OsmGpsMap.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#OsmGpsMap.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#OsmGpsMap.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                   | 
+                  <a href="#OsmGpsMap.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
+                   | 
+                  <a href="#OsmGpsMap.properties" class="shortcut">Properties</a>
+                   | 
+                  <a href="#OsmGpsMap.signals" class="shortcut">Signals</a>
+</td></tr>
+</table>
+<div class="refentry" title="OsmGpsMap">
+<a name="OsmGpsMap"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="OsmGpsMap.top_of_page"></a>OsmGpsMap</span></h2>
+<p>OsmGpsMap</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv" title="Synopsis">
+<a name="OsmGpsMap.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">                    <a class="link" href="OsmGpsMap.html#OsmGpsMap-struct" title="OsmGpsMap">OsmGpsMap</a>;
+                    <a class="link" href="OsmGpsMap.html#OsmGpsMapClass" title="OsmGpsMapClass">OsmGpsMapClass</a>;
+#define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS" title="OSM_GPS_MAP_INVALID">OSM_GPS_MAP_INVALID</a>
+#define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS" title="OSM_GPS_MAP_CACHE_DISABLED">OSM_GPS_MAP_CACHE_DISABLED</a>
+#define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS" title="OSM_GPS_MAP_CACHE_AUTO">OSM_GPS_MAP_CACHE_AUTO</a>
+#define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" title="OSM_GPS_MAP_CACHE_FRIENDLY">OSM_GPS_MAP_CACHE_FRIENDLY</a>
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a>*              <a class="link" href="OsmGpsMap.html#osm-gps-map-get-default-cache-directory" title="osm_gps_map_get_default_cache_directory ()">osm_gps_map_get_default_cache_directory</a>
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);
+enum                <a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t">OsmGpsMapSource_t</a>;
+const <span class="returnvalue">char</span>*         <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-friendly-name" title="osm_gps_map_source_get_friendly_name ()">osm_gps_map_source_get_friendly_name</a>
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+const <span class="returnvalue">char</span>*         <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-repo-uri" title="osm_gps_map_source_get_repo_uri ()">osm_gps_map_source_get_repo_uri</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+const <span class="returnvalue">char</span>*         <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-image-format" title="osm_gps_map_source_get_image_format ()">osm_gps_map_source_get_image_format</a> (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-min-zoom" title="osm_gps_map_source_get_min_zoom ()">osm_gps_map_source_get_min_zoom</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-max-zoom" title="osm_gps_map_source_get_max_zoom ()">osm_gps_map_source_get_max_zoom</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-source-is-valid" title="osm_gps_map_source_is_valid ()">osm_gps_map_source_is_valid</a>         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-download-maps" title="osm_gps_map_download_maps ()">osm_gps_map_download_maps</a>           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom_start</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom_end</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-get-bbox" title="osm_gps_map_get_bbox ()">osm_gps_map_get_bbox</a>                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-set-center" title="osm_gps_map_set_center ()">osm_gps_map_set_center</a>              (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-set-center-and-zoom" title="osm_gps_map_set_center_and_zoom ()">osm_gps_map_set_center_and_zoom</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-set-zoom" title="osm_gps_map_set_zoom ()">osm_gps_map_set_zoom</a>                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-zoom-in" title="osm_gps_map_zoom_in ()">osm_gps_map_zoom_in</a>                 (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-zoom-out" title="osm_gps_map_zoom_out ()">osm_gps_map_zoom_out</a>                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-scroll" title="osm_gps_map_scroll ()">osm_gps_map_scroll</a>                  (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> dx</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> dy</code></em>);
+<span class="returnvalue">float</span>               <a class="link" href="OsmGpsMap.html#osm-gps-map-get-scale" title="osm_gps_map_get_scale ()">osm_gps_map_get_scale</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+enum                <a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="enum OsmGpsMapKey_t">OsmGpsMapKey_t</a>;
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut" title="osm_gps_map_set_keyboard_shortcut ()">osm_gps_map_set_keyboard_shortcut</a>   (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="enum OsmGpsMapKey_t"><span class="type">OsmGpsMapKey_t</span></a> key</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a> keyval</code></em>);
+<a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-get-event-location" title="osm_gps_map_get_event_location ()">osm_gps_map_get_event_location</a>      (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk/gdk-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen" title="osm_gps_map_convert_geographic_to_screen ()">osm_gps_map_convert_geographic_to_screen</a>
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_y</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic" title="osm_gps_map_convert_screen_to_geographic ()">osm_gps_map_convert_screen_to_geographic</a>
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_y</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-add" title="osm_gps_map_gps_add ()">osm_gps_map_gps_add</a>                 (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> heading</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-clear" title="osm_gps_map_gps_clear ()">osm_gps_map_gps_clear</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="returnvalue">OsmGpsMapTrack</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-get-track" title="osm_gps_map_gps_get_track ()">osm_gps_map_gps_get_track</a>           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-track-add" title="osm_gps_map_track_add ()">osm_gps_map_track_add</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-track-remove" title="osm_gps_map_track_remove ()">osm_gps_map_track_remove</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-track-remove-all" title="osm_gps_map_track_remove_all ()">osm_gps_map_track_remove_all</a>        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()">osm_gps_map_image_add</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add-with-alignment" title="osm_gps_map_image_add_with_alignment ()">osm_gps_map_image_add_with_alignment</a>
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> yalign</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove" title="osm_gps_map_image_remove ()">osm_gps_map_image_remove</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *image</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove-all" title="osm_gps_map_image_remove_all ()">osm_gps_map_image_remove_all</a>        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-layer-add" title="osm_gps_map_layer_add ()">osm_gps_map_layer_add</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-layer-remove" title="osm_gps_map_layer_remove ()">osm_gps_map_layer_remove</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-layer-remove-all" title="osm_gps_map_layer_remove_all ()">osm_gps_map_layer_remove_all</a>        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
+</pre>
+</div>
+<div class="refsect1" title="Object Hierarchy">
+<a name="OsmGpsMap.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+  <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+   +----<a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GInitiallyUnowned">GInitiallyUnowned</a>
+         +----<a href="/usr/share/gtk-doc/html/gtk/GtkObject.html">GtkObject</a>
+               +----<a href="/usr/share/gtk-doc/html/gtk/GtkWidget.html">GtkWidget</a>
+                     +----<a href="/usr/share/gtk-doc/html/gtk/GtkDrawingArea.html">GtkDrawingArea</a>
+                           +----OsmGpsMap
+</pre>
+</div>
+<div class="refsect1" title="Implemented Interfaces">
+<a name="OsmGpsMap.implemented-interfaces"></a><h2>Implemented Interfaces</h2>
+<p>
+OsmGpsMap implements
+ AtkImplementorIface and  <a href="/usr/share/gtk-doc/html/gtk/gtk-gtkbuildable.html#GtkBuildable">GtkBuildable</a>.</p>
+</div>
+<div class="refsect1" title="Properties">
+<a name="OsmGpsMap.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--auto-center" title='The "auto-center" property'>auto-center</a>"              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--auto-center-threshold" title='The "auto-center-threshold" property'>auto-center-threshold</a>"    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--auto-download" title='The "auto-download" property'>auto-download</a>"            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--drag-limit" title='The "drag-limit" property'>drag-limit</a>"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius" title='The "gps-track-highlight-radius" property'>gps-track-highlight-radius</a>" <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius" title='The "gps-track-point-radius" property'>gps-track-point-radius</a>"   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--gps-track-width" title='The "gps-track-width" property'>gps-track-width</a>"          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--image-format" title='The "image-format" property'>image-format</a>"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--latitude" title='The "latitude" property'>latitude</a>"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--longitude" title='The "longitude" property'>longitude</a>"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--map-source" title='The "map-source" property'>map-source</a>"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--map-x" title='The "map-x" property'>map-x</a>"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--map-y" title='The "map-y" property'>map-y</a>"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--max-zoom" title='The "max-zoom" property'>max-zoom</a>"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--min-zoom" title='The "min-zoom" property'>min-zoom</a>"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--proxy-uri" title='The "proxy-uri" property'>proxy-uri</a>"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--record-trip-history" title='The "record-trip-history" property'>record-trip-history</a>"      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'>repo-uri</a>"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--show-gps-point" title='The "show-gps-point" property'>show-gps-point</a>"           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--show-trip-history" title='The "show-trip-history" property'>show-trip-history</a>"        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='The "tile-cache" property'>tile-cache</a>"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'>tile-cache-base</a>"          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path" title='The "tile-cache-is-full-path" property'>tile-cache-is-full-path</a>"  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tiles-queued" title='The "tiles-queued" property'>tiles-queued</a>"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--zoom" title='The "zoom" property'>zoom</a>"                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
+</pre>
+</div>
+<div class="refsect1" title="Signals">
+<a name="OsmGpsMap.signals"></a><h2>Signals</h2>
+<pre class="synopsis">
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap-changed" title='The "changed" signal'>changed</a>"                                        : Run First
+</pre>
+</div>
+<div class="refsect1" title="Description">
+<a name="OsmGpsMap.description"></a><h2>Description</h2>
+<p>
+</p>
+</div>
+<div class="refsect1" title="Details">
+<a name="OsmGpsMap.details"></a><h2>Details</h2>
+<div class="refsect2" title="OsmGpsMap">
+<a name="OsmGpsMap-struct"></a><h3>OsmGpsMap</h3>
+<pre class="programlisting">typedef struct _OsmGpsMap OsmGpsMap;</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="OsmGpsMapClass">
+<a name="OsmGpsMapClass"></a><h3>OsmGpsMapClass</h3>
+<pre class="programlisting">typedef struct {
+    GtkDrawingAreaClass parent_class;
+
+    void (*draw_gps_point) (OsmGpsMap *map, GdkDrawable *drawable);
+} OsmGpsMapClass;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="OSM_GPS_MAP_INVALID">
+<a name="OSM-GPS-MAP-INVALID:CAPS"></a><h3>OSM_GPS_MAP_INVALID</h3>
+<pre class="programlisting">#define OSM_GPS_MAP_INVALID         (0.0/0.0)
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="OSM_GPS_MAP_CACHE_DISABLED">
+<a name="OSM-GPS-MAP-CACHE-DISABLED:CAPS"></a><h3>OSM_GPS_MAP_CACHE_DISABLED</h3>
+<pre class="programlisting">#define OSM_GPS_MAP_CACHE_DISABLED  "none://"
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="OSM_GPS_MAP_CACHE_AUTO">
+<a name="OSM-GPS-MAP-CACHE-AUTO:CAPS"></a><h3>OSM_GPS_MAP_CACHE_AUTO</h3>
+<pre class="programlisting">#define OSM_GPS_MAP_CACHE_AUTO      "auto://"
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="OSM_GPS_MAP_CACHE_FRIENDLY">
+<a name="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"></a><h3>OSM_GPS_MAP_CACHE_FRIENDLY</h3>
+<pre class="programlisting">#define OSM_GPS_MAP_CACHE_FRIENDLY  "friendly://"
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_get_default_cache_directory ()">
+<a name="osm-gps-map-get-default-cache-directory"></a><h3>osm_gps_map_get_default_cache_directory ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a>*              osm_gps_map_get_default_cache_directory
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> the default cache directory for the library, that is the base
+directory to which the full cache path is appended. If
+<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'><span class="type">"tile-cache-base"</span></a> is omitted from the constructor then this value
+is used.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="enum OsmGpsMapSource_t">
+<a name="OsmGpsMapSource-t"></a><h3>enum OsmGpsMapSource_t</h3>
+<pre class="programlisting">typedef enum {
+    OSM_GPS_MAP_SOURCE_NULL,
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP,
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,
+    OSM_GPS_MAP_SOURCE_OPENAERIALMAP,
+    OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,
+    OSM_GPS_MAP_SOURCE_OPENCYCLEMAP,
+    OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT,
+    OSM_GPS_MAP_SOURCE_GOOGLE_STREET,
+    OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,
+    OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,
+    OSM_GPS_MAP_SOURCE_YAHOO_STREET,
+    OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE,
+    OSM_GPS_MAP_SOURCE_YAHOO_HYBRID,
+    OSM_GPS_MAP_SOURCE_OSMC_TRAILS,
+
+    OSM_GPS_MAP_SOURCE_LAST
+} OsmGpsMapSource_t;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_get_friendly_name ()">
+<a name="osm-gps-map-source-get-friendly-name"></a><h3>osm_gps_map_source_get_friendly_name ()</h3>
+<pre class="programlisting">const <span class="returnvalue">char</span>*         osm_gps_map_source_get_friendly_name
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_get_repo_uri ()">
+<a name="osm-gps-map-source-get-repo-uri"></a><h3>osm_gps_map_source_get_repo_uri ()</h3>
+<pre class="programlisting">const <span class="returnvalue">char</span>*         osm_gps_map_source_get_repo_uri     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_get_image_format ()">
+<a name="osm-gps-map-source-get-image-format"></a><h3>osm_gps_map_source_get_image_format ()</h3>
+<pre class="programlisting">const <span class="returnvalue">char</span>*         osm_gps_map_source_get_image_format (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_get_min_zoom ()">
+<a name="osm-gps-map-source-get-min-zoom"></a><h3>osm_gps_map_source_get_min_zoom ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>                 osm_gps_map_source_get_min_zoom     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_get_max_zoom ()">
+<a name="osm-gps-map-source-get-max-zoom"></a><h3>osm_gps_map_source_get_max_zoom ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>                 osm_gps_map_source_get_max_zoom     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_source_is_valid ()">
+<a name="osm-gps-map-source-is-valid"></a><h3>osm_gps_map_source_is_valid ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_source_is_valid         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>source</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_download_maps ()">
+<a name="osm-gps-map-download-maps"></a><h3>osm_gps_map_download_maps ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_download_maps           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom_start</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom_end</code></em>);</pre>
+<p>
+Downloads all tiles over the supplied zoom range in the rectangular
+region specified by pt1 (north west corner) to pt2 (south east corner)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt1</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt2</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>zoom_start</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>zoom_end</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_get_bbox ()">
+<a name="osm-gps-map-get-bbox"></a><h3>osm_gps_map_get_bbox ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_get_bbox                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt1</code></em> :</span></p></td>
+<td>point to be filled with the top left location
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt2</code></em> :</span></p></td>
+<td>point to be filled with the bottom right location
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_set_center ()">
+<a name="osm-gps-map-set-center"></a><h3>osm_gps_map_set_center ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_set_center              (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_set_center_and_zoom ()">
+<a name="osm-gps-map-set-center-and-zoom"></a><h3>osm_gps_map_set_center_and_zoom ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_set_center_and_zoom     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>zoom</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_set_zoom ()">
+<a name="osm-gps-map-set-zoom"></a><h3>osm_gps_map_set_zoom ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>                 osm_gps_map_set_zoom                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> zoom</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>zoom</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_zoom_in ()">
+<a name="osm-gps-map-zoom-in"></a><h3>osm_gps_map_zoom_in ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>                 osm_gps_map_zoom_in                 (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_zoom_out ()">
+<a name="osm-gps-map-zoom-out"></a><h3>osm_gps_map_zoom_out ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>                 osm_gps_map_zoom_out                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_scroll ()">
+<a name="osm-gps-map-scroll"></a><h3>osm_gps_map_scroll ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_scroll                  (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> dx</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> dy</code></em>);</pre>
+<p>
+Scrolls the map by <em class="parameter"><code>dx</code></em>, <em class="parameter"><code>dy</code></em> pixels (positive north, east)
+</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_get_scale ()">
+<a name="osm-gps-map-get-scale"></a><h3>osm_gps_map_get_scale ()</h3>
+<pre class="programlisting"><span class="returnvalue">float</span>               osm_gps_map_get_scale               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> the scale of the map at the center, in meters/pixel.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="enum OsmGpsMapKey_t">
+<a name="OsmGpsMapKey-t"></a><h3>enum OsmGpsMapKey_t</h3>
+<pre class="programlisting">typedef enum {
+    OSM_GPS_MAP_KEY_FULLSCREEN,
+    OSM_GPS_MAP_KEY_ZOOMIN,
+    OSM_GPS_MAP_KEY_ZOOMOUT,
+    OSM_GPS_MAP_KEY_UP,
+    OSM_GPS_MAP_KEY_DOWN,
+    OSM_GPS_MAP_KEY_LEFT,
+    OSM_GPS_MAP_KEY_RIGHT,
+    OSM_GPS_MAP_KEY_MAX
+} OsmGpsMapKey_t;
+</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_set_keyboard_shortcut ()">
+<a name="osm-gps-map-set-keyboard-shortcut"></a><h3>osm_gps_map_set_keyboard_shortcut ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_set_keyboard_shortcut   (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="enum OsmGpsMapKey_t"><span class="type">OsmGpsMapKey_t</span></a> key</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a> keyval</code></em>);</pre>
+<p>
+Associates a keyboard shortcut with the supplied <em class="parameter"><code>keyval</code></em>
+(as returned by <a href="/usr/share/gtk-doc/html/gdk/gdk-Keyboard-Handling.html#gdk-keyval-from-name"><span class="type">gdk_keyval_from_name</span></a> or simiar). The action given in <em class="parameter"><code>key</code></em>
+will be triggered when the corresponding <em class="parameter"><code>keyval</code></em> is pressed. By default
+no keyboard shortcuts are associated.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>a <a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="enum OsmGpsMapKey_t"><span class="type">OsmGpsMapKey_t</span></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_get_event_location ()">
+<a name="osm-gps-map-get-event-location"></a><h3>osm_gps_map_get_event_location ()</h3>
+<pre class="programlisting"><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *    osm_gps_map_get_event_location      (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk/gdk-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);</pre>
+<p>
+A convenience function for getting the geographic location of events,
+such as mouse clicks, on the map
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>event</code></em> :</span></p></td>
+<td>A <span class="type">GtkEventButton</span> that occured on the map
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The point on the globe corresponding to the click. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_convert_geographic_to_screen ()">
+<a name="osm-gps-map-convert-geographic-to-screen"></a><h3>osm_gps_map_convert_geographic_to_screen ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_convert_geographic_to_screen
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *pixel_y</code></em>);</pre>
+<p>
+Convert the given location on the globe to the corresponding
+pixel locations on the map.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt</code></em> :</span></p></td>
+<td>location
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
+<td> pixel location on map, x axis. <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
+<td> pixel location on map, y axis. <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_convert_screen_to_geographic ()">
+<a name="osm-gps-map-convert-screen-to-geographic"></a><h3>osm_gps_map_convert_screen_to_geographic ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_convert_screen_to_geographic
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_x</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> pixel_y</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt</code></em>);</pre>
+<p>
+Convert the given pixel location on the map into corresponding
+location on the globe
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
+<td>pixel location on map, x axis
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
+<td>pixel location on map, y axis
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pt</code></em> :</span></p></td>
+<td> location . <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_gps_add ()">
+<a name="osm-gps-map-gps-add"></a><h3>osm_gps_map_gps_add ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_gps_add                 (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> heading</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>degrees
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>degrees
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>heading</code></em> :</span></p></td>
+<td>degrees or <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS" title="OSM_GPS_MAP_INVALID"><span class="type">OSM_GPS_MAP_INVALID</span></a> to disable showing heading
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_gps_clear ()">
+<a name="osm-gps-map-gps-clear"></a><h3>osm_gps_map_gps_clear ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_gps_clear               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_gps_get_track ()">
+<a name="osm-gps-map-gps-get-track"></a><h3>osm_gps_map_gps_get_track ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="returnvalue">OsmGpsMapTrack</span></a> *    osm_gps_map_gps_get_track           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> of the internal GPS track, 
+i.e. that which is modified when calling <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-add" title="osm_gps_map_gps_add ()"><code class="function">osm_gps_map_gps_add()</code></a>. You must 
+not free this.. <acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_track_add ()">
+<a name="osm-gps-map-track-add"></a><h3>osm_gps_map_track_add ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_track_add               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>track</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_track_remove ()">
+<a name="osm-gps-map-track-remove"></a><h3>osm_gps_map_track_remove ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_track_remove            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>track</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_track_remove_all ()">
+<a name="osm-gps-map-track-remove-all"></a><h3>osm_gps_map_track_remove_all ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_track_remove_all        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_image_add ()">
+<a name="osm-gps-map-image-add"></a><h3>osm_gps_map_image_add ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    osm_gps_map_image_add               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_image_add_with_alignment ()">
+<a name="osm-gps-map-image-add-with-alignment"></a><h3>osm_gps_map_image_add_with_alignment ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    osm_gps_map_image_add_with_alignment
+                                                        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
+                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> yalign</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>latitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>longitude</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>xalign</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>yalign</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_image_remove ()">
+<a name="osm-gps-map-image-remove"></a><h3>osm_gps_map_image_remove ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_image_remove            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *image</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>image</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_image_remove_all ()">
+<a name="osm-gps-map-image-remove-all"></a><h3>osm_gps_map_image_remove_all ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_image_remove_all        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_layer_add ()">
+<a name="osm-gps-map-layer-add"></a><h3>osm_gps_map_layer_add ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_layer_add               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>layer</code></em> :</span></p></td>
+<td>a <a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> object
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_layer_remove ()">
+<a name="osm-gps-map-layer-remove"></a><h3>osm_gps_map_layer_remove ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_layer_remove            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);</pre>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>layer</code></em> :</span></p></td>
+<td>a <a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_layer_remove_all ()">
+<a name="osm-gps-map-layer-remove-all"></a><h3>osm_gps_map_layer_remove_all ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_layer_remove_all        (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" title="Property Details">
+<a name="OsmGpsMap.property-details"></a><h2>Property Details</h2>
+<div class="refsect2" title='The "auto-center" property'>
+<a name="OsmGpsMap--auto-center"></a><h3>The <code class="literal">"auto-center"</code> property</h3>
+<pre class="programlisting">  "auto-center"              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
+<p>map auto center.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "auto-center-threshold" property'>
+<a name="OsmGpsMap--auto-center-threshold"></a><h3>The <code class="literal">"auto-center-threshold"</code> property</h3>
+<pre class="programlisting">  "auto-center-threshold"    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct</pre>
+<p>the amount of the window the gps point must move before auto centering.</p>
+<p>Allowed values: [0,1]</p>
+<p>Default value: 0.25</p>
+</div>
+<hr>
+<div class="refsect2" title='The "auto-download" property'>
+<a name="OsmGpsMap--auto-download"></a><h3>The <code class="literal">"auto-download"</code> property</h3>
+<pre class="programlisting">  "auto-download"            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
+<p>map auto download.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "drag-limit" property'>
+<a name="OsmGpsMap--drag-limit"></a><h3>The <code class="literal">"drag-limit"</code> property</h3>
+<pre class="programlisting">  "drag-limit"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>The number of pixels the user has to move the pointer in order to start dragging.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 10</p>
+</div>
+<hr>
+<div class="refsect2" title='The "gps-track-highlight-radius" property'>
+<a name="OsmGpsMap--gps-track-highlight-radius"></a><h3>The <code class="literal">"gps-track-highlight-radius"</code> property</h3>
+<pre class="programlisting">  "gps-track-highlight-radius" <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
+<p>The radius of the gps point highlight circle.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 20</p>
+</div>
+<hr>
+<div class="refsect2" title='The "gps-track-point-radius" property'>
+<a name="OsmGpsMap--gps-track-point-radius"></a><h3>The <code class="literal">"gps-track-point-radius"</code> property</h3>
+<pre class="programlisting">  "gps-track-point-radius"   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
+<p>The radius of the gps point inner circle.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 5</p>
+</div>
+<hr>
+<div class="refsect2" title='The "gps-track-width" property'>
+<a name="OsmGpsMap--gps-track-width"></a><h3>The <code class="literal">"gps-track-width"</code> property</h3>
+<pre class="programlisting">  "gps-track-width"          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct</pre>
+<p>The width of the lines drawn for the gps track.</p>
+<p>Allowed values: [1,100]</p>
+<p>Default value: 4</p>
+</div>
+<hr>
+<div class="refsect2" title='The "image-format" property'>
+<a name="OsmGpsMap--image-format"></a><h3>The <code class="literal">"image-format"</code> property</h3>
+<pre class="programlisting">  "image-format"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only</pre>
+<p>The map source tile repository image format (jpg, png).</p>
+<p>Default value: "png"</p>
+</div>
+<hr>
+<div class="refsect2" title='The "latitude" property'>
+<a name="OsmGpsMap--latitude"></a><h3>The <code class="literal">"latitude"</code> property</h3>
+<pre class="programlisting">  "latitude"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read</pre>
+<p>Latitude in degrees.</p>
+<p>Allowed values: [-90,90]</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" title='The "longitude" property'>
+<a name="OsmGpsMap--longitude"></a><h3>The <code class="literal">"longitude"</code> property</h3>
+<pre class="programlisting">  "longitude"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read</pre>
+<p>Longitude in degrees.</p>
+<p>Allowed values: [-180,180]</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" title='The "map-source" property'>
+<a name="OsmGpsMap--map-source"></a><h3>The <code class="literal">"map-source"</code> property</h3>
+<pre class="programlisting">  "map-source"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
+<p>
+A <a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> representing the tile repository to use
+</p>
+<p>
+</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+If you do not wish to use the default map tiles (provided by OpenStreeMap)
+it is recommened that you set this property at construction, instead
+of setting <a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'><span class="type">"repo-uri"</span></a>.
+</p>
+</div>
+<p>
+</p>
+<p>Allowed values: &gt;= -1</p>
+<p>Default value: -1</p>
+</div>
+<hr>
+<div class="refsect2" title='The "map-x" property'>
+<a name="OsmGpsMap--map-x"></a><h3>The <code class="literal">"map-x"</code> property</h3>
+<pre class="programlisting">  "map-x"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>Initial map x location.</p>
+<p>Default value: 890</p>
+</div>
+<hr>
+<div class="refsect2" title='The "map-y" property'>
+<a name="OsmGpsMap--map-y"></a><h3>The <code class="literal">"map-y"</code> property</h3>
+<pre class="programlisting">  "map-y"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>Initial map y location.</p>
+<p>Default value: 515</p>
+</div>
+<hr>
+<div class="refsect2" title='The "max-zoom" property'>
+<a name="OsmGpsMap--max-zoom"></a><h3>The <code class="literal">"max-zoom"</code> property</h3>
+<pre class="programlisting">  "max-zoom"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>Maximum zoom level.</p>
+<p>Allowed values: [0,20]</p>
+<p>Default value: 18</p>
+</div>
+<hr>
+<div class="refsect2" title='The "min-zoom" property'>
+<a name="OsmGpsMap--min-zoom"></a><h3>The <code class="literal">"min-zoom"</code> property</h3>
+<pre class="programlisting">  "min-zoom"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>Minimum zoom level.</p>
+<p>Allowed values: [0,20]</p>
+<p>Default value: 1</p>
+</div>
+<hr>
+<div class="refsect2" title='The "proxy-uri" property'>
+<a name="OsmGpsMap--proxy-uri"></a><h3>The <code class="literal">"proxy-uri"</code> property</h3>
+<pre class="programlisting">  "proxy-uri"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only</pre>
+<p>HTTP proxy uri or NULL.</p>
+<p>Default value: NULL</p>
+</div>
+<hr>
+<div class="refsect2" title='The "record-trip-history" property'>
+<a name="OsmGpsMap--record-trip-history"></a><h3>The <code class="literal">"record-trip-history"</code> property</h3>
+<pre class="programlisting">  "record-trip-history"      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
+<p>should all gps points be recorded in a trip history.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "repo-uri" property'>
+<a name="OsmGpsMap--repo-uri"></a><h3>The <code class="literal">"repo-uri"</code> property</h3>
+<pre class="programlisting">  "repo-uri"                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only</pre>
+<p>
+A URI string which defines the location and format to fetch tiles
+for the map. The string is of the format
+"http://tile.openstreetmap.org/#Z/#X/#Y.png". Characters
+that begin with # are treated as tokens and replaced according to
+the following rules;
+</p>
+<p>
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+#X - X-tile, slippy map format
+</p></li>
+<li class="listitem"><p>
+#Y - Y-tile, slippy map format, mercator projection
+</p></li>
+<li class="listitem"><p>
+#Z - Zoom level, where min_zoom &gt;= zoom &lt;= max_zoom
+</p></li>
+<li class="listitem"><p>
+#S - Zoom level, where -max_zoom &gt;= (zoom-max_zoom) &lt;= min_zoom
+</p></li>
+<li class="listitem"><p>
+#Q - Quad tree format, set of "qrts"
+</p></li>
+<li class="listitem"><p>
+#Q0 - Quad tree format, set of "0123"
+</p></li>
+<li class="listitem"><p>
+#YS - Not Implemented
+</p></li>
+<li class="listitem"><p>
+#R - Random integer in range [0,4]
+</p></li>
+</ul></div>
+<p>
+</p>
+<p>
+</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+If you do not wish to use the default map tiles (provided by OpenStreeMap)
+it is recommened that you use one of the predefined map sources, and thus
+you should construct the map by setting <a class="link" href="OsmGpsMap.html#OsmGpsMap--map-source" title='The "map-source" property'><span class="type">"map-source"</span></a> and not
+<a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'><span class="type">"repo-uri"</span></a>. The <a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'><span class="type">"repo-uri"</span></a> property is primarily
+designed for applications that wish complete control of tile repository
+management, or wish to use <a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> with a tile repository it does not
+explicitly support.
+</p>
+</div>
+<p>
+</p>
+<p>Default value: "http://tile.openstreetmap.org/#Z/#X/#Y.png"</p>
+</div>
+<hr>
+<div class="refsect2" title='The "show-gps-point" property'>
+<a name="OsmGpsMap--show-gps-point"></a><h3>The <code class="literal">"show-gps-point"</code> property</h3>
+<pre class="programlisting">  "show-gps-point"           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
+<p>
+Controls whether the current gps point is shown on the map. Note that
+for derived classes that implement the draw_gps_point vfunc, if this
+property is <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>
+</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "show-trip-history" property'>
+<a name="OsmGpsMap--show-trip-history"></a><h3>The <code class="literal">"show-trip-history"</code> property</h3>
+<pre class="programlisting">  "show-trip-history"        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
+<p>should the recorded trip history be shown on the map.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "tile-cache" property'>
+<a name="OsmGpsMap--tile-cache"></a><h3>The <code class="literal">"tile-cache"</code> property</h3>
+<pre class="programlisting">  "tile-cache"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct</pre>
+<p>
+Either a full path or one of the special format URIs
+<a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS" title="OSM_GPS_MAP_CACHE_DISABLED"><span class="type">OSM_GPS_MAP_CACHE_DISABLED</span></a>, <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS" title="OSM_GPS_MAP_CACHE_AUTO"><span class="type">OSM_GPS_MAP_CACHE_AUTO</span></a>,
+<a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" title="OSM_GPS_MAP_CACHE_FRIENDLY"><span class="type">OSM_GPS_MAP_CACHE_FRIENDLY</span></a>. Also see <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'><span class="type">"tile-cache-base"</span></a> for a
+full understanding.
+</p>
+<p>
+<a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS" title="OSM_GPS_MAP_CACHE_DISABLED"><span class="type">OSM_GPS_MAP_CACHE_DISABLED</span></a> disables the on disk tile cache (so all tiles
+are fetched from the network. <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS" title="OSM_GPS_MAP_CACHE_AUTO"><span class="type">OSM_GPS_MAP_CACHE_AUTO</span></a> causes the tile
+cache to be /tile-cache-base/md5(repo-uri), where md5 is the md5sum
+of <a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'><span class="type">"repo-uri"</span></a>. <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" title="OSM_GPS_MAP_CACHE_FRIENDLY"><span class="type">OSM_GPS_MAP_CACHE_FRIENDLY</span></a>
+causes the tile cache to be /tile-cache-base/friendlyname(repo-uri).
+</p>
+<p>
+Any other string is interpreted as a local path, i.e. /path/to/cache
+</p>
+<p>Default value: "auto://"</p>
+</div>
+<hr>
+<div class="refsect2" title='The "tile-cache-base" property'>
+<a name="OsmGpsMap--tile-cache-base"></a><h3>The <code class="literal">"tile-cache-base"</code> property</h3>
+<pre class="programlisting">  "tile-cache-base"          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only</pre>
+<p>
+The base directory of the tile cache when you have constructed
+the map with <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='The "tile-cache" property'><span class="type">"tile-cache"</span></a> set to <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS" title="OSM_GPS_MAP_CACHE_AUTO"><span class="type">OSM_GPS_MAP_CACHE_AUTO</span></a> or
+<a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" title="OSM_GPS_MAP_CACHE_FRIENDLY"><span class="type">OSM_GPS_MAP_CACHE_FRIENDLY</span></a>
+</p>
+<p>
+The string is interpreted as a local path, i.e. /path/to/cache
+</p>
+<p>Default value: NULL</p>
+</div>
+<hr>
+<div class="refsect2" title='The "tile-cache-is-full-path" property'>
+<a name="OsmGpsMap--tile-cache-is-full-path"></a><h3>The <code class="literal">"tile-cache-is-full-path"</code> property</h3>
+<pre class="programlisting">  "tile-cache-is-full-path"  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write</pre>
+<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Warning</h3>
+<p><code class="literal">OsmGpsMap:tile-cache-is-full-path</code> is deprecated and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='The "tile-cache" property'><span class="type">"tile-cache"</span></a> and <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'><span class="type">"tile-cache-base"</span></a> instead</p>
+</div>
+<p></p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" title='The "tiles-queued" property'>
+<a name="OsmGpsMap--tiles-queued"></a><h3>The <code class="literal">"tiles-queued"</code> property</h3>
+<pre class="programlisting">  "tiles-queued"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read</pre>
+<p>
+The number of tiles currently waiting to download. Connect to
+::notify::tiles-queued if you want to be informed when this changes
+</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" title='The "zoom" property'>
+<a name="OsmGpsMap--zoom"></a><h3>The <code class="literal">"zoom"</code> property</h3>
+<pre class="programlisting">  "zoom"                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>
+The map zoom level. Connect to ::notify::zoom if you want to be informed
+when this changes.
+</p>
+<p>Allowed values: [0,20]</p>
+<p>Default value: 3</p>
+</div>
+</div>
+<div class="refsect1" title="Signal Details">
+<a name="OsmGpsMap.signal-details"></a><h2>Signal Details</h2>
+<div class="refsect2" title='The "changed" signal'>
+<a name="OsmGpsMap-changed"></a><h3>The <code class="literal">"changed"</code> signal</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *arg0,
+                                                        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)      : Run First</pre>
+<p>
+The <a class="link" href="OsmGpsMap.html#OsmGpsMap-changed" title='The "changed" signal'><span class="type">"changed"</span></a> signal is emitted any time the map zoom or map center
+is chaged (such as by dragging or zooming).
+</p>
+<p>
+</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+If you are only interested in the map zoom, then you can simply connect
+to ::notify::zoom
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.14</div>
+</body>
+</html>
