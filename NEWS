@@ -10,6 +10,7 @@ Changes in 0.7.0
   * GPS marker visibility can also be controlled using the show-gps-point property
   * GObject introspection support
   * Documentation using gtk-doc
+  * Gtk-3.0 compatible (builds with -DGSEAL_ENABLE)
   * Massive improvements to the Image and Track functions and additional
     API cleanup. This release is not ABI compatible, however it is API compatible.
     All users are advised to update to the new API.

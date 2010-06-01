@@ -944,22 +944,19 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
     if(!(pixbuf = osm_gps_map_load_cached_tile(map, zoom, x, y)))
         pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 
-    if(pixbuf)
-    {
+    if(pixbuf) {
         g_debug("Found tile %s", filename);
         osm_gps_map_blit_tile(map, pixbuf, offset_x,offset_y);
         g_object_unref (pixbuf);
-    }
-    else
-    {
-        if (priv->map_auto_download_enabled)
+    } else {
+        if (priv->map_auto_download_enabled) {
             osm_gps_map_download_tile(map, zoom, x, y, TRUE);
+        }
 
         /* try to render the tile by scaling cached tiles from other zoom
          * levels */
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
-        if (pixbuf)
-        {
+        if (pixbuf) {
             gdk_draw_pixbuf (priv->pixmap,
                              priv->gc_map,
                              pixbuf,
@@ -968,13 +965,13 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
                              TILESIZE,TILESIZE,
                              GDK_RGB_DITHER_NONE, 0, 0);
             g_object_unref (pixbuf);
-        }
-        else
-        {
-            //prevent some artifacts when drawing not yet loaded areas.
+        } else {
+            /* prevent some artifacts when drawing not yet loaded areas. */
+            GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(map));
             gdk_draw_rectangle (priv->pixmap,
-                                GTK_WIDGET(map)->style->white_gc,
-                                TRUE, offset_x, offset_y, TILESIZE, TILESIZE);
+                                style->white_gc,
+                                TRUE,
+                                offset_x, offset_y, TILESIZE, TILESIZE);
         }
     }
     g_free(filename);
@@ -984,13 +981,18 @@ static void
 osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv = map->priv;
-    int i,j, width, height, tile_x0, tile_y0, tiles_nx, tiles_ny;
+    GtkAllocation allocation;
+    GtkStyle *style;
+    int i,j, tile_x0, tile_y0, tiles_nx, tiles_ny;
     int offset_xn = 0;
     int offset_yn = 0;
     int offset_x;
     int offset_y;
 
     g_debug("Fill tiles: %d,%d z:%d", priv->map_x, priv->map_y, priv->map_zoom);
+
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
+    style = gtk_widget_get_style(GTK_WIDGET(map));
 
     offset_x = - priv->map_x % TILESIZE;
     offset_y = - priv->map_y % TILESIZE;
@@ -1000,11 +1002,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
     offset_xn = offset_x + EXTRA_BORDER;
     offset_yn = offset_y + EXTRA_BORDER;
 
-    width  = GTK_WIDGET(map)->allocation.width;
-    height = GTK_WIDGET(map)->allocation.height;
-
-    tiles_nx = (width  - offset_x) / TILESIZE + 1;
-    tiles_ny = (height - offset_y) / TILESIZE + 1;
+    tiles_nx = (allocation.width  - offset_x) / TILESIZE + 1;
+    tiles_ny = (allocation.height - offset_y) / TILESIZE + 1;
 
     tile_x0 =  floor((float)priv->map_x / (float)TILESIZE);
     tile_y0 =  floor((float)priv->map_y / (float)TILESIZE);
@@ -1017,7 +1016,7 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map)
             if( j<0 || i<0 || i>=exp(priv->map_zoom * M_LN2) || j>=exp(priv->map_zoom * M_LN2))
             {
                 gdk_draw_rectangle (priv->pixmap,
-                                    GTK_WIDGET(map)->style->white_gc,
+                                    style->white_gc,
                                     TRUE,
                                     offset_xn, offset_yn,
                                     TILESIZE,TILESIZE);
@@ -1140,6 +1139,8 @@ osm_gps_map_purge_cache (OsmGpsMap *map)
 static gboolean
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
+    GtkStyle *style;
+    GtkAllocation allocation;
     OsmGpsMapPrivate *priv = map->priv;
 
     priv->idle_map_redraw = 0;
@@ -1170,12 +1171,14 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     priv->redraw_cycle++;
 
     /* draw white background to initialise pixmap */
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
+    style = gtk_widget_get_style(GTK_WIDGET(map));
     gdk_draw_rectangle (priv->pixmap,
-                        GTK_WIDGET(map)->style->white_gc,
+                        style->white_gc,
                         TRUE,
                         0, 0,
-                        GTK_WIDGET(map)->allocation.width + EXTRA_BORDER * 2,
-                        GTK_WIDGET(map)->allocation.height + EXTRA_BORDER * 2);
+                        allocation.width + EXTRA_BORDER * 2,
+                        allocation.height + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map);
 
@@ -1219,9 +1222,11 @@ center_coord_update(OsmGpsMap *map) {
 
     GtkWidget *widget = GTK_WIDGET(map);
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    GtkAllocation allocation;
 
-    gint pixel_x = priv->map_x + widget->allocation.width/2;
-    gint pixel_y = priv->map_y + widget->allocation.height/2;
+    gtk_widget_get_allocation(widget, &allocation);
+    gint pixel_x = priv->map_x + allocation.width/2;
+    gint pixel_y = priv->map_y + allocation.height/2;
 
     priv->center_rlon = pixel2lon(priv->map_zoom, pixel_x);
     priv->center_rlat = pixel2lat(priv->map_zoom, pixel_y);
@@ -1265,19 +1270,20 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
     int i;
     int step;
     gboolean handled;
-    OsmGpsMap *map;
+    GtkAllocation allocation;
+    OsmGpsMap *map = OSM_GPS_MAP(widget);
 
-    //if no keybindings are set, let the app handle them...
+    /* if no keybindings are set, let the app handle them... */
     if (!priv->keybindings_enabled)
         return FALSE;
 
     handled = FALSE;
-    map = OSM_GPS_MAP(widget);
-    step = GTK_WIDGET(widget)->allocation.width/OSM_GPS_MAP_SCROLL_STEP;
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
+    step = allocation.width/OSM_GPS_MAP_SCROLL_STEP;
 
-    //the map handles some keys on its own
+    /* the map handles some keys on its own */
     for (i = 0; i < OSM_GPS_MAP_KEY_MAX; i++) {
-        //not the key we have a binding for
+        /* not the key we have a binding for */
         if (map->priv->keybindings[i] != event->keyval)
             continue;
 
@@ -1416,7 +1422,7 @@ osm_gps_map_init (OsmGpsMap *object)
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                            GDK_POINTER_MOTION_MASK |
                            GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
-    GTK_WIDGET_SET_FLAGS (object, GTK_CAN_FOCUS);
+    gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 
@@ -1946,33 +1952,37 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 static gboolean
 osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
+    GtkAllocation allocation;
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    GdkWindow *window;
 
     /* create pixmap */
     if (priv->pixmap)
         g_object_unref (priv->pixmap);
 
+    gtk_widget_get_allocation(widget, &allocation);
+    window = gtk_widget_get_window(widget);
     priv->pixmap = gdk_pixmap_new (
-                        widget->window,
-                        widget->allocation.width + EXTRA_BORDER * 2,
-                        widget->allocation.height + EXTRA_BORDER * 2,
+                        window,
+                        allocation.width + EXTRA_BORDER * 2,
+                        allocation.height + EXTRA_BORDER * 2,
                         -1);
 
     // pixel_x,y, offsets
     gint pixel_x = lon2pixel(priv->map_zoom, priv->center_rlon);
     gint pixel_y = lat2pixel(priv->map_zoom, priv->center_rlat);
 
-    priv->map_x = pixel_x - widget->allocation.width/2;
-    priv->map_y = pixel_y - widget->allocation.height/2;
+    priv->map_x = pixel_x - allocation.width/2;
+    priv->map_y = pixel_y - allocation.height/2;
 
 #ifdef OSD_DOUBLE_BUFFER
     if (priv->dbuf_pixmap)
         g_object_unref (priv->dbuf_pixmap);
 
     priv->dbuf_pixmap = gdk_pixmap_new (
-                        widget->window,
-                        widget->allocation.width,
-                        widget->allocation.height,
+                        window,
+                        allocation.width,
+                        allocation.height,
                         -1);
 #endif
 
@@ -1995,18 +2005,26 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
+    GtkAllocation allocation;
+    GtkStateType state;
+    GtkStyle *style;
+    GdkWindow *window;
+    GdkDrawable *drawable;
 
+    window = gtk_widget_get_window (widget);
 #ifdef OSD_DOUBLE_BUFFER
-    GdkDrawable *drawable = priv->dbuf_pixmap;
+    drawable = priv->dbuf_pixmap;
 #else
-    GdkDrawable *drawable = widget->window;
+    drawable = window;
 #endif
-    GtkStateType state = gtk_widget_get_state (widget);
+    state = gtk_widget_get_state (widget);
+    gtk_widget_get_allocation (widget, &allocation);
+    style = gtk_widget_get_style (widget);
 
     if (!priv->drag_mouse_dx && !priv->drag_mouse_dy && event)
     {
         gdk_draw_drawable (drawable,
-                           widget->style->fg_gc[state],
+                           style->fg_gc[state],
                            priv->pixmap,
                            event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
                            event->area.x, event->area.y,
@@ -2015,48 +2033,48 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
     else
     {
         gdk_draw_drawable (drawable,
-                           widget->style->fg_gc[state],
+                           style->fg_gc[state],
                            priv->pixmap,
                            0,0,
                            priv->drag_mouse_dx - EXTRA_BORDER, 
                            priv->drag_mouse_dy - EXTRA_BORDER,
                            -1,-1);
         
-        //Paint white outside of the map if dragging. Its less
-        //ugly than painting the corrupted map
+        /* Paint white outside of the map if dragging. Its less 
+           ugly than painting the corrupted map */
         if(priv->drag_mouse_dx>EXTRA_BORDER) {
             gdk_draw_rectangle (drawable,
-                                widget->style->white_gc,
+                                style->white_gc,
                                 TRUE,
                                 0, 0,
                                 priv->drag_mouse_dx - EXTRA_BORDER,
-                                widget->allocation.height);
+                                allocation.height);
         }
         else if (-priv->drag_mouse_dx > EXTRA_BORDER)
         {
             gdk_draw_rectangle (drawable,
-                                widget->style->white_gc,
+                                style->white_gc,
                                 TRUE,
-                                priv->drag_mouse_dx + widget->allocation.width + EXTRA_BORDER, 0,
+                                priv->drag_mouse_dx + allocation.width + EXTRA_BORDER, 0,
                                 -priv->drag_mouse_dx - EXTRA_BORDER,
-                                widget->allocation.height);
+                                allocation.height);
         }
         
         if (priv->drag_mouse_dy>EXTRA_BORDER) {
             gdk_draw_rectangle (drawable,
-                                widget->style->white_gc,
+                                style->white_gc,
                                 TRUE,
                                 0, 0,
-                                widget->allocation.width,
+                                allocation.width,
                                 priv->drag_mouse_dy - EXTRA_BORDER);
         }
         else if (-priv->drag_mouse_dy > EXTRA_BORDER)
         {
             gdk_draw_rectangle (drawable,
-                                widget->style->white_gc,
+                                style->white_gc,
                                 TRUE,
-                                0, priv->drag_mouse_dy + widget->allocation.height + EXTRA_BORDER,
-                                widget->allocation.width,
+                                0, priv->drag_mouse_dy + allocation.height + EXTRA_BORDER,
+                                allocation.width,
                                 -priv->drag_mouse_dy - EXTRA_BORDER);
         }
     }
@@ -2068,7 +2086,7 @@ osm_gps_map_expose (GtkWidget *widget, GdkEventExpose  *event)
             osm_gps_map_layer_draw(layer, map, drawable);
 #ifdef OSD_DOUBLE_BUFFER
             gdk_draw_drawable (widget->window,
-                       widget->style->fg_gc[state],
+                       style->fg_gc[state],
                        priv->dbuf_pixmap,
                        0,0,0,0,-1,-1);
 #endif
@@ -2557,13 +2575,15 @@ osm_gps_map_download_cancel_all (OsmGpsMap *map)
 void
 osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
 {
+    GtkAllocation allocation;
     OsmGpsMapPrivate *priv = map->priv;
 
     if (pt1 && pt2) {
+        gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
         pt1->rlat = pixel2lat(priv->map_zoom, priv->map_y);
         pt1->rlon = pixel2lon(priv->map_zoom, priv->map_x);
-        pt2->rlat = pixel2lat(priv->map_zoom, priv->map_y + GTK_WIDGET(map)->allocation.height);
-        pt2->rlon = pixel2lon(priv->map_zoom, priv->map_x + GTK_WIDGET(map)->allocation.width);
+        pt2->rlat = pixel2lat(priv->map_zoom, priv->map_y + allocation.height);
+        pt2->rlon = pixel2lon(priv->map_zoom, priv->map_x + allocation.width);
     }
 }
 
@@ -2587,10 +2607,12 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
 {
     int pixel_x, pixel_y;
     OsmGpsMapPrivate *priv;
+    GtkAllocation allocation;
 
     g_return_if_fail (OSM_IS_GPS_MAP (map));
-    priv = map->priv;
 
+    priv = map->priv;
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
     g_object_set(G_OBJECT(map), "auto-center", FALSE, NULL);
 
     priv->center_rlat = deg2rad(latitude);
@@ -2599,8 +2621,8 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     pixel_x = lon2pixel(priv->map_zoom, priv->center_rlon);
     pixel_y = lat2pixel(priv->map_zoom, priv->center_rlat);
 
-    priv->map_x = pixel_x - GTK_WIDGET(map)->allocation.width/2;
-    priv->map_y = pixel_y - GTK_WIDGET(map)->allocation.height/2;
+    priv->map_x = pixel_x - allocation.width/2;
+    priv->map_y = pixel_y - allocation.height/2;
 
     osm_gps_map_map_redraw_idle(map);
 
@@ -2616,14 +2638,16 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
     int width_center, height_center;
     OsmGpsMapPrivate *priv;
+    GtkAllocation allocation;
 
     g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
     priv = map->priv;
 
     if (zoom != priv->map_zoom)
     {
-        width_center  = GTK_WIDGET(map)->allocation.width / 2;
-        height_center = GTK_WIDGET(map)->allocation.height / 2;
+        gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
+        width_center  = allocation.width / 2;
+        height_center = allocation.height / 2;
 
         /* update zoom but constrain [min_zoom..max_zoom] */
         priv->map_zoom = CLAMP(zoom, priv->min_zoom, priv->max_zoom);

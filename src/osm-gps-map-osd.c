@@ -466,24 +466,24 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
     cairo_t *cr;
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
-    GtkAllocation *allocation;
+    GtkAllocation allocation;
 
     g_return_if_fail(OSM_IS_GPS_MAP_OSD(osd));
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
-    allocation = &(GTK_WIDGET(map)->allocation);
 
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
     cr = gdk_cairo_create(drawable);
 
     if (priv->show_scale)
-        scale_draw(self, allocation, cr);
+        scale_draw(self, &allocation, cr);
     if (priv->show_coordinates)
-        coordinates_draw(self, allocation, cr);
+        coordinates_draw(self, &allocation, cr);
     if (priv->show_crosshair)
-        crosshair_draw(self, allocation, cr);
+        crosshair_draw(self, &allocation, cr);
     if (priv->show_zoom || priv->show_dpad)
-        controls_draw(self, allocation, cr);
+        controls_draw(self, &allocation, cr);
 
     cairo_destroy(cr);
 }
@@ -503,23 +503,23 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
     OsdControlPress_t but = OSD_NONE;
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
-    GtkAllocation *allocation;
+    GtkAllocation allocation;
 
     g_return_val_if_fail(OSM_IS_GPS_MAP_OSD(osd), FALSE);
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
-    allocation = &(GTK_WIDGET(map)->allocation);
+    gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
     if ((event->button == 1) && (event->type == GDK_BUTTON_PRESS)) {
         gint mx = event->x - priv->osd_x;
         gint my = event->y - priv->osd_y;
 
         if(priv->osd_x < 0)
-            mx -= (allocation->width - priv->osd_w);
+            mx -= (allocation.width - priv->osd_w);
     
         if(priv->osd_y < 0)
-            my -= (allocation->height - priv->osd_h);
+            my -= (allocation.height - priv->osd_h);
 
         /* first do a rough test for the OSD area. */
         /* this is just to avoid an unnecessary detailed test */
@@ -856,8 +856,9 @@ controls_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 
     controls->rendered = TRUE;
 
-    GdkColor bg = GTK_WIDGET(map)->style->bg[GTK_STATE_NORMAL];
-    GdkColor fg = GTK_WIDGET(map)->style->fg[GTK_STATE_NORMAL];
+    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(map));
+    GdkColor bg = style->bg[GTK_STATE_NORMAL];
+    GdkColor fg = style->fg[GTK_STATE_NORMAL];
     //GdkColor da = GTK_WIDGET(map)->style->fg[GTK_STATE_INSENSITIVE];
 
     /* first fill with transparency */
