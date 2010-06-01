@@ -22,7 +22,6 @@ osmgpsmap_la_SOURCES = osmgpsmapmodule.c osmgpsmap.c
 CLEANFILES = osmgpsmap.c
 EXTRA_DIST = \
 	setup.py \
-	mapviewer.py \
 	osmgpsmap.override \
 	$(defs_DATA)
 

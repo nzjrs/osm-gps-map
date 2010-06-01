@@ -21,22 +21,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap.pc
 
 EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
-	osmgpsmap.pc.in                             \
-	python/Makefile.am                          \
-	python/Makefile.in                          \
-	python/acinclude.m4                         \
-	python/ChangeLog                            \
-	python/osmgpsmap.defs                       \
-	python/setup.py                             \
-	python/aclocal.m4                           \
-	python/configure                            \
-	python/osmgpsmapmodule.c                    \
-	python/mapviewer.py                         \
-	python/AUTHORS                              \
-	python/configure.ac                         \
-	python/osmgpsmap.override                   \
-	python/NEWS                                 \
-	python/README
+	osmgpsmap.pc.in
 
 # ChangeLog generation from nautils
 distclean-local:
