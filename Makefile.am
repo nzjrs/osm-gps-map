@@ -25,6 +25,8 @@ EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
 	gtk-doc.make		                        \
 	m4/introspection.m4
 
+DISTCLEANFILES = gtk-doc.make
+
 # ChangeLog generation from nautils
 distclean-local:
 	if test "$(srcdir)" = "."; then :; else \
