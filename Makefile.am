@@ -21,7 +21,9 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap.pc
 
 EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
-	osmgpsmap.pc.in
+	osmgpsmap.pc.in                             \
+	gtk-doc.make		                        \
+	m4/introspection.m4
 
 # ChangeLog generation from nautils
 distclean-local:
