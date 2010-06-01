@@ -1212,13 +1212,14 @@ osm_gps_map_map_redraw_idle (OsmGpsMap *map)
         priv->idle_map_redraw = g_idle_add ((GSourceFunc)osm_gps_map_map_redraw, map);
 }
 
+/* call this to update center_rlat and center_rlon after
+ * changin map_x or map_y */
 static void
 center_coord_update(OsmGpsMap *map) {
 
     GtkWidget *widget = GTK_WIDGET(map);
     OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
 
-    // pixel_x,y, offsets
     gint pixel_x = priv->map_x + widget->allocation.width/2;
     gint pixel_y = priv->map_y + widget->allocation.height/2;
 
@@ -2296,7 +2297,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     /**
      * OsmGpsMap:zoom:
      *
-     * The map zoom level. Connect to notify::zoom if you want to be informed
+     * The map zoom level. Connect to ::notify::zoom if you want to be informed
      * when this changes.
     **/
     g_object_class_install_property (object_class,
@@ -2373,7 +2374,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
      * OsmGpsMap:tiles-queued:
      *
      * The number of tiles currently waiting to download. Connect to
-     * notify::tiles-queued if you want to be informed when this changes
+     * ::notify::tiles-queued if you want to be informed when this changes
     **/
     g_object_class_install_property (object_class,
                                      PROP_TILES_QUEUED,
@@ -2456,6 +2457,19 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        10,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * OsmGpsMap::changed:
+     *
+     * The #OsmGpsMap::changed signal is emitted any time the map zoom or map center
+     * is chaged (such as by dragging or zooming).
+     *
+     * <note>
+     * <para>
+     * If you are only interested in the map zoom, then you can simply connect
+     * to ::notify::zoom
+     * </para>
+     * </note>
+     **/
     g_signal_new ("changed", OSM_TYPE_GPS_MAP,
                   G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
