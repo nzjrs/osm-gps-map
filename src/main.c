@@ -129,7 +129,7 @@ static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    osm_gps_map_set_mapcenter(map, -43.5326,172.6362,12);
+    osm_gps_map_set_center_and_zoom(map, -43.5326,172.6362,12);
     return FALSE;
 }
 

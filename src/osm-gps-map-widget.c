@@ -2523,6 +2523,7 @@ cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
  * Cancels all tiles currently being downloaded. Typically used if you wish to
  * cacel a large number of tiles queued using osm_gps_map_download_maps()
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_download_cancel_all (OsmGpsMap *map)
@@ -2531,6 +2532,14 @@ osm_gps_map_download_cancel_all (OsmGpsMap *map)
     g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, priv->soup_session);
 }
 
+/**
+ * osm_gps_map_get_bbox:
+ * @pt1: point to be filled with the top left location
+ * @pt2: point to be filled with the bottom right location
+ *
+ * Returns the geographic locations of the bounding box describing the contents
+ * of the current window, i.e the top left and bottom right corners.
+ **/
 void
 osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
 {
@@ -2544,13 +2553,21 @@ osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
     }
 }
 
-void
-osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int zoom)
+/**
+ * osm_gps_map_set_center_and_zoom:
+ *
+ * Since: 0.7.0
+ **/
+void osm_gps_map_set_center_and_zoom (OsmGpsMap *map, float latitude, float longitude, int zoom)
 {
     osm_gps_map_set_center (map, latitude, longitude);
     osm_gps_map_set_zoom (map, zoom);
 }
 
+/**
+ * osm_gps_map_set_center:
+ *
+ **/
 void
 osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
 {
@@ -2565,7 +2582,6 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     priv->center_rlat = deg2rad(latitude);
     priv->center_rlon = deg2rad(longitude);
 
-    // pixel_x,y, offsets
     pixel_x = lon2pixel(priv->map_zoom, priv->center_rlon);
     pixel_y = lat2pixel(priv->map_zoom, priv->center_rlat);
 
@@ -2577,6 +2593,10 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     g_signal_emit_by_name(map, "changed");
 }
 
+/**
+ * osm_gps_map_set_zoom:
+ *
+ **/
 int 
 osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
@@ -2604,6 +2624,10 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
     return priv->map_zoom;
 }
 
+/**
+ * osm_gps_map_zoom_in:
+ *
+ **/
 int
 osm_gps_map_zoom_in (OsmGpsMap *map)
 {
@@ -2611,6 +2635,10 @@ osm_gps_map_zoom_in (OsmGpsMap *map)
     return osm_gps_map_set_zoom(map, map->priv->map_zoom+1);
 }
 
+/**
+ * osm_gps_map_zoom_out:
+ *
+ **/
 int
 osm_gps_map_zoom_out (OsmGpsMap *map)
 {
@@ -2705,6 +2733,11 @@ osm_gps_map_set_keyboard_shortcut (OsmGpsMap *map, OsmGpsMapKey_t key, guint key
     map->priv->keybindings_enabled = TRUE;
 }
 
+/**
+ * osm_gps_map_track_add:
+ *
+ * Since: 0.7.0
+ **/
 void
 osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
@@ -2723,6 +2756,11 @@ osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
     osm_gps_map_map_redraw_idle(map);
 }
 
+/**
+ * osm_gps_map_track_remove_all:
+ *
+ * Since: 0.7.0
+ **/
 void
 osm_gps_map_track_remove_all (OsmGpsMap *map)
 {
@@ -2732,6 +2770,11 @@ osm_gps_map_track_remove_all (OsmGpsMap *map)
     osm_gps_map_map_redraw_idle(map);
 }
 
+/**
+ * osm_gps_map_track_remove:
+ *
+ * Since: 0.7.0
+ **/
 gboolean
 osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
@@ -2748,6 +2791,7 @@ osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
 /**
  * osm_gps_map_gps_clear:
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_gps_clear (OsmGpsMap *map)
@@ -2772,6 +2816,7 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
  * Returns: (transfer none): The #OsmGpsMapTrack of the internal GPS track, 
  * i.e. that which is modified when calling osm_gps_map_gps_add(). You must 
  * not free this.
+ * Since: 0.7.0
  **/
 OsmGpsMapTrack *
 osm_gps_map_gps_get_track (OsmGpsMap *map)
@@ -2785,6 +2830,8 @@ osm_gps_map_gps_get_track (OsmGpsMap *map)
  * @latitude: degrees
  * @longitude: degrees
  * @heading: degrees or #OSM_GPS_MAP_INVALID to disable showing heading
+ *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float heading)
@@ -2816,6 +2863,7 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
  * osm_gps_map_image_add:
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ * Since: 0.7.0
  **/
 OsmGpsMapImage *
 osm_gps_map_image_add (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
@@ -2833,6 +2881,7 @@ on_image_changed (OsmGpsMapImage *image, GParamSpec *pspec, OsmGpsMap *map)
  * osm_gps_map_image_add_with_alignment:
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ * Since: 0.7.0
  **/
 OsmGpsMapImage *
 osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
@@ -2856,6 +2905,7 @@ osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float long
 /**
  * osm_gps_map_image_remove:
  *
+ * Since: 0.7.0
  **/
 gboolean
 osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
@@ -2873,6 +2923,7 @@ osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
 /**
  * osm_gps_map_image_remove_all:
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_image_remove_all (OsmGpsMap *map)
@@ -2887,6 +2938,7 @@ osm_gps_map_image_remove_all (OsmGpsMap *map)
  * osm_gps_map_layer_add:
  * @layer: a #OsmGpsMapLayer object
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_layer_add (OsmGpsMap *map, OsmGpsMapLayer *layer)
@@ -2902,6 +2954,7 @@ osm_gps_map_layer_add (OsmGpsMap *map, OsmGpsMapLayer *layer)
  * osm_gps_map_layer_remove:
  * @layer: a #OsmGpsMapLayer object
  *
+ * Since: 0.7.0
  **/
 gboolean
 osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
@@ -2920,6 +2973,7 @@ osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
  * osm_gps_map_layer_remove:
  * @layer: a #OsmGpsMapLayer object
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_layer_remove_all (OsmGpsMap *map)
@@ -2940,6 +2994,7 @@ osm_gps_map_layer_remove_all (OsmGpsMap *map)
  * Convert the given pixel location on the map into corresponding
  * location on the globe
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixel_y, OsmGpsMapPoint *pt)
@@ -2964,6 +3019,7 @@ osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixe
  * Convert the given location on the globe to the corresponding
  * pixel locations on the map.
  *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gint *pixel_x, gint *pixel_y)
@@ -2989,6 +3045,7 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
  * such as mouse clicks, on the map
  *
  * Returns: (transfer full): The point on the globe corresponding to the click
+ * Since: 0.7.0
  **/
 OsmGpsMapPoint *
 osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
@@ -2999,9 +3056,9 @@ osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
 }
 
 /**
- * osm_gps_map_remove_image: (skip)
+ * osm_gps_map_remove_image:
  *
- * Deprecated: Use osm_gps_map_image_remove() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_image_remove() instead.
  **/
 gboolean
 osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
@@ -3034,10 +3091,10 @@ osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 }
 
 /**
- * osm_gps_map_replace_track: (skip)
+ * osm_gps_map_replace_track:
  *
- * Deprecated: Use osm_gps_map_track_remove() and osm_gps_map_track_add() or just
- * edit the #OsmGpsMapTrack object directly
+ * Deprecated: 0.7.0: Use osm_gps_map_track_remove() and osm_gps_map_track_add()
+ * or just edit the #OsmGpsMapTrack object directly
  **/
 void
 osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)

@@ -100,3 +100,14 @@
   )
 )
 
+(define-method set_mapcenter
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_mapcenter")
+  (return-type "none")
+  (parameters
+    '("float" "latitude")
+    '("float" "longitude")
+    '("int" "zoom")
+  )
+)
+

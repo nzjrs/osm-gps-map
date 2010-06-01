@@ -2,9 +2,9 @@
 #include "osm-gps-map-compat.h"
 
 /**
- * osm_gps_map_draw_gps: (skip)
+ * osm_gps_map_draw_gps:
  *
- * Deprecated: Use osm_gps_map_gps_add() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_gps_add() instead.
  **/
 void
 osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float heading)
@@ -14,9 +14,9 @@ osm_gps_map_draw_gps (OsmGpsMap *map, float latitude, float longitude, float hea
 }
 
 /**
- * osm_gps_map_clear_gps: (skip)
+ * osm_gps_map_clear_gps:
  *
- * Deprecated: Use osm_gps_map_gps_clear() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_gps_clear() instead.
  **/
 void
 osm_gps_map_clear_gps (OsmGpsMap *map)
@@ -26,9 +26,9 @@ osm_gps_map_clear_gps (OsmGpsMap *map)
 }
 
 /**
- * osm_gps_map_add_track: (skip)
+ * osm_gps_map_add_track:
  *
- * Deprecated: Use osm_gps_map_track_add() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_track_add() instead.
  **/
 void
 osm_gps_map_add_track (OsmGpsMap *map, GSList *list)
@@ -40,9 +40,9 @@ osm_gps_map_add_track (OsmGpsMap *map, GSList *list)
 }
 
 /**
- * osm_gps_map_clear_tracks: (skip)
+ * osm_gps_map_clear_tracks:
  *
- * Deprecated: Use osm_gps_map_track_remove_all() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_track_remove_all() instead.
  **/
 void
 osm_gps_map_clear_tracks (OsmGpsMap *map)
@@ -52,9 +52,9 @@ osm_gps_map_clear_tracks (OsmGpsMap *map)
 }
 
 /**
- * osm_gps_map_add_image_with_alignment: (skip)
+ * osm_gps_map_add_image_with_alignment:
  *
- * Deprecated: Use osm_gps_map_image_add_with_alignment() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_image_add_with_alignment() instead.
  **/
 void
 osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
@@ -64,9 +64,9 @@ osm_gps_map_add_image_with_alignment (OsmGpsMap *map, float latitude, float long
 }
 
 /**
- * osm_gps_map_add_image: (skip)
+ * osm_gps_map_add_image:
  *
- * Deprecated: Use osm_gps_map_image_add() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_image_add() instead.
  **/
 void
 osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
@@ -76,9 +76,9 @@ osm_gps_map_add_image (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 }
 
 /**
- * osm_gps_map_clear_images: (skip)
+ * osm_gps_map_clear_images:
  *
- * Deprecated: Use osm_gps_map_image_remove_all() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_image_remove_all() instead.
  **/
 void
 osm_gps_map_clear_images (OsmGpsMap *map)
@@ -88,9 +88,9 @@ osm_gps_map_clear_images (OsmGpsMap *map)
 }
 
 /**
- * osm_gps_map_add_layer: (skip)
+ * osm_gps_map_add_layer:
  *
- * Deprecated: Use osm_gps_map_layer_add() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_layer_add() instead.
  **/
 void
 osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
@@ -100,9 +100,9 @@ osm_gps_map_add_layer (OsmGpsMap *map, OsmGpsMapLayer *layer)
 }
 
 /**
- * osm_gps_map_screen_to_geographic: (skip)
+ * osm_gps_map_screen_to_geographic:
  *
- * Deprecated: Use osm_gps_map_convert_screen_to_geographic() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_convert_screen_to_geographic() instead.
  **/
 void
 osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
@@ -118,9 +118,9 @@ osm_gps_map_screen_to_geographic (OsmGpsMap *map, gint pixel_x, gint pixel_y,
 }
 
 /**
- * osm_gps_map_geographic_to_screen: (skip)
+ * osm_gps_map_geographic_to_screen:
  *
- * Deprecated: Use osm_gps_map_convert_geographic_to_screen() instead.
+ * Deprecated: 0.7.0: Use osm_gps_map_convert_geographic_to_screen() instead.
  **/
 void
 osm_gps_map_geographic_to_screen (OsmGpsMap *map,
@@ -134,9 +134,9 @@ osm_gps_map_geographic_to_screen (OsmGpsMap *map,
 }
 
 /**
- * osm_gps_map_get_co_ordinates: (skip)
+ * osm_gps_map_get_co_ordinates:
  *
- * Deprecated: Use osm_gps_map_convert_screen_to_geographic() or 
+ * Deprecated: 0.7.0: Use osm_gps_map_convert_screen_to_geographic() or 
  * osm_gps_map_get_event_location() instead.
  **/
 OsmGpsMapPoint
@@ -147,3 +147,17 @@ osm_gps_map_get_co_ordinates (OsmGpsMap *map, int pixel_x, int pixel_y)
     osm_gps_map_convert_screen_to_geographic(map, pixel_x, pixel_y, &p);
     return p;
 }
+
+/**
+ * osm_gps_map_set_mapcenter:
+ *
+ * Deprecated: 0.7.0: Use osm_gps_map_set_center_and_zoom() instead.
+ **/
+void
+osm_gps_map_set_mapcenter (OsmGpsMap *map, float latitude, float longitude, int zoom)
+{
+    g_warning("%s is deprecated", G_STRFUNC);
+    osm_gps_map_set_center_and_zoom (map, latitude, longitude, zoom);
+}
+
+

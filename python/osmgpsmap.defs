@@ -102,7 +102,8 @@
     '("auto_center" (optional))
     '("auto_center_threshold" (optional))
     '("record_trip_history" (optional))
-    '("show_trip-history" (optional))
+    '("show_trip_history" (optional))
+    '("show_gps_point" (optional))
     '("auto_download" (optional))
     '("repo_uri" (optional))
     '("proxy_uri" (optional))
@@ -164,9 +165,9 @@
   )
 )
 
-(define-method set_mapcenter
+(define-method set_center_and_zoom
   (of-object "OsmGpsMap")
-  (c-name "osm_gps_map_set_mapcenter")
+  (c-name "osm_gps_map_set_center_and_zoom")
   (return-type "none")
   (parameters
     '("float" "latitude")

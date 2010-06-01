@@ -197,7 +197,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
     def home_clicked(self, button):
-        self.osm.set_mapcenter(-44.39, 171.25, 12)
+        self.osm.set_center_and_zoom(-44.39, 171.25, 12)
  
     def cache_clicked(self, button):
         bbox = self.osm.get_bbox()
