@@ -17,7 +17,7 @@ def get_lib_dirs(pkg):
 def get_libs(pkg):
     return pkg_config_parse(pkg,'--libs-only-l')
 
-VERSION = "0.7.0"
+VERSION = "0.7.1"
 
 _osmgpsmap = Extension(name = 'osmgpsmap',
             sources= ['osmgpsmapmodule.c','osmgpsmap.c'],

@@ -1,3 +1,7 @@
+Changes in 0.7.1
+======================
+
+
 Changes in 0.7.0
 ======================
   * Map auto center threshold is now adjustable via the auto-center-threshold
