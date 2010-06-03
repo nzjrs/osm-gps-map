@@ -54,7 +54,7 @@ if test -f ../src/libosmgpsmap.la; then
 	OSMGPSMAP_CFLAGS="-I\$(top_srcdir)/../src/"
 	OSMGPSMAP_LIBS="\$(top_builddir)/../src/libosmgpsmap.la"
 else
-	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap)
+	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap = 0.7.0)
 fi
 
 AC_OUTPUT([Makefile])
