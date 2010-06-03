@@ -17,19 +17,18 @@ def get_lib_dirs(pkg):
 def get_libs(pkg):
     return pkg_config_parse(pkg,'--libs-only-l')
 
-#print get_libs('osmgpsmap pygobject-2.0')
-#print get_libs('osmgpsmap pygobject-2.0')
-#print get_libs('osmgpsmap pygobject-2.0')
+VERSION = "0.7.0"
 
 _osmgpsmap = Extension(name = 'osmgpsmap',
             sources= ['osmgpsmapmodule.c','osmgpsmap.c'],
             include_dirs = get_include('osmgpsmap pygobject-2.0'),
             library_dirs = get_lib_dirs('osmgpsmap pygobject-2.0'),
             libraries = get_libs('osmgpsmap pygobject-2.0'),
-        )
+            define_macros = [('VERSION', '"""%s"""' % VERSION)],
+            )
 
 setup( name = "python-osmgpsmap",
-    version = "0.6.0",
+    version = VERSION,
     description = "python interface for osmgpsmap",
     ext_modules = [_osmgpsmap],
     )
