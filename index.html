@@ -30,7 +30,20 @@
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style>
-	
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3707626-5']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>	
 </head>
 
 <body>
@@ -88,15 +101,28 @@
     </ul></p>
 
     <h2>Dependencies</h2>
-    <p><ul>
+
+    <p>To build on Linux you will need to install the following;
+    <ul>
         <li>libsoup-2.4 (recommended) or libsoup-2.2</li>
         <li>gtk+</li>
         <li>cairo</li>
         <li>pygtk-dev (optional, for python bindings)</li>
     </ul></p>
 
-    <h2>Install</h2>
-    <p>
+    <p>To run or build on Windows you will need to install the following;
+    <ul>
+        <li><a href="http://www.python.org/download/">Python 2.6</a></li>
+        <li><a href="http://www.gtk.org/download-windows.html#StableRelease">GTK+</a></li>
+        <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/libxml2_2.7.4-1_win32.zip">libxml</a></li>
+        <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/libsoup/2.26">libsoup</a></li>
+        <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pygobject/">PyGObject</a></li>
+        <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pycairo/">PyCairo</a></li>
+        <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/">PyGTK</a></li>
+    </ul></p>
+
+    <h2>Install From Source</h2>
+    <p> On Linux perform the following;
 <pre>./configure; make; make install #C library
 cd python; ./configure; make; make install #Python bindings</pre>
     </p>
@@ -153,15 +179,5 @@ cd python; ./configure; make; make install #Python bindings</pre>
     </div>
     
   </div>
-
-  <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-3707626-5");
-pageTracker._trackPageview();
-} catch(err) {}</script>
 </body>
 </html>
