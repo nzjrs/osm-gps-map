@@ -2874,7 +2874,6 @@ osm_gps_map_gps_get_track (OsmGpsMap *map)
 void
 osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float heading)
 {
-    OsmGpsMapPoint *point;
     OsmGpsMapPrivate *priv;
 
     g_return_if_fail (OSM_IS_GPS_MAP (map));
@@ -2888,9 +2887,10 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
 
     /* If trip marker add to list of gps points */
     if (priv->trip_history_record_enabled) {
-        point = osm_gps_map_point_new_degrees(latitude, longitude);
+        OsmGpsMapPoint point;
+        osm_gps_map_point_set_degrees (&point, latitude, longitude);
         /* this will cause a redraw to be scheduled */
-        osm_gps_map_track_add_point (priv->gps_track, point);
+        osm_gps_map_track_add_point (priv->gps_track, &point);
     } else {
         osm_gps_map_map_redraw_idle (map);
         maybe_autocenter_map (map);

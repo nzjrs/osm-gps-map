@@ -501,7 +501,7 @@
   (c-name "osm_gps_map_track_add_point")
   (return-type "none")
   (parameters
-    '("OsmGpsMapPoint*" "point")
+    '("const-OsmGpsMapPoint*" "point")
   )
 )
 
