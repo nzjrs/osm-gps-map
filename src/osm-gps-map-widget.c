@@ -1145,6 +1145,10 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
     priv->idle_map_redraw = 0;
 
+    /* dont't redraw if we have not been shown yet */
+    if (!priv->pixmap)
+        return FALSE;
+
     /* don't redraw the entire map while the OSD is doing */
     /* some animation or the like. This is to keep the animation */
     /* fluid */
