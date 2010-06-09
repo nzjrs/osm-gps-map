@@ -136,8 +136,8 @@
 #include <cairo.h>
 
 #include "converter.h"
+#include "private.h"
 #include "osm-gps-map-source.h"
-#include "osm-gps-map-types.h"
 #include "osm-gps-map-widget.h"
 #include "osm-gps-map-compat.h"
 

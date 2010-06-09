@@ -21,7 +21,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "osm-gps-map-types.h"
+#include "private.h"
 #include "converter.h"
 
 

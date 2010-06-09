@@ -36,7 +36,7 @@ libosmgpsmap_la_LIBADD =    \
 sources_private_h =         \
 	converter.h             \
 	osd-utils.h             \
-	osm-gps-map-types.h
+	private.h
 
 sources_public_h =          \
     osm-gps-map.h           \

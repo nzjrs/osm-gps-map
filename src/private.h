@@ -1,7 +1,5 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 cino=t0,(0: */
 /*
- * osm-gps-map-types.h
+ * private.h
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
  * Copyright (C) John Stowers 2009 <john.stowers@gmail.com>
  *
@@ -21,8 +19,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _OSM_GPS_MAP_TYPES_H_
-#define _OSM_GPS_MAP_TYPES_H_
+#ifndef _PRIVATE_H_
+#define _PRIVATE_H_
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -97,4 +95,4 @@ int g_strcmp0(const char *str1, const char *str2)
 #define gtk_widget_set_window(widget, _window)                  ((widget)->window = _window)
 #endif /* GTK+ < 2.18.0 */
 
-#endif /* _OSM_GPS_MAP_TYPES_H_ */
+#endif /* _PRIVATE_H_ */

@@ -1,5 +1,5 @@
+#include "private.h"
 #include "osm-gps-map-source.h"
-#include "osm-gps-map-types.h"
 
 const char* 
 osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
