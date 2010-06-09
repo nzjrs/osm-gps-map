@@ -71,8 +71,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                  g_random_double_range(0,360));
         }
         if (event->button == 3) {
-            OsmGpsMapPoint *pt = g_boxed_copy(OSM_TYPE_GPS_MAP_POINT, &coord);
-            osm_gps_map_track_add_point(othertrack, pt);
+            osm_gps_map_track_add_point(othertrack, &coord);
         }
     }
 
