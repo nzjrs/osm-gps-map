@@ -248,8 +248,6 @@ struct _OsmGpsMapPrivate
     guint is_google : 1;
 };
 
-#define OSM_GPS_MAP_PRIVATE(o)  (OSM_GPS_MAP (o)->priv)
-
 typedef struct
 {
     GdkPixbuf *pixbuf;
@@ -1322,7 +1320,7 @@ static void
 center_coord_update(OsmGpsMap *map) {
 
     GtkWidget *widget = GTK_WIDGET(map);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(map);
+    OsmGpsMapPrivate *priv = map->priv;
     GtkAllocation allocation;
 
     gtk_widget_get_allocation(widget, &allocation);
@@ -1960,7 +1958,7 @@ static gboolean
 osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if(!priv->is_button_down)
         return FALSE;
@@ -2004,7 +2002,8 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 {
     int x, y;
     GdkModifierType state;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
+    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMapPrivate *priv = map->priv;
 
     if(!priv->is_button_down)
         return FALSE;
@@ -2054,8 +2053,9 @@ static gboolean
 osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
     GtkAllocation allocation;
-    OsmGpsMapPrivate *priv = OSM_GPS_MAP_PRIVATE(widget);
     GdkWindow *window;
+    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMapPrivate *priv = map->priv;
 
     /* create pixmap */
     if (priv->pixmap)
