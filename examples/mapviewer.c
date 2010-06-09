@@ -26,13 +26,13 @@
 #include "osm-gps-map.h"
 
 static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
-static gboolean opt_default_cache = FALSE;
+static gboolean opt_friendly_cache = FALSE;
 static gboolean opt_no_cache = FALSE;
 static gboolean opt_debug = FALSE;
 static char *opt_cache_base_dir = NULL;
 static GOptionEntry entries[] =
 {
-  { "default-cache", 'D', 0, G_OPTION_ARG_NONE, &opt_default_cache, "Store maps using default cache style (md5)", NULL },
+  { "friendly-cache", 'f', 0, G_OPTION_ARG_NONE, &opt_friendly_cache, "Store maps using friendly cache style (source name)", NULL },
   { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &opt_no_cache, "Disable cache", NULL },
   { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
   { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
@@ -228,7 +228,6 @@ main (int argc, char **argv)
     OsmGpsMapLayer *osd;
     OsmGpsMapTrack *rightclicktrack;
     const char *repo_uri;
-    const char *friendly_name;
     char *cachedir, *cachebasedir;
     GError *error = NULL;
     GOptionContext *context;
@@ -253,25 +252,24 @@ main (int argc, char **argv)
         return 2;
     }
 
-    friendly_name = osm_gps_map_source_get_friendly_name(opt_map_provider);
     cachebasedir = osm_gps_map_get_default_cache_directory();
 
     if (opt_cache_base_dir && g_file_test(opt_cache_base_dir, G_FILE_TEST_IS_DIR)) {
         cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
         cachebasedir = g_strdup(opt_cache_base_dir);
-    } else if (opt_default_cache) {
-        cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
+    } else if (opt_friendly_cache) {
+        cachedir = g_strdup(OSM_GPS_MAP_CACHE_FRIENDLY);
     } else if (opt_no_cache) {
         cachedir = g_strdup(OSM_GPS_MAP_CACHE_DISABLED);
     } else {
-        cachedir = g_build_filename(cachebasedir,friendly_name,NULL);
+        cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
     }
 
     if (opt_debug)
         gdk_window_set_debug_updates(TRUE);
 
     g_debug("Map Cache Dir: %s", cachedir);
-    g_debug("Map Provider: %s (%d)", friendly_name, opt_map_provider);
+    g_debug("Map Provider: %s (%d)", osm_gps_map_source_get_friendly_name(opt_map_provider), opt_map_provider);
 
     map = g_object_new (OSM_TYPE_GPS_MAP,
                         "map-source",opt_map_provider,
