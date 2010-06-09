@@ -15,7 +15,7 @@ OSMGPSMAP_LIBS =            \
     $(SOUP24_LIBS)
 
 ## Demo Application
-bin_PROGRAMS = mapviewer
+noinst_PROGRAMS = mapviewer
 
 mapviewer_SOURCES =         \
 	mapviewer.c
