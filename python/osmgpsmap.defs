@@ -629,7 +629,7 @@
   )
 )
 
-(define-function osm_gps_map_source_is_valid
+(define-function source_is_valid
   (c-name "osm_gps_map_source_is_valid")
   (return-type "gboolean")
   (parameters
