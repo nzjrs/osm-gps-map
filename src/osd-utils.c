@@ -328,8 +328,6 @@ osd_check_zoom(gint x, gint y, guint w, guint h, guint gps_w) {
     if( x > 0 && x < w && y > 0 && y < h) {
         gint r = h/2;   /* radius of curved ends of zoom pad */
 
-        g_warning("IN ZOOM: x:%d y:%d r:%d", x, y, r);
-
         /* within circle around (-) label */
         if( osm_gps_map_in_circle(x, y, r, r, r))
             return OSD_OUT;
