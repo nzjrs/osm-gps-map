@@ -87,12 +87,12 @@ override osm_gps_map_convert_geographic_to_screen
 static PyObject *
 _wrap_osm_gps_map_convert_geographic_to_screen(PyGObject *self, PyObject *args, PyObject *kwargs)
 {
-    static char *kwlist[] = { "pt", "pixel_x", "pixel_y", NULL };
+    static char *kwlist[] = { "pt", NULL };
     int pixel_x, pixel_y;
     PyObject *py_pt;
     OsmGpsMapPoint *pt = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs,"Oii:Osm.GpsMap.convert_geographic_to_screen", kwlist, &py_pt, &pixel_x, &pixel_y))
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs,"O:Osm.GpsMap.convert_geographic_to_screen", kwlist, &py_pt))
         return NULL;
     if (pyg_boxed_check(py_pt, OSM_TYPE_GPS_MAP_POINT))
         pt = pyg_boxed_get(py_pt, OsmGpsMapPoint);
