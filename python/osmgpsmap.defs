@@ -285,7 +285,6 @@
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_image_add")
   (return-type "OsmGpsMapImage*")
-  (caller-owns-return #t)
   (parameters
     '("float" "latitude")
     '("float" "longitude")
@@ -297,7 +296,6 @@
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_image_add_with_alignment")
   (return-type "OsmGpsMapImage*")
-  (caller-owns-return #t)
   (parameters
     '("float" "latitude")
     '("float" "longitude")

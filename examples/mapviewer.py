@@ -176,7 +176,6 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                     repo_uri=uri,
                     image_format=format
                 )
-                self.osm.connect('button_release_event', self.map_clicked)
             except Exception, e:
                 print "ERROR:", e
                 self.osm = osm.GpsMap()
@@ -208,6 +207,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         )
 
     def map_clicked(self, osm, event):
+        lat,lon = self.osm.get_event_location(event).get_degrees()
         if event.button == 1:
             self.latlon_entry.set_text(
                 'Map Centre: latitude %s longitude %s' % (
@@ -216,9 +216,10 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 )
             )
         elif event.button == 2:
-            p = self.osm.get_event_location(event)
-            lat,lon = p.get_degrees()
             self.osm.gps_add(lat, lon, heading=osmgpsmap.INVALID);
+        elif event.button == 3:
+            pb = gtk.gdk.pixbuf_new_from_file_at_size ("poi.png", 24,24)
+            self.osm.image_add(lat,lon,pb)
 
 if __name__ == "__main__":
     u = UI()
