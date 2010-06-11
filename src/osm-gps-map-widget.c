@@ -22,6 +22,103 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * SECTION:osm-gps-map
+ * @short_description: map display widget
+ * @stability: Stable
+ * @include: osm-gps-map.h
+ *
+ * #OsmGpsMap is a widget for displaying a map, optionally overlaid with a
+ * track(s) of GPS co-ordinates, images, points of interest or on screen display
+ * controls. #OsmGpsMap downloads (and caches for offline use) map data from a
+ * number of websites, including
+ * <ulink url="http://www.openstreetmap.org"><citetitle>OpenStreetMap</citetitle></ulink>
+ *
+ * <example>
+ *  <title>Showing a map</title>
+ *  <programlisting>
+ * int main (int argc, char **argv)
+ * {
+ *     g_thread_init(NULL);
+ *     gtk_init (&argc, &argv);
+ *
+ *     GtkWidget *map = osm_gps_map_new ();
+ *     GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *     gtk_container_add (GTK_CONTAINER(w), map);
+ *     gtk_widget_show_all (w);
+ *
+ *     gtk_main ();
+ *     return 0;
+ * }
+ *  </programlisting>
+ * </example>
+ *
+ * #OsmGpsMap allows great flexibility in customizing how the map tiles are
+ * cached, see #OsmGpsMap:tile-cache-base and #OsmGpsMap:tile-cache for more
+ * information.
+ *
+ * A number of different map sources are supported, see #OsmGpsMapSource_t. The
+ * default source, %OSM_GPS_MAP_SOURCE_OPENSTREETMAP always works. Other sources,
+ * particular those from proprietary providers may work occasionally, and then
+ * cease to work. To check if a source is supported for the given version of
+ * this library, call osm_gps_map_source_is_valid().
+ *
+ * <example>
+ *  <title>Map with custom source and cache dir</title>
+ *  <programlisting>
+ * int main (int argc, char **argv)
+ * {
+ *     g_thread_init(NULL);
+ *     gtk_init (&argc, &argv);
+ *     OsmGpsMapSource_t source = OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE;
+ *
+ *     if ( !osm_gps_map_source_is_valid(source) )
+ *         return 1;
+ *
+ *     GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+ *                      "map-source", source,
+ *                      "tile-cache", "/tmp/",
+ *                       NULL);
+ *     GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *     gtk_container_add (GTK_CONTAINER(w), map);
+ *     gtk_widget_show_all (w);
+ *
+ *     gtk_main ();
+ *     return 0;
+ * }
+ *  </programlisting>
+ * </example>
+ *
+ * Finally, if you wish to use a custom map source not supported by #OsmGpsMap, 
+ * such as a custom map created with
+ * <ulink url="http://www.cloudmade.com"><citetitle>CloudMade</citetitle></ulink>
+ * then you can also pass a specially formatted string to #OsmGpsMap:repo-uri.
+ *
+ * <example>
+ *  <title>Map using custom CloudMade map and on screen display</title>
+ *  <programlisting>
+ * int main (int argc, char **argv)
+ * {
+ *     g_thread_init(NULL);
+ *     gtk_init (&argc, &argv);
+ *     const gchar *cloudmate = "http://a.tile.cloudmade.com/YOUR_API_KEY/1/256/&num;Z/&num;X/&num;Y.png";
+ *
+ *     GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+ *                      "repo-uri", cloudmate,
+ *                       NULL);
+ *     OsmGpsMapOsd *osd = osm_gps_map_osd_new ();
+ *     GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *     osm_gps_map_layer_add (OSM_GPS_MAP(map), OSM_GPS_MAP_LAYER(osd));
+ *     gtk_container_add (GTK_CONTAINER(w), map);
+ *     gtk_widget_show_all (w);
+ *
+ *     gtk_main ();
+ *     return 0;
+ * }
+ *  </programlisting>
+ * </example>
+ **/
+
 #include "config.h"
 
 #include <fcntl.h>
@@ -2293,7 +2390,14 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
      * the map with #OsmGpsMap:tile-cache set to #OSM_GPS_MAP_CACHE_AUTO or
      * #OSM_GPS_MAP_CACHE_FRIENDLY
      *
-     * The string is interpreted as a local path, i.e. /path/to/cache
+     * The string is interpreted as a local path, i.e. /path/to/cache. If NULL
+     * is supplied, map tiles are cached starting in the users cache directory,
+     * (as outlined in the
+     * <ulink url="http://www.freedesktop.org/wiki/Specifications/basedir-spec">
+     * <citetitle>XDG Base Directory Specification</citetitle></ulink>). To get the
+     * base directory where map tiles will be cached call
+     * osm_gps_map_get_default_cache_directory()
+     *
      **/
     g_object_class_install_property (object_class,
                                      PROP_TILE_CACHE_BASE_DIR,
