@@ -98,6 +98,8 @@ osm_gps_map_point_new_degrees
 osm_gps_map_point_new_radians
 osm_gps_map_point_set_degrees
 osm_gps_map_point_set_radians
+osm_gps_map_point_copy
+osm_gps_map_point_free
 </SECTION>
 
 <SECTION>

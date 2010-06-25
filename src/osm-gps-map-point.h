@@ -27,6 +27,8 @@ void                osm_gps_map_point_get_degrees   (OsmGpsMapPoint *point, floa
 void                osm_gps_map_point_get_radians   (OsmGpsMapPoint *point, float *rlat, float *rlon);
 void                osm_gps_map_point_set_degrees   (OsmGpsMapPoint *point, float lat, float lon);
 void                osm_gps_map_point_set_radians   (OsmGpsMapPoint *point, float rlat, float rlon);
+void                osm_gps_map_point_free          (OsmGpsMapPoint *point);
+OsmGpsMapPoint *    osm_gps_map_point_copy          (const OsmGpsMapPoint *point);
 
 G_END_DECLS
 
