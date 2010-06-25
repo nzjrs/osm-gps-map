@@ -39,13 +39,20 @@
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
 <h2><span class="refentrytitle"><a name="OsmGpsMap.top_of_page"></a>OsmGpsMap</span></h2>
-<p>OsmGpsMap</p>
+<p>OsmGpsMap — map display widget</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
+<div class="refsect1" title="Stability Level">
+<a name="OsmGpsMap.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
 <div class="refsynopsisdiv" title="Synopsis">
 <a name="OsmGpsMap.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">                    <a class="link" href="OsmGpsMap.html#OsmGpsMap-struct" title="OsmGpsMap">OsmGpsMap</a>;
+<pre class="synopsis">
+#include &lt;osm-gps-map.h&gt;
+
+                    <a class="link" href="OsmGpsMap.html#OsmGpsMap-struct" title="OsmGpsMap">OsmGpsMap</a>;
                     <a class="link" href="OsmGpsMap.html#OsmGpsMapClass" title="OsmGpsMapClass">OsmGpsMapClass</a>;
 #define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS" title="OSM_GPS_MAP_INVALID">OSM_GPS_MAP_INVALID</a>
 #define             <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS" title="OSM_GPS_MAP_CACHE_DISABLED">OSM_GPS_MAP_CACHE_DISABLED</a>
@@ -188,6 +195,107 @@ OsmGpsMap implements
 <div class="refsect1" title="Description">
 <a name="OsmGpsMap.description"></a><h2>Description</h2>
 <p>
+<a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> is a widget for displaying a map, optionally overlaid with a
+track(s) of GPS co-ordinates, images, points of interest or on screen display
+controls. <a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> downloads (and caches for offline use) map data from a
+number of websites, including
+<a class="ulink" href="http://www.openstreetmap.org" target="_top"><em class="citetitle">OpenStreetMap</em></a>
+</p>
+<p>
+</p>
+<div class="example">
+<a name="id3034422"></a><p class="title"><b>Example 1. Showing a map</b></p>
+<div class="example-contents"><pre class="programlisting">
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+
+    GtkWidget *map = osm_gps_map_new ();
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </pre></div>
+</div>
+<p><br class="example-break">
+</p>
+<p>
+<a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> allows great flexibility in customizing how the map tiles are
+cached, see <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'><span class="type">"tile-cache-base"</span></a> and <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='The "tile-cache" property'><span class="type">"tile-cache"</span></a> for more
+information.
+</p>
+<p>
+A number of different map sources are supported, see <a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a>. The
+default source, <code class="literal">OSM_GPS_MAP_SOURCE_OPENSTREETMAP</code> always works. Other sources,
+particular those from proprietary providers may work occasionally, and then
+cease to work. To check if a source is supported for the given version of
+this library, call <a class="link" href="OsmGpsMap.html#osm-gps-map-source-is-valid" title="osm_gps_map_source_is_valid ()"><code class="function">osm_gps_map_source_is_valid()</code></a>.
+</p>
+<p>
+</p>
+<div class="example">
+<a name="id3034506"></a><p class="title"><b>Example 2. Map with custom source and cache dir</b></p>
+<div class="example-contents"><pre class="programlisting">
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+    OsmGpsMapSource_t source = OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE;
+
+    if ( !osm_gps_map_source_is_valid(source) )
+        return 1;
+
+    GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+                     "map-source", source,
+                     "tile-cache", "/tmp/",
+                      NULL);
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </pre></div>
+</div>
+<p><br class="example-break">
+</p>
+<p>
+Finally, if you wish to use a custom map source not supported by <a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a>, 
+such as a custom map created with
+<a class="ulink" href="http://www.cloudmade.com" target="_top"><em class="citetitle">CloudMade</em></a>
+then you can also pass a specially formatted string to <a class="link" href="OsmGpsMap.html#OsmGpsMap--repo-uri" title='The "repo-uri" property'><span class="type">"repo-uri"</span></a>.
+</p>
+<p>
+</p>
+<div class="example">
+<a name="id3034558"></a><p class="title"><b>Example 3. Map using custom CloudMade map and on screen display</b></p>
+<div class="example-contents"><pre class="programlisting">
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+    const gchar *cloudmate = "http://a.tile.cloudmade.com/YOUR_API_KEY/1/256/#Z/#X/#Y.png";
+
+    GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+                     "repo-uri", cloudmate,
+                      NULL);
+    OsmGpsMapOsd *osd = osm_gps_map_osd_new ();
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    osm_gps_map_layer_add (OSM_GPS_MAP(map), OSM_GPS_MAP_LAYER(osd));
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </pre></div>
+</div>
+<p><br class="example-break">
 </p>
 </div>
 <div class="refsect1" title="Details">
@@ -1358,7 +1466,13 @@ the map with <a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='
 <a class="link" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" title="OSM_GPS_MAP_CACHE_FRIENDLY"><span class="type">OSM_GPS_MAP_CACHE_FRIENDLY</span></a>
 </p>
 <p>
-The string is interpreted as a local path, i.e. /path/to/cache
+The string is interpreted as a local path, i.e. /path/to/cache. If NULL
+is supplied, map tiles are cached starting in the users cache directory,
+(as outlined in the
+<a class="ulink" href="http://www.freedesktop.org/wiki/Specifications/basedir-spec" target="_top">
+<em class="citetitle">XDG Base Directory Specification</em></a>). To get the
+base directory where map tiles will be cached call
+<a class="link" href="OsmGpsMap.html#osm-gps-map-get-default-cache-directory" title="osm_gps_map_get_default_cache_directory ()"><code class="function">osm_gps_map_get_default_cache_directory()</code></a>
 </p>
 <p>Default value: NULL</p>
 </div>
