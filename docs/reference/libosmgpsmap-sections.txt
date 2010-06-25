@@ -15,7 +15,9 @@ osm_gps_map_source_get_image_format
 osm_gps_map_source_get_min_zoom
 osm_gps_map_source_get_max_zoom
 osm_gps_map_source_is_valid
+osm_gps_map_new
 osm_gps_map_download_maps
+osm_gps_map_download_cancel_all
 osm_gps_map_get_bbox
 osm_gps_map_set_center
 osm_gps_map_set_center_and_zoom

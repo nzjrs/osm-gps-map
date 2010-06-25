@@ -2792,6 +2792,17 @@ osm_gps_map_zoom_out (OsmGpsMap *map)
     return osm_gps_map_set_zoom(map, map->priv->map_zoom-1);
 }
 
+/**
+ * osm_gps_map_new:
+ *
+ * Returns a new #OsmGpsMap object, defaults to showing data from
+ * <ulink url="http://www.openstreetmap.org"><citetitle>OpenStreetMap</citetitle></ulink>
+ *
+ * See the properties description for more information about construction
+ * parameters than could be passed to g_object_new()
+ *
+ * Returns: a newly created #OsmGpsMap object.
+ **/
 GtkWidget *
 osm_gps_map_new (void)
 {
