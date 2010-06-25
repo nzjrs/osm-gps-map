@@ -1,6 +1,8 @@
 Changes in 0.7.1
 ======================
-
+  * Don't install mapviewer binary
+  * Bug fixes
+  * Doc updates
 
 Changes in 0.7.0
 ======================
