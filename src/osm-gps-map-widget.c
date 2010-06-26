@@ -181,6 +181,7 @@ struct _OsmGpsMapPrivate
     char *tile_dir;
     char *tile_base_dir;
     char *cache_dir;
+    guint tile_cache_expiry;
 
     //contains flags indicating the various special characters
     //the uri string contains, that will be replaced when calculating
@@ -299,7 +300,8 @@ enum
     PROP_IMAGE_FORMAT,
     PROP_DRAG_LIMIT,
     PROP_AUTO_CENTER_THRESHOLD,
-    PROP_SHOW_GPS_POINT
+    PROP_SHOW_GPS_POINT,
+    PROP_TILE_CACHE_EXPIRY
 };
 
 G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
@@ -1026,12 +1028,29 @@ osm_gps_map_render_missing_tile (OsmGpsMap *map, int zoom, int x, int y)
     return osm_gps_map_render_missing_tile_upscaled (map, zoom, x, y);
 }
 
+static gboolean
+osm_gps_map_tile_age_exceeded(OsmGpsMap *map, char *filename)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+    struct stat buf;
+
+    /* don't stat the file if cache_expiry is not enabled */
+    if (priv->tile_cache_expiry == 0)
+        return FALSE;
+
+    if( !g_stat(filename, &buf) )
+        return (time(NULL) - buf.st_mtime) > priv->tile_cache_expiry;
+
+    return FALSE;
+}
+
 static void
 osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int offset_y)
 {
     OsmGpsMapPrivate *priv = map->priv;
-    gchar *filename;
-    GdkPixbuf *pixbuf;
+    gchar *filename = NULL;
+    GdkPixbuf *pixbuf = NULL;
+    gboolean needs_refresh = FALSE;
 
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
@@ -1047,15 +1066,21 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
                 y,
                 priv->image_format);
 
-    /* try to get file from internal cache first */
-    if(!(pixbuf = osm_gps_map_load_cached_tile(map, zoom, x, y)))
-        pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+    if (g_file_test(filename, G_FILE_TEST_EXISTS)) {
+        /* try to get file from internal cache first */
+        if(!(pixbuf = osm_gps_map_load_cached_tile(map, zoom, x, y)))
+            pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+
+        needs_refresh = osm_gps_map_tile_age_exceeded(map, filename);
+    }
 
     if(pixbuf) {
         g_debug("Found tile %s", filename);
         osm_gps_map_blit_tile(map, pixbuf, offset_x,offset_y);
         g_object_unref (pixbuf);
-    } else {
+    }
+
+    if (pixbuf == NULL || needs_refresh) {
         if (priv->map_auto_download_enabled) {
             osm_gps_map_download_tile(map, zoom, x, y, TRUE);
         }
@@ -1774,7 +1799,10 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             priv->tile_base_dir = g_value_dup_string (value);
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-             break;
+            break;
+        case PROP_TILE_CACHE_EXPIRY:
+            priv->tile_cache_expiry = g_value_get_uint (value);
+            break;
         case PROP_ZOOM:
             priv->map_zoom = g_value_get_int (value);
             break;
@@ -1871,6 +1899,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
             g_value_set_boolean(value, FALSE);
+            break;
+        case PROP_TILE_CACHE_EXPIRY:
+            g_value_set_uint(value, priv->tile_cache_expiry);
             break;
         case PROP_ZOOM:
             g_value_set_int(value, priv->map_zoom);
@@ -2433,6 +2464,24 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                             G_PARAM_READABLE | G_PARAM_WRITABLE));
 
     /**
+     * OsmGpsMap:tile-cache-expiry:
+     *
+     * The maximum age of tiles (in seconds) before they will be
+     * re-downloaded from the map source. 0 to disable.
+     *
+     * Since: 0.7.2
+    **/
+    g_object_class_install_property (object_class,
+                                     PROP_TILE_CACHE_EXPIRY,
+                                     g_param_spec_uint ("tile-cache-expiry",
+                                                        "tile-cache-expiry",
+                                                        "The maximum age of tiles before they re-downloaded",
+                                                        0,          /* minimum property value */
+                                                        G_MAXUINT,  /* maximum property value */
+                                                        0,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    /**
      * OsmGpsMap:zoom:
      *
      * The map zoom level. Connect to ::notify::zoom if you want to be informed
@@ -2659,7 +2708,8 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
                                     i, G_DIR_SEPARATOR,
                                     j,
                                     priv->image_format);
-                    if (!g_file_test(filename, G_FILE_TEST_EXISTS)) {
+                    if (!g_file_test(filename, G_FILE_TEST_EXISTS) ||
+                         osm_gps_map_tile_age_exceeded(map,filename)) {
                         osm_gps_map_download_tile(map, zoom, i, j, FALSE);
                         num_tiles++;
                     }
