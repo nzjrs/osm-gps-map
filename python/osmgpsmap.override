@@ -83,7 +83,7 @@ _wrap_osm_gps_map_download_maps(PyGObject *self, PyObject *args,
     Py_RETURN_NONE;
 }
 %%
-override osm_gps_map_convert_geographic_to_screen
+override osm_gps_map_convert_geographic_to_screen kwargs
 static PyObject *
 _wrap_osm_gps_map_convert_geographic_to_screen(PyGObject *self, PyObject *args, PyObject *kwargs)
 {
