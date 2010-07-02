@@ -71,4 +71,6 @@ echo $PACKAGE v$VERSION
 echo
 echo Prefix............... : $prefix
 echo libsoup.............. : $soup_ver
+echo Introspection support : ${found_introspection}
+echo gtk-doc documentation : ${enable_gtk_doc}
 echo
