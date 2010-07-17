@@ -67,7 +67,7 @@ osm_gps_map_image_set_property (GObject      *object,
                 g_object_unref (priv->pixbuf);
             priv->pixbuf = g_value_dup_object (value);
             priv->w = gdk_pixbuf_get_width(priv->pixbuf);
-            priv->h = gdk_pixbuf_get_width(priv->pixbuf);
+            priv->h = gdk_pixbuf_get_height(priv->pixbuf);
             break;
         case PROP_X_ALIGN:
             priv->xalign = g_value_get_float (value);
@@ -183,7 +183,7 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc
                      priv->h,
                      GDK_RGB_DITHER_NONE, 0, 0);
     rect->width = priv->w;
-    rect->height = priv->w;
+    rect->height = priv->h;
 }
 
 const OsmGpsMapPoint *
