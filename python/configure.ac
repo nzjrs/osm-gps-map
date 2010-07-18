@@ -32,15 +32,20 @@ fi
 AM_PATH_PYTHON()
 AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([install python-devel]))
 
-PKG_CHECK_MODULES(PYGTK, [pygtk-2.0 >= 2.10.0 pygobject-2.0 >= 2.16.0])
+PKG_CHECK_MODULES(PYGTK, [pygtk-2.0 >= 2.10.0 pygobject-2.0 >= 2.14.0])
 
 AC_MSG_CHECKING([for pygtk defs])
 PYGTK_DEFSDIR=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 AC_SUBST(PYGTK_DEFSDIR)
 AC_MSG_RESULT($PYGTK_DEFSDIR)
 
+#codegen was moved from pygtk to pygobject starting with 2.14
+#but we accept both so that we can build against older pygobject/pygtk
+#on maemo
 AC_MSG_CHECKING([for codegen])
-CODEGENDIR=`$PKG_CONFIG --variable codegendir pygobject-2.0`
+PKG_CHECK_MODULES(DUMMY, [pygobject-2.0 >= 2.16.0],
+       CODEGENDIR=`$PKG_CONFIG --variable codegendir pygobject-2.0`,
+       CODEGENDIR=`$PKG_CONFIG --variable codegendir pygtk-2.0`)
 AC_SUBST([CODEGENDIR])
 AC_MSG_RESULT($CODEGENDIR)
 
