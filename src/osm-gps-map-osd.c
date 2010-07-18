@@ -19,6 +19,8 @@
 #include <cairo.h>
 #include "osd-utils.h"
 
+#include "private.h"
+
 #include "osm-gps-map-layer.h"
 #include "osm-gps-map-osd.h"
 

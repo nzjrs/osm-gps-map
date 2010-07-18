@@ -84,9 +84,9 @@ int g_strcmp0(const char *str1, const char *str2)
 #define gtk_widget_get_allocation(widget, alloc)                (*(alloc) = (widget)->allocation)
 #define gtk_widget_set_allocation(widget, alloc)                ((widget)->allocation = *(alloc))
 #define gtk_widget_get_app_paintable(widget)                    (GTK_WIDGET_APP_PAINTABLE (widget))
-#define gtk_widget_set_can_default(widget, can_default)         ((can_default) ? (GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_CAN_DEFAULT)))
-#define gtk_widget_set_can_focus(widget, can_focus)             ((can_focus) ? (GTK_WIDGET_SET_FLAGS (w, GTK_CAN_FOCUS)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_CAN_FOCUS)))
-#define gtk_widget_set_double_buffered(widget, double_buffered) ((double_buffered) ? (GTK_WIDGET_SET_FLAGS (w, GTK_DOUBLE_BUFFERED)) : (GTK_WIDGET_UNSET_FLAGS (w, GTK_DOUBLE_BUFFERED)))
+#define gtk_widget_set_can_default(widget, can_default)         { if (can_default) { GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT); } else { GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT); } }
+#define gtk_widget_set_can_focus(widget, can_focus)             { if (can_focus) { GTK_WIDGET_SET_FLAGS ((widget), GTK_CAN_FOCUS); } else { GTK_WIDGET_UNSET_FLAGS ((widget), GTK_CAN_FOCUS); } }
+#define gtk_widget_set_double_buffered(widget, double_buffered) { if (double_buffered) { GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED); } else { GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED); } }
 #define gtk_widget_is_drawable(widget)                          (GTK_WIDGET_DRAWABLE (widget))
 #define gtk_widget_has_focus(widget)                            (GTK_WIDGET_HAS_FOCUS (widget))
 #define gtk_widget_get_has_window(widget)                       (!GTK_WIDGET_NO_WINDOW (widget))
