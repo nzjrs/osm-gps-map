@@ -1,5 +1,9 @@
 Changes in 0.7.2
 ======================
+  * Make osm_gps_map_point_{copy,free} public
+  * Fix build against older gtk and pygtk/pygobject versions (Maemo)
+  * Doc updates
+  * Bug fixes
 
 Changes in 0.7.1
 ======================
