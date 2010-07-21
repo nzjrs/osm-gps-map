@@ -1,6 +1,6 @@
 AC_PREREQ([2.62])
 AC_INIT([python-osmgpsmap],
-        [0.7.2],
+        [0.7.3],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [python-osmgpsmap])
 AM_INIT_AUTOMAKE([1.10])
@@ -59,7 +59,7 @@ if test -f ../src/libosmgpsmap.la; then
 	OSMGPSMAP_CFLAGS="-I\$(top_srcdir)/../src/"
 	OSMGPSMAP_LIBS="\$(top_builddir)/../src/libosmgpsmap.la"
 else
-	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap = 0.7.2)
+	PKG_CHECK_MODULES(OSMGPSMAP, osmgpsmap = 0.7.3)
 fi
 
 AC_OUTPUT([Makefile])

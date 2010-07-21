@@ -1,3 +1,6 @@
+Changes in 0.7.3
+======================
+
 Changes in 0.7.2
 ======================
   * Make osm_gps_map_point_{copy,free} public
