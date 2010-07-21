@@ -21,7 +21,9 @@
 <ANCHOR id="osm-gps-map-source-get-min-zoom" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-source-get-min-zoom">
 <ANCHOR id="osm-gps-map-source-get-max-zoom" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-source-get-max-zoom">
 <ANCHOR id="osm-gps-map-source-is-valid" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-source-is-valid">
+<ANCHOR id="osm-gps-map-new" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-new">
 <ANCHOR id="osm-gps-map-download-maps" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-download-maps">
+<ANCHOR id="osm-gps-map-download-cancel-all" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-download-cancel-all">
 <ANCHOR id="osm-gps-map-get-bbox" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-get-bbox">
 <ANCHOR id="osm-gps-map-set-center" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-set-center">
 <ANCHOR id="osm-gps-map-set-center-and-zoom" href="libosmgpsmap/OsmGpsMap.html#osm-gps-map-set-center-and-zoom">
@@ -153,6 +155,8 @@
 <ANCHOR id="osm-gps-map-point-new-radians" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-new-radians">
 <ANCHOR id="osm-gps-map-point-set-degrees" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-degrees">
 <ANCHOR id="osm-gps-map-point-set-radians" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-radians">
+<ANCHOR id="osm-gps-map-point-copy" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-copy">
+<ANCHOR id="osm-gps-map-point-free" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-free">
 <ANCHOR id="libosmgpsmap-OsmGpsMap-Deprecated" href="libosmgpsmap/libosmgpsmap-OsmGpsMap-Deprecated.html">
 <ANCHOR id="libosmgpsmap-OsmGpsMap-Deprecated.synopsis" href="libosmgpsmap/libosmgpsmap-OsmGpsMap-Deprecated.html#libosmgpsmap-OsmGpsMap-Deprecated.synopsis">
 <ANCHOR id="libosmgpsmap-OsmGpsMap-Deprecated.description" href="libosmgpsmap/libosmgpsmap-OsmGpsMap-Deprecated.html#libosmgpsmap-OsmGpsMap-Deprecated.description">

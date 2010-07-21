@@ -33,7 +33,9 @@
     <keyword type="function" name="osm_gps_map_source_get_min_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-min-zoom"/>
     <keyword type="function" name="osm_gps_map_source_get_max_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-max-zoom"/>
     <keyword type="function" name="osm_gps_map_source_is_valid ()" link="OsmGpsMap.html#osm-gps-map-source-is-valid"/>
+    <keyword type="function" name="osm_gps_map_new ()" link="OsmGpsMap.html#osm-gps-map-new"/>
     <keyword type="function" name="osm_gps_map_download_maps ()" link="OsmGpsMap.html#osm-gps-map-download-maps"/>
+    <keyword type="function" name="osm_gps_map_download_cancel_all ()" link="OsmGpsMap.html#osm-gps-map-download-cancel-all" since="0.7.0"/>
     <keyword type="function" name="osm_gps_map_get_bbox ()" link="OsmGpsMap.html#osm-gps-map-get-bbox"/>
     <keyword type="function" name="osm_gps_map_set_center ()" link="OsmGpsMap.html#osm-gps-map-set-center"/>
     <keyword type="function" name="osm_gps_map_set_center_and_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-center-and-zoom" since="0.7.0"/>
@@ -133,6 +135,8 @@
     <keyword type="function" name="osm_gps_map_point_new_radians ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-new-radians"/>
     <keyword type="function" name="osm_gps_map_point_set_degrees ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-degrees"/>
     <keyword type="function" name="osm_gps_map_point_set_radians ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-set-radians"/>
+    <keyword type="function" name="osm_gps_map_point_copy ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-copy" since="0.7.2"/>
+    <keyword type="function" name="osm_gps_map_point_free ()" link="libosmgpsmap-OsmGpsMapPoint.html#osm-gps-map-point-free" since="0.7.2"/>
     <keyword type="function" name="osm_gps_map_draw_gps ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-draw-gps" deprecated="0.7.0: Use osm_gps_map_gps_add() instead."/>
     <keyword type="function" name="osm_gps_map_clear_gps ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-gps" deprecated="0.7.0: Use osm_gps_map_gps_clear() instead."/>
     <keyword type="function" name="osm_gps_map_add_track ()" link="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-track" deprecated="0.7.0: Use osm_gps_map_track_add() instead."/>

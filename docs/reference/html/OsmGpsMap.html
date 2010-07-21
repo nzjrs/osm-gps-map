@@ -68,11 +68,13 @@ const <span class="returnvalue">char</span>*         <a class="link" href="OsmGp
 <span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-min-zoom" title="osm_gps_map_source_get_min_zoom ()">osm_gps_map_source_get_min_zoom</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
 <span class="returnvalue">int</span>                 <a class="link" href="OsmGpsMap.html#osm-gps-map-source-get-max-zoom" title="osm_gps_map_source_get_max_zoom ()">osm_gps_map_source_get_max_zoom</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-source-is-valid" title="osm_gps_map_source_is_valid ()">osm_gps_map_source_is_valid</a>         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html#OsmGpsMapSource-t" title="enum OsmGpsMapSource_t"><span class="type">OsmGpsMapSource_t</span></a> source</code></em>);
+<a href="/usr/share/gtk-doc/html/gtk/GtkWidget.html"><span class="returnvalue">GtkWidget</span></a>*          <a class="link" href="OsmGpsMap.html#osm-gps-map-new" title="osm_gps_map_new ()">osm_gps_map_new</a>                     (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-download-maps" title="osm_gps_map_download_maps ()">osm_gps_map_download_maps</a>           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>,
                                                          <em class="parameter"><code><span class="type">int</span> zoom_start</code></em>,
                                                          <em class="parameter"><code><span class="type">int</span> zoom_end</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-download-cancel-all" title="osm_gps_map_download_cancel_all ()">osm_gps_map_download_cancel_all</a>     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="OsmGpsMap.html#osm-gps-map-get-bbox" title="osm_gps_map_get_bbox ()">osm_gps_map_get_bbox</a>                (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt1</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *pt2</code></em>);
@@ -204,7 +206,7 @@ number of websites, including
 <p>
 </p>
 <div class="example">
-<a name="id3034422"></a><p class="title"><b>Example 1. Showing a map</b></p>
+<a name="id2739348"></a><p class="title"><b>Example 1. Showing a map</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -238,7 +240,7 @@ this library, call <a class="link" href="OsmGpsMap.html#osm-gps-map-source-is-va
 <p>
 </p>
 <div class="example">
-<a name="id3034506"></a><p class="title"><b>Example 2. Map with custom source and cache dir</b></p>
+<a name="id2739432"></a><p class="title"><b>Example 2. Map with custom source and cache dir</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -273,7 +275,7 @@ then you can also pass a specially formatted string to <a class="link" href="Osm
 <p>
 </p>
 <div class="example">
-<a name="id3034558"></a><p class="title"><b>Example 3. Map using custom CloudMade map and on screen display</b></p>
+<a name="id2739484"></a><p class="title"><b>Example 3. Map using custom CloudMade map and on screen display</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -530,6 +532,27 @@ is used.
 </table></div>
 </div>
 <hr>
+<div class="refsect2" title="osm_gps_map_new ()">
+<a name="osm-gps-map-new"></a><h3>osm_gps_map_new ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/gtk/GtkWidget.html"><span class="returnvalue">GtkWidget</span></a>*          osm_gps_map_new                     (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+Returns a new <a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> object, defaults to showing data from
+<a class="ulink" href="http://www.openstreetmap.org" target="_top"><em class="citetitle">OpenStreetMap</em></a>
+</p>
+<p>
+See the properties description for more information about construction
+parameters than could be passed to <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-new"><code class="function">g_object_new()</code></a>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> a newly created <a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> object.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
 <div class="refsect2" title="osm_gps_map_download_maps ()">
 <a name="osm-gps-map-download-maps"></a><h3>osm_gps_map_download_maps ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_download_maps           (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
@@ -571,6 +594,24 @@ region specified by pt1 (north west corner) to pt2 (south east corner)
 </tr>
 </tbody>
 </table></div>
+</div>
+<hr>
+<div class="refsect2" title="osm_gps_map_download_cancel_all ()">
+<a name="osm-gps-map-download-cancel-all"></a><h3>osm_gps_map_download_cancel_all ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_download_cancel_all     (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<p>
+Cancels all tiles currently being downloaded. Typically used if you wish to
+cacel a large number of tiles queued using <a class="link" href="OsmGpsMap.html#osm-gps-map-download-maps" title="osm_gps_map_download_maps ()"><code class="function">osm_gps_map_download_maps()</code></a>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>map</code></em> :</span></p></td>
+<td>
+</td>
+</tr></tbody>
+</table></div>
+<p class="since">Since 0.7.0</p>
 </div>
 <hr>
 <div class="refsect2" title="osm_gps_map_get_bbox ()">
