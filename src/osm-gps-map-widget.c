@@ -841,6 +841,19 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
 
 }
 
+static gchar *
+osm_gps_map_get_tile_filename (OsmGpsMap *map, int zoom, int x, int y)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+
+    return g_strdup_printf("%s%c%d%c%d%c%d.%s",
+                priv->cache_dir, G_DIR_SEPARATOR,
+                zoom, G_DIR_SEPARATOR,
+                x, G_DIR_SEPARATOR,
+                y,
+                priv->image_format);
+}
+
 static void
 osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw)
 {
@@ -868,12 +881,7 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
                             priv->cache_dir, G_DIR_SEPARATOR,
                             zoom, G_DIR_SEPARATOR,
                             x, G_DIR_SEPARATOR);
-        dl->filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
-                            priv->cache_dir, G_DIR_SEPARATOR,
-                            zoom, G_DIR_SEPARATOR,
-                            x, G_DIR_SEPARATOR,
-                            y,
-                            priv->image_format);
+        dl->filename = osm_gps_map_get_tile_filename(map, zoom, x, y);
         dl->map = map;
         dl->redraw = redraw;
 
@@ -915,43 +923,26 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 }
 
 static GdkPixbuf *
-osm_gps_map_load_cached_tile (OsmGpsMap *map, int zoom, int x, int y)
+osm_gps_map_load_cached_tile (OsmGpsMap *map, const gchar *filename)
 {
     OsmGpsMapPrivate *priv = map->priv;
-    gchar *filename;
     GdkPixbuf *pixbuf = NULL;
-    OsmCachedTile *tile;
+    OsmCachedTile *tile = NULL;
 
-    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
-                priv->cache_dir, G_DIR_SEPARATOR,
-                zoom, G_DIR_SEPARATOR,
-                x, G_DIR_SEPARATOR,
-                y,
-                priv->image_format);
-
+    /* check the memory cache first */
     tile = g_hash_table_lookup (priv->tile_cache, filename);
-    if (tile)
-    {
-        g_free (filename);
-    }
-    else
-    {
+    if (!tile) {
+        /* next check the disk cache */
         pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-        if (pixbuf)
-        {
+        if (pixbuf) {
             tile = g_slice_new (OsmCachedTile);
             tile->pixbuf = pixbuf;
-            g_hash_table_insert (priv->tile_cache, filename, tile);
-        }
-        else
-        {
-            g_free (filename);
+            g_hash_table_insert (priv->tile_cache, g_strdup(filename), tile);
         }
     }
 
     /* set/update the redraw_cycle timestamp on the tile */
-    if (tile)
-    {
+    if (tile) {
         tile->redraw_cycle = priv->redraw_cycle;
         pixbuf = g_object_ref (tile->pixbuf);
     }
@@ -964,18 +955,24 @@ osm_gps_map_find_bigger_tile (OsmGpsMap *map, int zoom, int x, int y,
                               int *zoom_found)
 {
     GdkPixbuf *pixbuf;
+    gchar *filename;
     int next_zoom, next_x, next_y;
 
-    if (zoom == 0) return NULL;
+    if (zoom == 0)
+        return NULL;
+
     next_zoom = zoom - 1;
     next_x = x / 2;
     next_y = y / 2;
-    pixbuf = osm_gps_map_load_cached_tile (map, next_zoom, next_x, next_y);
+    filename = osm_gps_map_get_tile_filename(map, next_zoom, next_x, next_y);
+    pixbuf = osm_gps_map_load_cached_tile (map, filename);
     if (pixbuf)
         *zoom_found = next_zoom;
     else
         pixbuf = osm_gps_map_find_bigger_tile (map, next_zoom, next_x, next_y,
                                                zoom_found);
+
+    g_free(filename);
     return pixbuf;
 }
 
@@ -1028,19 +1025,12 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
         return;
     }
 
-    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
-                priv->cache_dir, G_DIR_SEPARATOR,
-                zoom, G_DIR_SEPARATOR,
-                x, G_DIR_SEPARATOR,
-                y,
-                priv->image_format);
+    filename = osm_gps_map_get_tile_filename(map, zoom, x, y);
 
-    /* try to get file from internal cache first */
-    if(!(pixbuf = osm_gps_map_load_cached_tile(map, zoom, x, y)))
-        pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-
+    /* try to get file from internal cache first. This first checks the memory
+       cache, then checks the disk cache */
+    pixbuf = osm_gps_map_load_cached_tile(map, filename);
     if(pixbuf) {
-        g_debug("Found tile %s", filename);
         osm_gps_map_blit_tile(map, pixbuf, offset_x,offset_y);
         g_object_unref (pixbuf);
     } else {
@@ -2633,12 +2623,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
                 /* loop y1 - y2 */
                 for(j=y1; j<=y2; j++) {
                     /* x = i, y = j */
-                    filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
-                                    priv->cache_dir, G_DIR_SEPARATOR,
-                                    zoom, G_DIR_SEPARATOR,
-                                    i, G_DIR_SEPARATOR,
-                                    j,
-                                    priv->image_format);
+                    filename = osm_gps_map_get_tile_filename(map, zoom, i, j);
                     if (!g_file_test(filename, G_FILE_TEST_EXISTS)) {
                         osm_gps_map_download_tile(map, zoom, i, j, FALSE);
                         num_tiles++;
