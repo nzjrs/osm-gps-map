@@ -33,3 +33,7 @@ src/Makefile
 src/mapviewer
 stamp-h1
 ChangeLog
+.project
+.cproject
+.autotools
+.pydevproject
