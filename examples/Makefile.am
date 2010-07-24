@@ -37,5 +37,5 @@ mapviewer_LDADD =           \
     $(top_builddir)/src/libosmgpsmap.la
 
 ## Misc
-EXTRA_DIST = poi.png mapviewer.ui mapviewer.js
+EXTRA_DIST = poi.png mapviewer.ui mapviewer.js README
 
