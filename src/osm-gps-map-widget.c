@@ -145,6 +145,7 @@
 #define EXTRA_BORDER                (TILESIZE / 2)
 #define OSM_GPS_MAP_SCROLL_STEP     (10)
 #define USER_AGENT                  "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
+#define DOWNLOAD_RETRIES            3
 
 struct _OsmGpsMapPrivate
 {
@@ -264,6 +265,7 @@ typedef struct {
     OsmGpsMap *map;
     /* whether to redraw the map when the tile arrives */
     gboolean redraw;
+    int ttl;
 #if USE_LIBSOUP22
     SoupSession *session;
 #endif
@@ -829,12 +831,18 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
             g_object_notify(G_OBJECT(map), "tiles-queued");
         } else {
             g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
+            dl->ttl--;
+            if (dl->ttl) {
 #if USE_LIBSOUP22
-            soup_session_requeue_message(dl->session, msg);
+                soup_session_requeue_message(dl->session, msg);
 #else
-            soup_session_requeue_message(session, msg);
+                soup_session_requeue_message(session, msg);
 #endif
-            return;
+                return;
+            }
+
+            g_hash_table_remove(priv->tile_queue, dl->uri);
+            g_object_notify(G_OBJECT(map), "tiles-queued");
         }
     }
 
@@ -847,6 +855,9 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
     SoupMessage *msg;
     OsmGpsMapPrivate *priv = map->priv;
     OsmTileDownload *dl = g_new0(OsmTileDownload,1);
+
+    // set retries
+    dl->ttl = DOWNLOAD_RETRIES;
 
     //calculate the uri to download
     dl->uri = replace_map_uri(map, priv->repo_uri, zoom, x, y);
