@@ -2618,6 +2618,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
         int i,j,zoom;
         int num_tiles = 0;
         zoom_end = CLAMP(zoom_end, priv->min_zoom, priv->max_zoom);
+        zoom_start = CLAMP(zoom_start, priv->min_zoom, priv->max_zoom);
 
         for(zoom=zoom_start; zoom<=zoom_end; zoom++) {
             int x1,y1,x2,y2;
