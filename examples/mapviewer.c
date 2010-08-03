@@ -224,6 +224,7 @@ main (int argc, char **argv)
 {
     GtkBuilder *builder;
     GtkWidget *widget;
+    GtkAccelGroup *ag;
     OsmGpsMap *map;
     OsmGpsMapLayer *osd;
     OsmGpsMapTrack *rightclicktrack;
@@ -379,6 +380,14 @@ main (int argc, char **argv)
     widget = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
     g_signal_connect (widget, "destroy",
                       G_CALLBACK (on_close), (gpointer) map);
+    //Setup accelerators.
+    ag = gtk_accel_group_new();
+    gtk_accel_group_connect(ag, GDK_w, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+                    g_cclosure_new(gtk_main_quit, NULL, NULL));
+    gtk_accel_group_connect(ag, GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+                    g_cclosure_new(gtk_main_quit, NULL, NULL));
+    gtk_window_add_accel_group(GTK_WINDOW(widget), ag);
+
     gtk_widget_show_all (widget);
 
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
