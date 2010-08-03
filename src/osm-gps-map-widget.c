@@ -146,6 +146,7 @@
 #define OSM_GPS_MAP_SCROLL_STEP     (10)
 #define USER_AGENT                  "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11"
 #define DOWNLOAD_RETRIES            3
+#define MAX_DOWNLOAD_TILES          10000
 
 struct _OsmGpsMapPrivate
 {
@@ -2629,6 +2630,7 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
         int i,j,zoom;
         int num_tiles = 0;
         zoom_end = CLAMP(zoom_end, priv->min_zoom, priv->max_zoom);
+        zoom_start = CLAMP(zoom_start, priv->min_zoom, priv->max_zoom);
 
         for(zoom=zoom_start; zoom<=zoom_end; zoom++) {
             int x1,y1,x2,y2;
@@ -2638,6 +2640,13 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
 
             x2 = (int)floor((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
             y2 = (int)floor((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
+
+            /* check for insane ranges */
+            if ( (x2-x1) * (y2-y1) > MAX_DOWNLOAD_TILES ) {
+                g_warning("Aborting download of zoom level %d and up, because "
+                          "number of tiles would exceed %d", zoom, MAX_DOWNLOAD_TILES);
+                break;
+            }
 
             /* loop x1-x2 */
             for(i=x1; i<=x2; i++) {
