@@ -822,7 +822,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
         g_free(dl->filename);
         g_free(dl);
     } else {
-        if (msg->status_code == SOUP_STATUS_NOT_FOUND) {
+        if ((msg->status_code == SOUP_STATUS_NOT_FOUND) || (msg->status_code == SOUP_STATUS_FORBIDDEN)) {
             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
