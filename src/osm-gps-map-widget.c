@@ -764,7 +764,6 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
                 }
             } else {
                 g_warning("Error creating tile download directory: %s", dl->folder);
-                perror("perror:");
             }
         }
 
