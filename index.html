@@ -98,11 +98,16 @@
             <li><a href="http://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.py">mapviewer.py</a></li>
             <li><a href="http://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.js">mapviewer.js</a> (JavaScript example using GObject Introspection)</li>
         </ul>
+        <li>Please e-mail the <a href="http://groups.google.com/group/osm-gps-map">mailing list</a> for all questions.</li>
     </ul></p>
 
-    <h2>Dependencies</h2>
+    <h2>Install Instructions</h2>
+    <p>osm-gps-map should be packaged by your distibution. On Debian, Ubuntu or
+similar, you can install using the following;
+<pre>sudo apt-get install libosmgpsmap-dev python-osmgpsmap</pre></p>
 
-    <p>To build on Linux you will need to install the following;
+    <h3>Installing From Source</h3>
+    <p>To build from source on Linux you will need to install the following dependencies;
     <ul>
         <li>libsoup-2.4 (recommended) or libsoup-2.2</li>
         <li>gtk+</li>
@@ -110,6 +115,12 @@
         <li>pygtk-dev (optional, for python bindings)</li>
     </ul></p>
 
+    <p>Once the dependencies have been installed you can build osm-gps-map. On Linux perform the following;
+<pre>./configure; make; make install #C library
+cd python; ./configure; make; make install #Python bindings</pre>
+    </p>
+
+    <h3>Installing and Running on Windows</h3>
     <p>To run or build on Windows you will need to install the following;
     <ul>
         <li><a href="http://www.python.org/download/">Python 2.6</a></li>
@@ -119,30 +130,6 @@
         <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pygobject/">PyGObject</a></li>
         <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pycairo/">PyCairo</a></li>
         <li><a href="http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/">PyGTK</a></li>
-    </ul></p>
-
-    <h2>Install From Source</h2>
-    <p> On Linux perform the following;
-<pre>./configure; make; make install #C library
-cd python; ./configure; make; make install #Python bindings</pre>
-    </p>
-
-    <h2>License</h2>
-    <p><ul>
-        <li>GPLv3</li>
-    </ul></p>
-
-    <h2>Authors</h2>
-    <p><ul>
-        <li>John Stowers</li>
-        <li>Till Harbaum</li>
-        <li>Alberto Mardegan</li>
-        <li>Mark Cottrell</li>
-        <li>Originally based on <a href="http://www.tangogps.org">tangoGPS</a> by Marcus Bauer</li>
-    </ul></p>
-    <h2>Contact</h2>
-    <p><ul>
-        <li>osm-gps-map <a href="http://groups.google.com/group/osm-gps-map">mailing list</a></li>
     </ul></p>
 
     <h2>Download</h2>
@@ -161,7 +148,26 @@ cd python; ./configure; make; make install #Python bindings</pre>
       by running:
       <pre>$ git clone git://github.com/nzjrs/osm-gps-map</pre>
     </p>
-      
+
+    <h2>License</h2>
+    <p><ul>
+        <li>GPLv3</li>
+    </ul></p>
+
+    <h2>Authors</h2>
+    <p><ul>
+        <li>John Stowers</li>
+        <li>Till Harbaum</li>
+        <li>Alberto Mardegan</li>
+        <li>Mark Cottrell</li>
+        <li>Originally based on <a href="http://www.tangogps.org">tangoGPS</a> by Marcus Bauer</li>
+    </ul></p>
+
+    <h2>Contact</h2>
+    <p><ul>
+        <li>osm-gps-map <a href="http://groups.google.com/group/osm-gps-map">mailing list</a></li>
+    </ul></p>
+
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/nzjrs/osm-gps-map">nzjrs/osm-gps-map</a>
     </div>
