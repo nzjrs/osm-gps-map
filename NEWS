@@ -1,5 +1,7 @@
 Changes in 0.7.3
 ======================
+  * When using the mouse scroll wheel to zoom in, centre on the mouse pointer
+    (as recommended by the HIG)
 
 Changes in 0.7.2
 ======================

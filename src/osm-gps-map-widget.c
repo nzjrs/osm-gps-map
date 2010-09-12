@@ -1930,12 +1930,23 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 static gboolean
 osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
 {
-    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMap *map;
+    OsmGpsMapPoint *pt;
+    float lat, lon;
+
+    map = OSM_GPS_MAP(widget);
+    pt = osm_gps_map_point_new_degrees(0.0,0.0);
+    /* arguably we could use get_event_location here, but I'm not convinced it
+    is forward compatible to cast between GdkEventScroll and GtkEventButton */
+    osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, pt);
+    osm_gps_map_point_get_degrees (pt, &lat, &lon);
 
     if (event->direction == GDK_SCROLL_UP)
-        osm_gps_map_zoom_in(map);
+        osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom+1);
     else if (event->direction == GDK_SCROLL_DOWN)
-        osm_gps_map_zoom_out(map);
+        osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom-1);
+
+    osm_gps_map_point_free (pt);
 
     return FALSE;
 }
