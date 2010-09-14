@@ -33,6 +33,8 @@ sys.path.insert(0, libdir)
 import osmgpsmap
 print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap.__version__)
 
+assert osmgpsmap.__version__ == "0.7.3"
+
 class DummyMapNoGpsPoint(osmgpsmap.GpsMap):
     def do_draw_gps_point(self, drawable):
         pass
