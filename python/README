@@ -1,1 +1,10 @@
 Python bindings for osm-gps-map
+
+To Build
+* Install the dependencies
+  * osm-gps-map
+  * pygobject and pygtk dev packages
+* Linux
+  * ./configure ; make ; make install
+* Windows
+  * python setup.py build --compiler=mingw32 bdist_wininst
