@@ -1,4 +1,30 @@
-/* osm-gps-map-point.c */
+/* vim:set et sw=4 ts=4 */
+/*
+ * Copyright (C) 2010 John Stowers <john.stowers@gmail.com>
+ *
+ * This is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; version 2.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * SECTION:osm-gps-map-point
+ * @short_description: A geographic location (latitude, longitude)
+ * @stability: Stable
+ * @include: osm-gps-map.h
+ *
+ * #OsmGpsMapPoint describes a geographic location (latitude, longitude). 
+ * Helper functions exist to create such a point from either radian co-ordinates
+ * (osm_gps_map_point_new_radians()) or degrees (osm_gps_map_new_degrees()).
+ **/
 
 #include "converter.h"
 #include "osm-gps-map-point.h"

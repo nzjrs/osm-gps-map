@@ -1,3 +1,4 @@
+/* vim:set et sw=4 ts=4 */
 /*
  * Copyright (C) 2010 John Stowers <john.stowers@gmail.com>
  *
@@ -9,10 +10,21 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * SECTION:osm-gps-map-layer
+ * @short_description: An interface for layers to be drawn on the map
+ * @stability: Stable
+ * @include: osm-gps-map.h
+ *
+ * #OsmGpsMapLayer is an interface implemented by objects that wish
+ * to draw on top of the map respond to button press events. The most
+ * common implementation of this interface is #OsmGpsMapOsd
+ **/
 
 #include "osm-gps-map-layer.h"
 

@@ -1,5 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*- */
-/* vim:set et sw=4 ts=4 cino=t0,(0: */
+/* vim:set et sw=4 ts=4 */
 /*
  * osm-gps-map.c
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
@@ -17,14 +16,14 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * SECTION:osm-gps-map
- * @short_description: map display widget
+ * @short_description: The map display widget
  * @stability: Stable
  * @include: osm-gps-map.h
  *

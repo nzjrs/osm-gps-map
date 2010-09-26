@@ -1,4 +1,29 @@
-/* osm-gps-map-image.c */
+/* vim:set et sw=4 ts=4 */
+/*
+ * Copyright (C) 2010 John Stowers <john.stowers@gmail.com>
+ *
+ * This is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; version 2.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * SECTION:osm-gps-map-image
+ * @short_description: An image shown on the map
+ * @stability: Stable
+ * @include: osm-gps-map.h
+ *
+ * #OsmGpsMapImage represents an image (a #GdkPixbuf) shown on the map
+ * (osm_gps_map_image_add()) at a specific location (a #OsmGpsMapPoint).
+ **/
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
