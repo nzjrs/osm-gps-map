@@ -2,6 +2,12 @@ Changes in 0.7.3
 ======================
   * When using the mouse scroll wheel to zoom in, centre on the mouse pointer
     (as recommended by the HIG)
+  * Doc updates
+  * Bug fixes
+    * Treat 403 errors as missing tiles
+    * Bail if user queues too many tiles to download (DOS)
+    * Limit retries of tile download on unspecified errors
+    * Enforce gtk+-2.14 minimum
 
 Changes in 0.7.2
 ======================
