@@ -88,6 +88,10 @@ class UI(gtk.Window):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
 
+        #connect to tooltip
+        self.osm.props.has_tooltip = True
+        self.osm.connect("query-tooltip", self.on_query_tooltip)
+
         self.latlon_entry = gtk.Entry()
 
         zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)
@@ -149,11 +153,17 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         gobtn.connect("clicked", self.load_map_clicked)
         vb.pack_start(gobtn, False)
 
+        self.show_tooltips = False
+        cb = gtk.CheckButton("Show Location in Tooltips")
+        cb.props.active = self.show_tooltips
+        cb.connect("toggled", self.on_show_tooltips_toggled)
+        self.vbox.pack_end(cb, False)
+
         cb = gtk.CheckButton("Disable Cache")
         cb.props.active = False
         cb.connect("toggled", self.disable_cache_toggled)
-
         self.vbox.pack_end(cb, False)
+
         self.vbox.pack_end(ex, False)
         self.vbox.pack_end(self.latlon_entry, False)
         self.vbox.pack_end(hbox, False)
@@ -165,6 +175,9 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             self.osm.props.tile_cache = osmgpsmap.CACHE_DISABLED
         else:
             self.osm.props.tile_cache = osmgpsmap.CACHE_AUTO
+
+    def on_show_tooltips_toggled(self, btn):
+        self.show_tooltips = btn.props.active
 
     def load_map_clicked(self, button):
         uri = self.repouri_entry.get_text()
@@ -199,6 +212,19 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
 
     def home_clicked(self, button):
         self.osm.set_center_and_zoom(-44.39, 171.25, 12)
+
+    def on_query_tooltip(self, widget, x, y, keyboard_tip, tooltip, data=None):
+        if keyboard_tip:
+            return False
+
+        if self.show_tooltips:
+            p = osmgpsmap.point_new_degrees(0.0, 0.0)
+            self.osm.convert_screen_to_geographic(x, y, p)
+            lat,lon = p.get_degrees()
+            tooltip.set_markup("%+.4f, %+.4f" % p.get_degrees())
+            return True
+
+        return False
  
     def cache_clicked(self, button):
         bbox = self.osm.get_bbox()
