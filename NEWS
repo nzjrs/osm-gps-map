@@ -8,6 +8,7 @@ Changes in 0.7.3
     * Bail if user queues too many tiles to download (DOS)
     * Limit retries of tile download on unspecified errors
     * Enforce gtk+-2.14 minimum
+    * Fix Google
 
 Changes in 0.7.2
 ======================
