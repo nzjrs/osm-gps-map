@@ -308,7 +308,7 @@ G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  */
 static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
 static gchar    *replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
-static void     osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y);
+static void     osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y, int tile_zoom, int target_x, int target_y);
 #if USE_LIBSOUP22
 static void     osm_gps_map_tile_download_complete (SoupMessage *msg, gpointer user_data);
 #else
@@ -708,20 +708,33 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map, GdkDrawable *drawable)
 }
 
 static void
-osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y)
+osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offset_y,
+                      int tile_zoom, int target_x, int target_y)
 {
     OsmGpsMapPrivate *priv = map->priv;
+    int target_zoom = priv->map_zoom;
 
     g_debug("Queing redraw @ %d,%d (w:%d h:%d)", offset_x,offset_y, TILESIZE,TILESIZE);
 
-    /* draw pixbuf onto pixmap */
-    gdk_draw_pixbuf (priv->pixmap,
-                     priv->gc_map,
-                     pixbuf,
-                     0,0,
-                     offset_x,offset_y,
-                     TILESIZE,TILESIZE,
-                     GDK_RGB_DITHER_NONE, 0, 0);
+    if (tile_zoom == target_zoom) {
+        /* draw pixbuf onto pixmap */
+        gdk_draw_pixbuf (priv->pixmap,
+                         priv->gc_map,
+                         pixbuf,
+                         0,0,
+                         offset_x,offset_y,
+                         TILESIZE,TILESIZE,
+                         GDK_RGB_DITHER_NONE, 0, 0);
+    } else {
+        /* get an upscaled version of the pixbuf, and then draw it */
+        GdkPixbuf *pixmap_scaled = osm_gps_map_render_tile_upscaled
+            (map, pixbuf, tile_zoom, target_zoom, target_x, target_y);
+
+        osm_gps_map_blit_tile (map, pixmap_scaled, offset_x, offset_y,
+                               target_zoom, target_x, target_y);
+
+        g_object_unref (pixmap_scaled);
+    }
 }
 
 /* libsoup-2.2 and libsoup-2.4 use different ways to store the body data */
@@ -1051,7 +1064,8 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
     g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
     if (priv->map_source == OSM_GPS_MAP_SOURCE_NULL) {
-        osm_gps_map_blit_tile(map, priv->null_tile, offset_x,offset_y);
+        osm_gps_map_blit_tile(map, priv->null_tile, offset_x, offset_y,
+                              priv->map_zoom, x, y);
         return;
     }
 
@@ -1068,7 +1082,8 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
 
     if(pixbuf) {
         g_debug("Found tile %s", filename);
-        osm_gps_map_blit_tile(map, pixbuf, offset_x,offset_y);
+        osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y,
+                              zoom, x, y);
         g_object_unref (pixbuf);
     } else {
         if (priv->map_auto_download_enabled) {
@@ -1079,7 +1094,8 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
          * levels */
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
         if (pixbuf) {
-            osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y);
+            osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y,
+                                   zoom, x, y);
             g_object_unref (pixbuf);
         } else {
             /* prevent some artifacts when drawing not yet loaded areas. */
