@@ -319,6 +319,7 @@ static void     osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, i
 static void     osm_gps_map_fill_tiles_pixel (OsmGpsMap *map);
 static gboolean osm_gps_map_map_redraw (OsmGpsMap *map);
 static void     osm_gps_map_map_redraw_idle (OsmGpsMap *map);
+static GdkPixbuf* osm_gps_map_render_tile_upscaled (OsmGpsMap *map, GdkPixbuf *tile, int tile_zoom, int zoom, int x, int y);
 
 static void
 cached_tile_free (OsmCachedTile *tile)
@@ -993,24 +994,40 @@ static GdkPixbuf *
 osm_gps_map_render_missing_tile_upscaled (OsmGpsMap *map, int zoom,
                                           int x, int y)
 {
-    GdkPixbuf *pixbuf, *big, *area;
-    int zoom_big, zoom_diff, area_size, area_x, area_y;
-    int modulo;
+    GdkPixbuf *pixbuf, *big;
+    int zoom_big;
 
     big = osm_gps_map_find_bigger_tile (map, zoom, x, y, &zoom_big);
     if (!big) return NULL;
 
     g_debug ("Found bigger tile (zoom = %d, wanted = %d)", zoom_big, zoom);
 
+    pixbuf = osm_gps_map_render_tile_upscaled (map, big, zoom_big,
+                                               zoom, x, y);
+    g_object_unref (big);
+
+    return pixbuf;
+}
+static GdkPixbuf*
+osm_gps_map_render_tile_upscaled (OsmGpsMap *map, GdkPixbuf *big, int zoom_big,
+                                  int zoom, int x, int y)
+{
+    GdkPixbuf *pixbuf, *area;
+    int area_size, area_x, area_y;
+    int modulo;
+    int zoom_diff;
+
     /* get a Pixbuf for the area to magnify */
     zoom_diff = zoom - zoom_big;
+
+    g_debug ("Upscaling by %d levels into tile %d,%d", zoom_diff, x, y);
+
     area_size = TILESIZE >> zoom_diff;
     modulo = 1 << zoom_diff;
     area_x = (x % modulo) * area_size;
     area_y = (y % modulo) * area_size;
     area = gdk_pixbuf_new_subpixbuf (big, area_x, area_y,
                                      area_size, area_size);
-    g_object_unref (big);
     pixbuf = gdk_pixbuf_scale_simple (area, TILESIZE, TILESIZE,
                                       GDK_INTERP_NEAREST);
     g_object_unref (area);
