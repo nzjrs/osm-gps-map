@@ -156,6 +156,9 @@ struct _OsmGpsMapPrivate
     int map_zoom;
     int max_zoom;
     int min_zoom;
+
+    int tile_zoom_offset;
+
     int map_x;
     int map_y;
 
@@ -283,6 +286,7 @@ enum
     PROP_TILE_CACHE_DIR,
     PROP_TILE_CACHE_BASE_DIR,
     PROP_TILE_CACHE_DIR_IS_FULL_PATH,
+    PROP_TILE_ZOOM_OFFSET,
     PROP_ZOOM,
     PROP_MAX_ZOOM,
     PROP_MIN_ZOOM,
@@ -1060,12 +1064,22 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
     OsmGpsMapPrivate *priv = map->priv;
     gchar *filename;
     GdkPixbuf *pixbuf;
+    int zoom_offset = priv->tile_zoom_offset;
+    int target_x, target_y;
 
-    g_debug("Load tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
+    g_debug("Load virtual tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
+
+    if (zoom > MIN_ZOOM) {
+      zoom -= zoom_offset;
+      target_x = x; x >>= zoom_offset;
+      target_y = y; y >>= zoom_offset;
+    }
+
+    g_debug("Load actual tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
     if (priv->map_source == OSM_GPS_MAP_SOURCE_NULL) {
         osm_gps_map_blit_tile(map, priv->null_tile, offset_x, offset_y,
-                              priv->map_zoom, x, y);
+                              priv->map_zoom, target_x, target_y);
         return;
     }
 
@@ -1083,7 +1097,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
     if(pixbuf) {
         g_debug("Found tile %s", filename);
         osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y,
-                              zoom, x, y);
+                              zoom, target_x, target_y);
         g_object_unref (pixbuf);
     } else {
         if (priv->map_auto_download_enabled) {
@@ -1095,7 +1109,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
         if (pixbuf) {
             osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y,
-                                   zoom, x, y);
+                                   zoom, target_x, target_y);
             g_object_unref (pixbuf);
         } else {
             /* prevent some artifacts when drawing not yet loaded areas. */
@@ -1800,6 +1814,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
              break;
+        case PROP_TILE_ZOOM_OFFSET:
+            priv->tile_zoom_offset = g_value_get_int (value);
+            break;
         case PROP_ZOOM:
             priv->map_zoom = g_value_get_int (value);
             break;
@@ -1896,6 +1913,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
             g_value_set_boolean(value, FALSE);
+            break;
+        case PROP_TILE_ZOOM_OFFSET:
+            g_value_set_int(value, priv->tile_zoom_offset);
             break;
         case PROP_ZOOM:
             g_value_set_int(value, priv->map_zoom);
@@ -2485,6 +2505,16 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (object_class,
+                                     PROP_TILE_ZOOM_OFFSET,
+                                     g_param_spec_int ("tile-zoom-offset",
+                                                       "tile zoom-offset",
+                                                       "Number of zoom-levels to upsample tiles",
+                                                       MIN_TILE_ZOOM_OFFSET, /* minimum propery value */
+                                                       MAX_TILE_ZOOM_OFFSET, /* maximum propery value */
+                                                       0,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+    g_object_class_install_property (object_class,
                                      PROP_MAX_ZOOM,
                                      g_param_spec_int ("max-zoom",
                                                        "max zoom",
@@ -2791,6 +2821,25 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     osm_gps_map_map_redraw_idle(map);
 
     g_signal_emit_by_name(map, "changed");
+}
+
+/**
+ * osm_gps_map_set_zoom_offset:
+ *
+ **/
+void
+osm_gps_map_set_zoom_offset (OsmGpsMap *map, int zoom_offset)
+{
+    OsmGpsMapPrivate *priv;
+
+    g_return_if_fail (OSM_GPS_MAP (map));
+    priv = map->priv;
+
+    if (zoom_offset != priv->tile_zoom_offset)
+    {
+        priv->tile_zoom_offset = zoom_offset;
+        osm_gps_map_map_redraw_idle (map);
+    }
 }
 
 /**
