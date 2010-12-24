@@ -1062,13 +1062,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, int zoom, int x, int y, int offset_x, int
          * levels */
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
         if (pixbuf) {
-            gdk_draw_pixbuf (priv->pixmap,
-                             priv->gc_map,
-                             pixbuf,
-                             0,0,
-                             offset_x,offset_y,
-                             TILESIZE,TILESIZE,
-                             GDK_RGB_DITHER_NONE, 0, 0);
+            osm_gps_map_blit_tile(map, pixbuf, offset_x, offset_y);
             g_object_unref (pixbuf);
         } else {
             /* prevent some artifacts when drawing not yet loaded areas. */
