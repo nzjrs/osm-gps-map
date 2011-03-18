@@ -19,9 +19,10 @@ AM_PROG_LIBTOOL
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 # Library dependencies
-PKG_CHECK_MODULES(GLIB,  [glib-2.0 >= 2.16])
-PKG_CHECK_MODULES(GTK,   [gtk+-3.0 >= 3.0])
-PKG_CHECK_MODULES(CAIRO, [cairo >= 1.8])
+PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])
+PKG_CHECK_MODULES(GTK,      [gtk+-3.0 >= 3.0])
+PKG_CHECK_MODULES(CAIRO,    [cairo >= 1.8])
+PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against
 # libgthread-2.0.
@@ -30,13 +31,6 @@ PKG_CHECK_MODULES(GTHREAD, [gthread-2.0], [
         have_gthread="no"
         AC_MSG_RESULT([mapviewer demo disabled])])
 AM_CONDITIONAL([HAVE_GTHREAD], [ test "x$have_gthread" = "xyes" ])
-
-PKG_CHECK_MODULES(SOUP24, [libsoup-2.4], [
-    soup_ver=2.4], [
-        PKG_CHECK_MODULES(SOUP22, [libsoup-2.2], [
-            soup_ver=2.2
-            AC_DEFINE(USE_LIBSOUP22, 1, Use libsoup 2.2 instead of libsoup-2.4 to download tiles)],
-                AC_ERROR([libsoup-2.4 (preferred) or libsoup-2.2 not found]))])
 
 AC_MSG_CHECKING([for Win32])
 case "$host" in
@@ -82,7 +76,6 @@ echo
 echo $PACKAGE v$VERSION
 echo
 echo Prefix............... : $prefix
-echo libsoup.............. : $soup_ver
 echo Introspection support : ${found_introspection}
 echo gtk-doc documentation : ${enable_gtk_doc}
 echo

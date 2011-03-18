@@ -25,9 +25,6 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#if USE_LIBSOUP22
-#include <libsoup/soup.h>
-#endif
 #include "osm-gps-map-widget.h"
 
 #define TILESIZE 256

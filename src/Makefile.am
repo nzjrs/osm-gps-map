@@ -5,14 +5,12 @@ OSMGPSMAP_CFLAGS =          \
 	$(GLIB_CFLAGS)          \
 	$(GTK_CFLAGS)           \
 	$(CAIRO_CFLAGS)         \
-	$(SOUP22_CFLAGS)        \
     $(SOUP24_CFLAGS)
 
 OSMGPSMAP_LIBS =            \
     $(GLIB_LIBS)            \
     $(GTK_LIBS)             \
     $(CAIRO_LIBS)           \
-    $(SOUP22_LIBS)          \
     $(SOUP24_LIBS)
 
 ## Shared library
