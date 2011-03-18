@@ -1574,11 +1574,7 @@ osm_gps_map_setup(OsmGpsMap *map)
         priv->cache_dir = NULL;
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0 ) {
         char *base = osm_gps_map_get_cache_base_dir(priv);
-#if GLIB_CHECK_VERSION (2, 16, 0)
         char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
-#else
-        char *md5 = g_strdup(osm_gps_map_source_get_friendly_name(priv->map_source));
-#endif
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, md5);
         g_free(base);
         g_free(md5);
