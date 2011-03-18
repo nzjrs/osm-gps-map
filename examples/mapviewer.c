@@ -289,7 +289,7 @@ main (int argc, char **argv)
                         "show-gps-in-zoom",FALSE,
                         "dpad-radius", 30,
                         NULL);
-    osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
+    //osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
     //Add a second track for right clicks
@@ -300,11 +300,11 @@ main (int argc, char **argv)
     g_free(cachebasedir);
 
     //Enable keyboard navigation
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_F11);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_UP, GDK_Up);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_Down);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_Left);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_KEY_F11);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_UP, GDK_KEY_Up);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_KEY_Down);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_KEY_Left);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_KEY_Right);
 
     //Build the UI
     g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
@@ -382,9 +382,9 @@ main (int argc, char **argv)
                       G_CALLBACK (on_close), (gpointer) map);
     //Setup accelerators.
     ag = gtk_accel_group_new();
-    gtk_accel_group_connect(ag, GDK_w, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+    gtk_accel_group_connect(ag, GDK_KEY_w, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
                     g_cclosure_new(gtk_main_quit, NULL, NULL));
-    gtk_accel_group_connect(ag, GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+    gtk_accel_group_connect(ag, GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
                     g_cclosure_new(gtk_main_quit, NULL, NULL));
     gtk_window_add_accel_group(GTK_WINDOW(widget), ag);
 

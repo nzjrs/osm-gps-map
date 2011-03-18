@@ -188,12 +188,11 @@ osm_gps_map_image_new (void)
 }
 
 void
-osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc, GdkRectangle *rect)
+osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
 {
     OsmGpsMapImagePrivate *priv;
     int xoffset, yoffset;
     gdouble x,y;
-    cairo_t *cr;
 
     g_return_if_fail (OSM_IS_GPS_MAP_IMAGE (object));
     priv = OSM_GPS_MAP_IMAGE(object)->priv;
@@ -203,10 +202,8 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc
     x = rect->x - xoffset;
     y = rect->y - yoffset;
 
-    cr = gdk_cairo_create (drawable);
     gdk_cairo_set_source_pixbuf (cr, priv->pixbuf, x, y);
     cairo_paint (cr);
-    cairo_destroy (cr);
 
     rect->width = priv->w;
     rect->height = priv->h;

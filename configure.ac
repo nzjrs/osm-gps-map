@@ -19,9 +19,9 @@ AM_PROG_LIBTOOL
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 # Library dependencies
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.16])
-PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.24])
-PKG_CHECK_MODULES(CAIRO, [cairo >= 1.6])
+PKG_CHECK_MODULES(GLIB,  [glib-2.0 >= 2.16])
+PKG_CHECK_MODULES(GTK,   [gtk+-3.0 >= 3.0])
+PKG_CHECK_MODULES(CAIRO, [cairo >= 1.8])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against
 # libgthread-2.0.

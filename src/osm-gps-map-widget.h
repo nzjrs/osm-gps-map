@@ -29,6 +29,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 
@@ -52,7 +53,7 @@ struct _OsmGpsMapClass
 {
     GtkDrawingAreaClass parent_class;
 
-    void (*draw_gps_point) (OsmGpsMap *map, GdkDrawable *drawable);
+    void (*draw_gps_point) (OsmGpsMap *map, cairo_t *cr);
 };
 
 struct _OsmGpsMap

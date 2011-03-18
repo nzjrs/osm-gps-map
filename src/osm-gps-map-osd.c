@@ -94,7 +94,7 @@ struct _OsmGpsMapOsdPrivate
 };
 
 static void                 osm_gps_map_osd_render       (OsmGpsMapLayer *osd, OsmGpsMap *map);
-static void                 osm_gps_map_osd_draw         (OsmGpsMapLayer *osd, OsmGpsMap *map, GdkDrawable *drawable);
+static void                 osm_gps_map_osd_draw         (OsmGpsMapLayer *osd, OsmGpsMap *map, cairo_t *cr);
 static gboolean             osm_gps_map_osd_busy         (OsmGpsMapLayer *osd);
 static gboolean             osm_gps_map_osd_button_press (OsmGpsMapLayer *osd, OsmGpsMap *map, GdkEventButton *event);
 
@@ -463,9 +463,8 @@ osm_gps_map_osd_render (OsmGpsMapLayer *osd,
 static void
 osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
                               OsmGpsMap *map,
-                              GdkDrawable *drawable)
+                              cairo_t *cr)
 {
-    cairo_t *cr;
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
@@ -476,7 +475,6 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
     priv = self->priv;
 
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
-    cr = gdk_cairo_create(drawable);
 
     if (priv->show_scale)
         scale_draw(self, &allocation, cr);
@@ -850,6 +848,7 @@ crosshair_draw(OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr)
 static void
 controls_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 {
+    GdkColor fg, bg;
     OsmGpsMapOsdPrivate *priv = self->priv;
     OsdControls_t *controls = self->priv->controls;
 
@@ -858,10 +857,8 @@ controls_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 
     controls->rendered = TRUE;
 
-    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(map));
-    GdkColor bg = style->bg[GTK_STATE_NORMAL];
-    GdkColor fg = style->fg[GTK_STATE_NORMAL];
-    //GdkColor da = GTK_WIDGET(map)->style->fg[GTK_STATE_INSENSITIVE];
+    gdk_color_parse ("red", &fg);
+    gdk_color_parse ("blue", &bg);
 
     /* first fill with transparency */
     g_assert(controls->surface);
