@@ -128,6 +128,8 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib/gprintf.h>
@@ -718,19 +720,15 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
     OsmGpsMapPrivate *priv = map->priv;
     int target_zoom = priv->map_zoom;
 
-    g_debug("Queing redraw @ %d,%d (w:%d h:%d)", offset_x,offset_y, TILESIZE,TILESIZE);
-
     if (tile_zoom == target_zoom) {
-        /* draw pixbuf onto pixmap */
-        gdk_draw_pixbuf (priv->pixmap,
-                         priv->gc_map,
-                         pixbuf,
-                         0,0,
-                         offset_x,offset_y,
-                         TILESIZE,TILESIZE,
-                         GDK_RGB_DITHER_NONE, 0, 0);
+        g_debug("Blit @ %d,%d", offset_x,offset_y);
+        /* draw pixbuf */
+        cairo_t *cr = gdk_cairo_create (priv->pixmap);
+        gdk_cairo_set_source_pixbuf (cr, pixbuf, offset_x, offset_y);
+        cairo_paint (cr);
+        cairo_destroy (cr);
     } else {
-        /* get an upscaled version of the pixbuf, and then draw it */
+        /* get an upscaled version of the pixbuf */
         GdkPixbuf *pixmap_scaled = osm_gps_map_render_tile_upscaled
             (map, pixbuf, tile_zoom, target_zoom, target_x, target_y);
 
