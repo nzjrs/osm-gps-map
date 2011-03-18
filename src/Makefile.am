@@ -75,7 +75,7 @@ CLEANFILES =
 ## GObject Introspection Support
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --add-include-path=$(builddir)
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --add-include-path=$(builddir) --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION
@@ -86,6 +86,7 @@ OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-2.0
 OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
 OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
 OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
+OsmGpsMap_1_0_gir_SCANNERFLAGS = --identifier-prefix=OsmGps
 INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
 
 girdir = $(datadir)/gir-1.0
