@@ -589,6 +589,16 @@ gslist_of_data_free (GSList **list)
 }
 
 static void
+draw_white_rectangle(cairo_t *cr, double x, double y, double width, double height)
+{
+    cairo_save (cr);
+    cairo_set_source_rgb (cr, 1, 1, 1);
+    cairo_rectangle (cr, x, y, width, height);
+    cairo_fill (cr);
+    cairo_restore (cr);
+}
+
+static void
 osm_gps_map_print_images (OsmGpsMap *map, cairo_t *cr)
 {
     GSList *list;
@@ -1065,11 +1075,8 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
             g_object_unref (pixbuf);
         } else {
             /* prevent some artifacts when drawing not yet loaded areas. */
-            g_warning("DRAW WHITE RECT");
-            //gdk_draw_rectangle (priv->pixmap,
-            //                    style->white_gc,
-            //                    TRUE,
-            //                    offset_x, offset_y, TILESIZE, TILESIZE);
+            g_warning ("Error getting missing tile"); /* FIXME: is this a warning? */
+            draw_white_rectangle (cr, offset_x, offset_y, TILESIZE, TILESIZE);
         }
     }
     g_free(filename);
@@ -1110,13 +1117,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
         {
             if( j<0 || i<0 || i>=exp(priv->map_zoom * M_LN2) || j>=exp(priv->map_zoom * M_LN2))
             {
-                /* draw white */
-                g_warning("DRAW WHITE RECT");
-                //gdk_draw_rectangle (priv->pixmap,
-                //                    style->white_gc,
-                //                    TRUE,
-                //                    offset_xn, offset_yn,
-                //                    TILESIZE,TILESIZE);
+                /* draw white in areas outside map (i.e. when zoomed right out) */
+                draw_white_rectangle (cr, offset_xn, offset_yn, TILESIZE, TILESIZE);
             }
             else
             {
@@ -1235,7 +1237,9 @@ static gboolean
 osm_gps_map_map_redraw (OsmGpsMap *map)
 {
     cairo_t *cr;
+    int w, h;
     OsmGpsMapPrivate *priv = map->priv;
+    GtkWidget *widget = GTK_WIDGET(map);
 
     priv->idle_map_redraw = 0;
 
@@ -1271,16 +1275,10 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
     priv->redraw_cycle++;
 
-    /* draw white background */
-    g_warning("DRAW WHITE RECT");
-    //gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
-    //style = gtk_widget_get_style(GTK_WIDGET(map));
-    //gdk_draw_rectangle (priv->pixmap,
-    //                    style->white_gc,
-    //                    TRUE,
-    //                    0, 0,
-    //                    allocation.width + EXTRA_BORDER * 2,
-    //                    allocation.height + EXTRA_BORDER * 2);
+    /* clear white background */
+    w = gtk_widget_get_allocated_width (widget);
+    h = gtk_widget_get_allocated_width (widget);
+    draw_white_rectangle(cr, 0, 0, w + EXTRA_BORDER * 2, h + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map, cr);
 
