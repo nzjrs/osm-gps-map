@@ -195,6 +195,15 @@
   )
 )
 
+(define-method set_zoom_offset
+  (of-object "OsmGpsMap")
+  (c-name "osm_gps_map_set_zoom_offset")
+  (return-type "none")
+  (parameters
+    '("int" "zoom_offset")
+  )
+)
+
 (define-method zoom_in
   (of-object "OsmGpsMap")
   (c-name "osm_gps_map_zoom_in")
