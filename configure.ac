@@ -1,22 +1,20 @@
-AC_PREREQ([2.62])
+AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [0.7.3],
+        [0.7.4],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
-AM_INIT_AUTOMAKE([1.10])
+AM_INIT_AUTOMAKE([1.11])
 
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
 AC_CONFIG_MACRO_DIR([m4])
-
-AM_MAINTAINER_MODE
 
 AM_PROG_CC_C_O
 
 AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+AM_SILENT_RULES([yes])
 
 # Library dependencies
 PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])

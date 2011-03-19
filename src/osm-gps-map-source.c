@@ -75,11 +75,11 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             return "http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg";
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
-            return "http://mt#R.google.com/vt/lyrs=m@140&hl=en&x=#X&s=&y=#Y&z=#Z";
+            return "http://mt#R.google.com/vt/lyrs=m@146&hl=en&x=#X&s=&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
-            return "http://mt#R.google.com/vt/lyrs=h@140&hl=en&x=#X&s=&y=#Y&z=#Z";
+            return "http://mt#R.google.com/vt/lyrs=h@146&hl=en&x=#X&s=&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
-            return "http://khm#R.google.com/kh/v=75&x=#X&y=#Y&z=#Z";
+            return "http://khm#R.google.com/kh/v=80&x=#X&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/r#W.jpeg?g=50";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
