@@ -1,6 +1,6 @@
 AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [0.7.3],
+        [0.7.4],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
 AM_INIT_AUTOMAKE([1.11])
