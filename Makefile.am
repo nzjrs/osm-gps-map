@@ -3,8 +3,7 @@
 SUBDIRS = src examples docs
 DISTCHECK_CONFIGURE_FLAGS =                     \
     --enable-gtk-doc                            \
-    --enable-maintainer-flags                   \
-    --enable-introspection
+    --enable-maintainer-flags
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 

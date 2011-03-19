@@ -5,7 +5,7 @@ srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
 PKG_NAME="osm-gps-map"
-# REQUIRED_M4MACROS=introspection.m4
+#REQUIRED_M4MACROS=introspection.m4
 
 (test -f $srcdir/configure.ac) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
@@ -18,5 +18,6 @@ which gnome-autogen.sh || {
 	exit 1
 }
 
-. gnome-autogen.sh --enable-gtk-doc "$@"
+REQUIRED_AUTOMAKE_VERSION=1.11 USE_GNOME2_MACROS=1 USE_COMMON_DOC_BUILD=yes . gnome-autogen.sh --enable-gtk-doc "$@"
+
 
