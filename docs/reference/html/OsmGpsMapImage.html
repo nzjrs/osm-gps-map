@@ -8,7 +8,7 @@
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer">
 <link rel="next" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -35,13 +35,20 @@
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
 <h2><span class="refentrytitle"><a name="OsmGpsMapImage.top_of_page"></a>OsmGpsMapImage</span></h2>
-<p>OsmGpsMapImage</p>
+<p>OsmGpsMapImage — An image shown on the map</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
+<div class="refsect1" title="Stability Level">
+<a name="OsmGpsMapImage.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
 <div class="refsynopsisdiv" title="Synopsis">
 <a name="OsmGpsMapImage.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">                    <a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage-struct" title="OsmGpsMapImage">OsmGpsMapImage</a>;
+<pre class="synopsis">
+#include &lt;osm-gps-map.h&gt;
+
+                    <a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage-struct" title="OsmGpsMapImage">OsmGpsMapImage</a>;
                     <a class="link" href="OsmGpsMapImage.html#OsmGpsMapImageClass" title="OsmGpsMapImageClass">OsmGpsMapImageClass</a>;
 <span class="returnvalue">void</span>                <a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-draw" title="osm_gps_map_image_draw ()">osm_gps_map_image_draw</a>              (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>,
                                                          <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk/gdk-Drawing-Primitives.html#GdkDrawable"><span class="type">GdkDrawable</span></a> *drawable</code></em>,
@@ -62,7 +69,7 @@ const <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" tit
 <div class="refsect1" title="Properties">
 <a name="OsmGpsMapImage.properties"></a><h2>Properties</h2>
 <pre class="synopsis">
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf" title='The "pixbuf" property'>pixbuf</a>"                   <a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a>*            : Read / Write / Construct
+  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf" title='The "pixbuf" property'>pixbuf</a>"                   <span class="type">GdkPixbuf</span>*            : Read / Write / Construct
   "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--point" title='The "point" property'>point</a>"                    <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>*       : Read / Write / Construct
   "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align" title='The "x-align" property'>x-align</a>"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
   "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align" title='The "y-align" property'>y-align</a>"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
@@ -71,6 +78,8 @@ const <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" tit
 <div class="refsect1" title="Description">
 <a name="OsmGpsMapImage.description"></a><h2>Description</h2>
 <p>
+<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> represents an image (a <span class="type">GdkPixbuf</span>) shown on the map
+(<a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()"><code class="function">osm_gps_map_image_add()</code></a>) at a specific location (a <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>).
 </p>
 </div>
 <div class="refsect1" title="Details">
@@ -183,7 +192,7 @@ const <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" tit
 <a name="OsmGpsMapImage.property-details"></a><h2>Property Details</h2>
 <div class="refsect2" title='The "pixbuf" property'>
 <a name="OsmGpsMapImage--pixbuf"></a><h3>The <code class="literal">"pixbuf"</code> property</h3>
-<pre class="programlisting">  "pixbuf"                   <a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a>*            : Read / Write / Construct</pre>
+<pre class="programlisting">  "pixbuf"                   <span class="type">GdkPixbuf</span>*            : Read / Write / Construct</pre>
 <p>the pixbuf for this image.</p>
 </div>
 <hr>
@@ -212,6 +221,6 @@ const <a class="link" href="libosmgpsmap-OsmGpsMapPoint.html#OsmGpsMapPoint" tit
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.15</div>
 </body>
 </html>

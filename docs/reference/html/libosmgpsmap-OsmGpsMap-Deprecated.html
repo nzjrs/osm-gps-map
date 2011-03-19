@@ -8,7 +8,7 @@
 <link rel="up" href="api-reference-deprecated.html" title="Deprecated API">
 <link rel="prev" href="api-reference-deprecated.html" title="Deprecated API">
 <link rel="next" href="api-index-full.html" title="Index of all symbols">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -51,16 +51,16 @@
 <span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image" title="osm_gps_map_add_image ()">osm_gps_map_add_image</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-image-with-alignment" title="osm_gps_map_add_image_with_alignment ()">osm_gps_map_add_image_with_alignment</a>
                                                         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> yalign</code></em>);
 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-remove-image" title="osm_gps_map_remove_image ()">osm_gps_map_remove_image</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-clear-images" title="osm_gps_map_clear_images ()">osm_gps_map_clear_images</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libosmgpsmap-OsmGpsMap-Deprecated.html#osm-gps-map-add-layer" title="osm_gps_map_add_layer ()">osm_gps_map_add_layer</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *layer</code></em>);
@@ -223,7 +223,7 @@ or just edit the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrac
 <pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_add_image               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);</pre>
 <div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Warning</h3>
 <p><code class="literal">osm_gps_map_add_image</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()"><code class="function">osm_gps_map_image_add()</code></a> instead.</p>
@@ -261,7 +261,7 @@ or just edit the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrac
                                                         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> yalign</code></em>);</pre>
 <div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -308,7 +308,7 @@ or just edit the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrac
 <div class="refsect2" title="osm_gps_map_remove_image ()">
 <a name="osm-gps-map-remove-image"></a><h3>osm_gps_map_remove_image ()</h3>
 <pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_remove_image            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);</pre>
 <div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Warning</h3>
 <p><code class="literal">osm_gps_map_remove_image</code> has been deprecated since version 0.7.0 and should not be used in newly-written code. Use <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove" title="osm_gps_map_image_remove ()"><code class="function">osm_gps_map_image_remove()</code></a> instead.</p>
@@ -540,6 +540,6 @@ or just edit the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrac
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.15</div>
 </body>
 </html>

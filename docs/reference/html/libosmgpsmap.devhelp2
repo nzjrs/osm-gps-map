@@ -85,6 +85,7 @@
     <keyword type="property" name="The &quot;tile-cache&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache"/>
     <keyword type="property" name="The &quot;tile-cache-base&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-base"/>
     <keyword type="property" name="The &quot;tile-cache-is-full-path&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path"/>
+    <keyword type="property" name="The &quot;tile-zoom-offset&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset"/>
     <keyword type="property" name="The &quot;tiles-queued&quot; property" link="OsmGpsMap.html#OsmGpsMap--tiles-queued"/>
     <keyword type="property" name="The &quot;zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--zoom"/>
     <keyword type="signal" name="The &quot;changed&quot; signal" link="OsmGpsMap.html#OsmGpsMap-changed"/>

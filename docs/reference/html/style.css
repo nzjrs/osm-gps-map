@@ -209,6 +209,14 @@ h2 .extralinks, h3 .extralinks
   font-weight: normal;
 }
 
+.annotation
+{
+  /* tango:aluminium 5 */
+  color: #555753;
+  font-size: 80%;
+  font-weight: normal;
+}
+
 /* code listings */
 
 .listing_code .programlisting .cbracket   { color: #a40000; } /* tango: scarlet red 3 */

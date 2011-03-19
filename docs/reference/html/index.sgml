@@ -74,11 +74,13 @@
 <ANCHOR id="OsmGpsMap--tile-cache" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--tile-cache">
 <ANCHOR id="OsmGpsMap--tile-cache-base" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--tile-cache-base">
 <ANCHOR id="OsmGpsMap--tile-cache-is-full-path" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path">
+<ANCHOR id="OsmGpsMap--tile-zoom-offset" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--tile-zoom-offset">
 <ANCHOR id="OsmGpsMap--tiles-queued" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--tiles-queued">
 <ANCHOR id="OsmGpsMap--zoom" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap--zoom">
 <ANCHOR id="OsmGpsMap.signal-details" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap.signal-details">
 <ANCHOR id="OsmGpsMap-changed" href="libosmgpsmap/OsmGpsMap.html#OsmGpsMap-changed">
 <ANCHOR id="OsmGpsMapLayer" href="libosmgpsmap/OsmGpsMapLayer.html">
+<ANCHOR id="OsmGpsMapLayer.stability-level" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapLayer.stability-level">
 <ANCHOR id="OsmGpsMapLayer.synopsis" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapLayer.synopsis">
 <ANCHOR id="OsmGpsMapOsd" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapOsd">
 <ANCHOR id="OsmGpsMapLayer.object-hierarchy" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapLayer.object-hierarchy">
@@ -107,6 +109,7 @@
 <ANCHOR id="OsmGpsMapOsd--show-scale" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale">
 <ANCHOR id="OsmGpsMapOsd--show-zoom" href="libosmgpsmap/OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom">
 <ANCHOR id="OsmGpsMapImage" href="libosmgpsmap/OsmGpsMapImage.html">
+<ANCHOR id="OsmGpsMapImage.stability-level" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage.stability-level">
 <ANCHOR id="OsmGpsMapImage.synopsis" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage.synopsis">
 <ANCHOR id="OsmGpsMapImage.object-hierarchy" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage.object-hierarchy">
 <ANCHOR id="OsmGpsMapImage.properties" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage.properties">
@@ -124,6 +127,7 @@
 <ANCHOR id="OsmGpsMapImage--x-align" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage--x-align">
 <ANCHOR id="OsmGpsMapImage--y-align" href="libosmgpsmap/OsmGpsMapImage.html#OsmGpsMapImage--y-align">
 <ANCHOR id="OsmGpsMapTrack" href="libosmgpsmap/OsmGpsMapTrack.html">
+<ANCHOR id="OsmGpsMapTrack.stability-level" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack.stability-level">
 <ANCHOR id="OsmGpsMapTrack.synopsis" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack.synopsis">
 <ANCHOR id="OsmGpsMapTrack.object-hierarchy" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack.object-hierarchy">
 <ANCHOR id="OsmGpsMapTrack.properties" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack.properties">
@@ -145,6 +149,7 @@
 <ANCHOR id="OsmGpsMapTrack.signal-details" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack.signal-details">
 <ANCHOR id="OsmGpsMapTrack-point-added" href="libosmgpsmap/OsmGpsMapTrack.html#OsmGpsMapTrack-point-added">
 <ANCHOR id="libosmgpsmap-OsmGpsMapPoint" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html">
+<ANCHOR id="libosmgpsmap-OsmGpsMapPoint.stability-level" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#libosmgpsmap-OsmGpsMapPoint.stability-level">
 <ANCHOR id="libosmgpsmap-OsmGpsMapPoint.synopsis" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#libosmgpsmap-OsmGpsMapPoint.synopsis">
 <ANCHOR id="libosmgpsmap-OsmGpsMapPoint.description" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#libosmgpsmap-OsmGpsMapPoint.description">
 <ANCHOR id="libosmgpsmap-OsmGpsMapPoint.details" href="libosmgpsmap/libosmgpsmap-OsmGpsMapPoint.html#libosmgpsmap-OsmGpsMapPoint.details">

@@ -8,7 +8,7 @@
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="api-reference.html" title="API Reference">
 <link rel="next" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer">
-<meta name="generator" content="GTK-Doc V1.14 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -39,7 +39,7 @@
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
 <h2><span class="refentrytitle"><a name="OsmGpsMap.top_of_page"></a>OsmGpsMap</span></h2>
-<p>OsmGpsMap — map display widget</p>
+<p>OsmGpsMap — The map display widget</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
@@ -123,12 +123,12 @@ enum                <a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="
 <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()">osm_gps_map_image_add</a>               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);
 <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    <a class="link" href="OsmGpsMap.html#osm-gps-map-image-add-with-alignment" title="osm_gps_map_image_add_with_alignment ()">osm_gps_map_image_add_with_alignment</a>
                                                         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> yalign</code></em>);
 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMap.html#osm-gps-map-image-remove" title="osm_gps_map_image_remove ()">osm_gps_map_image_remove</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
@@ -156,7 +156,7 @@ enum                <a class="link" href="OsmGpsMap.html#OsmGpsMapKey-t" title="
 <a name="OsmGpsMap.implemented-interfaces"></a><h2>Implemented Interfaces</h2>
 <p>
 OsmGpsMap implements
- AtkImplementorIface and  <a href="/usr/share/gtk-doc/html/gtk/gtk-gtkbuildable.html#GtkBuildable">GtkBuildable</a>.</p>
+ AtkImplementorIface and  <a href="/usr/share/gtk-doc/html/gtk/GtkBuildable.html">GtkBuildable</a>.</p>
 </div>
 <div class="refsect1" title="Properties">
 <a name="OsmGpsMap.properties"></a><h2>Properties</h2>
@@ -184,6 +184,7 @@ OsmGpsMap implements
   "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache" title='The "tile-cache" property'>tile-cache</a>"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct
   "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base" title='The "tile-cache-base" property'>tile-cache-base</a>"          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write / Construct Only
   "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path" title='The "tile-cache-is-full-path" property'>tile-cache-is-full-path</a>"  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write
+  "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset" title='The "tile-zoom-offset" property'>tile-zoom-offset</a>"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
   "<a class="link" href="OsmGpsMap.html#OsmGpsMap--tiles-queued" title='The "tiles-queued" property'>tiles-queued</a>"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read
   "<a class="link" href="OsmGpsMap.html#OsmGpsMap--zoom" title='The "zoom" property'>zoom</a>"                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only
 </pre>
@@ -206,7 +207,7 @@ number of websites, including
 <p>
 </p>
 <div class="example">
-<a name="id2739348"></a><p class="title"><b>Example 1. Showing a map</b></p>
+<a name="id2652667"></a><p class="title"><b>Example 1. Showing a map</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -240,7 +241,7 @@ this library, call <a class="link" href="OsmGpsMap.html#osm-gps-map-source-is-va
 <p>
 </p>
 <div class="example">
-<a name="id2739432"></a><p class="title"><b>Example 2. Map with custom source and cache dir</b></p>
+<a name="id2652751"></a><p class="title"><b>Example 2. Map with custom source and cache dir</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -275,7 +276,7 @@ then you can also pass a specially formatted string to <a class="link" href="Osm
 <p>
 </p>
 <div class="example">
-<a name="id2739484"></a><p class="title"><b>Example 3. Map using custom CloudMade map and on screen display</b></p>
+<a name="id2652805"></a><p class="title"><b>Example 3. Map using custom CloudMade map and on screen display</b></p>
 <div class="example-contents"><pre class="programlisting">
 int main (int argc, char **argv)
 {
@@ -855,7 +856,8 @@ such as mouse clicks, on the map
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The point on the globe corresponding to the click. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+<td> The point on the globe corresponding to the click. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -883,11 +885,13 @@ pixel locations on the map.
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>pixel_x</code></em> :</span></p></td>
-<td> pixel location on map, x axis. <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+<td> pixel location on map, x axis. <span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span>
+</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>pixel_y</code></em> :</span></p></td>
-<td> pixel location on map, y axis. <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+<td> pixel location on map, y axis. <span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -920,7 +924,8 @@ location on the globe
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>pt</code></em> :</span></p></td>
-<td> location . <acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>. </td>
+<td> location. <span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -990,7 +995,8 @@ location on the globe
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> The <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> of the internal GPS track, 
 i.e. that which is modified when calling <a class="link" href="OsmGpsMap.html#osm-gps-map-gps-add" title="osm_gps_map_gps_add ()"><code class="function">osm_gps_map_gps_add()</code></a>. You must 
-not free this.. <acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>. </td>
+not free this. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -1065,7 +1071,7 @@ not free this.. <acronym title="Don't free data after the code is done."><span c
 <pre class="programlisting"><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    osm_gps_map_image_add               (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>);</pre>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1091,7 +1097,8 @@ not free this.. <acronym title="Don't free data after the code is done."><span c
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -1104,7 +1111,7 @@ not free this.. <acronym title="Don't free data after the code is done."><span c
                                                         (<em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> latitude</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> longitude</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"><span class="type">GdkPixbuf</span></a> *image</code></em>,
+                                                         <em class="parameter"><code><span class="type">GdkPixbuf</span> *image</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> xalign</code></em>,
                                                          <em class="parameter"><code><span class="type">float</span> yalign</code></em>);</pre>
 <div class="variablelist"><table border="0">
@@ -1142,7 +1149,8 @@ not free this.. <acronym title="Don't free data after the code is done."><span c
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>. </td>
+<td> A <a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> representing the added pixbuf. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
 </tr>
 </tbody>
 </table></div>
@@ -1529,6 +1537,14 @@ base directory where map tiles will be cached call
 <p>Default value: FALSE</p>
 </div>
 <hr>
+<div class="refsect2" title='The "tile-zoom-offset" property'>
+<a name="OsmGpsMap--tile-zoom-offset"></a><h3>The <code class="literal">"tile-zoom-offset"</code> property</h3>
+<pre class="programlisting">  "tile-zoom-offset"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct Only</pre>
+<p>Number of zoom-levels to upsample tiles.</p>
+<p>Allowed values: [0,10]</p>
+<p>Default value: 0</p>
+</div>
+<hr>
 <div class="refsect2" title='The "tiles-queued" property'>
 <a name="OsmGpsMap--tiles-queued"></a><h3>The <code class="literal">"tiles-queued"</code> property</h3>
 <pre class="programlisting">  "tiles-queued"             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read</pre>
@@ -1583,6 +1599,6 @@ to ::notify::zoom
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.14</div>
+          Generated by GTK-Doc V1.15</div>
 </body>
 </html>

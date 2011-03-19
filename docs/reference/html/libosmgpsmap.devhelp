@@ -85,6 +85,7 @@
     <function name="The &quot;tile-cache&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache"/>
     <function name="The &quot;tile-cache-base&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-base"/>
     <function name="The &quot;tile-cache-is-full-path&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-is-full-path"/>
+    <function name="The &quot;tile-zoom-offset&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset"/>
     <function name="The &quot;tiles-queued&quot; property" link="OsmGpsMap.html#OsmGpsMap--tiles-queued"/>
     <function name="The &quot;zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--zoom"/>
     <function name="The &quot;changed&quot; signal" link="OsmGpsMap.html#OsmGpsMap-changed"/>
