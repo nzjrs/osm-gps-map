@@ -16,6 +16,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#define NO_IMPORT_PYGOBJECT
 #include <pygobject.h>
 #include <osm-gps-map.h>
 #include <osm-gps-map-osd.h>
