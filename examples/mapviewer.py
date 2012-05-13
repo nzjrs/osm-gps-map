@@ -193,7 +193,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 )
             except Exception, e:
                 print "ERROR:", e
-                self.osm = osm.GpsMap()
+                self.osm = osmgpsmap.GpsMap()
 
             self.vbox.pack_start(self.osm, True)
             self.osm.connect('button_release_event', self.map_clicked)
