@@ -3130,7 +3130,19 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
 OsmGpsMapImage *
 osm_gps_map_image_add (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image)
 {
-    return osm_gps_map_image_add_with_alignment (map, latitude, longitude, image, 0.5, 0.5);
+    return osm_gps_map_image_add_with_alignment_z (map, latitude, longitude, image, 0.5, 0.5, 0);
+}
+
+/**
+ * osm_gps_map_image_add_z:
+ *
+ * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ * Since: 0.7.4
+ **/
+OsmGpsMapImage *
+osm_gps_map_image_add_z (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, gint zorder)
+{
+    return osm_gps_map_image_add_with_alignment_z (map, latitude, longitude, image, 0.5, 0.5, zorder);
 }
 
 static void
@@ -3148,6 +3160,27 @@ on_image_changed (OsmGpsMapImage *image, GParamSpec *pspec, OsmGpsMap *map)
 OsmGpsMapImage *
 osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign)
 {
+    return osm_gps_map_image_add_with_alignment_z (map, latitude, longitude, image, xalign, yalign, 0);
+}
+
+static gint
+osm_gps_map_image_z_compare(gconstpointer item1, gconstpointer item2)
+{
+    gint z1 = osm_gps_map_image_get_zorder(OSM_GPS_MAP_IMAGE(item1));
+    gint z2 = osm_gps_map_image_get_zorder(OSM_GPS_MAP_IMAGE(item2));
+
+    return(z1 - z2 + 1);
+}
+
+/**
+ * osm_gps_map_image_add_with_alignment_z:
+ *
+ * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
+ * Since: 0.7.4
+ **/
+OsmGpsMapImage *
+osm_gps_map_image_add_with_alignment_z (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign, gint zorder)
+{
     OsmGpsMapImage *im;
     OsmGpsMapPoint pt;
 
@@ -3155,11 +3188,12 @@ osm_gps_map_image_add_with_alignment (OsmGpsMap *map, float latitude, float long
     pt.rlat = deg2rad(latitude);
     pt.rlon = deg2rad(longitude);
 
-    im = g_object_new (OSM_TYPE_GPS_MAP_IMAGE, "pixbuf", image, "x-align", xalign, "y-align", yalign, "point", &pt, NULL);
+    im = g_object_new (OSM_TYPE_GPS_MAP_IMAGE, "pixbuf", image, "x-align", xalign, "y-align", yalign, "point", &pt, "z-order", zorder, NULL);
     g_signal_connect(im, "notify",
                     G_CALLBACK(on_image_changed), map);
 
-    map->priv->images = g_slist_append(map->priv->images, im);
+    map->priv->images = g_slist_insert_sorted(map->priv->images, im,
+                                              (GCompareFunc) osm_gps_map_image_z_compare);
     osm_gps_map_map_redraw_idle(map);
     return im;
 }
