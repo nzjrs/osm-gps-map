@@ -80,7 +80,7 @@ if HAVE_INTROSPECTION
 introspection_sources = $(sources_c) $(sources_public_h)
 
 OsmGpsMap-1.0.gir: libosmgpsmap.la
-OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-2.0
+OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-3.0
 OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
 OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
 OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
