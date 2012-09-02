@@ -2664,8 +2664,8 @@ osm_gps_map_download_cancel_all (OsmGpsMap *map)
 
 /**
  * osm_gps_map_get_bbox:
- * @pt1: point to be filled with the top left location
- * @pt2: point to be filled with the bottom right location
+ * @pt1: (out): point to be filled with the top left location
+ * @pt2: (out): point to be filled with the bottom right location
  *
  * Returns the geographic locations of the bounding box describing the contents
  * of the current window, i.e the top left and bottom right corners.

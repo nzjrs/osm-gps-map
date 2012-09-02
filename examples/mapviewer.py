@@ -224,17 +224,13 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         if self.show_tooltips:
             p = osmgpsmap.point_new_degrees(0.0, 0.0)
             self.osm.convert_screen_to_geographic(x, y, p)
-            # BUG here : how to solves this ( workaround ? )
-            #lat,lon = p.get_degrees()
-            lat = 180 * p.rlat / pi
-            lon = 180 * p.rlon / pi
+            lat,lon = p.get_degrees()
             tooltip.set_markup("%+.4f, %+.4f" % (lat, lon ))
             return True
 
         return False
  
     def cache_clicked(self, button):
-        # BUG here : how to solves this
         bbox = self.osm.get_bbox()
         self.osm.download_maps(
             *bbox,
@@ -243,10 +239,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         )
 
     def map_clicked(self, osm, event):
-        # BUG here : how to solves this ( workaround ? )
-        #lat,lon = self.osm.get_event_location(event).get_degrees()
-        lat = 180 * self.osm.get_event_location(event).rlat / pi
-        lon = 180 * self.osm.get_event_location(event).rlon / pi
+        lat,lon = self.osm.get_event_location(event).get_degrees()
         if event.button == 1:
             self.latlon_entry.set_text(
                 'Map Centre: latitude %s longitude %s' % (
