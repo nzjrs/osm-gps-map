@@ -27,6 +27,8 @@ osm_gps_map_clear_gps (OsmGpsMap *map)
 
 /**
  * osm_gps_map_add_track:
+ * @map:
+ * @track: (element-type OsmGpsMapTrack) : list of #OsmGpsMapTrack
  *
  * Deprecated: 0.7.0: Use osm_gps_map_track_add() instead.
  **/

@@ -250,7 +250,6 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         elif event.button == 2:
             self.osm.gps_add(lat, lon, heading=osmgpsmap.MAP_INVALID);
         elif event.button == 3:
-            #pb = gtk.gdk.pixbuf_new_from_file_at_size ("poi.png", 24,24)
             pb = GdkPixbuf.Pixbuf.new_from_file_at_size ("poi.png", 24,24)
             self.osm.image_add(lat,lon,pb)
 

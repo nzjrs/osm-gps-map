@@ -128,7 +128,6 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -2152,6 +2151,7 @@ osm_gps_map_draw (GtkWidget *widget, cairo_t *cr)
                                 -priv->drag_mouse_dy - EXTRA_BORDER);
         }
     }
+#endif
 
     if (priv->layers) {
         GSList *list;
@@ -2160,7 +2160,6 @@ osm_gps_map_draw (GtkWidget *widget, cairo_t *cr)
             osm_gps_map_layer_draw(layer, map, cr);
         }
     }
-#endif
 
     return FALSE;
 }
@@ -3136,8 +3135,7 @@ osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
 }
 
 /**
- * osm_gps_map_layer_remove:
- * @layer: a #OsmGpsMapLayer object
+ * osm_gps_map_layer_remove_all:
  *
  * Since: 0.7.0
  **/
@@ -3258,6 +3256,9 @@ osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
 
 /**
  * osm_gps_map_replace_track:
+ * @map:
+ * @old_track: (element-type OsmGpsMapTrack) (in): list of #OsmGpsMapTrack
+ * @new_track: (element-type OsmGpsMapTrack) (in): list of #OsmGpsMapTrack
  *
  * Deprecated: 0.7.0: Use osm_gps_map_track_remove() and osm_gps_map_track_add()
  * or just edit the #OsmGpsMapTrack object directly
