@@ -485,7 +485,6 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
     if (priv->show_zoom || priv->show_dpad)
         controls_draw(self, &allocation, cr);
 
-    cairo_destroy(cr);
 }
 
 static gboolean

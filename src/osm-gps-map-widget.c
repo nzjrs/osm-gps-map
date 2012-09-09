@@ -695,7 +695,6 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map, cairo_t *cr)
         cairo_stroke(cr);
     }
 
-    //cairo_destroy(cr);
     gtk_widget_queue_draw_area (GTK_WIDGET(map),
                                 x-mr,
                                 y-mr,
@@ -1988,7 +1987,7 @@ osm_gps_map_idle_expose (GtkWidget *widget)
 
     priv->drag_expose_source = 0;
 
-    g_warning("SCHEDULE EXPOSE");
+    //g_warning("SCHEDULE EXPOSE");
     //osm_gps_map_expose (widget, NULL);
     return FALSE;
 }

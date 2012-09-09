@@ -289,7 +289,7 @@ main (int argc, char **argv)
                         "show-gps-in-zoom",FALSE,
                         "dpad-radius", 30,
                         NULL);
-    //osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
+    osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
     //Add a second track for right clicks
