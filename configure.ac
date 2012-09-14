@@ -1,8 +1,11 @@
 AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [0.7.4],
+        [0.8],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
+
+AC_SUBST(OGM_MAJOR_MINOR,0_8)
+
 AM_INIT_AUTOMAKE([1.11])
 
 AC_CONFIG_HEADER([config.h])

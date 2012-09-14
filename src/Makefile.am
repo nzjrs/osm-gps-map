@@ -79,13 +79,13 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 if HAVE_INTROSPECTION
 introspection_sources = $(sources_c) $(sources_public_h)
 
-OsmGpsMap-1.0.gir: libosmgpsmap.la
-OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-3.0
-OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
-OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
-OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
-OsmGpsMap_1_0_gir_SCANNERFLAGS = --identifier-prefix=OsmGps
-INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
+OsmGpsMap-@VERSION@.gir: libosmgpsmap.la
+OsmGpsMap_@OGM_MAJOR_MINOR@_gir_INCLUDES = GObject-2.0 Gtk-3.0
+OsmGpsMap_@OGM_MAJOR_MINOR@_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
+OsmGpsMap_@OGM_MAJOR_MINOR@_gir_LIBS = libosmgpsmap.la
+OsmGpsMap_@OGM_MAJOR_MINOR@_gir_FILES = $(introspection_sources)
+OsmGpsMap_@OGM_MAJOR_MINOR@_gir_SCANNERFLAGS = --identifier-prefix=OsmGps
+INTROSPECTION_GIRS += OsmGpsMap-@VERSION@.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
