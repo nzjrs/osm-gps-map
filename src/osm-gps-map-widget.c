@@ -1143,7 +1143,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     gfloat lw, alpha;
     int map_x0, map_y0;
-    GdkColor color;
+    GdkRGBA color;
 
     g_object_get (track,
             "track", &points,
@@ -1995,16 +1995,21 @@ osm_gps_map_idle_expose (GtkWidget *widget)
 static gboolean
 osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 {
-    int x, y;
     GdkModifierType state;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
+    gint x, y;
+
+    GdkDeviceManager* manager = gdk_display_get_device_manager( gdk_display_get_default() );
+    GdkDevice* pointer = gdk_device_manager_get_client_pointer( manager);
 
     if(!priv->is_button_down)
         return FALSE;
 
     if (event->is_hint)
-        gdk_window_get_pointer (event->window, &x, &y, &state);
+        // gdk_window_get_pointer (event->window, &x, &y, &state);
+        gdk_window_get_device_position( event->window, pointer, &x, &y, &state);
+
     else
     {
         x = event->x;
@@ -2084,10 +2089,10 @@ osm_gps_map_draw (GtkWidget *widget, cairo_t *cr)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
-    int w, h;
+    // int w, h;
 
-    w = gtk_widget_get_allocated_width (widget);
-    h = gtk_widget_get_allocated_width (widget);
+    // w = gtk_widget_get_allocated_width (widget);
+    // h = gtk_widget_get_allocated_height (widget);
 
     cairo_set_source_surface (cr, priv->pixmap, 0, 0);
     cairo_paint (cr);

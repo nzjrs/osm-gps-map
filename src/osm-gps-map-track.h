@@ -61,7 +61,7 @@ void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, cons
  * Since: 0.7.0
  **/
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
-void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkColor *color);
+void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
 
 G_END_DECLS
 

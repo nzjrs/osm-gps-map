@@ -847,7 +847,7 @@ crosshair_draw(OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr)
 static void
 controls_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 {
-    GdkColor fg, bg;
+    GdkRGBA fg, bg;
     OsmGpsMapOsdPrivate *priv = self->priv;
     OsdControls_t *controls = self->priv->controls;
 
@@ -856,8 +856,8 @@ controls_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 
     controls->rendered = TRUE;
 
-    gdk_color_parse ("red", &fg);
-    gdk_color_parse ("blue", &bg);
+    gdk_rgba_parse (&fg, "black");
+    gdk_rgba_parse (&bg, "grey80");
 
     /* first fill with transparency */
     g_assert(controls->surface);
