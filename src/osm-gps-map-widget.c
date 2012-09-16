@@ -729,7 +729,7 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, cairo_t *cr, int offset
 
 #define MSG_RESPONSE_BODY(a)    ((a)->response_body->data)
 #define MSG_RESPONSE_LEN(a)     ((a)->response_body->length)
-#define MSG_RESPONSE_LEN_FORMAT "%lld"
+#define MSG_RESPONSE_LEN_FORMAT "%ld"
 
 static void
 osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data)
@@ -3173,8 +3173,10 @@ osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixe
     g_return_if_fail (pt);
     priv = map->priv;
 
-    pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
-    pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
+    // pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
+    // pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
+    pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y - EXTRA_BORDER);
+    pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x - EXTRA_BORDER);
 }
 
 /**
@@ -3199,9 +3201,9 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
     priv = map->priv;
 
     if (pixel_x)
-        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - priv->map_x + priv->drag_mouse_dx;
+        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - priv->map_x + priv->drag_mouse_dx + EXTRA_BORDER;
     if (pixel_y)
-        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy;
+        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy + EXTRA_BORDER;
 }
 
 /**
