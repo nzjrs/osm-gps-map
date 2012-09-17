@@ -65,9 +65,13 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
                http://openaerialmap.org/pipermail/talk_openaerialmap.org/2008-December/000055.html */
             return NULL;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
-            return "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png";
+            /* The Tile@Home serverhas been shut down.
+               http://openaerialmap.org/pipermail/talk_openaerialmap.org/2008-December/000055.html */
+            // return "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png";
+            return NULL;
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
-            return "http://c.andy.sandbox.cloudmade.com/tiles/cycle/#Z/#X/#Y.png";
+            // return "http://c.andy.sandbox.cloudmade.com/tiles/cycle/#Z/#X/#Y.png";
+            return "http://b.tile.opencyclemap.org/cycle/#Z/#X/#Y.png";
         case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
             return "http://tile.xn--pnvkarte-m4a.de/tilegen/#Z/#X/#Y.png";
         case OSM_GPS_MAP_SOURCE_OSMC_TRAILS:
