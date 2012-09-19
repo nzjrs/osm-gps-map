@@ -65,8 +65,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
                http://openaerialmap.org/pipermail/talk_openaerialmap.org/2008-December/000055.html */
             return NULL;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
-            /* The Tile@Home serverhas been shut down.
-               http://openaerialmap.org/pipermail/talk_openaerialmap.org/2008-December/000055.html */
+            /* The Tile@Home serverhas been shut down. */
             // return "http://tah.openstreetmap.org/Tiles/tile/#Z/#X/#Y.png";
             return NULL;
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
