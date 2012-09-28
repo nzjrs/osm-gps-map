@@ -1124,7 +1124,7 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
                                       cr,
                                       priv->map_zoom,
                                       i,j,
-                                      offset_xn,offset_yn);
+                                      offset_xn - EXTRA_BORDER,offset_yn - EXTRA_BORDER);
             }
             offset_yn += TILESIZE;
         }
@@ -3173,10 +3173,8 @@ osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixe
     g_return_if_fail (pt);
     priv = map->priv;
 
-    // pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
-    // pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
-    pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y - EXTRA_BORDER);
-    pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x - EXTRA_BORDER);
+    pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
+    pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
 }
 
 /**
@@ -3201,9 +3199,9 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
     priv = map->priv;
 
     if (pixel_x)
-        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - priv->map_x + priv->drag_mouse_dx + EXTRA_BORDER;
+        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - priv->map_x + priv->drag_mouse_dx;
     if (pixel_y)
-        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy + EXTRA_BORDER;
+        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy;
 }
 
 /**
