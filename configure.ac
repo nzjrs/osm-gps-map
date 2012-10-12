@@ -52,7 +52,7 @@ AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
 # - If binary compatibility has been broken (eg removed or changed interfaces)
 #   change to C+1:0:0
 # - If the interface is the same as the previous version, change to C:R+1:A
-LT_VERSION_INFO=2:1:0
+LT_VERSION_INFO=3:0:0
 AC_SUBST(LT_VERSION_INFO)
 
 GOBJECT_INTROSPECTION_REQS=0.10.0
