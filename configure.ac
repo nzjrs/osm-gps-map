@@ -33,6 +33,8 @@ PKG_CHECK_MODULES(GTHREAD, [gthread-2.0], [
         AC_MSG_RESULT([mapviewer demo disabled])])
 AM_CONDITIONAL([HAVE_GTHREAD], [ test "x$have_gthread" = "xyes" ])
 
+AC_CHECK_FUNCS(gdk_event_get_scroll_deltas)
+
 AC_MSG_CHECKING([for Win32])
 case "$host" in
   *-*-mingw*)

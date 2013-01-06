@@ -1514,8 +1514,11 @@ osm_gps_map_init (OsmGpsMap *object)
 
     gtk_widget_add_events (GTK_WIDGET (object),
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_POINTER_MOTION_MASK | GDK_SMOOTH_SCROLL_MASK |
+                           GDK_POINTER_MOTION_MASK | GDK_SCROLL_MASK |
                            GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
+#ifdef HAVE_GDK_EVENT_GET_SCROLL_DELTAS
+    gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
+#endif
     gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);

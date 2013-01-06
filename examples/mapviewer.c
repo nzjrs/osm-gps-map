@@ -186,6 +186,7 @@ on_star_align_changed (GtkAdjustment *adjustment, gpointer user_data)
         g_object_set (g_last_image, propname, f, NULL);
 }
 
+#if GTK_CHECK_VERSION(3,4,0)
 static void
 on_gps_color_changed (GtkColorChooser *widget, gpointer user_data)
 {
@@ -194,6 +195,7 @@ on_gps_color_changed (GtkColorChooser *widget, gpointer user_data)
     gtk_color_chooser_get_rgba (widget, &c);
     g_object_set(track, "color", &c, NULL);
 }
+#endif
 
 static void
 on_close (GtkWidget *widget, gpointer user_data)
@@ -335,9 +337,14 @@ main (int argc, char **argv)
     gtk_adjustment_set_value (
                 GTK_ADJUSTMENT(gtk_builder_get_object(builder, "star_yalign_adjustment")),
                 0.5);
+#if GTK_CHECK_VERSION(3,4,0)
     gtk_color_chooser_set_rgba (
                 GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "gps_colorbutton")),
                 &c);
+    g_signal_connect (
+                gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
+                G_CALLBACK (on_gps_color_changed), (gpointer) gpstrack);
+#endif
 
     //Connect to signals
     g_signal_connect (
@@ -364,9 +371,6 @@ main (int argc, char **argv)
     g_signal_connect (
                 gtk_builder_get_object(builder, "star_yalign_adjustment"), "value-changed",
                 G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
-    g_signal_connect (
-                gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
-                G_CALLBACK (on_gps_color_changed), (gpointer) gpstrack);
     g_signal_connect (G_OBJECT (map), "button-press-event",
                 G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
     g_signal_connect (G_OBJECT (map), "button-release-event",
