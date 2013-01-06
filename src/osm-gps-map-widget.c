@@ -3205,13 +3205,17 @@ void
 osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixel_y, OsmGpsMapPoint *pt)
 {
     OsmGpsMapPrivate *priv;
+    int map_x0, map_y0;
 
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     g_return_if_fail (pt);
-    priv = map->priv;
 
-    pt->rlat = pixel2lat(priv->map_zoom, priv->map_y + pixel_y);
-    pt->rlon = pixel2lon(priv->map_zoom, priv->map_x + pixel_x);
+    priv = map->priv;
+    map_x0 = priv->map_x - EXTRA_BORDER;
+    map_y0 = priv->map_y - EXTRA_BORDER;
+
+    pt->rlat = pixel2lat(priv->map_zoom, map_y0 + pixel_y);
+    pt->rlon = pixel2lon(priv->map_zoom, map_x0 + pixel_x);
 }
 
 /**
@@ -3230,15 +3234,19 @@ void
 osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gint *pixel_x, gint *pixel_y)
 {
     OsmGpsMapPrivate *priv;
+    int map_x0, map_y0;
 
     g_return_if_fail (OSM_IS_GPS_MAP (map));
     g_return_if_fail (pt);
+
     priv = map->priv;
+    map_x0 = priv->map_x - EXTRA_BORDER;
+    map_y0 = priv->map_y - EXTRA_BORDER;
 
     if (pixel_x)
-        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - priv->map_x + priv->drag_mouse_dx;
+        *pixel_x = lon2pixel(priv->map_zoom, pt->rlon) - map_x0 + priv->drag_mouse_dx;
     if (pixel_y)
-        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - priv->map_y + priv->drag_mouse_dy;
+        *pixel_y = lat2pixel(priv->map_zoom, pt->rlat) - map_y0 + priv->drag_mouse_dy;
 }
 
 /**
