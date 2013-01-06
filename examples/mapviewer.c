@@ -195,6 +195,16 @@ on_gps_color_changed (GtkColorChooser *widget, gpointer user_data)
     gtk_color_chooser_get_rgba (widget, &c);
     g_object_set(track, "color", &c, NULL);
 }
+#else
+static void
+on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
+{
+    GdkRGBA c;
+    OsmGpsMapTrack *track = OSM_GPS_MAP_TRACK(user_data);
+    gtk_color_button_get_rgba (widget, &c);
+    g_object_set(track, "color", &c, NULL);
+}
+
 #endif
 
 static void
@@ -341,12 +351,16 @@ main (int argc, char **argv)
     gtk_color_chooser_set_rgba (
                 GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "gps_colorbutton")),
                 &c);
-    g_signal_connect (
-                gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
-                G_CALLBACK (on_gps_color_changed), (gpointer) gpstrack);
+#else
+    gtk_color_button_set_rgba (
+                GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "gps_colorbutton")),
+                &c);
 #endif
 
     //Connect to signals
+    g_signal_connect (
+                gtk_builder_get_object(builder, "gps_colorbutton"), "color-set",
+                G_CALLBACK (on_gps_color_changed), (gpointer) gpstrack);
     g_signal_connect (
                 gtk_builder_get_object(builder, "zoom_in_button"), "clicked",
                 G_CALLBACK (on_zoom_in_clicked_event), (gpointer) map);
