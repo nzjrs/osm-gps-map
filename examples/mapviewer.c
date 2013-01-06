@@ -187,11 +187,11 @@ on_star_align_changed (GtkAdjustment *adjustment, gpointer user_data)
 }
 
 static void
-on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
+on_gps_color_changed (GtkColorChooser *widget, gpointer user_data)
 {
-    GdkColor c;
+    GdkRGBA c;
     OsmGpsMapTrack *track = OSM_GPS_MAP_TRACK(user_data);
-    gtk_color_button_get_color (widget, &c);
+    gtk_color_chooser_get_rgba (widget, &c);
     g_object_set(track, "color", &c, NULL);
 }
 
@@ -233,7 +233,6 @@ main (int argc, char **argv)
     GError *error = NULL;
     GOptionContext *context;
 
-    g_thread_init(NULL);
     gtk_init (&argc, &argv);
 
     context = g_option_context_new ("- Map browser");
@@ -300,11 +299,11 @@ main (int argc, char **argv)
     g_free(cachebasedir);
 
     //Enable keyboard navigation
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_F11);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_UP, GDK_Up);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_Down);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_Left);
-    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_Right);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_FULLSCREEN, GDK_KEY_F11);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_UP, GDK_KEY_Up);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_DOWN, GDK_KEY_Down);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_LEFT, GDK_KEY_Left);
+    osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_KEY_Right);
 
     //Build the UI
     g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
@@ -320,7 +319,7 @@ main (int argc, char **argv)
 
     //Init values
     float lw,a;
-    GdkColor c;
+    GdkRGBA c;
     OsmGpsMapTrack *gpstrack = osm_gps_map_gps_get_track (map);
     g_object_get (gpstrack, "line-width", &lw, "alpha", &a, NULL);
     osm_gps_map_track_get_color(gpstrack, &c);
@@ -336,8 +335,8 @@ main (int argc, char **argv)
     gtk_adjustment_set_value (
                 GTK_ADJUSTMENT(gtk_builder_get_object(builder, "star_yalign_adjustment")),
                 0.5);
-    gtk_color_button_set_color (
-                GTK_COLOR_BUTTON(gtk_builder_get_object(builder, "gps_colorbutton")),
+    gtk_color_chooser_set_rgba (
+                GTK_COLOR_CHOOSER(gtk_builder_get_object(builder, "gps_colorbutton")),
                 &c);
 
     //Connect to signals
@@ -382,9 +381,9 @@ main (int argc, char **argv)
                       G_CALLBACK (on_close), (gpointer) map);
     //Setup accelerators.
     ag = gtk_accel_group_new();
-    gtk_accel_group_connect(ag, GDK_w, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+    gtk_accel_group_connect(ag, GDK_KEY_w, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
                     g_cclosure_new(gtk_main_quit, NULL, NULL));
-    gtk_accel_group_connect(ag, GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
+    gtk_accel_group_connect(ag, GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_MASK,
                     g_cclosure_new(gtk_main_quit, NULL, NULL));
     gtk_window_add_accel_group(GTK_WINDOW(widget), ag);
 

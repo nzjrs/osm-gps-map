@@ -25,6 +25,7 @@
  * (osm_gps_map_image_add()) at a specific location (a #OsmGpsMapPoint).
  **/
 
+#include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "converter.h"
@@ -205,26 +206,23 @@ osm_gps_map_image_new (void)
 }
 
 void
-osm_gps_map_image_draw (OsmGpsMapImage *object, GdkDrawable *drawable, GdkGC *gc, GdkRectangle *rect)
+osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
 {
     OsmGpsMapImagePrivate *priv;
     int xoffset, yoffset;
+    gdouble x,y;
 
     g_return_if_fail (OSM_IS_GPS_MAP_IMAGE (object));
     priv = OSM_GPS_MAP_IMAGE(object)->priv;
+
     xoffset =  priv->xalign * priv->w;
     yoffset =  priv->yalign * priv->h;
+    x = rect->x - xoffset;
+    y = rect->y - yoffset;
 
-    gdk_draw_pixbuf (
-                     drawable,
-                     gc,
-                     priv->pixbuf,
-                     0,0,
-                     rect->x - xoffset,
-                     rect->y - yoffset,
-                     priv->w,
-                     priv->h,
-                     GDK_RGB_DITHER_NONE, 0, 0);
+    gdk_cairo_set_source_pixbuf (cr, priv->pixbuf, x, y);
+    cairo_paint (cr);
+
     rect->width = priv->w;
     rect->height = priv->h;
 }

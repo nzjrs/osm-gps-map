@@ -57,7 +57,7 @@ struct _OsmGpsMapTrackPrivate
     gboolean visible;
     gfloat linewidth;
     gfloat alpha;
-    GdkColor color;
+    GdkRGBA color;
 };
 
 #define DEFAULT_R   (60000)
@@ -118,7 +118,7 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->alpha = g_value_get_float (value);
             break;
         case PROP_COLOR: {
-            GdkColor *c = g_value_get_boxed (value);
+            GdkRGBA *c = g_value_get_boxed (value);
             priv->color.red = c->red;
             priv->color.green = c->green;
             priv->color.blue = c->blue;
@@ -251,7 +251,7 @@ osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 }
 
 void
-osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkColor *color)
+osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
     g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
     color->red = track->priv->color.red;

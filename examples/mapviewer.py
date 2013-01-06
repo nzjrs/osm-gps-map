@@ -19,30 +19,34 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import os.path
-import gtk.gdk
-import gobject
+from math import pi
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import GObject
 
-gobject.threads_init()
-gtk.gdk.threads_init()
+#gobject.threads_init()
+#Gtk.threads_init()
+GObject.threads_init()
 
 #Try static lib first
 mydir = os.path.dirname(os.path.abspath(__file__))
 libdir = os.path.abspath(os.path.join(mydir, "..", "python", ".libs"))
 sys.path.insert(0, libdir)
 
-import osmgpsmap
-print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap.__version__)
+from gi.repository import OsmGpsMap as osmgpsmap
+print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap._version)
 
-assert osmgpsmap.__version__ == "0.7.3"
+assert osmgpsmap._version == "0.8"
 
-class DummyMapNoGpsPoint(osmgpsmap.GpsMap):
+class DummyMapNoGpsPoint(osmgpsmap.Map):
     def do_draw_gps_point(self, drawable):
         pass
-gobject.type_register(DummyMapNoGpsPoint)
+GObject.type_register(DummyMapNoGpsPoint)
 
-class DummyLayer(gobject.GObject, osmgpsmap.GpsMapLayer):
+class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
     def do_draw(self, gpsmap, gdkdrawable):
         pass
@@ -55,25 +59,25 @@ class DummyLayer(gobject.GObject, osmgpsmap.GpsMapLayer):
 
     def do_button_press(self, gpsmap, gdkeventbutton):
         return False
-gobject.type_register(DummyLayer)
+GObject.type_register(DummyLayer)
 
-class UI(gtk.Window):
+class UI(Gtk.Window):
     def __init__(self):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        Gtk.Window.__init__(self, type=Gtk.WindowType.TOPLEVEL)
 
         self.set_default_size(500, 500)
-        self.connect('destroy', lambda x: gtk.main_quit())
+        self.connect('destroy', lambda x: Gtk.main_quit())
         self.set_title('OpenStreetMap GPS Mapper')
 
-        self.vbox = gtk.VBox(False, 0)
+        self.vbox = Gtk.VBox(False, 0)
         self.add(self.vbox)
 
         if 0:
             self.osm = DummyMapNoGpsPoint()
         else:
-            self.osm = osmgpsmap.GpsMap()
+            self.osm = osmgpsmap.Map()
         self.osm.layer_add(
-                    osmgpsmap.GpsMapOsd(
+                    osmgpsmap.MapOsd(
                         show_dpad=True,
                         show_zoom=True))
         self.osm.layer_add(
@@ -82,44 +86,44 @@ class UI(gtk.Window):
         self.osm.connect('button_release_event', self.map_clicked)
 
         #connect keyboard shortcuts
-        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_FULLSCREEN, gtk.gdk.keyval_from_name("F11"))
-        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_UP, gtk.gdk.keyval_from_name("Up"))
-        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_DOWN, gtk.gdk.keyval_from_name("Down"))
-        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
-        self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.UP, Gdk.keyval_from_name("Up"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.DOWN, Gdk.keyval_from_name("Down"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.LEFT, Gdk.keyval_from_name("Left"))
+        self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.RIGHT, Gdk.keyval_from_name("Right"))
 
         #connect to tooltip
         self.osm.props.has_tooltip = True
         self.osm.connect("query-tooltip", self.on_query_tooltip)
 
-        self.latlon_entry = gtk.Entry()
+        self.latlon_entry = Gtk.Entry()
 
-        zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)
+        zoom_in_button = Gtk.Button(stock=Gtk.STOCK_ZOOM_IN)
         zoom_in_button.connect('clicked', self.zoom_in_clicked)
-        zoom_out_button = gtk.Button(stock=gtk.STOCK_ZOOM_OUT)
+        zoom_out_button = Gtk.Button(stock=Gtk.STOCK_ZOOM_OUT)
         zoom_out_button.connect('clicked', self.zoom_out_clicked)
-        home_button = gtk.Button(stock=gtk.STOCK_HOME)
+        home_button = Gtk.Button(stock=Gtk.STOCK_HOME)
         home_button.connect('clicked', self.home_clicked)
-        cache_button = gtk.Button('Cache')
+        cache_button = Gtk.Button('Cache')
         cache_button.connect('clicked', self.cache_clicked)
 
-        self.vbox.pack_start(self.osm)
-        hbox = gtk.HBox(False, 0)
-        hbox.pack_start(zoom_in_button)
-        hbox.pack_start(zoom_out_button)
-        hbox.pack_start(home_button)
-        hbox.pack_start(cache_button)
+        self.vbox.pack_start(self.osm, False, True, 0)
+        hbox = Gtk.HBox(False, 0)
+        hbox.pack_start(zoom_in_button, False, True, 0)
+        hbox.pack_start(zoom_out_button, False, True, 0)
+        hbox.pack_start(home_button, False, True, 0)
+        hbox.pack_start(cache_button, False, True, 0)
 
         #add ability to test custom map URIs
-        ex = gtk.Expander("<b>Map Repository URI</b>")
+        ex = Gtk.Expander(label="<b>Map Repository URI</b>")
         ex.props.use_markup = True
-        vb = gtk.VBox()
-        self.repouri_entry = gtk.Entry()
+        vb = Gtk.VBox()
+        self.repouri_entry = Gtk.Entry()
         self.repouri_entry.set_text(self.osm.props.repo_uri)
-        self.image_format_entry = gtk.Entry()
+        self.image_format_entry = Gtk.Entry()
         self.image_format_entry.set_text(self.osm.props.image_format)
 
-        lbl = gtk.Label(
+        lbl = Gtk.Label(
 """
 Enter an repository URL to fetch map tiles from in the box below. Special metacharacters may be included in this url
 
@@ -137,44 +141,44 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
         lbl.props.wrap = True
 
         ex.add(vb)
-        vb.pack_start(lbl, False)
+        vb.pack_start(lbl, False, True, 0)
 
-        hb = gtk.HBox()
-        hb.pack_start(gtk.Label("URI: "), False)
-        hb.pack_start(self.repouri_entry, True)
-        vb.pack_start(hb, False)
+        hb = Gtk.HBox()
+        hb.pack_start(Gtk.Label("URI: "), False, True, 0)
+        hb.pack_start(self.repouri_entry, True, True, 0)
+        vb.pack_start(hb, False, True, 0)
 
-        hb = gtk.HBox()
-        hb.pack_start(gtk.Label("Image Format: "), False)
-        hb.pack_start(self.image_format_entry, True)
-        vb.pack_start(hb, False)
+        hb = Gtk.HBox()
+        hb.pack_start(Gtk.Label("Image Format: "), False, True, 0)
+        hb.pack_start(self.image_format_entry, True, True, 0)
+        vb.pack_start(hb, False, True, 0)
 
-        gobtn = gtk.Button("Load Map URI")
+        gobtn = Gtk.Button("Load Map URI")
         gobtn.connect("clicked", self.load_map_clicked)
-        vb.pack_start(gobtn, False)
+        vb.pack_start(gobtn, False, True, 0)
 
         self.show_tooltips = False
-        cb = gtk.CheckButton("Show Location in Tooltips")
+        cb = Gtk.CheckButton("Show Location in Tooltips")
         cb.props.active = self.show_tooltips
         cb.connect("toggled", self.on_show_tooltips_toggled)
-        self.vbox.pack_end(cb, False)
+        self.vbox.pack_end(cb, False, True, 0)
 
-        cb = gtk.CheckButton("Disable Cache")
+        cb = Gtk.CheckButton("Disable Cache")
         cb.props.active = False
         cb.connect("toggled", self.disable_cache_toggled)
-        self.vbox.pack_end(cb, False)
+        self.vbox.pack_end(cb, False, True, 0)
 
-        self.vbox.pack_end(ex, False)
-        self.vbox.pack_end(self.latlon_entry, False)
-        self.vbox.pack_end(hbox, False)
+        self.vbox.pack_end(ex, False, True, 0)
+        self.vbox.pack_end(self.latlon_entry, False, True, 0)
+        self.vbox.pack_end(hbox, False, True, 0)
 
-        gobject.timeout_add(500, self.print_tiles)
+        GObject.timeout_add(500, self.print_tiles)
 
     def disable_cache_toggled(self, btn):
         if btn.props.active:
-            self.osm.props.tile_cache = osmgpsmap.CACHE_DISABLED
+            self.osm.props.tile_cache = osmgpsmap.MAP_CACHE_DISABLED
         else:
-            self.osm.props.tile_cache = osmgpsmap.CACHE_AUTO
+            self.osm.props.tile_cache = osmgpsmap.MAP_CACHE_AUTO
 
     def on_show_tooltips_toggled(self, btn):
         self.show_tooltips = btn.props.active
@@ -187,15 +191,15 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 #remove old map
                 self.vbox.remove(self.osm)
             try:
-                self.osm = osmgpsmap.GpsMap(
+                self.osm = osmgpsmap.Map(
                     repo_uri=uri,
                     image_format=format
                 )
             except Exception, e:
                 print "ERROR:", e
-                self.osm = osmgpsmap.GpsMap()
+                self.osm = osm.Map()
 
-            self.vbox.pack_start(self.osm, True)
+            self.vbox.pack_start(self.osm, True, True, 0)
             self.osm.connect('button_release_event', self.map_clicked)
             self.osm.show()
 
@@ -221,7 +225,7 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             p = osmgpsmap.point_new_degrees(0.0, 0.0)
             self.osm.convert_screen_to_geographic(x, y, p)
             lat,lon = p.get_degrees()
-            tooltip.set_markup("%+.4f, %+.4f" % p.get_degrees())
+            tooltip.set_markup("%+.4f, %+.4f" % (lat, lon ))
             return True
 
         return False
@@ -244,15 +248,15 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
                 )
             )
         elif event.button == 2:
-            self.osm.gps_add(lat, lon, heading=osmgpsmap.INVALID);
+            self.osm.gps_add(lat, lon, heading=osmgpsmap.MAP_INVALID);
         elif event.button == 3:
-            pb = gtk.gdk.pixbuf_new_from_file_at_size ("poi.png", 24,24)
+            pb = GdkPixbuf.Pixbuf.new_from_file_at_size ("poi.png", 24,24)
             self.osm.image_add(lat,lon,pb)
 
 if __name__ == "__main__":
     u = UI()
     u.show_all()
-    if os.name == "nt": gtk.gdk.threads_enter()
-    gtk.main()
-    if os.name == "nt": gtk.gdk.threads_leave()
+    if os.name == "nt": Gdk.threads_enter()
+    Gtk.main()
+    if os.name == "nt": Gdk.threads_leave()
 

@@ -155,10 +155,10 @@ osd_shape_shadow(cairo_t *cr) {
 }
 
 void
-osd_shape(cairo_t *cr, GdkColor *bg, GdkColor *fg) {
-    gdk_cairo_set_source_color(cr, bg);
+osd_shape(cairo_t *cr, GdkRGBA *bg, GdkRGBA *fg) {
+    gdk_cairo_set_source_rgba(cr, bg);
     cairo_fill_preserve (cr);
-    gdk_cairo_set_source_color(cr, fg);
+    gdk_cairo_set_source_rgba(cr, fg);
     cairo_set_line_width (cr, 1);
     cairo_stroke (cr);
 }
@@ -209,7 +209,7 @@ osd_zoom_labels(cairo_t *cr, gint x, gint y, gint w, gint h) {
 }
 
 void
-osd_render_zoom(cairo_t *cr, gint x, gint y, gint w, gint h, gint gps, gint shadow, GdkColor *bg, GdkColor *fg) {
+osd_render_zoom(cairo_t *cr, gint x, gint y, gint w, gint h, gint gps, gint shadow, GdkRGBA *bg, GdkRGBA *fg) {
     /* add the width of the GPS widget */
     w += gps;
 
@@ -262,7 +262,7 @@ osd_dpad_labels(cairo_t *cr, gint x, gint y, gint r) {
 }
 
 void
-osd_render_dpad(cairo_t *cr, gint x, gint y, gint r, gint gps, gint shadow, GdkColor *bg, GdkColor *fg) {
+osd_render_dpad(cairo_t *cr, gint x, gint y, gint r, gint gps, gint shadow, GdkRGBA *bg, GdkRGBA *fg) {
     if (shadow) {
         osd_dpad_shape(cr, x+shadow, y+shadow, r);
         osd_shape_shadow(cr);
@@ -357,7 +357,7 @@ osd_check_zoom(gint x, gint y, guint w, guint h, guint gps_w) {
 
 /* draw a satellite receiver dish */
 void
-osd_render_gps(cairo_t *cr, gint x, gint y, gint w, GdkColor *bg, GdkColor *fg) {
+osd_render_gps(cairo_t *cr, gint x, gint y, gint w, GdkRGBA *bg, GdkRGBA *fg) {
 
     gint ox = x;
     gint oy = y;

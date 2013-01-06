@@ -34,12 +34,34 @@ struct _OsmGpsMapTrackClass
     GObjectClass parent_class;
 };
 
+/**
+ * osm_gps_map_track_get_type:
+ *
+ * Return value: (element-type GType): The type of the track
+ *
+ * Since: 0.7.0
+ **/
 GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
 
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
+/**
+ * osm_gps_map_track_add_point:
+ * track (in,out): a #OsmGpsMapTrack
+ * @point (in): point to add
+ *
+ * Since: 0.7.0
+ **/
 void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, const OsmGpsMapPoint *point);
+/**
+ * osm_gps_map_track_get_points:
+ * @track (in): a #OsmGpsMapTrack
+ *
+ * Returns: (element-type OsmGpsMapPoint) (transfer full): list of #OsmGpsMapPoint
+ *
+ * Since: 0.7.0
+ **/
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
-void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkColor *color);
+void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
 
 G_END_DECLS
 

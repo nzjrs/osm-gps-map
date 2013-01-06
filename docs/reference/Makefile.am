@@ -75,12 +75,12 @@ INCLUDES=-I$(top_srcdir) -I$(top_builddir) \
 	$(GLIB_CFLAGS) \
 	$(GTK_CFLAGS) \
 	$(CAIRO_CFLAGS) \
-	$(SOUP22_CFLAGS) $(SOUP24_CFLAGS)
+	$(SOUP24_CFLAGS)
 GTKDOC_LIBS=$(top_builddir)/src/libosmgpsmap.la \
 	$(GLIB_LIBS) \
 	$(GTK_LIBS) \
 	$(CAIRO_LIBS) \
-	$(SOUP22_LIBS) $(SOUP24_LIBS)
+	$(SOUP24_LIBS)
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make

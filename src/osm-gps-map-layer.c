@@ -52,9 +52,9 @@ osm_gps_map_layer_render (OsmGpsMapLayer *self, OsmGpsMap *map)
 }
 
 void
-osm_gps_map_layer_draw (OsmGpsMapLayer *self, OsmGpsMap *map, GdkDrawable *drawable)
+osm_gps_map_layer_draw (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr)
 {
-	OSM_GPS_MAP_LAYER_GET_INTERFACE (self)->draw (self, map, drawable);
+	OSM_GPS_MAP_LAYER_GET_INTERFACE (self)->draw (self, map, cr);
 }
 
 gboolean

@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gdk/gdk.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 
@@ -45,7 +46,7 @@ struct _OsmGpsMapLayerIface {
     GTypeInterface parent;
 
     void (*render) (OsmGpsMapLayer *self, OsmGpsMap *map);
-    void (*draw) (OsmGpsMapLayer *self, OsmGpsMap *map, GdkDrawable *drawable);
+    void (*draw) (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr);
     gboolean (*busy) (OsmGpsMapLayer *self);
     gboolean (*button_press) (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
 };
@@ -53,7 +54,7 @@ struct _OsmGpsMapLayerIface {
 GType osm_gps_map_layer_get_type (void);
 
 void        osm_gps_map_layer_render            (OsmGpsMapLayer *self, OsmGpsMap *map);
-void        osm_gps_map_layer_draw              (OsmGpsMapLayer *self, OsmGpsMap *map, GdkDrawable *drawable);
+void        osm_gps_map_layer_draw              (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr);
 gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
 gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
 

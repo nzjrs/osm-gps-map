@@ -1,8 +1,11 @@
 AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [0.7.4],
+        [0.8],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
+
+AC_SUBST(OGM_MAJOR_MINOR,0_8)
+
 AM_INIT_AUTOMAKE([1.11])
 
 AC_CONFIG_HEADER([config.h])
@@ -17,9 +20,10 @@ AM_PROG_LIBTOOL
 AM_SILENT_RULES([yes])
 
 # Library dependencies
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.16])
-PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.14])
-PKG_CHECK_MODULES(CAIRO, [cairo >= 1.6])
+PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])
+PKG_CHECK_MODULES(GTK,      [gtk+-3.0 >= 3.0])
+PKG_CHECK_MODULES(CAIRO,    [cairo >= 1.8])
+PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against
 # libgthread-2.0.
@@ -28,13 +32,6 @@ PKG_CHECK_MODULES(GTHREAD, [gthread-2.0], [
         have_gthread="no"
         AC_MSG_RESULT([mapviewer demo disabled])])
 AM_CONDITIONAL([HAVE_GTHREAD], [ test "x$have_gthread" = "xyes" ])
-
-PKG_CHECK_MODULES(SOUP24, [libsoup-2.4], [
-    soup_ver=2.4], [
-        PKG_CHECK_MODULES(SOUP22, [libsoup-2.2], [
-            soup_ver=2.2
-            AC_DEFINE(USE_LIBSOUP22, 1, Use libsoup 2.2 instead of libsoup-2.4 to download tiles)],
-                AC_ERROR([libsoup-2.4 (preferred) or libsoup-2.2 not found]))])
 
 AC_MSG_CHECKING([for Win32])
 case "$host" in
@@ -55,12 +52,13 @@ AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
 # - If binary compatibility has been broken (eg removed or changed interfaces)
 #   change to C+1:0:0
 # - If the interface is the same as the previous version, change to C:R+1:A
-LT_VERSION_INFO=2:1:0
+LT_VERSION_INFO=3:0:0
 AC_SUBST(LT_VERSION_INFO)
 
-GTK_DOC_CHECK([1.12])
+GOBJECT_INTROSPECTION_REQS=0.10.0
+GOBJECT_INTROSPECTION_REQUIRE([$GOBJECT_INTROSPECTION_REQS])
 
-GOBJECT_INTROSPECTION_CHECK([0.6.7])
+GTK_DOC_CHECK([1.12])
 
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
@@ -79,7 +77,6 @@ echo
 echo $PACKAGE v$VERSION
 echo
 echo Prefix............... : $prefix
-echo libsoup.............. : $soup_ver
 echo Introspection support : ${found_introspection}
 echo gtk-doc documentation : ${enable_gtk_doc}
 echo

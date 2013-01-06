@@ -59,6 +59,15 @@ osm_gps_map_point_new_radians(float rlat, float rlon)
     return p;
 }
 
+/**
+ * osm_gps_map_point_get_degrees:
+ * @point: The point ( latitude and longitude in radian )
+ * @lat: (out): latitude in degrees
+ * @lon: (out): longitude in degrees
+ *
+ * Returns the lagitude and longitude in degrees.
+ * of the current window, i.e the top left and bottom right corners.
+ **/
 void
 osm_gps_map_point_get_degrees(OsmGpsMapPoint *point, float *lat, float *lon)
 {
