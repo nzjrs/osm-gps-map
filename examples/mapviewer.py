@@ -107,7 +107,7 @@ class UI(Gtk.Window):
         cache_button = Gtk.Button('Cache')
         cache_button.connect('clicked', self.cache_clicked)
 
-        self.vbox.pack_start(self.osm, False, True, 0)
+        self.vbox.pack_start(self.osm, True, True, 0)
         hbox = Gtk.HBox(False, 0)
         hbox.pack_start(zoom_in_button, False, True, 0)
         hbox.pack_start(zoom_out_button, False, True, 0)
