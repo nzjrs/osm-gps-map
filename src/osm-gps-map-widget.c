@@ -1031,9 +1031,12 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
 
     if (zoom > MIN_ZOOM) {
       zoom -= zoom_offset;
-      target_x = x; x >>= zoom_offset;
-      target_y = y; y >>= zoom_offset;
+      x >>= zoom_offset;
+      y >>= zoom_offset;
     }
+
+    target_x = x;
+    target_y = y;
 
     g_debug("Load actual tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
