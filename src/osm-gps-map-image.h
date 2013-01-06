@@ -39,7 +39,7 @@ GType osm_gps_map_image_get_type (void) G_GNUC_CONST;
 OsmGpsMapImage *osm_gps_map_image_new (void);
 void            osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect);
 const OsmGpsMapPoint *osm_gps_map_image_get_point(OsmGpsMapImage *object);
-const gint osm_gps_map_image_get_zorder(OsmGpsMapImage *object);
+gint osm_gps_map_image_get_zorder(OsmGpsMapImage *object);
 
 G_END_DECLS
 
