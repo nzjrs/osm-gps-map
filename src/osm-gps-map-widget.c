@@ -750,7 +750,7 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, int offset_x, int offse
 #else
 #define MSG_RESPONSE_BODY(a)    ((a)->response_body->data)
 #define MSG_RESPONSE_LEN(a)     ((a)->response_body->length)
-#define MSG_RESPONSE_LEN_FORMAT "%lld"
+#define MSG_RESPONSE_LEN_FORMAT "%"G_GOFFSET_FORMAT
 #endif
 
 #if USE_LIBSOUP22
