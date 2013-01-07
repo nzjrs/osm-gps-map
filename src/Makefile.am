@@ -72,27 +72,3 @@ libosmgpsmapinc_HEADERS = $(sources_public_h)
 ## Misc
 CLEANFILES =
 
-## GObject Introspection Support
--include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --add-include-path=$(builddir)
-INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
-
-if HAVE_INTROSPECTION
-introspection_sources = $(sources_c) $(sources_public_h)
-
-OsmGpsMap-1.0.gir: libosmgpsmap.la
-OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-2.0
-OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
-OsmGpsMap_1_0_gir_LIBS = libosmgpsmap.la
-OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
-INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
-
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
-
-typelibdir = $(libdir)/girepository-1.0
-typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-
-CLEANFILES += $(gir_DATA) $(typelib_DATA)
-endif

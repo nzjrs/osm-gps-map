@@ -60,11 +60,6 @@ AC_SUBST(LT_VERSION_INFO)
 
 GTK_DOC_CHECK([1.12])
 
-GOBJECT_INTROSPECTION_CHECK([0.6.7])
-
-GNOME_COMPILE_WARNINGS([maximum])
-GNOME_MAINTAINER_MODE_DEFINES
-
 AC_OUTPUT([
 osmgpsmap.pc
 Makefile
@@ -80,6 +75,5 @@ echo $PACKAGE v$VERSION
 echo
 echo Prefix............... : $prefix
 echo libsoup.............. : $soup_ver
-echo Introspection support : ${found_introspection}
 echo gtk-doc documentation : ${enable_gtk_doc}
 echo
