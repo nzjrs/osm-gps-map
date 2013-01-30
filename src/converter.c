@@ -49,6 +49,9 @@ lat2pixel(  int zoom,
 
     /* the formula is
      *
+     * some more notes
+     * http://manialabs.wordpress.com/2013/01/26/converting-latitude-and-longitude-to-map-tile-in-mercator-projection/
+     *
      * pixel_y = -(2^zoom * TILESIZE * lat_m) / 2PI + (2^zoom * TILESIZE) / 2
      */
     pixel_y = -(int)( (lat_m * TILESIZE * (1 << zoom) ) / (2*M_PI)) +
