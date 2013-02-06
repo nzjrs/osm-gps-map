@@ -51,41 +51,39 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
 
+    int left_button =   (event->button == 1) && (event->state == 0);
+    int middle_button = (event->button == 2) || ((event->button == 1) && (event->state & GDK_SHIFT_MASK));
+    int right_button =  (event->button == 3) || ((event->button == 1) && (event->state & GDK_CONTROL_MASK));
+
+    osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, &coord);
+    osm_gps_map_point_get_degrees(&coord, &lat, &lon);
+
     if (event->type == GDK_3BUTTON_PRESS) {
-        if (event->button == 1) {
+        if (middle_button) {
             if (g_last_image)
                 osm_gps_map_image_remove (map, g_last_image);
         }
-        if (event->button == 3) {
+        if (right_button) {
             osm_gps_map_track_remove(map, othertrack);
         }
-    }
-
-    if (event->type == GDK_2BUTTON_PRESS) {
-        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, &coord);
-        osm_gps_map_point_get_degrees(&coord, &lat, &lon);
-        if (event->button == 1) {
+    } else if (event->type == GDK_2BUTTON_PRESS) {
+        if (left_button) {
             osm_gps_map_gps_add (map,
                                  lat,
                                  lon,
                                  g_random_double_range(0,360));
         }
-        if (event->button == 3) {
+        if (middle_button) {
+            g_last_image = osm_gps_map_image_add (map,
+                                                  lat,
+                                                  lon,
+                                                  g_star_image);
+        }
+        if (right_button) {
             osm_gps_map_track_add_point(othertrack, &coord);
         }
     }
 
-    if (event->type == GDK_BUTTON_PRESS) {
-        if (event->button == 2) {
-        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, &coord);
-        osm_gps_map_point_get_degrees(&coord, &lat, &lon);
-            g_last_image = osm_gps_map_image_add (
-                                    map,
-                                    lat,
-                                    lon,
-                                    g_star_image);
-        }
-    }
     return FALSE;
 }
 
@@ -97,7 +95,7 @@ on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user
     OsmGpsMap *map = OSM_GPS_MAP(widget);
 
     g_object_get(map, "latitude", &lat, "longitude", &lon, NULL);
-    gchar *msg = g_strdup_printf("%f,%f",lat,lon);
+    gchar *msg = g_strdup_printf("Map Centre: lattitude %f longitude %f",lat,lon);
     gtk_entry_set_text(entry, msg);
     g_free(msg);
 

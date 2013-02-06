@@ -19,20 +19,15 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import os.path
+import random
 from math import pi
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 
-#gobject.threads_init()
-#Gtk.threads_init()
 GObject.threads_init()
-
-#Try static lib first
-mydir = os.path.dirname(os.path.abspath(__file__))
-libdir = os.path.abspath(os.path.join(mydir, "..", "python", ".libs"))
-sys.path.insert(0, libdir)
+Gdk.threads_init()
 
 from gi.repository import OsmGpsMap as osmgpsmap
 print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap._version)
@@ -79,11 +74,17 @@ class UI(Gtk.Window):
         self.osm.layer_add(
                     osmgpsmap.MapOsd(
                         show_dpad=True,
-                        show_zoom=True))
+                        show_zoom=True,
+                        show_crosshair=True)
+        )
         self.osm.layer_add(
-                    DummyLayer())
+                    DummyLayer()
+        )
 
-        self.osm.connect('button_release_event', self.map_clicked)
+        self.last_image = None
+
+        self.osm.connect('button_press_event', self.on_button_press)
+        self.osm.connect('button_release_event', self.on_button_release)
 
         #connect keyboard shortcuts
         self.osm.set_keyboard_shortcut(osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11"))
@@ -238,20 +239,40 @@ Enter an repository URL to fetch map tiles from in the box below. Special metach
             zoom_end=self.osm.props.max_zoom
         )
 
-    def map_clicked(self, osm, event):
-        lat,lon = self.osm.get_event_location(event).get_degrees()
-        if event.button == 1:
-            self.latlon_entry.set_text(
-                'Map Centre: latitude %s longitude %s' % (
-                    self.osm.props.latitude,
-                    self.osm.props.longitude
-                )
+    def on_button_release(self, osm, event):
+        self.latlon_entry.set_text(
+            'Map Centre: latitude %s longitude %s' % (
+                self.osm.props.latitude,
+                self.osm.props.longitude
             )
-        elif event.button == 2:
-            self.osm.gps_add(lat, lon, heading=osmgpsmap.MAP_INVALID);
-        elif event.button == 3:
-            pb = GdkPixbuf.Pixbuf.new_from_file_at_size ("poi.png", 24,24)
-            self.osm.image_add(lat,lon,pb)
+        )
+
+    def on_button_press(self, osm, event):
+        state = event.get_state()
+        lat,lon = self.osm.get_event_location(event).get_degrees()
+
+        left    = event.button == 1 and state == 0
+        middle  = event.button == 2 or (event.button == 1 and state & Gdk.ModifierType.SHIFT_MASK)
+        right   = event.button == 3 or (event.button == 1 and state & Gdk.ModifierType.CONTROL_MASK)
+
+        #work around binding bug with invalid variable name
+        GDK_2BUTTON_PRESS = getattr(Gdk.EventType, "2BUTTON_PRESS")
+        GDK_3BUTTON_PRESS = getattr(Gdk.EventType, "3BUTTON_PRESS")
+
+        if event.type == GDK_3BUTTON_PRESS:
+            if middle:
+                if self.last_image is not None:
+                    self.osm.image_remove(self.last_image)
+                    self.last_image = None
+        elif event.type == GDK_2BUTTON_PRESS:
+            if left:
+                self.osm.gps_add(lat, lon, heading=random.random()*360)
+            if middle:
+                pb = GdkPixbuf.Pixbuf.new_from_file_at_size ("poi.png", 24,24)
+                self.last_image = self.osm.image_add(lat,lon,pb)
+            if right:
+                pass
+
 
 if __name__ == "__main__":
     u = UI()
