@@ -3108,6 +3108,8 @@ osm_gps_map_image_add_with_alignment_z (OsmGpsMap *map, float latitude, float lo
     map->priv->images = g_slist_insert_sorted(map->priv->images, im,
                                               (GCompareFunc) osm_gps_map_image_z_compare);
     osm_gps_map_map_redraw_idle(map);
+
+    g_object_ref(im);
     return im;
 }
 
