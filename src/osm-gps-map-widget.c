@@ -278,7 +278,6 @@ enum
     PROP_PROXY_URI,
     PROP_TILE_CACHE_DIR,
     PROP_TILE_CACHE_BASE_DIR,
-    PROP_TILE_CACHE_DIR_IS_FULL_PATH,
     PROP_TILE_ZOOM_OFFSET,
     PROP_ZOOM,
     PROP_MAX_ZOOM,
@@ -1746,8 +1745,6 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_TILE_CACHE_BASE_DIR:
             priv->tile_base_dir = g_value_dup_string (value);
             break;
-        case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-             break;
         case PROP_TILE_ZOOM_OFFSET:
             priv->tile_zoom_offset = g_value_get_int (value);
             break;
@@ -1844,9 +1841,6 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_TILE_CACHE_BASE_DIR:
             g_value_set_string(value, priv->tile_base_dir);
-            break;
-        case PROP_TILE_CACHE_DIR_IS_FULL_PATH:
-            g_value_set_boolean(value, FALSE);
             break;
         case PROP_TILE_ZOOM_OFFSET:
             g_value_set_int(value, priv->tile_zoom_offset);
@@ -2387,19 +2381,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                           "Base directory to which friendly and auto paths are appended",
                                                           NULL,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-
-    /**
-     * OsmGpsMap:tile-cache-is-full-path:
-     *
-     * Deprecated: Use #OsmGpsMap:tile-cache and #OsmGpsMap:tile-cache-base instead
-     **/
-     g_object_class_install_property (object_class,
-                                      PROP_TILE_CACHE_DIR_IS_FULL_PATH,
-                                      g_param_spec_boolean ("tile-cache-is-full-path",
-                                                            "tile cache is full path",
-                                                            "",
-                                                            FALSE,
-                                                            G_PARAM_READABLE | G_PARAM_WRITABLE));
 
     /**
      * OsmGpsMap:zoom:
@@ -3271,76 +3252,5 @@ osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
     OsmGpsMapPoint *p = osm_gps_map_point_new_degrees(0.0,0.0);
     osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, p);
     return p;
-}
-
-/**
- * osm_gps_map_remove_image:
- *
- * Deprecated: 0.7.0: Use osm_gps_map_image_remove() instead.
- **/
-gboolean
-osm_gps_map_remove_image (OsmGpsMap *map, GdkPixbuf *image)
-{
-    GSList *tmp;
-    OsmGpsMapImage *im;
-
-    g_critical("%s is deprecated", G_STRFUNC);
-
-    im = NULL;
-    tmp = map->priv->images;
-    while (tmp != NULL) {
-        GdkPixbuf *p;
-        im = tmp->data;
-        /* g_object_get ref's the pixbuf */
-        g_object_get (im, "pixbuf", &p, NULL);
-        if (p == image) {
-            g_object_unref (p);
-            break;
-        }
-        g_object_unref (p);
-        tmp = g_slist_next(tmp);
-    }
-
-    /* we found the image */
-    if (tmp && im)
-        return osm_gps_map_image_remove (map, im);
-
-    return FALSE;
-}
-
-/**
- * osm_gps_map_replace_track:
- * @map:
- * @old_track: (element-type OsmGpsMapTrack) (in): list of #OsmGpsMapTrack
- * @new_track: (element-type OsmGpsMapTrack) (in): list of #OsmGpsMapTrack
- *
- * Deprecated: 0.7.0: Use osm_gps_map_track_remove() and osm_gps_map_track_add()
- * or just edit the #OsmGpsMapTrack object directly
- **/
-void
-osm_gps_map_replace_track (OsmGpsMap *map, GSList *old_track, GSList *new_track)
-{
-    GSList *tmp;
-    OsmGpsMapTrack *track;
-
-    g_critical("%s is deprecated", G_STRFUNC);
-
-    track = NULL;
-    tmp = map->priv->tracks;
-    while (tmp != NULL) {
-        GSList *l;
-        track = tmp->data;
-        g_object_get (track, "track", &l, NULL);
-        if (l == old_track)
-            break;
-        tmp = g_slist_next(tmp);
-    }
-
-    /* we found the track */
-    if (tmp && track) {
-        osm_gps_map_track_remove (map, track);
-        track = g_object_new (OSM_TYPE_GPS_MAP_TRACK, "track", new_track, NULL);
-        osm_gps_map_track_add (map, track);
-    }
 }
 
