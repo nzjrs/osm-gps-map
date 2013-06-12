@@ -1984,11 +1984,8 @@ static gboolean
 osm_gps_map_idle_expose (GtkWidget *widget)
 {
     OsmGpsMapPrivate *priv = OSM_GPS_MAP(widget)->priv;
-
     priv->drag_expose_source = 0;
-
-    //g_warning("SCHEDULE EXPOSE");
-    //osm_gps_map_expose (widget, NULL);
+    gtk_widget_queue_draw (widget);
     return FALSE;
 }
 
@@ -2089,73 +2086,16 @@ osm_gps_map_draw (GtkWidget *widget, cairo_t *cr)
 {
     OsmGpsMap *map = OSM_GPS_MAP(widget);
     OsmGpsMapPrivate *priv = map->priv;
-    // int w, h;
 
-    // w = gtk_widget_get_allocated_width (widget);
-    // h = gtk_widget_get_allocated_height (widget);
+    if (!priv->drag_mouse_dx && !priv->drag_mouse_dy) {
+        cairo_set_source_surface (cr, priv->pixmap, 0, 0);
+    } else {
+        cairo_set_source_surface (cr, priv->pixmap,
+            priv->drag_mouse_dx - EXTRA_BORDER,
+            priv->drag_mouse_dy - EXTRA_BORDER);
+    }
 
-    cairo_set_source_surface (cr, priv->pixmap, 0, 0);
     cairo_paint (cr);
-
-#if 0
-    if (!priv->drag_mouse_dx && !priv->drag_mouse_dy && event)
-    {
-        gdk_draw_drawable (drawable,
-                           style->fg_gc[state],
-                           priv->pixmap,
-                           event->area.x + EXTRA_BORDER, event->area.y + EXTRA_BORDER,
-                           event->area.x, event->area.y,
-                           event->area.width, event->area.height);
-    }
-    else
-    {
-        gdk_draw_drawable (drawable,
-                           style->fg_gc[state],
-                           priv->pixmap,
-                           0,0,
-                           priv->drag_mouse_dx - EXTRA_BORDER, 
-                           priv->drag_mouse_dy - EXTRA_BORDER,
-                           -1,-1);
-        
-        /* Paint white outside of the map if dragging. Its less 
-           ugly than painting the corrupted map */
-        if(priv->drag_mouse_dx>EXTRA_BORDER) {
-            gdk_draw_rectangle (drawable,
-                                style->white_gc,
-                                TRUE,
-                                0, 0,
-                                priv->drag_mouse_dx - EXTRA_BORDER,
-                                h);
-        }
-        else if (-priv->drag_mouse_dx > EXTRA_BORDER)
-        {
-            gdk_draw_rectangle (drawable,
-                                style->white_gc,
-                                TRUE,
-                                priv->drag_mouse_dx + w + EXTRA_BORDER, 0,
-                                -priv->drag_mouse_dx - EXTRA_BORDER,
-                                h);
-        }
-        
-        if (priv->drag_mouse_dy>EXTRA_BORDER) {
-            gdk_draw_rectangle (drawable,
-                                style->white_gc,
-                                TRUE,
-                                0, 0,
-                                w,
-                                priv->drag_mouse_dy - EXTRA_BORDER);
-        }
-        else if (-priv->drag_mouse_dy > EXTRA_BORDER)
-        {
-            gdk_draw_rectangle (drawable,
-                                style->white_gc,
-                                TRUE,
-                                0, priv->drag_mouse_dy + h + EXTRA_BORDER,
-                                w,
-                                -priv->drag_mouse_dy - EXTRA_BORDER);
-        }
-    }
-#endif
 
     if (priv->layers) {
         GSList *list;
