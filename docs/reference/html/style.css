@@ -32,8 +32,9 @@
   /* this is needed so that the local anchors are displayed below the naviagtion */
   div.footnote a[name], div.refnamediv a[name], div.refsect1 a[name], div.refsect2 a[name], div.index a[name], div.glossary a[name], div.sect1 a[name]
   {
+    display: inline-block;
     position: relative;
-    padding-top:4.5em;
+    top:-5em;
   }
   /* this seems to be a bug in the xsl style sheets when generating indexes */
   div.index div.index
