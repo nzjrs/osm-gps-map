@@ -1,6 +1,9 @@
 Changes in 0.8.0
 ======================
-  * Gtk3 support
+  * Gtk3 support (serge.noiraud@laposte.net)
+  * Remove deprecated functionality
+  * Add z-order property to map items
+  * Fix Google
 
 Changes in 0.7.4
 ======================
