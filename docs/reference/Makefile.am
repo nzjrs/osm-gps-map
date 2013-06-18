@@ -76,7 +76,7 @@ INCLUDES=-I$(top_srcdir) -I$(top_builddir) \
 	$(GTK_CFLAGS) \
 	$(CAIRO_CFLAGS) \
 	$(SOUP24_CFLAGS)
-GTKDOC_LIBS=$(top_builddir)/src/libosmgpsmap.la \
+GTKDOC_LIBS=$(top_builddir)/src/libosmgpsmap-1.0.la \
 	$(GLIB_LIBS) \
 	$(GTK_LIBS) \
 	$(CAIRO_LIBS) \
