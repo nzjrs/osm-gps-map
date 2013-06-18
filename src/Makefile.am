@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-lib_LTLIBRARIES = libosmgpsmap.la
+lib_LTLIBRARIES = libosmgpsmap-1.0.la
 
 OSMGPSMAP_CFLAGS =          \
 	$(GLIB_CFLAGS)          \
@@ -14,7 +14,7 @@ OSMGPSMAP_LIBS =            \
     $(SOUP24_LIBS)
 
 ## Shared library
-libosmgpsmap_la_CFLAGS =    \
+libosmgpsmap_1_0_la_CFLAGS =    \
     $(WARN_CFLAGS)          \
     $(DISABLE_DEPRECATED)   \
     $(OSMGPSMAP_CFLAGS)     \
@@ -24,11 +24,11 @@ if OS_WIN32
 no_undefined = -no-undefined
 endif
 
-libosmgpsmap_la_LDFLAGS = \
+libosmgpsmap_1_0_la_LDFLAGS = \
 	-version-info $(LT_VERSION_INFO)    \
 	$(no_undefined)
 
-libosmgpsmap_la_LIBADD =    \
+libosmgpsmap_1_0_la_LIBADD =    \
     $(OSMGPSMAP_LIBS)
 
 sources_private_h =         \
@@ -59,12 +59,12 @@ sources_c =                 \
     osm-gps-map-widget.c    \
     osm-gps-map-compat.c
 
-libosmgpsmap_la_SOURCES =   \
+libosmgpsmap_1_0_la_SOURCES =   \
 	$(sources_public_h)     \
 	$(sources_private_h)    \
 	$(sources_c)
 
-libosmgpsmapincdir = $(includedir)/osmgpsmap
+libosmgpsmapincdir = $(includedir)/osmgpsmap-1.0
 libosmgpsmapinc_HEADERS = $(sources_public_h)
 
 ## Misc
@@ -79,13 +79,13 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 if HAVE_INTROSPECTION
 introspection_sources = $(sources_c) $(sources_public_h)
 
-OsmGpsMap-@VERSION@.gir: libosmgpsmap.la
-OsmGpsMap_@OGM_MAJOR_MINOR@_gir_INCLUDES = GObject-2.0 Gtk-3.0
-OsmGpsMap_@OGM_MAJOR_MINOR@_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
-OsmGpsMap_@OGM_MAJOR_MINOR@_gir_LIBS = libosmgpsmap.la
-OsmGpsMap_@OGM_MAJOR_MINOR@_gir_FILES = $(introspection_sources)
-OsmGpsMap_@OGM_MAJOR_MINOR@_gir_SCANNERFLAGS = --identifier-prefix=OsmGps
-INTROSPECTION_GIRS += OsmGpsMap-@VERSION@.gir
+OsmGpsMap-1.0.gir: libosmgpsmap-1.0.la
+OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-3.0
+OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS)
+OsmGpsMap_1_0_gir_LIBS = libosmgpsmap-1.0.la
+OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
+OsmGpsMap_1_0_gir_SCANNERFLAGS = --identifier-prefix=OsmGps
+INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)

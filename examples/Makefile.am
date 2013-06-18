@@ -32,7 +32,7 @@ mapviewer_CFLAGS =          \
 mapviewer_LDADD =           \
     $(OSMGPSMAP_LIBS)       \
     $(GTHREAD_LIBS)         \
-    $(top_builddir)/src/libosmgpsmap.la
+    $(top_builddir)/src/libosmgpsmap-1.0.la
 
 ## Misc
 EXTRA_DIST = poi.png mapviewer.ui mapviewer.js README

@@ -17,7 +17,7 @@ osm_gps_mapdoc_DATA =                           \
 	NEWS
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = osmgpsmap.pc
+pkgconfig_DATA = osmgpsmap-1.0.pc
 
 EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
 	osmgpsmap.pc.in                             \

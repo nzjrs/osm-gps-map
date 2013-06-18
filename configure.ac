@@ -1,10 +1,8 @@
 AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [0.8],
+        [1.0.0],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
-
-AC_SUBST(OGM_MAJOR_MINOR,0_8)
 
 AM_INIT_AUTOMAKE([1.11])
 
@@ -54,7 +52,7 @@ AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
 # - If binary compatibility has been broken (eg removed or changed interfaces)
 #   change to C+1:0:0
 # - If the interface is the same as the previous version, change to C:R+1:A
-LT_VERSION_INFO=3:0:0
+LT_VERSION_INFO=0:0:0
 AC_SUBST(LT_VERSION_INFO)
 
 GOBJECT_INTROSPECTION_REQS=0.10.0
@@ -66,7 +64,7 @@ GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
 AC_OUTPUT([
-osmgpsmap.pc
+osmgpsmap-1.0.pc
 Makefile
 src/Makefile
 docs/Makefile
