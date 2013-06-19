@@ -7,5 +7,5 @@ Name: @PACKAGE_NAME@
 Description: Moving map widget using openstreet map data
 Version: @PACKAGE_VERSION@
 Requires: gtk+-3.0 libsoup-2.4
-Libs: -L${libdir} -losmgpsmap
-Cflags: -I${includedir}/osmgpsmap
+Libs: -L${libdir} -losmgpsmap-1.0
+Cflags: -I${includedir}/osmgpsmap-1.0

@@ -24,7 +24,7 @@ install-sh
 libtool
 ltmain.sh
 missing
-osmgpsmap.pc
+osmgpsmap-1.0.pc
 python/autom4te.cache/
 python/build/
 python/configure

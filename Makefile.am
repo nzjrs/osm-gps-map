@@ -20,7 +20,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap-1.0.pc
 
 EXTRA_DIST = $(openstreetmap_gps_mapdoc_DATA)   \
-	osmgpsmap.pc.in                             \
+	osmgpsmap-1.0.pc.in                         \
 	gtk-doc.make		                        \
 	m4/introspection.m4                         \
 	m4/gtk-doc.m4
