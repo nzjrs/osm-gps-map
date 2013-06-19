@@ -1,4 +1,8 @@
-Changes in 0.8.0
+Changes in 1.0.1
+======================
+  * Build fixes
+
+Changes in 1.0.0
 ======================
   * Gtk3 support (serge.noiraud@laposte.net)
   * Remove deprecated functionality
