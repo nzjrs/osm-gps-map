@@ -29,7 +29,8 @@ libosmgpsmap_1_0_la_LDFLAGS = \
 	$(no_undefined)
 
 libosmgpsmap_1_0_la_LIBADD =    \
-    $(OSMGPSMAP_LIBS)
+    $(OSMGPSMAP_LIBS) \
+    -lm
 
 sources_private_h =         \
 	converter.h             \
