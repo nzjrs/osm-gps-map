@@ -1,3 +1,9 @@
+Changes in 1.0.2
+======================
+  * Fix build with new giscanner
+  * Build fixes guillomovitch <guillomovitch@gmail.com>
+  * Fix open-street-maps Andrew Gee <andrew@andrewgee.org>
+
 Changes in 1.0.1
 ======================
   * Build fixes
