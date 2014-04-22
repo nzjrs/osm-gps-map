@@ -1908,7 +1908,7 @@ osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
 {
     OsmGpsMap *map;
     OsmGpsMapPoint *pt;
-    float lat, lon;
+    float lat, lon, c_lat, c_lon;
 
     map = OSM_GPS_MAP(widget);
     pt = osm_gps_map_point_new_degrees(0.0,0.0);
@@ -1917,10 +1917,20 @@ osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
     osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, pt);
     osm_gps_map_point_get_degrees (pt, &lat, &lon);
 
-    if (event->direction == GDK_SCROLL_UP)
+    c_lat = rad2deg(map->priv->center_rlat);
+    c_lon = rad2deg(map->priv->center_rlon);
+
+
+
+    if ((event->direction == GDK_SCROLL_UP) && (map->priv->map_zoom < map->priv->max_zoom)) {
+        lat = c_lat + ((lat - c_lat)/2.0);
+        lon = c_lon + ((lon - c_lon)/2.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom+1);
-    else if (event->direction == GDK_SCROLL_DOWN)
+    } else if ((event->direction == GDK_SCROLL_DOWN) && (map->priv->map_zoom > map->priv->min_zoom)) {
+        lat = c_lat + ((c_lat - lat)*1.0);
+        lon = c_lon + ((c_lon - lon)*1.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom-1);
+    }
 
     osm_gps_map_point_free (pt);
 
@@ -2074,7 +2084,7 @@ osm_gps_map_configure (GtkWidget *widget, GdkEventConfigure *event)
     gint pixel_y = lat2pixel(priv->map_zoom, priv->center_rlat);
 
     priv->map_x = pixel_x - w/2;
-    priv->map_y = pixel_y - w/2;
+    priv->map_y = pixel_y - h/2;
 
     osm_gps_map_map_redraw(OSM_GPS_MAP(widget));
 
