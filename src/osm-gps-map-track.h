@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -69,6 +69,13 @@ OsmGpsMapTrack *    osm_gps_map_track_new           (void);
  * Since: 0.7.0
  **/
 void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, const OsmGpsMapPoint *point);
+
+void                osm_gps_map_track_remove_point     (OsmGpsMapTrack* track, int pos);
+
+int osm_gps_map_track_n_points(OsmGpsMapTrack* track);
+void osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos);
+OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
+
 /**
  * osm_gps_map_track_get_points:
  * @track (in): a #OsmGpsMapTrack

@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,10 +23,14 @@
  * @stability: Stable
  * @include: osm-gps-map.h
  *
- * #OsmGpsMapPoint describes a geographic location (latitude, longitude). 
+ * #OsmGpsMapPoint describes a geographic location (latitude, longitude).
  * Helper functions exist to create such a point from either radian co-ordinates
  * (osm_gps_map_point_new_radians()) or degrees (osm_gps_map_new_degrees()).
  **/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "converter.h"
 #include "osm-gps-map-point.h"
@@ -122,3 +126,7 @@ osm_gps_map_point_free (OsmGpsMapPoint *point)
 {
     g_free(point);
 }
+
+#ifdef __cplusplus
+}
+#endif

@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,6 +27,10 @@
  * to draw on top of the map respond to button press events. The most
  * common implementation of this interface is #OsmGpsMapOsd
  **/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "osm-gps-map-layer.h"
 
@@ -71,3 +75,6 @@ osm_gps_map_layer_button_press (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventBu
 	return OSM_GPS_MAP_LAYER_GET_INTERFACE (self)->button_press (self, map, event);
 }
 
+#ifdef __cplusplus
+}
+#endif
