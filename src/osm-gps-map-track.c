@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,11 +27,6 @@
  * describes how such a track should be drawn on the map
  * (see osm_gps_map_track_add()), including its colour, width, etc.
  **/
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <gdk/gdk.h>
 
@@ -54,7 +49,7 @@ enum
 enum
 {
 	POINT_ADDED,
-	POINT_CHANGED,
+    POINT_CHANGED,
 	POINT_INSERTED,
 	POINT_REMOVED,
 	LAST_SIGNAL
@@ -247,6 +242,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            1,
                                 OSM_TYPE_GPS_MAP_POINT);
 
+    
     signals [POINT_CHANGED] = g_signal_new ("changed",
 	                            OSM_TYPE_GPS_MAP_TRACK,
 	                            G_SIGNAL_RUN_FIRST,
@@ -329,6 +325,7 @@ OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos)
     return g_slist_nth_data(priv->track, pos);
 }
 
+
 GSList *
 osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 {
@@ -352,6 +349,3 @@ osm_gps_map_track_new (void)
     return g_object_new (OSM_TYPE_GPS_MAP_TRACK, NULL);
 }
 
-#ifdef __cplusplus
-}
-#endif

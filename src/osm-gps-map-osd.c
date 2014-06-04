@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,10 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <math.h>
 #include <cairo.h>
@@ -522,7 +518,7 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
 
         if(priv->osd_x < 0)
             mx -= (allocation.width - priv->osd_w);
-
+    
         if(priv->osd_y < 0)
             my -= (allocation.height - priv->osd_h);
 
@@ -777,11 +773,11 @@ coordinates_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 
     char *latitude = osd_latitude_str(lat);
     char *longitude = osd_longitude_str(lon);
-
+    
     int y = OSD_COORDINATES_OFFSET;
     y = osd_render_centered_text(cr, y, OSD_COORDINATES_W, OSD_COORDINATES_FONT_SIZE, latitude);
     y = osd_render_centered_text(cr, y, OSD_COORDINATES_W, OSD_COORDINATES_FONT_SIZE, longitude);
-
+    
     g_free(latitude);
     g_free(longitude);
 
@@ -923,6 +919,3 @@ controls_draw(OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr)
     cairo_paint(cr);
 }
 
-#ifdef __cplusplus
-}
-#endif

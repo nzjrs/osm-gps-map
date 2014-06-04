@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,14 +17,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "private.h"
 #include "osm-gps-map-source.h"
 
-const char*
+const char* 
 osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
 {
     switch(source)
@@ -74,7 +70,7 @@ osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
 //https://garage.maemo.org/plugins/scmsvn/viewcvs.php/trunk/src/maps.c?root=maemo-mapper&view=markup
 //http://www.ponies.me.uk/maps/GoogleTileUtils.java
 //http://www.mgmaps.com/cache/MapTileCacher.perl
-const char*
+const char* 
 osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
 {
     switch(source)
@@ -117,7 +113,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
         case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
             /* TODO: Implement signed Y, aka U
-             * http://us.maps3.yimg.com/aerial.maps.yimg.com/ximg?v=1.7&t=a&s=256&x=%d&y=%-d&z=%d
+             * http://us.maps3.yimg.com/aerial.maps.yimg.com/ximg?v=1.7&t=a&s=256&x=%d&y=%-d&z=%d 
              *  x = tilex,
              *  y = (1 << (MAX_ZOOM - zoom)) - tiley - 1,
              *  z = zoom - (MAX_ZOOM - 17));
@@ -161,13 +157,13 @@ osm_gps_map_source_get_image_format(OsmGpsMapSource_t source)
 }
 
 
-int
+int 
 osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source)
 {
     return 1;
 }
 
-int
+int 
 osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
 {
     switch(source) {
@@ -207,6 +203,3 @@ osm_gps_map_source_is_valid(OsmGpsMapSource_t source)
     return osm_gps_map_source_get_repo_uri(source) != NULL;
 }
 
-#ifdef __cplusplus
-}
-#endif

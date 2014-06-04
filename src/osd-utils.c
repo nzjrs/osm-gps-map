@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,10 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <glib.h>
 #include <math.h>
@@ -50,18 +46,18 @@ char *
 osd_latitude_str(float latitude) {
     char *c = OSD_COORDINATES_CHR_N;
     float integral, fractional;
-
-    if(isnan(latitude))
+    
+    if(isnan(latitude)) 
         return NULL;
-
-    if(latitude < 0) {
-        latitude = fabs(latitude);
-        c = OSD_COORDINATES_CHR_S;
+    
+    if(latitude < 0) { 
+        latitude = fabs(latitude); 
+        c = OSD_COORDINATES_CHR_S; 
     }
 
     fractional = modff(latitude, &integral);
-
-    return g_strdup_printf("%s %02d° %06.3f'",
+    
+    return g_strdup_printf("%s %02d° %06.3f'", 
                            c, (int)integral, fractional*60.0);
 }
 
@@ -69,18 +65,18 @@ char *
 osd_longitude_str(float longitude) {
     char *c = OSD_COORDINATES_CHR_E;
     float integral, fractional;
-
-    if(isnan(longitude))
+    
+    if(isnan(longitude)) 
         return NULL;
-
-    if(longitude < 0) {
-        longitude = fabs(longitude);
-        c = OSD_COORDINATES_CHR_W;
+    
+    if(longitude < 0) { 
+        longitude = fabs(longitude); 
+        c = OSD_COORDINATES_CHR_W; 
     }
 
     fractional = modff(longitude, &integral);
-
-    return g_strdup_printf("%s %03d° %06.3f'",
+    
+    return g_strdup_printf("%s %03d° %06.3f'", 
                            c, (int)integral, fractional*60.0);
 }
 
@@ -188,7 +184,7 @@ static void
 osd_zoom_shape(cairo_t *cr, gint x, gint y, gint w, gint h) {
     gint r = h/2;   /* radius of curved ends of zoom pad */
 
-    x += r;
+    x += r;    
 
     cairo_move_to     (cr, x,           y);
     cairo_rel_line_to (cr, w-2*r,       0);
@@ -231,7 +227,7 @@ osd_render_zoom(cairo_t *cr, gint x, gint y, gint w, gint h, gint gps, gint shad
     debug_bbox(cr, x, y, w, h);
 }
 
-static void
+static void 
 osd_dpad_shape(cairo_t *cr, gint x, gint y, gint r) {
     cairo_arc (cr, x+r, y+r, r, 0, 2 * M_PI);
 }
@@ -282,13 +278,13 @@ osd_render_dpad(cairo_t *cr, gint x, gint y, gint r, gint gps, gint shadow, GdkR
 }
 
 gboolean
-osm_gps_map_in_circle(gint x, gint y, gint cx, gint cy, gint rad)
+osm_gps_map_in_circle(gint x, gint y, gint cx, gint cy, gint rad) 
 {
     return( pow(cx - x, 2) + pow(cy - y, 2) < rad * rad);
 }
 
 OsdControlPress_t
-osd_check_dpad(gint x, gint y, gint r, gboolean has_gps)
+osd_check_dpad(gint x, gint y, gint r, gboolean has_gps) 
 {
     /* within entire dpad circle */
     if( osm_gps_map_in_circle(x, y, r, r, r)) {
@@ -297,7 +293,7 @@ osd_check_dpad(gint x, gint y, gint r, gboolean has_gps)
         y -= r;
 
         if (has_gps)
-            if( osm_gps_map_in_circle(x, y, 0, 0, r/3))
+            if( osm_gps_map_in_circle(x, y, 0, 0, r/3)) 
                 return OSD_GPS;
 
         if( y < 0 && abs(x) < abs(y))
@@ -321,7 +317,7 @@ osd_check_zoom(gint x, gint y, guint w, guint h, guint gps_w) {
 //osd_zoom_shape(cairo_t *cr, gint x, gint y, gint w, gint h) {
 //gint r = h/2;   /* radius of curved ends of zoom pad */
 //
-//x += r;
+//x += r;    
 //
 //cairo_move_to     (cr, x,           y);
 //cairo_rel_line_to (cr, w-2*r,       0);
@@ -339,7 +335,7 @@ osd_check_zoom(gint x, gint y, guint w, guint h, guint gps_w) {
             return OSD_OUT;
 
         /* within circle around (+) label */
-        if( osm_gps_map_in_circle(x, y, w-r, r, r))
+        if( osm_gps_map_in_circle(x, y, w-r, r, r)) 
             return OSD_IN;
 
 //#if Z_GPS == 1
@@ -349,14 +345,14 @@ osd_check_zoom(gint x, gint y, guint w, guint h, guint gps_w) {
 //#endif
 //
 //        /* between center of (-) button and center of entire zoom control area */
-//        if(x > OSD_LEFT && x < D_RAD)
+//        if(x > OSD_LEFT && x < D_RAD) 
 //            return OSD_OUT;
 //
 //        /* between center of (+) button and center of entire zoom control area */
-//        if(x < OSD_RIGHT && x > D_RAD)
+//        if(x < OSD_RIGHT && x > D_RAD) 
 //            return OSD_IN;
     }
-
+ 
     return OSD_NONE;
 }
 
@@ -395,6 +391,3 @@ osd_render_gps(cairo_t *cr, gint x, gint y, gint w, GdkRGBA *bg, GdkRGBA *fg) {
     debug_bbox(cr, ox, oy, w, w);
 }
 
-#ifdef __cplusplus
-}
-#endif
