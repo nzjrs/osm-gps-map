@@ -29,6 +29,7 @@
  **/
 
 #include <gdk/gdk.h>
+#include <math.h>
 
 #include "converter.h"
 #include "osm-gps-map-track.h"
@@ -340,6 +341,28 @@ osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;
+}
+
+double
+osm_gps_map_track_get_length(OsmGpsMapTrack* track)
+{
+    GSList* points = track->priv->track;
+    double ret = 0;
+    OsmGpsMapPoint* point_a = NULL;
+    OsmGpsMapPoint* point_b = NULL;
+       
+    while(points)
+    {
+        point_a = point_b;
+        point_b = points->data;
+        if(point_a)
+        {
+            ret += acos(sin(point_a->rlat)*sin(point_b->rlat) 
+                    + cos(point_a->rlat)*cos(point_b->rlat)*cos(point_b->rlon-point_a->rlon)) * 6371109; //the mean raduis of earth
+        }
+        points = points->next;
+    }
+    return ret;
 }
 
 

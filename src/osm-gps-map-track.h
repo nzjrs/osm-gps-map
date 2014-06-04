@@ -80,10 +80,28 @@ void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, cons
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
 void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
 
+/**
+ * osm_gps_map_track_remove_point:
+ * @track (in): a #OsmGpsMapTrack
+ * @pos: Position of the point to remove
+ *
+ **/
 void                osm_gps_map_track_remove_point(OsmGpsMapTrack* track, int pos);
+
+/**
+ *
+ **/
 int                 osm_gps_map_track_n_points(OsmGpsMapTrack* track);
 void                osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos);
 OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
+
+/**
+ * osm_gps_map_track_get_length:
+ * @track (in): a #OsmGpsMapTrack
+ * 
+ * Returns: the length of the track in meters.
+ **/
+double              osm_gps_map_track_get_length(OsmGpsMapTrack* track);
 
 
 G_END_DECLS

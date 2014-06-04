@@ -52,7 +52,7 @@ static int click_down_y = 0;
 static gboolean
 on_track_changed(GtkWidget* widget)
 {
-    printf("track has been edited\n");
+    printf("new track length: %f\n", osm_gps_map_track_get_length(maptrack));
 }
 
 static gboolean
