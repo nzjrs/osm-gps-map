@@ -30,6 +30,7 @@ static gboolean opt_friendly_cache = FALSE;
 static gboolean opt_no_cache = FALSE;
 static gboolean opt_debug = FALSE;
 static char *opt_cache_base_dir = NULL;
+static gboolean opt_editable_tracks = FALSE;
 static GOptionEntry entries[] =
 {
   { "friendly-cache", 'f', 0, G_OPTION_ARG_NONE, &opt_friendly_cache, "Store maps using friendly cache style (source name)", NULL },
@@ -37,6 +38,7 @@ static GOptionEntry entries[] =
   { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
   { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
   { "map", 'm', 0, G_OPTION_ARG_INT, &opt_map_provider, "Map source", "N" },
+  { "editable-tracks", 'e', 0, G_OPTION_ARG_NONE, &opt_editable_tracks, "Make the tracks editable", NULL },
   { NULL }
 };
 
@@ -303,6 +305,9 @@ main (int argc, char **argv)
 
     //Add a second track for right clicks
     rightclicktrack = osm_gps_map_track_new();
+
+    if(opt_editable_tracks)
+        g_object_set(rightclicktrack, "editable", TRUE, NULL);
     osm_gps_map_track_add(OSM_GPS_MAP(map), rightclicktrack);
 
     g_free(cachedir);

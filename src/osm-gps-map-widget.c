@@ -1194,14 +1194,14 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
         {
             cairo_arc (cr, x, y, 4.0, 0.0, 2 * M_PI);
             cairo_stroke(cr);
-        }
 
-        if(pt != points)
-        {
-            cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha*0.75);
-            cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
-            cairo_stroke(cr);
-            cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+            if(pt != points)
+            {
+                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha*0.75);
+                cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
+                cairo_stroke(cr);
+                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+            }
         }
 
         cairo_move_to(cr, x, y);
@@ -1990,8 +1990,6 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
         while(tracks)
         {
             OsmGpsMapTrack* track = tracks->data;
-            if(!track)
-                break;
             gboolean path_editable = FALSE;
             g_object_get(track, "editable", &path_editable, NULL);
             if(path_editable)
@@ -2008,7 +2006,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     osm_gps_map_convert_geographic_to_screen(map, point, &cx, &cy);
 
                     float dist_sqrd = (event->x - cx) * (event->x-cx) + (event->y-cy) * (event->y-cy);
-                    if(dist_sqrd <= (4*4))
+                    if(dist_sqrd <= (5*5))
                     {
                         priv->is_button_down = TRUE;
                         priv->drag_point = point;
@@ -2024,7 +2022,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         int ptx = (last_x+cx)/2.0;
                         int pty = (last_y+cy)/2.0;
                         dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
-                        if(dist_sqrd <= (4*4))
+                        if(dist_sqrd <= (5*5))
                         {
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);

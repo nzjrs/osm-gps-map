@@ -223,7 +223,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                      g_param_spec_boolean ("editable",
                                                            "editable",
                                                            "should this track be editable",
-                                                           TRUE,
+                                                           FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 	/**
