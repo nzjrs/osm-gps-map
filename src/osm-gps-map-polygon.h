@@ -23,6 +23,8 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 
+G_BEGIN_DECLS
+
 #include "osm-gps-map-track.h"
 
 #define OSM_TYPE_GPS_MAP_POLYGON              osm_gps_map_polygon_get_type()
