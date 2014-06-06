@@ -193,7 +193,7 @@ on_gps_color_changed (GtkColorChooser *widget, gpointer user_data)
     GdkRGBA c;
     OsmGpsMapTrack *track = OSM_GPS_MAP_TRACK(user_data);
     gtk_color_chooser_get_rgba (widget, &c);
-    g_object_set(track, "color", &c, NULL);
+    osm_gps_map_track_set_color(track, &c);
 }
 #else
 static void
@@ -202,7 +202,7 @@ on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
     GdkRGBA c;
     OsmGpsMapTrack *track = OSM_GPS_MAP_TRACK(user_data);
     gtk_color_button_get_rgba (widget, &c);
-    g_object_set(track, "color", &c, NULL);
+    osm_gps_map_track_set_color(track, &c);
 }
 
 #endif

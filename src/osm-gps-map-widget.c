@@ -1166,7 +1166,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
     g_object_get(track, "editable", &path_editable, NULL);
 
     cairo_set_line_width (cr, lw);
-    cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+    cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
 
@@ -1198,10 +1198,10 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
 
             if(pt != points)
             {
-                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha*0.75);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
                 cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
                 cairo_stroke(cr);
-                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
             }
         }
 
@@ -1278,7 +1278,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     g_object_get(poly, "shaded", &poly_shaded, NULL);
 
     cairo_set_line_width (cr, lw);
-    cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+    cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
 
@@ -1324,19 +1324,19 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
 
             if(pt != points)
             {
-                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha*0.75);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
                 cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
                 cairo_stroke(cr);
-                cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
             }
             last_x = x; last_y = y;
         }
 
         x = first_x; y = first_y;
-        cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha*0.75);
+        cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
         cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
         cairo_stroke(cr);
-        cairo_set_source_rgba (cr, color.red/65535.0, color.green/65535.0, color.blue/65535.0, alpha);
+        cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
     }
 
     gtk_widget_queue_draw_area (

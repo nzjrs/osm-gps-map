@@ -68,7 +68,7 @@ struct _OsmGpsMapTrackPrivate
     gboolean editable;
 };
 
-#define DEFAULT_R   (60000)
+#define DEFAULT_R   (0.6)
 #define DEFAULT_G   (0)
 #define DEFAULT_B   (0)
 #define DEFAULT_A   (0.6)
@@ -133,6 +133,8 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->color.red = c->red;
             priv->color.green = c->green;
             priv->color.blue = c->blue;
+            printf("\n%f %f %f\n", c->red, c->green, c->blue);
+            fflush(stdout);
             } break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
@@ -332,6 +334,15 @@ osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 {
     g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
     return track->priv->track;
+}
+
+void                
+osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    track->priv->color.red = color->red;
+    track->priv->color.green = color->green;
+    track->priv->color.blue = color->blue;
 }
 
 void
