@@ -39,8 +39,6 @@ main (int   argc,
 	gtk_widget_show (GTK_WIDGET(map));
     gtk_widget_show (window);
 
-
-
     gtk_main ();
 
     return 0;
