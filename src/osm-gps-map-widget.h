@@ -44,6 +44,7 @@ typedef struct _OsmGpsMapPrivate OsmGpsMapPrivate;
 #include "osm-gps-map-layer.h"
 #include "osm-gps-map-point.h"
 #include "osm-gps-map-track.h"
+#include "osm-gps-map-polygon.h"
 #include "osm-gps-map-image.h"
 
 struct _OsmGpsMapClass
@@ -96,6 +97,9 @@ void            osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsM
 void            osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
 void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
 gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
+void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
+gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
 void            osm_gps_map_gps_clear                   (OsmGpsMap *map);
 OsmGpsMapTrack *osm_gps_map_gps_get_track               (OsmGpsMap *map);
