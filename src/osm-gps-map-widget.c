@@ -3209,7 +3209,7 @@ osm_gps_map_polygon_add (OsmGpsMap *map, OsmGpsMapPolygon *poly)
     g_signal_connect(track, "notify",
                     G_CALLBACK(on_track_changed), map);
 
-    priv->polygons = g_slist_append(priv->tracks, poly);
+    priv->polygons = g_slist_append(priv->polygons, poly);
     osm_gps_map_map_redraw_idle(map);
 }
 
