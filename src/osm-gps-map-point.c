@@ -61,6 +61,26 @@ osm_gps_map_point_new_radians(float rlat, float rlon)
     return p;
 }
 
+OsmGpsMapPoint *
+osm_gps_map_point_new_degrees_with_user_data(float lat, float lon, gpointer user_data)
+{
+    OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
+    p->rlat = deg2rad(lat);
+    p->rlon = deg2rad(lon);
+    p->user_data = user_data;
+    return p;
+}
+
+OsmGpsMapPoint *
+osm_gps_map_point_new_radians_with_user_data(float rlat, float rlon, gpointer user_data)
+{
+    OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
+    p->rlat = rlat;
+    p->rlon = rlon;
+    p->user_data = user_data;
+    return p;
+}
+
 /**
  * osm_gps_map_point_get_degrees:
  * @point: The point ( latitude and longitude in radian )
@@ -96,6 +116,18 @@ osm_gps_map_point_set_radians(OsmGpsMapPoint *point, float rlat, float rlon)
 {
     point->rlat = rlat;
     point->rlon = rlon;
+}
+
+gpointer
+osm_gps_map_point_get_user_data(OsmGpsMapPoint *point)
+{
+    return point->user_data;
+}
+
+void
+osm_gps_map_point_set_user_data(OsmGpsMapPoint *point, gpointer user_data)
+{
+    point->user_data = user_data;
 }
 
 /**
