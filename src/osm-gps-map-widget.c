@@ -227,6 +227,7 @@ struct _OsmGpsMapPrivate
     int drag_limit;
     guint drag_expose_source;
 
+    /* Properties for dragging a point with right mouse button. */
     OsmGpsMapPoint* drag_point;
     OsmGpsMapTrack* drag_track;
 
