@@ -246,7 +246,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                 OSM_TYPE_GPS_MAP_POINT);
 
     
-    signals [POINT_CHANGED] = g_signal_new ("changed",
+    signals [POINT_CHANGED] = g_signal_new ("point-changed",
 	                            OSM_TYPE_GPS_MAP_TRACK,
 	                            G_SIGNAL_RUN_FIRST,
 	                            0,

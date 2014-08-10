@@ -2272,7 +2272,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
     {
         priv->is_dragging_point = FALSE;
         osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, priv->drag_point);
-        g_signal_emit_by_name(priv->drag_track, "changed");
+        g_signal_emit_by_name(priv->drag_track, "point-changed");
     }
 
     priv->drag_counter = -1;
