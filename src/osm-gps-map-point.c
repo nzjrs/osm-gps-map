@@ -49,6 +49,7 @@ osm_gps_map_point_new_degrees(float lat, float lon)
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = deg2rad(lat);
     p->rlon = deg2rad(lon);
+    p->user_data = NULL;
     return p;
 }
 
@@ -58,6 +59,7 @@ osm_gps_map_point_new_radians(float rlat, float rlon)
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = rlat;
     p->rlon = rlon;
+    p->user_data = NULL;
     return p;
 }
 
