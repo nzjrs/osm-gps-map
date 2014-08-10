@@ -2103,8 +2103,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
         }
     }
 
-    int left_button = (event->button == 1) && (event->state == 0);
-    if(left_button)
+    if(event->button == 1)
     {
         GSList* tracks = priv->tracks;
         while(tracks)
