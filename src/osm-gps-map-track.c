@@ -40,7 +40,7 @@ enum
     PROP_VISIBLE,
     PROP_TRACK,
     PROP_LINE_WIDTH,
-    PROP_ALPHA,
+    PROP_ALPHA, /* The alpha property can be considered obsolete as GdkRGBA also provides an alpha field */
     PROP_COLOR,
     PROP_EDITABLE,
     PROP_CLICKABLE,
@@ -65,7 +65,6 @@ struct _OsmGpsMapTrackPrivate
     GSList *track;
     gboolean visible;
     gfloat linewidth;
-    gfloat alpha;
     GdkRGBA color;
     gboolean editable;
     gboolean clickable;
@@ -112,7 +111,7 @@ osm_gps_map_track_get_property (GObject    *object,
             g_value_set_float(value, priv->linewidth);
             break;
         case PROP_ALPHA:
-            g_value_set_float(value, priv->alpha);
+            g_value_set_float(value, priv->color.alpha);
             break;
         case PROP_COLOR:
             g_value_set_boxed(value, &priv->color);
@@ -154,13 +153,14 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->linewidth = g_value_get_float (value);
             break;
         case PROP_ALPHA:
-            priv->alpha = g_value_get_float (value);
+            priv->color.alpha = g_value_get_float (value);
             break;
         case PROP_COLOR: {
             GdkRGBA *c = g_value_get_boxed (value);
             priv->color.red = c->red;
             priv->color.green = c->green;
             priv->color.blue = c->blue;
+            priv->color.alpha = c->alpha;
             } break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
@@ -176,8 +176,7 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->highlight_color.red = c->red;
             priv->highlight_color.green = c->green;
             priv->highlight_color.blue = c->blue;
-            printf("\n%f %f %f\n", c->red, c->green, c->blue);
-            fflush(stdout);
+            priv->highlight_color.alpha = c->alpha;
             } break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -248,7 +247,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                          0.0,       /* minimum property value */
                                                          1.0,       /* maximum property value */
                                                          DEFAULT_A,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED));
 
     g_object_class_install_property (object_class,
                                      PROP_COLOR,
@@ -366,10 +365,12 @@ osm_gps_map_track_init (OsmGpsMapTrack *self)
     self->priv->color.red = DEFAULT_R;
     self->priv->color.green = DEFAULT_G;
     self->priv->color.blue = DEFAULT_B;
+    self->priv->color.alpha = DEFAULT_A;
 
     self->priv->highlight_color.red = DEFAULT_HIGHLIGHT_R;
     self->priv->highlight_color.green = DEFAULT_HIGHLIGHT_G;
     self->priv->highlight_color.blue = DEFAULT_HIGHLIGHT_B;
+    self->priv->highlight_color.alpha = DEFAULT_HIGHLIGHT_A;
 
     self->priv->highlight_point = NULL;
 }
@@ -427,6 +428,7 @@ osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
     track->priv->color.red = color->red;
     track->priv->color.green = color->green;
     track->priv->color.blue = color->blue;
+    track->priv->color.alpha = color->alpha;
 }
 
 void
@@ -436,6 +438,7 @@ osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;
+    color->alpha = track->priv->color.alpha;
 }
 
 void
@@ -445,6 +448,7 @@ osm_gps_map_track_set_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color)
     track->priv->highlight_color.red = color->red;
     track->priv->highlight_color.green = color->green;
     track->priv->highlight_color.blue = color->blue;
+    track->priv->highlight_color.alpha = color->alpha;
 }
 
 void
@@ -454,6 +458,7 @@ osm_gps_map_track_get_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color)
     color->red = track->priv->highlight_color.red;
     color->green = track->priv->highlight_color.green;
     color->blue = track->priv->highlight_color.blue;
+    color->alpha = track->priv->highlight_color.alpha;
 }
 
 double
