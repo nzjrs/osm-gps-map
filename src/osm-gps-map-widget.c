@@ -1184,11 +1184,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
 
         /* first time through loop */
         if (pt == points)
-        {
-            if(path_editable)
-                cairo_arc (cr, x, y, 4.0, 0.0, 2 * M_PI);
             cairo_move_to(cr, x, y);
-        }
 
         cairo_line_to(cr, x, y);
         cairo_stroke(cr);
