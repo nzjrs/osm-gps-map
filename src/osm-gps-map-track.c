@@ -49,11 +49,11 @@ enum
 
 enum
 {
-	POINT_ADDED,
+    POINT_ADDED,
     POINT_CHANGED,
-	POINT_INSERTED,
-	POINT_REMOVED,
-	LAST_SIGNAL
+    POINT_INSERTED,
+    POINT_REMOVED,
+    LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = {0,};
