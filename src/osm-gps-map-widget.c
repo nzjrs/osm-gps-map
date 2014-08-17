@@ -148,6 +148,7 @@
 #define USER_AGENT                  "libosmgpsmap/1.0"
 #define DOWNLOAD_RETRIES            3
 #define MAX_DOWNLOAD_TILES          10000
+#define DOT_RADIUS                  4.0
 
 struct _OsmGpsMapPrivate
 {
@@ -1190,7 +1191,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
         cairo_stroke(cr);
         if(path_editable)
         {
-            cairo_arc (cr, x, y, 4.0, 0.0, 2 * M_PI);
+            cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
             if(pt != points)
@@ -1316,13 +1317,13 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
             x = lon2pixel(priv->map_zoom, tp->rlon) - map_x0;
             y = lat2pixel(priv->map_zoom, tp->rlat) - map_y0;
 
-            cairo_arc (cr, x, y, 4.0, 0.0, 2 * M_PI);
+            cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
             if(pt != points)
             {
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
-                cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
+                cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
                 cairo_stroke(cr);
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
             }
@@ -1331,7 +1332,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
 
         x = first_x; y = first_y;
         cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
-        cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
+        cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
         cairo_stroke(cr);
         cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
     }
@@ -2122,7 +2123,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     osm_gps_map_convert_geographic_to_screen(map, point, &cx, &cy);
 
                     float dist_sqrd = (event->x - cx) * (event->x-cx) + (event->y-cy) * (event->y-cy);
-                    if(dist_sqrd <= (5*5))
+                    if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                     {
                         priv->is_button_down = TRUE;
                         priv->drag_point = point;
@@ -2138,7 +2139,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         int ptx = (last_x+cx)/2.0;
                         int pty = (last_y+cy)/2.0;
                         dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
-                        if(dist_sqrd <= (5*5))
+                        if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
@@ -2179,7 +2180,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     osm_gps_map_convert_geographic_to_screen(map, point, &cx, &cy);
 
                     float dist_sqrd = (event->x - cx) * (event->x-cx) + (event->y-cy) * (event->y-cy);
-                    if(dist_sqrd <= (5*5))
+                    if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                     {
                         priv->is_button_down = TRUE;
                         priv->drag_point = point;
@@ -2195,7 +2196,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         int ptx = (last_x+cx)/2.0;
                         int pty = (last_y+cy)/2.0;
                         dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
-                        if(dist_sqrd <= (5*5))
+                        if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
@@ -2218,7 +2219,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                 int ptx = (last_x+first_x)/2.0;
                 int pty = (last_y+first_y)/2.0;
                 float dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
-                if(dist_sqrd <= (5*5))
+                if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                 {
                     OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                     osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
