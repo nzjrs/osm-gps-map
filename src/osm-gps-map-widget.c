@@ -1197,7 +1197,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
             if(pt != points)
             {
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
-                cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, 4.0, 0.0, 2*M_PI);
+                cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
                 cairo_stroke(cr);
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
             }
