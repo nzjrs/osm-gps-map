@@ -2922,6 +2922,21 @@ osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
 }
 
 /**
+ * osm_gps_map_zoom_fit_bbox:
+ * Zoom and center the map so that both points fit inside the window.
+ **/
+void
+osm_gps_map_zoom_fit_bbox (OsmGpsMap *map, float latitude1, float latitude2, float longitude1, float longitude2)
+{
+    GtkAllocation allocation;
+    int zoom;
+    gtk_widget_get_allocation (GTK_WIDGET (map), &allocation);
+    zoom = latlon2zoom (allocation.height, allocation.width, deg2rad(latitude1), deg2rad(latitude2), deg2rad(longitude1), deg2rad(longitude2));
+    osm_gps_map_set_center (map, (latitude1 + latitude2) / 2, (longitude1 + longitude2) / 2);
+    osm_gps_map_set_zoom (map, zoom);
+}
+
+/**
  * osm_gps_map_set_center_and_zoom:
  *
  * Since: 0.7.0
