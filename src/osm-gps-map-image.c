@@ -44,6 +44,7 @@ enum
     PROP_Y_ALIGN,
     PROP_POINT,
     PROP_Z_ORDER,
+    PROP_ROTATION
 };
 
 struct _OsmGpsMapImagePrivate
@@ -55,6 +56,7 @@ struct _OsmGpsMapImagePrivate
     gfloat          xalign;
     gfloat          yalign;
     int             zorder;
+    float           rotation;
 };
 
 static void
@@ -80,6 +82,9 @@ osm_gps_map_image_get_property (GObject    *object,
             break;
         case PROP_Z_ORDER:
             g_value_set_int   (value, priv->zorder);
+            break;
+        case PROP_ROTATION:
+            g_value_set_float(value, priv->rotation);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -113,6 +118,9 @@ osm_gps_map_image_set_property (GObject      *object,
             break;
         case PROP_Z_ORDER:
             priv->zorder = g_value_get_int (value);
+            break;
+        case PROP_ROTATION:
+            priv->rotation = g_value_get_float(value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -193,6 +201,16 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
                                                         100, /* maximum property value */
                                                           0,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_ROTATION,
+                                     g_param_spec_int ("rotation",
+                                                       "rotation",
+                                                       "image rotation",
+                                                       -180.0, /* minimum property value */
+                                                        180.0, /* maximum property value */
+                                                          0.0f,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 
 static void
@@ -222,8 +240,16 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
     x = rect->x - xoffset;
     y = rect->y - yoffset;
 
+     cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
+    cairo_rotate(cr, deg2rad(priv->rotation));
+    cairo_translate(cr,  -(x+(priv->w/2)), -(y+(priv->h/2)));
+
     gdk_cairo_set_source_pixbuf (cr, priv->pixbuf, x, y);
     cairo_paint (cr);
+
+    cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
+    cairo_rotate(cr, -deg2rad(priv->rotation));
+    cairo_translate(cr,  -(x+(priv->w/2)), -(y+(priv->h/2)));
 
     rect->width = priv->w;
     rect->height = priv->h;
@@ -242,3 +268,14 @@ osm_gps_map_image_get_zorder(OsmGpsMapImage *object)
     g_return_val_if_fail (OSM_IS_GPS_MAP_IMAGE (object), 0);
     return object->priv->zorder;
 }
+
+float osm_gps_map_image_get_rotation(OsmGpsMapImage* object)
+{
+    return object->priv->rotation;
+}
+
+void osm_gps_map_image_set_rotation(OsmGpsMapImage* object, float rot)
+{
+    object->priv->rotation = rot;
+}
+

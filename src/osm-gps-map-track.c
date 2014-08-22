@@ -29,6 +29,7 @@
  **/
 
 #include <gdk/gdk.h>
+#include <math.h>
 
 #include "converter.h"
 #include "osm-gps-map-track.h"
@@ -42,13 +43,17 @@ enum
     PROP_TRACK,
     PROP_LINE_WIDTH,
     PROP_ALPHA,
-    PROP_COLOR
+    PROP_COLOR,
+    PROP_EDITABLE
 };
 
 enum
 {
-	POINT_ADDED,
-	LAST_SIGNAL
+    POINT_ADDED,
+    POINT_CHANGED,
+    POINT_INSERTED,
+    POINT_REMOVED,
+    LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = {0,};
@@ -60,9 +65,10 @@ struct _OsmGpsMapTrackPrivate
     gfloat linewidth;
     gfloat alpha;
     GdkRGBA color;
+    gboolean editable;
 };
 
-#define DEFAULT_R   (60000)
+#define DEFAULT_R   (0.6)
 #define DEFAULT_G   (0)
 #define DEFAULT_B   (0)
 #define DEFAULT_A   (0.6)
@@ -91,6 +97,9 @@ osm_gps_map_track_get_property (GObject    *object,
             break;
         case PROP_COLOR:
             g_value_set_boxed(value, &priv->color);
+            break;
+        case PROP_EDITABLE:
+            g_value_set_boolean(value, priv->editable);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -124,7 +133,12 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->color.red = c->red;
             priv->color.green = c->green;
             priv->color.blue = c->blue;
+            printf("\n%f %f %f\n", c->red, c->green, c->blue);
+            fflush(stdout);
             } break;
+        case PROP_EDITABLE:
+            priv->editable = g_value_get_boolean(value);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -206,6 +220,14 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                          GDK_TYPE_COLOR,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+    g_object_class_install_property (object_class,
+                                     PROP_EDITABLE,
+                                     g_param_spec_boolean ("editable",
+                                                           "editable",
+                                                           "should this track be editable",
+                                                           FALSE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
@@ -222,6 +244,40 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            G_TYPE_NONE,
 	                            1,
                                 OSM_TYPE_GPS_MAP_POINT);
+
+    
+    signals [POINT_CHANGED] = g_signal_new ("point-changed",
+	                            OSM_TYPE_GPS_MAP_TRACK,
+	                            G_SIGNAL_RUN_FIRST,
+	                            0,
+	                            NULL,
+	                            NULL,
+	                            g_cclosure_marshal_VOID__VOID,
+	                            G_TYPE_NONE,
+	                            1,
+	                            G_TYPE_INT);
+
+    signals [POINT_INSERTED] = g_signal_new ("point-inserted",
+	                            OSM_TYPE_GPS_MAP_TRACK,
+	                            G_SIGNAL_RUN_FIRST,
+	                            0,
+	                            NULL,
+	                            NULL,
+	                            g_cclosure_marshal_VOID__INT,
+	                            G_TYPE_NONE,
+	                            1,
+	                            G_TYPE_INT);
+
+    signals [POINT_REMOVED] = g_signal_new ("point-removed",
+	                            OSM_TYPE_GPS_MAP_TRACK,
+	                            G_SIGNAL_RUN_FIRST,
+	                            0,
+	                            NULL,
+	                            NULL,
+	                            g_cclosure_marshal_VOID__INT,
+	                            G_TYPE_NONE,
+	                            1,
+	                            G_TYPE_INT);
 }
 
 static void
@@ -245,11 +301,48 @@ osm_gps_map_track_add_point (OsmGpsMapTrack *track, const OsmGpsMapPoint *point)
     g_signal_emit (track, signals[POINT_ADDED], 0, p);
 }
 
+void
+osm_gps_map_track_remove_point(OsmGpsMapTrack* track, int pos)
+{
+    OsmGpsMapTrackPrivate *priv = track->priv;
+    gpointer pgl = g_slist_nth_data(priv->track, pos);
+    priv->track = g_slist_remove(priv->track, pgl);
+    g_signal_emit(track, signals[POINT_REMOVED], 0, pos);
+}
+
+int osm_gps_map_track_n_points(OsmGpsMapTrack* track)
+{
+    return g_slist_length(track->priv->track);
+}
+
+void osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos)
+{
+    OsmGpsMapTrackPrivate* priv = track->priv;
+    priv->track = g_slist_insert(priv->track, np, pos);
+    g_signal_emit(track, signals[POINT_INSERTED], 0, pos);
+}
+
+OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos)
+{
+    OsmGpsMapTrackPrivate* priv = track->priv;
+    return g_slist_nth_data(priv->track, pos);
+}
+
+
 GSList *
 osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 {
     g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
     return track->priv->track;
+}
+
+void                
+osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    track->priv->color.red = color->red;
+    track->priv->color.green = color->green;
+    track->priv->color.blue = color->blue;
 }
 
 void
@@ -259,6 +352,28 @@ osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;
+}
+
+double
+osm_gps_map_track_get_length(OsmGpsMapTrack* track)
+{
+    GSList* points = track->priv->track;
+    double ret = 0;
+    OsmGpsMapPoint* point_a = NULL;
+    OsmGpsMapPoint* point_b = NULL;
+       
+    while(points)
+    {
+        point_a = point_b;
+        point_b = points->data;
+        if(point_a)
+        {
+            ret += acos(sin(point_a->rlat)*sin(point_b->rlat) 
+                    + cos(point_a->rlat)*cos(point_b->rlat)*cos(point_b->rlon-point_a->rlon)) * 6371109; //the mean raduis of earth
+        }
+        points = points->next;
+    }
+    return ret;
 }
 
 

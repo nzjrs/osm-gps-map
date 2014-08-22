@@ -57,6 +57,8 @@ OsmGpsMapImage *osm_gps_map_image_new (void);
 void            osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect);
 const OsmGpsMapPoint *osm_gps_map_image_get_point(OsmGpsMapImage *object);
 gint osm_gps_map_image_get_zorder(OsmGpsMapImage *object);
+float osm_gps_map_image_get_rotation(OsmGpsMapImage* object);
+void osm_gps_map_image_set_rotation(OsmGpsMapImage* object, float rot);
 
 G_END_DECLS
 
