@@ -42,3 +42,11 @@ pixel2lon(  float zoom,
 float
 pixel2lat(  float zoom,
             int pixel_y);
+
+int
+latlon2zoom(int pix_height,
+            int pix_width,
+            float lat1,
+            float lat2,
+            float lon1,
+            float lon2);

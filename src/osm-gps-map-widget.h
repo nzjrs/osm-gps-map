@@ -85,6 +85,7 @@ gchar*          osm_gps_map_get_default_cache_directory (void);
 void            osm_gps_map_download_maps               (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end);
 void            osm_gps_map_download_cancel_all         (OsmGpsMap *map);
 void            osm_gps_map_get_bbox                    (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2);
+void            osm_gps_map_zoom_fit_bbox               (OsmGpsMap *map, float latitude1, float latitude2, float longitude1, float longitude2);
 void            osm_gps_map_set_center_and_zoom         (OsmGpsMap *map, float latitude, float longitude, int zoom);
 void            osm_gps_map_set_center                  (OsmGpsMap *map, float latitude, float longitude);
 int             osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);

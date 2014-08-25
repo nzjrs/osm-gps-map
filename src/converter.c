@@ -3,6 +3,7 @@
 /*
  * Copyright (C) Marcus Bauer 2008 <marcus.bauer@gmail.com>
  * Copyright (C) 2013 John Stowers <john.stowers@gmail.com>
+ * Copyright (C) 2014 Martijn Goedhart <goedhart.martijn@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +21,22 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <float.h>
 
 #include "private.h"
 #include "converter.h"
 
+/*
+ * The (i)logb(x) function is equal to `floor(log(x) / log(2))` or
+ * `floor(log2(x))`, but probably faster and also accepts negative values.
+ * But this is only true when FLT_RADIX equals 2, which is on allmost all
+ * machine.
+ */
+#if FLT_RADIX == 2
+#define LOG2(x) (ilogb(x))
+#else
+#define LOG2(x) ((int)floor(log2(abs(x))))
+#endif
 
 float
 deg2rad(float deg)
@@ -101,4 +114,19 @@ pixel2lat(  float zoom,
     lat = asin(tanh(lat_m));
 
     return lat;
+}
+
+int
+latlon2zoom(int pix_height,
+	    int pix_width,
+	    float lat1,
+	    float lat2,
+	    float lon1,
+	    float lon2)
+{
+    float lat1_m = atanh(sin(lat1));
+    float lat2_m = atanh(sin(lat2));
+    int zoom_lon = LOG2((double)(2 * pix_width * M_PI) / (TILESIZE * (lon2 - lon1)));
+    int zoom_lat = LOG2((double)(2 * pix_height * M_PI) / (TILESIZE * (lat2_m - lat1_m)));
+    return MIN(zoom_lon, zoom_lat);
 }
