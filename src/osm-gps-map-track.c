@@ -44,7 +44,8 @@ enum
     PROP_LINE_WIDTH,
     PROP_ALPHA,
     PROP_COLOR,
-    PROP_EDITABLE
+    PROP_EDITABLE,
+    PROP_CLICKABLE
 };
 
 enum
@@ -53,6 +54,7 @@ enum
     POINT_CHANGED,
     POINT_INSERTED,
     POINT_REMOVED,
+    POINT_CLICKED,
     LAST_SIGNAL
 };
 
@@ -66,6 +68,7 @@ struct _OsmGpsMapTrackPrivate
     gfloat alpha;
     GdkRGBA color;
     gboolean editable;
+    gboolean clickable;
 };
 
 #define DEFAULT_R   (0.6)
@@ -100,6 +103,9 @@ osm_gps_map_track_get_property (GObject    *object,
             break;
         case PROP_EDITABLE:
             g_value_set_boolean(value, priv->editable);
+            break;
+        case PROP_CLICKABLE:
+            g_value_set_boolean(value, priv->clickable);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -138,6 +144,9 @@ osm_gps_map_track_set_property (GObject      *object,
             } break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
+            break;
+        case PROP_CLICKABLE:
+            priv->clickable = g_value_get_boolean(value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -228,6 +237,14 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                            FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_CLICKABLE,
+                                     g_param_spec_boolean ("clickable",
+                                                           "clickable",
+                                                           "should this track be clickable",
+                                                           FALSE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
@@ -278,6 +295,22 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            G_TYPE_NONE,
 	                            1,
 	                            G_TYPE_INT);
+
+    /*
+     * This signal is emitted when a point on the map is clicked/selected. The
+     * callback(s) connected to this signal will receive a pointer to the point
+     * which was clicked (hence the G_SIGNAL_TYPE_STATIC_SCOPE flag).
+     */
+    signals [POINT_CLICKED] = g_signal_new ("point-clicked",
+	                            OSM_TYPE_GPS_MAP_TRACK,
+	                            G_SIGNAL_RUN_FIRST,
+	                            0,
+	                            NULL,
+	                            NULL,
+	                            g_cclosure_marshal_VOID__POINTER,
+	                            G_TYPE_NONE,
+	                            1,
+	                            OSM_TYPE_GPS_MAP_POINT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
