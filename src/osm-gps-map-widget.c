@@ -1310,9 +1310,11 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
         return;
 
     gboolean path_editable = FALSE;
+    gboolean path_clickable = FALSE;
     gboolean poly_shaded = FALSE;
     gboolean breakable = TRUE;
     g_object_get(poly, "editable", &path_editable, NULL);
+    g_object_get(poly, "clickable", &path_clickable, NULL);
     g_object_get(poly, "shaded", &poly_shaded, NULL);
     g_object_get(poly, "shade_alpha", &shade_alpha, NULL);
     g_object_get(poly, "breakable", &breakable, NULL);
@@ -1346,7 +1348,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     cairo_line_to(cr, first_x, first_y);
     cairo_stroke(cr);
 
-    if(path_editable)
+    if(path_editable || path_clickable)
     {
         int last_x = 0, last_y = 0;
         for(pt = points; pt != NULL; pt = pt->next)
@@ -1359,7 +1361,8 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
             cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
-            if((pt != points) && (breakable))
+            /* This draws the breaker point, do this only when the track is editable. */
+            if((pt != points) && (breakable || path_editable))
             {
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
                 cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
