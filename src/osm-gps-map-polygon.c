@@ -28,16 +28,16 @@ enum
     PROP_0,
     PROP_VISIBLE,
     PROP_TRACK,
-	PROP_SHADED,
+    PROP_SHADED,
     PROP_EDITABLE
 };
 
 struct _OsmGpsMapPolygonPrivate
 {
     OsmGpsMapTrack* track;
-	gboolean visible;
+    gboolean visible;
+    gboolean shaded;
     gboolean editable;
-	gboolean shaded;
 };
 
 #define DEFAULT_R   (60000)
@@ -61,9 +61,9 @@ osm_gps_map_polygon_get_property (GObject    *object,
         case PROP_TRACK:
             g_value_set_pointer(value, priv->track);
             break;
-		case PROP_SHADED:
-			g_value_set_boolean(value, priv->shaded);
-			break;
+        case PROP_SHADED:
+            g_value_set_boolean(value, priv->shaded);
+            break;
         case PROP_EDITABLE:
             g_value_set_boolean(value, priv->editable);
             break;
@@ -89,8 +89,8 @@ osm_gps_map_polygon_set_property (GObject      *object,
             priv->track = g_value_get_pointer (value);
             break;
         case PROP_SHADED:
-			priv->shaded = g_value_get_boolean(value);
-			break;
+            priv->shaded = g_value_get_boolean(value);
+            break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
             break;
@@ -142,6 +142,14 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
                                                            "list of points for the polygon",
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_SHADED,
+                                     g_param_spec_boolean ("shaded",
+                                                           "shaded",
+                                                           "should this polygon be shaded",
+                                                           TRUE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
 
     g_object_class_install_property (object_class,
                                      PROP_EDITABLE,
@@ -151,27 +159,19 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
                                                            FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
-	g_object_class_install_property (object_class,
-                                     PROP_SHADED,
-                                     g_param_spec_boolean ("shaded",
-                                                           "shaded",
-                                                           "should this polygon be shaded",
-                                                           TRUE,
-                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
-
 }
 
 static void
 osm_gps_map_polygon_init (OsmGpsMapPolygon *self)
 {
     self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonPrivate);
-	self->priv->track = osm_gps_map_track_new();
+    self->priv->track = osm_gps_map_track_new();
 }
 
 OsmGpsMapTrack*
 osm_gps_map_polygon_get_track(OsmGpsMapPolygon* poly)
 {
-	return poly->priv->track;
+     return poly->priv->track;
 }
 
 OsmGpsMapPolygon *
