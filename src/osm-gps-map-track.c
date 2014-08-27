@@ -285,7 +285,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                      g_param_spec_boxed ("highlight-color",
                                                          "highlight color",
                                                          "color used to mark a highlighted point",
-                                                         GDK_TYPE_COLOR,
+                                                         GDK_TYPE_RGBA,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 
     /**
