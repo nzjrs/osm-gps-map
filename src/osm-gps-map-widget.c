@@ -2269,6 +2269,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                             osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            /*
+                             * Also emit the point-clicked signal when a
+                             * breaker has been clicked, but after the new
+                             * point has been created.
+                             */
+                            if(path_clickable)
+                                g_signal_emit_by_name(track, "point-clicked", newpoint);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2347,6 +2354,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                             osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            /*
+                             * Also emit the point-clicked signal when a
+                             * breaker has been clicked, but after the new
+                             * point has been created.
+                             */
+                            if(path_clickable)
+                                g_signal_emit_by_name(track, "point-clicked", newpoint);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2370,6 +2384,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                     osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                     osm_gps_map_track_insert_point(track, newpoint, ctr);
+                    /*
+                     * Also emit the point-clicked signal when a
+                     * breaker has been clicked, but after the new
+                     * point has been created.
+                     */
+                    if(path_clickable)
+                        g_signal_emit_by_name(track, "point-clicked", newpoint);
                     osm_gps_map_map_redraw(map);
                     return FALSE;
                 }
