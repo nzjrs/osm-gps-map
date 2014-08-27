@@ -1156,18 +1156,21 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
     OsmGpsMapPrivate *priv = map->priv;
 
     GSList *pt,*points;
+    OsmGpsMapPoint *highlight_point;
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     gfloat lw, alpha;
     int map_x0, map_y0;
-    GdkRGBA color;
+    GdkRGBA color, highlight_color;
 
     g_object_get (track,
                   "track", &points,
                   "line-width", &lw,
                   "alpha", &alpha,
+                  "highlight_point", &highlight_point,
                   NULL);
     osm_gps_map_track_get_color(track, &color);
+    osm_gps_map_track_get_highlight_color(track, &highlight_color);
 
     if (points == NULL)
         return;
@@ -1201,7 +1204,15 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
         cairo_stroke(cr);
         if(path_editable || path_clickable)
         {
-            cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
+            if(tp == highlight_point)
+            {
+                cairo_set_source_rgba (cr, highlight_color.red, highlight_color.green, highlight_color.blue, alpha);
+                cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
+                cairo_stroke(cr);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
+            }
+            else
+                cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
             /* This draws the breaker point, do this only when the track is editable. */
