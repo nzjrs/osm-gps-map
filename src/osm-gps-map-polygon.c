@@ -29,7 +29,8 @@ enum
     PROP_VISIBLE,
     PROP_TRACK,
     PROP_SHADED,
-    PROP_EDITABLE
+    PROP_EDITABLE,
+    PROP_CLICKABLE
 };
 
 struct _OsmGpsMapPolygonPrivate
@@ -38,6 +39,7 @@ struct _OsmGpsMapPolygonPrivate
     gboolean visible;
     gboolean shaded;
     gboolean editable;
+    gboolean clickable;
 };
 
 #define DEFAULT_R   (60000)
@@ -67,6 +69,9 @@ osm_gps_map_polygon_get_property (GObject    *object,
         case PROP_EDITABLE:
             g_value_set_boolean(value, priv->editable);
             break;
+	case PROP_CLICKABLE:
+            g_value_set_boolean(value, priv->clickable);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -93,6 +98,9 @@ osm_gps_map_polygon_set_property (GObject      *object,
             break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
+            break;
+        case PROP_CLICKABLE:
+            priv->clickable = g_value_get_boolean(value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -159,6 +167,13 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
                                                            FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_CLICKABLE,
+                                     g_param_spec_boolean ("clickable",
+                                                           "clickable",
+                                                           "should this polygon be clickable",
+                                                           FALSE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 
 static void
