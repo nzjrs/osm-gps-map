@@ -28,6 +28,7 @@ void
 point_clicked(OsmGpsMapTrack *osmgpsmaptrack, OsmGpsMapPoint *point, gpointer user_data)
 {
     printf("point at latitude: %.4f and longitude %.4f clicked\n", rad2deg(point->rlat), rad2deg(point->rlon));
+    osm_gps_map_track_set_highlight_point(osmgpsmaptrack, point);
 }
 
 void
