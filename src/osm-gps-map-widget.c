@@ -1710,6 +1710,8 @@ osm_gps_map_setup(OsmGpsMap *map)
             g_free(priv->repo_uri);
 
             priv->repo_uri = g_strdup(uri);
+
+            g_free(priv->image_format);
             priv->image_format = g_strdup(
                 osm_gps_map_source_get_image_format(priv->map_source));
             priv->max_zoom = osm_gps_map_source_get_max_zoom(priv->map_source);
@@ -1721,16 +1723,19 @@ osm_gps_map_setup(OsmGpsMap *map)
 
     /* setup the tile cache */
     if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0 ) {
+        g_free(priv->cache_dir);
         priv->cache_dir = NULL;
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0 ) {
         char *base = osm_gps_map_get_cache_base_dir(priv);
         char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
+        g_free(priv->cache_dir);
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, md5);
         g_free(base);
         g_free(md5);
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_FRIENDLY) == 0 ) {
         char *base = osm_gps_map_get_cache_base_dir(priv);
         const char *fname = osm_gps_map_source_get_friendly_name(priv->map_source);
+        g_free(priv->cache_dir);
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, fname);
         g_free(base);
     } else {
