@@ -1825,10 +1825,13 @@ osm_gps_map_finalize (GObject *object)
     if (priv->tile_dir)
         g_free(priv->tile_dir);
 
+    g_free(priv->tile_base_dir);
+
     if (priv->cache_dir)
         g_free(priv->cache_dir);
 
     g_free(priv->repo_uri);
+    g_free(priv->proxy_uri);
     g_free(priv->image_format);
 
     /* trip and tracks contain simple non GObject types, so free them here */
