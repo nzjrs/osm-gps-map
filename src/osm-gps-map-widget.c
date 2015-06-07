@@ -1710,6 +1710,8 @@ osm_gps_map_setup(OsmGpsMap *map)
             g_free(priv->repo_uri);
 
             priv->repo_uri = g_strdup(uri);
+
+            g_free(priv->image_format);
             priv->image_format = g_strdup(
                 osm_gps_map_source_get_image_format(priv->map_source));
             priv->max_zoom = osm_gps_map_source_get_max_zoom(priv->map_source);
@@ -1721,16 +1723,19 @@ osm_gps_map_setup(OsmGpsMap *map)
 
     /* setup the tile cache */
     if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0 ) {
+        g_free(priv->cache_dir);
         priv->cache_dir = NULL;
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0 ) {
         char *base = osm_gps_map_get_cache_base_dir(priv);
         char *md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, priv->repo_uri, -1);
+        g_free(priv->cache_dir);
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, md5);
         g_free(base);
         g_free(md5);
     } else if ( g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_FRIENDLY) == 0 ) {
         char *base = osm_gps_map_get_cache_base_dir(priv);
         const char *fname = osm_gps_map_source_get_friendly_name(priv->map_source);
+        g_free(priv->cache_dir);
         priv->cache_dir = g_strdup_printf("%s%c%s", base, G_DIR_SEPARATOR, fname);
         g_free(base);
     } else {
@@ -1825,10 +1830,13 @@ osm_gps_map_finalize (GObject *object)
     if (priv->tile_dir)
         g_free(priv->tile_dir);
 
+    g_free(priv->tile_base_dir);
+
     if (priv->cache_dir)
         g_free(priv->cache_dir);
 
     g_free(priv->repo_uri);
+    g_free(priv->proxy_uri);
     g_free(priv->image_format);
 
     /* trip and tracks contain simple non GObject types, so free them here */
@@ -1859,10 +1867,12 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
             priv->map_auto_download_enabled = g_value_get_boolean (value);
             break;
         case PROP_REPO_URI:
+            g_free(priv->repo_uri);
             priv->repo_uri = g_value_dup_string (value);
             break;
         case PROP_PROXY_URI:
             if ( g_value_get_string(value) ) {
+                g_free(priv->proxy_uri);
                 priv->proxy_uri = g_value_dup_string (value);
                 g_debug("Setting proxy server: %s", priv->proxy_uri);
 
@@ -1873,25 +1883,32 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
 
             } else {
+                g_free(priv->proxy_uri);
                 priv->proxy_uri = NULL;
             }
             break;
         case PROP_TILE_CACHE_DIR:
             if ( g_value_get_string(value) ) {
+                g_free(priv->tile_dir);
                 priv->tile_dir = g_value_dup_string (value);
                 if ((g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_DISABLED) == 0)    ||
                     (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_AUTO) == 0)        ||
                     (g_strcmp0(priv->tile_dir, OSM_GPS_MAP_CACHE_FRIENDLY) == 0)) {
                     /* this case is handled by osm_gps_map_setup */
                 } else {
+                    if (priv->cache_dir)
+                        g_free(priv->cache_dir);
                     priv->cache_dir = g_strdup(priv->tile_dir);
                     g_debug("Cache dir: %s", priv->cache_dir);
                 }
             } else {
+                if (priv->tile_dir)
+                    g_free(priv->tile_dir);
                 priv->tile_dir = g_strdup(OSM_GPS_MAP_CACHE_DISABLED);
             }
             break;
         case PROP_TILE_CACHE_BASE_DIR:
+            g_free(priv->tile_base_dir);
             priv->tile_base_dir = g_value_dup_string (value);
             break;
         case PROP_TILE_ZOOM_OFFSET:
@@ -1941,6 +1958,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 
             } } break;
         case PROP_IMAGE_FORMAT:
+            g_free(priv->image_format);
             priv->image_format = g_value_dup_string (value);
             break;
         case PROP_DRAG_LIMIT:
