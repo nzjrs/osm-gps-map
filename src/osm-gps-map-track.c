@@ -44,7 +44,10 @@ enum
     PROP_LINE_WIDTH,
     PROP_ALPHA,
     PROP_COLOR,
-    PROP_EDITABLE
+    PROP_EDITABLE,
+    PROP_CLICKABLE,
+    PROP_HIGHLIGHT_POINT,
+    PROP_HIGHLIGHT_COLOR
 };
 
 enum
@@ -53,6 +56,7 @@ enum
     POINT_CHANGED,
     POINT_INSERTED,
     POINT_REMOVED,
+    POINT_CLICKED,
     LAST_SIGNAL
 };
 
@@ -66,12 +70,27 @@ struct _OsmGpsMapTrackPrivate
     gfloat alpha;
     GdkRGBA color;
     gboolean editable;
+    gboolean clickable;
+
+    /*
+     * Properties for highlighted points.
+     * highlight_point - Must be a pointer to a element in the list of points
+     * associated with this track or NULL.
+     * highlight_color - The color used to indicate this point as highlighted.
+     */
+    OsmGpsMapPoint *highlight_point;
+    GdkRGBA highlight_color;
 };
 
 #define DEFAULT_R   (0.6)
 #define DEFAULT_G   (0)
 #define DEFAULT_B   (0)
 #define DEFAULT_A   (0.6)
+
+#define DEFAULT_HIGHLIGHT_R   (0)
+#define DEFAULT_HIGHLIGHT_G   (0)
+#define DEFAULT_HIGHLIGHT_B   (0.6)
+#define DEFAULT_HIGHLIGHT_A   (0.6)
 
 static void
 osm_gps_map_track_get_property (GObject    *object,
@@ -100,6 +119,15 @@ osm_gps_map_track_get_property (GObject    *object,
             break;
         case PROP_EDITABLE:
             g_value_set_boolean(value, priv->editable);
+            break;
+        case PROP_CLICKABLE:
+            g_value_set_boolean(value, priv->clickable);
+            break;
+        case PROP_HIGHLIGHT_POINT:
+            g_value_set_pointer(value, priv->highlight_point);
+            break;
+        case PROP_HIGHLIGHT_COLOR:
+            g_value_set_boxed(value, &priv->highlight_color);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -139,6 +167,20 @@ osm_gps_map_track_set_property (GObject      *object,
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
             break;
+        case PROP_CLICKABLE:
+            priv->clickable = g_value_get_boolean(value);
+            break;
+        case PROP_HIGHLIGHT_POINT:
+            priv->highlight_point = g_value_get_pointer(value);
+            break;
+        case PROP_HIGHLIGHT_COLOR: {
+            GdkRGBA *c = g_value_get_boxed (value);
+            priv->highlight_color.red = c->red;
+            priv->highlight_color.green = c->green;
+            priv->highlight_color.blue = c->blue;
+            printf("\n%f %f %f\n", c->red, c->green, c->blue);
+            fflush(stdout);
+            } break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -228,6 +270,29 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                            FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_CLICKABLE,
+                                     g_param_spec_boolean ("clickable",
+                                                           "clickable",
+                                                           "should this track be clickable",
+                                                           FALSE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_HIGHLIGHT_POINT,
+                                     g_param_spec_pointer ("highlight-point",
+                                                           "highlight point",
+                                                           "point in this track that must be highlighted",
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+    g_object_class_install_property (object_class,
+                                     PROP_HIGHLIGHT_COLOR,
+                                     g_param_spec_boxed ("highlight-color",
+                                                         "highlight color",
+                                                         "color used to mark a highlighted point",
+                                                         GDK_TYPE_COLOR,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
@@ -278,6 +343,22 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            G_TYPE_NONE,
 	                            1,
 	                            G_TYPE_INT);
+
+    /*
+     * This signal is emitted when a point on the map is clicked/selected. The
+     * callback(s) connected to this signal will receive a pointer to the point
+     * which was clicked (hence the G_SIGNAL_TYPE_STATIC_SCOPE flag).
+     */
+    signals [POINT_CLICKED] = g_signal_new ("point-clicked",
+	                            OSM_TYPE_GPS_MAP_TRACK,
+	                            G_SIGNAL_RUN_FIRST,
+	                            0,
+	                            NULL,
+	                            NULL,
+	                            g_cclosure_marshal_VOID__POINTER,
+	                            G_TYPE_NONE,
+	                            1,
+	                            OSM_TYPE_GPS_MAP_POINT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
@@ -288,6 +369,12 @@ osm_gps_map_track_init (OsmGpsMapTrack *self)
     self->priv->color.red = DEFAULT_R;
     self->priv->color.green = DEFAULT_G;
     self->priv->color.blue = DEFAULT_B;
+
+    self->priv->highlight_color.red = DEFAULT_HIGHLIGHT_R;
+    self->priv->highlight_color.green = DEFAULT_HIGHLIGHT_G;
+    self->priv->highlight_color.blue = DEFAULT_HIGHLIGHT_B;
+
+    self->priv->highlight_point = NULL;
 }
 
 void
@@ -354,6 +441,24 @@ osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
     color->blue = track->priv->color.blue;
 }
 
+void
+osm_gps_map_track_set_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    track->priv->highlight_color.red = color->red;
+    track->priv->highlight_color.green = color->green;
+    track->priv->highlight_color.blue = color->blue;
+}
+
+void
+osm_gps_map_track_get_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    color->red = track->priv->highlight_color.red;
+    color->green = track->priv->highlight_color.green;
+    color->blue = track->priv->highlight_color.blue;
+}
+
 double
 osm_gps_map_track_get_length(OsmGpsMapTrack* track)
 {
@@ -374,6 +479,23 @@ osm_gps_map_track_get_length(OsmGpsMapTrack* track)
         points = points->next;
     }
     return ret;
+}
+
+void
+osm_gps_map_track_set_highlight_point(OsmGpsMapTrack* track, OsmGpsMapPoint *point)
+{
+    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    track->priv->highlight_point = point;
+    /* Notify ourself of the new highlight point.
+     * When a map object is listening it will update the map. */
+    g_object_notify (G_OBJECT (track), "highlight-point");
+}
+
+OsmGpsMapPoint *
+osm_gps_map_track_get_highlight_point(OsmGpsMapTrack* track)
+{
+    g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
+    return track->priv->highlight_point;
 }
 
 
