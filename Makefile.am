@@ -6,13 +6,11 @@ AM_DISTCHECK_CONFIGURE_FLAGS =                  \
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-osm_gps_mapdocdir = ${prefix}/doc/osm-gps-map
-osm_gps_mapdoc_DATA =                           \
+doc_DATA =                                      \
 	README                                      \
 	COPYING                                     \
 	AUTHORS                                     \
 	ChangeLog                                   \
-	INSTALL                                     \
 	NEWS
 
 pkgconfigdir = $(libdir)/pkgconfig
