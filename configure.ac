@@ -4,7 +4,7 @@ AC_INIT([osm-gps-map],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
 
-AM_INIT_AUTOMAKE([1.11])
+AM_INIT_AUTOMAKE([1.11 foreign subdir-objects parallel-tests])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
@@ -25,11 +25,7 @@ PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against
 # libgthread-2.0.
-PKG_CHECK_MODULES(GTHREAD, [gthread-2.0], [
-    have_gthread="yes" ], [
-        have_gthread="no"
-        AC_MSG_RESULT([mapviewer demo disabled])])
-AM_CONDITIONAL([HAVE_GTHREAD], [ test "x$have_gthread" = "xyes" ])
+PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 
 AC_CHECK_FUNCS(gdk_event_get_scroll_deltas)
 
@@ -61,7 +57,6 @@ GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_REQS])
 GTK_DOC_CHECK([1.12])
 
 GNOME_COMPILE_WARNINGS([maximum])
-GNOME_MAINTAINER_MODE_DEFINES
 
 AC_OUTPUT([
 osmgpsmap-1.0.pc
