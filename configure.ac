@@ -4,7 +4,7 @@ AC_INIT([osm-gps-map],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
 
-AM_INIT_AUTOMAKE([1.11])
+AM_INIT_AUTOMAKE([1.11 foreign subdir-objects parallel-tests])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
