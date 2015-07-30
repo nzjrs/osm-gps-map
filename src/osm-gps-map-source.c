@@ -53,12 +53,6 @@ osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
             return "Virtual Earth Satellite";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
             return "Virtual Earth Hybrid";
-        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
-            return "Yahoo Maps";
-        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
-            return "Yahoo Satellite";
-        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
-            return "Yahoo Hybrid";
         case OSM_GPS_MAP_SOURCE_LAST:
         default:
             return NULL;
@@ -109,16 +103,6 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/a#W.jpeg?g=50";
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
             return "http://a#R.ortho.tiles.virtualearth.net/tiles/h#W.jpeg?g=50";
-        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
-        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
-        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
-            /* TODO: Implement signed Y, aka U
-             * http://us.maps3.yimg.com/aerial.maps.yimg.com/ximg?v=1.7&t=a&s=256&x=%d&y=%-d&z=%d 
-             *  x = tilex,
-             *  y = (1 << (MAX_ZOOM - zoom)) - tiley - 1,
-             *  z = zoom - (MAX_ZOOM - 17));
-             */
-            return NULL;
         case OSM_GPS_MAP_SOURCE_LAST:
         default:
             return NULL;
@@ -143,9 +127,6 @@ osm_gps_map_source_get_image_format(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
-        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
-        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
-        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
         case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
             return "jpg";
@@ -180,9 +161,6 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
-        case OSM_GPS_MAP_SOURCE_YAHOO_STREET:
-        case OSM_GPS_MAP_SOURCE_YAHOO_SATELLITE:
-        case OSM_GPS_MAP_SOURCE_YAHOO_HYBRID:
             return 17;
         case OSM_GPS_MAP_SOURCE_OSMC_TRAILS:
             return 15;
