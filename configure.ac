@@ -25,11 +25,7 @@ PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against
 # libgthread-2.0.
-PKG_CHECK_MODULES(GTHREAD, [gthread-2.0], [
-    have_gthread="yes" ], [
-        have_gthread="no"
-        AC_MSG_RESULT([mapviewer demo disabled])])
-AM_CONDITIONAL([HAVE_GTHREAD], [ test "x$have_gthread" = "xyes" ])
+PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 
 AC_CHECK_FUNCS(gdk_event_get_scroll_deltas)
 
