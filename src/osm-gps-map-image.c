@@ -204,7 +204,7 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
 
     g_object_class_install_property (object_class,
                                      PROP_ROTATION,
-                                     g_param_spec_int ("rotation",
+                                     g_param_spec_float ("rotation",
                                                        "rotation",
                                                        "image rotation",
                                                        -180.0, /* minimum property value */
