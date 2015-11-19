@@ -2,34 +2,28 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OsmGpsMapImage</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>OsmGpsMap Reference Manual: OsmGpsMapImage</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer">
 <link rel="next" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="OsmGpsMapLayer.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="api-reference.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">OsmGpsMap Reference Manual</th>
-<td><a accesskey="n" href="OsmGpsMapTrack.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#OsmGpsMapImage.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#OsmGpsMapImage.description" class="shortcut">Description</a>
-                   | 
-                  <a href="#OsmGpsMapImage.object-hierarchy" class="shortcut">Object Hierarchy</a>
-                   | 
-                  <a href="#OsmGpsMapImage.properties" class="shortcut">Properties</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapImage.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapImage.object-hierarchy" class="shortcut">Object Hierarchy</a></span><span id="nav_properties"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapImage.properties" class="shortcut">Properties</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="api-reference.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="OsmGpsMapLayer.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="OsmGpsMapTrack.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="OsmGpsMapImage"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -37,53 +31,183 @@
 <h2><span class="refentrytitle"><a name="OsmGpsMapImage.top_of_page"></a>OsmGpsMapImage</span></h2>
 <p>OsmGpsMapImage — An image shown on the map</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
 <div class="refsect1">
 <a name="OsmGpsMapImage.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
-<a name="OsmGpsMapImage.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;osm-gps-map.h&gt;
-
-struct              <a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage-struct" title="struct OsmGpsMapImage">OsmGpsMapImage</a>;
-struct              <a class="link" href="OsmGpsMapImage.html#OsmGpsMapImageClass" title="struct OsmGpsMapImageClass">OsmGpsMapImageClass</a>;
-<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-draw" title="osm_gps_map_image_draw ()">osm_gps_map_image_draw</a>              (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>,
-                                                         <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Points-Rectangles-and-Regions.html#GdkRectangle"><span class="type">GdkRectangle</span></a> *rect</code></em>);
-const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> * <a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-get-point" title="osm_gps_map_image_get_point ()">osm_gps_map_image_get_point</a>      (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>);
-<a href="/usr/share/gtk-doc/html/gobject/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>               <a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-get-type" title="osm_gps_map_image_get_type ()">osm_gps_map_image_get_type</a>          (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    <a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-new" title="osm_gps_map_image_new ()">osm_gps_map_image_new</a>               (<em class="parameter"><code><span class="type">void</span></code></em>);
-</pre>
-</div>
 <div class="refsect1">
-<a name="OsmGpsMapImage.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="synopsis">
-  <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
-   +----OsmGpsMapImage
-</pre>
+<a name="OsmGpsMapImage.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-draw" title="osm_gps_map_image_draw ()">osm_gps_map_image_draw</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-get-point" title="osm_gps_map_image_get_point ()">osm_gps_map_image_get_point</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="/usr/share/gtk-doc/html/gobject/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-get-type" title="osm_gps_map_image_get_type ()">osm_gps_map_image_get_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapImage.html#osm-gps-map-image-new" title="osm_gps_map_image_new ()">osm_gps_map_image_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapImage.properties"></a><h2>Properties</h2>
-<pre class="synopsis">
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf" title='The "pixbuf" property'>pixbuf</a>"                   <span class="type">GdkPixbuf</span>*            : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--point" title='The "point" property'>point</a>"                    <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>*       : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align" title='The "x-align" property'>x-align</a>"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align" title='The "y-align" property'>y-align</a>"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--z-order" title='The "z-order" property'>z-order</a>"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
+<div class="informaltable"><table border="0">
+<colgroup>
+<col width="150px" class="properties_type">
+<col width="300px" class="properties_name">
+<col width="200px" class="properties_flags">
+</colgroup>
+<tbody>
+<tr>
+<td class="property_type">
+<span class="type">GdkPixbuf</span> *</td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf" title="The “pixbuf” property">pixbuf</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type">
+<a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *</td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--point" title="The “point” property">point</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--rotation" title="The “rotation” property">rotation</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align" title="The “x-align” property">x-align</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align" title="The “y-align” property">y-align</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--z-order" title="The “z-order” property">z-order</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapImage.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage-struct" title="struct OsmGpsMapImage">OsmGpsMapImage</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImageClass" title="struct OsmGpsMapImageClass">OsmGpsMapImageClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapImage.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">    <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+    <span class="lineart">╰──</span> OsmGpsMapImage
+</pre>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapImage.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;osm-gps-map.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapImage.description"></a><h2>Description</h2>
-<p>
-<a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> represents an image (a <span class="type">GdkPixbuf</span>) shown on the map
-(<a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()"><code class="function">osm_gps_map_image_add()</code></a>) at a specific location (a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>).
-</p>
+<p><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> represents an image (a <span class="type">GdkPixbuf</span>) shown on the map
+(<a class="link" href="OsmGpsMap.html#osm-gps-map-image-add" title="osm_gps_map_image_add ()"><code class="function">osm_gps_map_image_add()</code></a>) at a specific location (a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>).</p>
 </div>
 <div class="refsect1">
-<a name="OsmGpsMapImage.details"></a><h2>Details</h2>
+<a name="OsmGpsMapImage.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="osm-gps-map-image-draw"></a><h3>osm_gps_map_image_draw ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_image_draw (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>,
+                        <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>,
+                        <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Points-Rectangles-and-Regions.html#GdkRectangle"><span class="type">GdkRectangle</span></a> *rect</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-image-get-point"></a><h3>osm_gps_map_image_get_point ()</h3>
+<pre class="programlisting">const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+osm_gps_map_image_get_point (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>);</pre>
+<p>
+</p>
+<div class="refsect3">
+<a name="id-1.2.4.10.3.5"></a><h4>Returns</h4>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-image-get-type"></a><h3>osm_gps_map_image_get_type ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/gobject/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>
+osm_gps_map_image_get_type (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+</p>
+<div class="refsect3">
+<a name="id-1.2.4.10.4.5"></a><h4>Returns</h4>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-image-new"></a><h3>osm_gps_map_image_new ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *
+osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+</p>
+<div class="refsect3">
+<a name="id-1.2.4.10.5.5"></a><h4>Returns</h4>
+<p></p>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapImage.other_details"></a><h2>Types and Values</h2>
 <div class="refsect2">
 <a name="OsmGpsMapImage-struct"></a><h3>struct OsmGpsMapImage</h3>
 <pre class="programlisting">struct OsmGpsMapImage;</pre>
@@ -100,71 +224,55 @@ const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span cl
 <p>
 </p>
 </div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-image-draw"></a><h3>osm_gps_map_image_draw ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_image_draw              (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>,
-                                                         <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Points-Rectangles-and-Regions.html#GdkRectangle"><span class="type">GdkRectangle</span></a> *rect</code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-image-get-point"></a><h3>osm_gps_map_image_get_point ()</h3>
-<pre class="programlisting">const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> * osm_gps_map_image_get_point      (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-image-get-type"></a><h3>osm_gps_map_image_get_type ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/gobject/gobject-Type-Information.html#GType"><span class="returnvalue">GType</span></a>               osm_gps_map_image_get_type          (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-image-new"></a><h3>osm_gps_map_image_new ()</h3>
-<pre class="programlisting"><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="returnvalue">OsmGpsMapImage</span></a> *    osm_gps_map_image_new               (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-</p>
-</div>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapImage.property-details"></a><h2>Property Details</h2>
 <div class="refsect2">
-<a name="OsmGpsMapImage--pixbuf"></a><h3>The <code class="literal">"pixbuf"</code> property</h3>
-<pre class="programlisting">  "pixbuf"                   <span class="type">GdkPixbuf</span>*            : Read / Write / Construct</pre>
+<a name="OsmGpsMapImage--pixbuf"></a><h3>The <code class="literal">“pixbuf”</code> property</h3>
+<pre class="programlisting">  “pixbuf”                   <span class="type">GdkPixbuf</span> *</pre>
 <p>the pixbuf for this image.</p>
+<p>Flags: Read / Write / Construct</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapImage--point"></a><h3>The <code class="literal">"point"</code> property</h3>
-<pre class="programlisting">  "point"                    <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>*       : Read / Write / Construct</pre>
+<a name="OsmGpsMapImage--point"></a><h3>The <code class="literal">“point”</code> property</h3>
+<pre class="programlisting">  “point”                    <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *</pre>
 <p>location point.</p>
+<p>Flags: Read / Write / Construct</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapImage--x-align"></a><h3>The <code class="literal">"x-align"</code> property</h3>
-<pre class="programlisting">  "x-align"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct</pre>
+<a name="OsmGpsMapImage--rotation"></a><h3>The <code class="literal">“rotation”</code> property</h3>
+<pre class="programlisting">  “rotation”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
+<p>image rotation.</p>
+<p>Flags: Read / Write / Construct</p>
+<p>Allowed values: [-180,180]</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="OsmGpsMapImage--x-align"></a><h3>The <code class="literal">“x-align”</code> property</h3>
+<pre class="programlisting">  “x-align”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>image x-alignment.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0.5</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapImage--y-align"></a><h3>The <code class="literal">"y-align"</code> property</h3>
-<pre class="programlisting">  "y-align"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>                : Read / Write / Construct</pre>
+<a name="OsmGpsMapImage--y-align"></a><h3>The <code class="literal">“y-align”</code> property</h3>
+<pre class="programlisting">  “y-align”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>image y-alignment.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0.5</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapImage--z-order"></a><h3>The <code class="literal">"z-order"</code> property</h3>
-<pre class="programlisting">  "z-order"                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
+<a name="OsmGpsMapImage--z-order"></a><h3>The <code class="literal">“z-order”</code> property</h3>
+<pre class="programlisting">  “z-order”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>image z-order.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [-100,100]</p>
 <p>Default value: 0</p>
 </div>
@@ -172,6 +280,6 @@ const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span cl
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

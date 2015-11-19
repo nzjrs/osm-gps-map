@@ -2,38 +2,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OsmGpsMapLayer</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>OsmGpsMap Reference Manual: OsmGpsMapLayer</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMap.html" title="OsmGpsMap">
 <link rel="next" href="OsmGpsMapImage.html" title="OsmGpsMapImage">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="OsmGpsMap.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="api-reference.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">OsmGpsMap Reference Manual</th>
-<td><a accesskey="n" href="OsmGpsMapImage.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#OsmGpsMapLayer.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#OsmGpsMapLayer.description" class="shortcut">Description</a>
-                   | 
-                  <a href="#OsmGpsMapLayer.object-hierarchy" class="shortcut">Object Hierarchy</a>
-                   | 
-                  <a href="#OsmGpsMapLayer.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
-                   | 
-                  <a href="#OsmGpsMapLayer.implementations" class="shortcut">Known Implementations</a>
-                   | 
-                  <a href="#OsmGpsMapLayer.properties" class="shortcut">Properties</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapLayer.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapLayer.object-hierarchy" class="shortcut">Object Hierarchy</a></span><span id="nav_interfaces"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapLayer.implemented-interfaces" class="shortcut">Implemented Interfaces</a></span><span id="nav_implementations"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapLayer.implementations" class="shortcut">Known Implementations</a></span><span id="nav_properties"> <span class="dim">|</span> 
+                  <a href="#OsmGpsMapLayer.properties" class="shortcut">Properties</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="api-reference.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="OsmGpsMap.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="OsmGpsMapImage.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="OsmGpsMapLayer"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -41,41 +33,154 @@
 <h2><span class="refentrytitle"><a name="OsmGpsMapLayer.top_of_page"></a>OsmGpsMapLayer</span></h2>
 <p>OsmGpsMapLayer — An interface for layers to be drawn on the map</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
 <div class="refsect1">
 <a name="OsmGpsMapLayer.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
-<a name="OsmGpsMapLayer.synopsis"></a><h2>Synopsis</h2>
-<a name="OsmGpsMapOsd"></a><pre class="synopsis">
-#include &lt;osm-gps-map.h&gt;
-
-                    <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapLayer-struct" title="OsmGpsMapLayer">OsmGpsMapLayer</a>;
-<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-render" title="osm_gps_map_layer_render ()">osm_gps_map_layer_render</a>            (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-draw" title="osm_gps_map_layer_draw ()">osm_gps_map_layer_draw</a>              (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-busy" title="osm_gps_map_layer_busy ()">osm_gps_map_layer_busy</a>              (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-button-press" title="osm_gps_map_layer_button_press ()">osm_gps_map_layer_button_press</a>      (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);
-struct              <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd-struct" title="struct OsmGpsMapOsd">OsmGpsMapOsd</a>;
-struct              <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsdClass" title="struct OsmGpsMapOsdClass">OsmGpsMapOsdClass</a>;
-<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="returnvalue">OsmGpsMapOsd</span></a> *      <a class="link" href="OsmGpsMapLayer.html#osm-gps-map-osd-new" title="osm_gps_map_osd_new ()">osm_gps_map_osd_new</a>                 (<em class="parameter"><code><span class="type">void</span></code></em>);
-</pre>
+<div class="refsect1">
+<a name="OsmGpsMapLayer.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-render" title="osm_gps_map_layer_render ()">osm_gps_map_layer_render</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-draw" title="osm_gps_map_layer_draw ()">osm_gps_map_layer_draw</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-busy" title="osm_gps_map_layer_busy ()">osm_gps_map_layer_busy</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapLayer.html#osm-gps-map-layer-button-press" title="osm_gps_map_layer_button_press ()">osm_gps_map_layer_button_press</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="returnvalue">OsmGpsMapOsd</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapLayer.html#osm-gps-map-osd-new" title="osm_gps_map_osd_new ()">osm_gps_map_osd_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapLayer.properties"></a><h2>Properties</h2>
+<div class="informaltable"><table border="0">
+<colgroup>
+<col width="150px" class="properties_type">
+<col width="300px" class="properties_name">
+<col width="200px" class="properties_flags">
+</colgroup>
+<tbody>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius" title="The “dpad-radius” property">dpad-radius</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x" title="The “osd-x” property">osd-x</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y" title="The “osd-y” property">osd-y</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates" title="The “show-coordinates” property">show-coordinates</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair" title="The “show-crosshair” property">show-crosshair</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad" title="The “show-dpad” property">show-dpad</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad" title="The “show-gps-in-dpad” property">show-gps-in-dpad</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom" title="The “show-gps-in-zoom” property">show-gps-in-zoom</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale" title="The “show-scale” property">show-scale</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom" title="The “show-zoom” property">show-zoom</a></td>
+<td class="property_flags">Read / Write / Construct</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<a name="OsmGpsMapOsd"></a><div class="refsect1">
+<a name="OsmGpsMapLayer.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword"> </td>
+<td class="function_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapLayer-struct" title="OsmGpsMapLayer">OsmGpsMapLayer</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd-struct" title="struct OsmGpsMapOsd">OsmGpsMapOsd</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsdClass" title="struct OsmGpsMapOsdClass">OsmGpsMapOsdClass</a></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapLayer.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="synopsis">
-  GInterface
-   +----OsmGpsMapLayer
-</pre>
-<pre class="synopsis">
-  <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
-   +----OsmGpsMapOsd
+<pre class="screen">    GInterface
+    <span class="lineart">╰──</span> OsmGpsMapLayer
+    <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+    <span class="lineart">╰──</span> OsmGpsMapOsd
 </pre>
 </div>
 <div class="refsect1">
@@ -91,66 +196,80 @@ OsmGpsMapLayer is implemented by
  <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd">OsmGpsMapOsd</a>.</p>
 </div>
 <div class="refsect1">
-<a name="OsmGpsMapLayer.properties"></a><h2>Properties</h2>
-<pre class="synopsis">
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius" title='The "dpad-radius" property'>dpad-radius</a>"              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x" title='The "osd-x" property'>osd-x</a>"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y" title='The "osd-y" property'>osd-y</a>"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates" title='The "show-coordinates" property'>show-coordinates</a>"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair" title='The "show-crosshair" property'>show-crosshair</a>"           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad" title='The "show-dpad" property'>show-dpad</a>"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad" title='The "show-gps-in-dpad" property'>show-gps-in-dpad</a>"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom" title='The "show-gps-in-zoom" property'>show-gps-in-zoom</a>"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale" title='The "show-scale" property'>show-scale</a>"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
-  "<a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom" title='The "show-zoom" property'>show-zoom</a>"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct
+<a name="OsmGpsMapLayer.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;osm-gps-map.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapLayer.description"></a><h2>Description</h2>
-<p>
-<a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> is an interface implemented by objects that wish
+<p><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> is an interface implemented by objects that wish
 to draw on top of the map respond to button press events. The most
-common implementation of this interface is <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a>
-</p>
+common implementation of this interface is <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a></p>
 </div>
 <div class="refsect1">
-<a name="OsmGpsMapLayer.details"></a><h2>Details</h2>
+<a name="OsmGpsMapLayer.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="osm-gps-map-layer-render"></a><h3>osm_gps_map_layer_render ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_layer_render (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
+                          <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-layer-draw"></a><h3>osm_gps_map_layer_draw ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_layer_draw (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
+                        <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                        <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>);</pre>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-layer-busy"></a><h3>osm_gps_map_layer_busy ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+osm_gps_map_layer_busy (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>);</pre>
+<p>
+</p>
+<div class="refsect3">
+<a name="id-1.2.3.13.4.5"></a><h4>Returns</h4>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-layer-button-press"></a><h3>osm_gps_map_layer_button_press ()</h3>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+osm_gps_map_layer_button_press (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
+                                <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
+                                <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);</pre>
+<p>
+</p>
+<div class="refsect3">
+<a name="id-1.2.3.13.5.5"></a><h4>Returns</h4>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-osd-new"></a><h3>osm_gps_map_osd_new ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="returnvalue">OsmGpsMapOsd</span></a> *
+osm_gps_map_osd_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>Creates a new instance of <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a>.</p>
+<div class="refsect3">
+<a name="id-1.2.3.13.6.5"></a><h4>Returns</h4>
+<p> the newly created <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a> instance</p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="OsmGpsMapLayer.other_details"></a><h2>Types and Values</h2>
 <div class="refsect2">
 <a name="OsmGpsMapLayer-struct"></a><h3>OsmGpsMapLayer</h3>
 <pre class="programlisting">typedef struct _OsmGpsMapLayer OsmGpsMapLayer;</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-layer-render"></a><h3>osm_gps_map_layer_render ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_layer_render            (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-layer-draw"></a><h3>osm_gps_map_layer_draw ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                osm_gps_map_layer_draw              (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-layer-busy"></a><h3>osm_gps_map_layer_busy ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_layer_busy              (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>);</pre>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-layer-button-press"></a><h3>osm_gps_map_layer_button_press ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            osm_gps_map_layer_button_press      (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);</pre>
 <p>
 </p>
 </div>
@@ -173,117 +292,92 @@ common implementation of this interface is <a class="link" href="OsmGpsMapLayer.
 <p>
 </p>
 </div>
-<hr>
-<div class="refsect2">
-<a name="osm-gps-map-osd-new"></a><h3>osm_gps_map_osd_new ()</h3>
-<pre class="programlisting"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="returnvalue">OsmGpsMapOsd</span></a> *      osm_gps_map_osd_new                 (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Creates a new instance of <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the newly created <a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd"><span class="type">OsmGpsMapOsd</span></a> instance</td>
-</tr></tbody>
-</table></div>
-</div>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapLayer.property-details"></a><h2>Property Details</h2>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--dpad-radius"></a><h3>The <code class="literal">"dpad-radius"</code> property</h3>
-<pre class="programlisting">  "dpad-radius"              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct</pre>
-<p>
-The dpad radius property.
-</p>
+<a name="OsmGpsMapOsd--dpad-radius"></a><h3>The <code class="literal">“dpad-radius”</code> property</h3>
+<pre class="programlisting">  “dpad-radius”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
+<p>The dpad radius property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: 30</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--osd-x"></a><h3>The <code class="literal">"osd-x"</code> property</h3>
-<pre class="programlisting">  "osd-x"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
-<p>
-The osd x property.
-</p>
+<a name="OsmGpsMapOsd--osd-x"></a><h3>The <code class="literal">“osd-x”</code> property</h3>
+<pre class="programlisting">  “osd-x”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
+<p>The osd x property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: 10</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--osd-y"></a><h3>The <code class="literal">"osd-y"</code> property</h3>
-<pre class="programlisting">  "osd-y"                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>                  : Read / Write / Construct</pre>
-<p>
-The osd y property.
-</p>
+<a name="OsmGpsMapOsd--osd-y"></a><h3>The <code class="literal">“osd-y”</code> property</h3>
+<pre class="programlisting">  “osd-y”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
+<p>The osd y property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: 10</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-coordinates"></a><h3>The <code class="literal">"show-coordinates"</code> property</h3>
-<pre class="programlisting">  "show-coordinates"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show coordinates of map centre property.
-</p>
+<a name="OsmGpsMapOsd--show-coordinates"></a><h3>The <code class="literal">“show-coordinates”</code> property</h3>
+<pre class="programlisting">  “show-coordinates”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show coordinates of map centre property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-crosshair"></a><h3>The <code class="literal">"show-crosshair"</code> property</h3>
-<pre class="programlisting">  "show-crosshair"           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show crosshair at map centre property.
-</p>
+<a name="OsmGpsMapOsd--show-crosshair"></a><h3>The <code class="literal">“show-crosshair”</code> property</h3>
+<pre class="programlisting">  “show-crosshair”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show crosshair at map centre property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-dpad"></a><h3>The <code class="literal">"show-dpad"</code> property</h3>
-<pre class="programlisting">  "show-dpad"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show dpad for map navigation property.
-</p>
+<a name="OsmGpsMapOsd--show-dpad"></a><h3>The <code class="literal">“show-dpad”</code> property</h3>
+<pre class="programlisting">  “show-dpad”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show dpad for map navigation property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-gps-in-dpad"></a><h3>The <code class="literal">"show-gps-in-dpad"</code> property</h3>
-<pre class="programlisting">  "show-gps-in-dpad"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show gps indicator in middle of dpad property.
-</p>
+<a name="OsmGpsMapOsd--show-gps-in-dpad"></a><h3>The <code class="literal">“show-gps-in-dpad”</code> property</h3>
+<pre class="programlisting">  “show-gps-in-dpad”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show gps indicator in middle of dpad property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-gps-in-zoom"></a><h3>The <code class="literal">"show-gps-in-zoom"</code> property</h3>
-<pre class="programlisting">  "show-gps-in-zoom"         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show gps indicator in middle of zoom control property.
-</p>
+<a name="OsmGpsMapOsd--show-gps-in-zoom"></a><h3>The <code class="literal">“show-gps-in-zoom”</code> property</h3>
+<pre class="programlisting">  “show-gps-in-zoom”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show gps indicator in middle of zoom control property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-scale"></a><h3>The <code class="literal">"show-scale"</code> property</h3>
-<pre class="programlisting">  "show-scale"               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show scale on the map property.
-</p>
+<a name="OsmGpsMapOsd--show-scale"></a><h3>The <code class="literal">“show-scale”</code> property</h3>
+<pre class="programlisting">  “show-scale”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show scale on the map property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="OsmGpsMapOsd--show-zoom"></a><h3>The <code class="literal">"show-zoom"</code> property</h3>
-<pre class="programlisting">  "show-zoom"                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
-<p>
-The show zoom control for map navigation property.
-</p>
+<a name="OsmGpsMapOsd--show-zoom"></a><h3>The <code class="literal">“show-zoom”</code> property</h3>
+<pre class="programlisting">  “show-zoom”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>The show zoom control for map navigation property.</p>
+<p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

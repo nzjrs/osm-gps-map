@@ -19,124 +19,129 @@
     </sub>
   </chapters>
   <functions>
-    <keyword type="struct" name="OsmGpsMap" link="OsmGpsMap.html#OsmGpsMap-struct"/>
-    <keyword type="struct" name="struct OsmGpsMapClass" link="OsmGpsMap.html#OsmGpsMapClass"/>
     <keyword type="macro" name="OSM_GPS_MAP_INVALID" link="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS"/>
+    <keyword type="function" name="osm_gps_map_get_default_cache_directory ()" link="OsmGpsMap.html#osm-gps-map-get-default-cache-directory"/>
+    <keyword type="function" name="osm_gps_map_source_get_friendly_name ()" link="OsmGpsMap.html#osm-gps-map-source-get-friendly-name"/>
+    <keyword type="function" name="osm_gps_map_source_get_repo_uri ()" link="OsmGpsMap.html#osm-gps-map-source-get-repo-uri"/>
+    <keyword type="function" name="osm_gps_map_source_get_image_format ()" link="OsmGpsMap.html#osm-gps-map-source-get-image-format"/>
+    <keyword type="function" name="osm_gps_map_source_get_min_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-min-zoom"/>
+    <keyword type="function" name="osm_gps_map_source_get_max_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-max-zoom"/>
+    <keyword type="function" name="osm_gps_map_source_is_valid ()" link="OsmGpsMap.html#osm-gps-map-source-is-valid"/>
+    <keyword type="function" name="osm_gps_map_new ()" link="OsmGpsMap.html#osm-gps-map-new"/>
+    <keyword type="function" name="osm_gps_map_download_maps ()" link="OsmGpsMap.html#osm-gps-map-download-maps"/>
+    <keyword type="function" name="osm_gps_map_download_cancel_all ()" link="OsmGpsMap.html#osm-gps-map-download-cancel-all" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_get_bbox ()" link="OsmGpsMap.html#osm-gps-map-get-bbox"/>
+    <keyword type="function" name="osm_gps_map_set_center ()" link="OsmGpsMap.html#osm-gps-map-set-center"/>
+    <keyword type="function" name="osm_gps_map_set_center_and_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-center-and-zoom" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_set_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-zoom"/>
+    <keyword type="function" name="osm_gps_map_zoom_in ()" link="OsmGpsMap.html#osm-gps-map-zoom-in"/>
+    <keyword type="function" name="osm_gps_map_zoom_out ()" link="OsmGpsMap.html#osm-gps-map-zoom-out"/>
+    <keyword type="function" name="osm_gps_map_scroll ()" link="OsmGpsMap.html#osm-gps-map-scroll"/>
+    <keyword type="function" name="osm_gps_map_get_scale ()" link="OsmGpsMap.html#osm-gps-map-get-scale"/>
+    <keyword type="function" name="osm_gps_map_set_keyboard_shortcut ()" link="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut"/>
+    <keyword type="function" name="osm_gps_map_get_event_location ()" link="OsmGpsMap.html#osm-gps-map-get-event-location" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_convert_geographic_to_screen ()" link="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_convert_screen_to_geographic ()" link="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_gps_add ()" link="OsmGpsMap.html#osm-gps-map-gps-add" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_gps_clear ()" link="OsmGpsMap.html#osm-gps-map-gps-clear" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_gps_get_track ()" link="OsmGpsMap.html#osm-gps-map-gps-get-track" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_track_add ()" link="OsmGpsMap.html#osm-gps-map-track-add" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_track_remove ()" link="OsmGpsMap.html#osm-gps-map-track-remove" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_track_remove_all ()" link="OsmGpsMap.html#osm-gps-map-track-remove-all" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_image_add ()" link="OsmGpsMap.html#osm-gps-map-image-add" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_image_add_with_alignment ()" link="OsmGpsMap.html#osm-gps-map-image-add-with-alignment" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_image_remove ()" link="OsmGpsMap.html#osm-gps-map-image-remove" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_image_remove_all ()" link="OsmGpsMap.html#osm-gps-map-image-remove-all" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_layer_add ()" link="OsmGpsMap.html#osm-gps-map-layer-add" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_layer_remove ()" link="OsmGpsMap.html#osm-gps-map-layer-remove" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_layer_remove_all ()" link="OsmGpsMap.html#osm-gps-map-layer-remove-all" since="0.7.0"/>
+    <keyword type="struct" name="struct OsmGpsMap" link="OsmGpsMap.html#OsmGpsMap-struct"/>
+    <keyword type="struct" name="struct OsmGpsMapClass" link="OsmGpsMap.html#OsmGpsMapClass"/>
     <keyword type="macro" name="OSM_GPS_MAP_CACHE_DISABLED" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS"/>
     <keyword type="macro" name="OSM_GPS_MAP_CACHE_AUTO" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS"/>
     <keyword type="macro" name="OSM_GPS_MAP_CACHE_FRIENDLY" link="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"/>
-    <keyword type="function" name="osm_gps_map_get_default_cache_directory ()" link="OsmGpsMap.html#osm-gps-map-get-default-cache-directory"/>
     <keyword type="enum" name="enum OsmGpsMapSource_t" link="OsmGpsMap.html#OsmGpsMapSource-t"/>
-    <keyword type="function" name="osm_gps_map_source_get_friendly_name ()" link="OsmGpsMap.html#osm-gps-map-source-get-friendly-name"/>
-    <keyword type="function" name="osm_gps_map_source_get_repo_uri ()" link="OsmGpsMap.html#osm-gps-map-source-get-repo-uri"/>
-    <keyword type="function" name="osm_gps_map_source_get_image_format ()" link="OsmGpsMap.html#osm-gps-map-source-get-image-format"/>
-    <keyword type="function" name="osm_gps_map_source_get_min_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-min-zoom"/>
-    <keyword type="function" name="osm_gps_map_source_get_max_zoom ()" link="OsmGpsMap.html#osm-gps-map-source-get-max-zoom"/>
-    <keyword type="function" name="osm_gps_map_source_is_valid ()" link="OsmGpsMap.html#osm-gps-map-source-is-valid"/>
-    <keyword type="function" name="osm_gps_map_new ()" link="OsmGpsMap.html#osm-gps-map-new"/>
-    <keyword type="function" name="osm_gps_map_download_maps ()" link="OsmGpsMap.html#osm-gps-map-download-maps"/>
-    <keyword type="function" name="osm_gps_map_download_cancel_all ()" link="OsmGpsMap.html#osm-gps-map-download-cancel-all" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_get_bbox ()" link="OsmGpsMap.html#osm-gps-map-get-bbox"/>
-    <keyword type="function" name="osm_gps_map_set_center ()" link="OsmGpsMap.html#osm-gps-map-set-center"/>
-    <keyword type="function" name="osm_gps_map_set_center_and_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-center-and-zoom" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_set_zoom ()" link="OsmGpsMap.html#osm-gps-map-set-zoom"/>
-    <keyword type="function" name="osm_gps_map_zoom_in ()" link="OsmGpsMap.html#osm-gps-map-zoom-in"/>
-    <keyword type="function" name="osm_gps_map_zoom_out ()" link="OsmGpsMap.html#osm-gps-map-zoom-out"/>
-    <keyword type="function" name="osm_gps_map_scroll ()" link="OsmGpsMap.html#osm-gps-map-scroll"/>
-    <keyword type="function" name="osm_gps_map_get_scale ()" link="OsmGpsMap.html#osm-gps-map-get-scale"/>
     <keyword type="enum" name="enum OsmGpsMapKey_t" link="OsmGpsMap.html#OsmGpsMapKey-t"/>
-    <keyword type="function" name="osm_gps_map_set_keyboard_shortcut ()" link="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut"/>
-    <keyword type="function" name="osm_gps_map_get_event_location ()" link="OsmGpsMap.html#osm-gps-map-get-event-location" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_convert_geographic_to_screen ()" link="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_convert_screen_to_geographic ()" link="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_gps_add ()" link="OsmGpsMap.html#osm-gps-map-gps-add" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_gps_clear ()" link="OsmGpsMap.html#osm-gps-map-gps-clear" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_gps_get_track ()" link="OsmGpsMap.html#osm-gps-map-gps-get-track" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_track_add ()" link="OsmGpsMap.html#osm-gps-map-track-add" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_track_remove ()" link="OsmGpsMap.html#osm-gps-map-track-remove" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_track_remove_all ()" link="OsmGpsMap.html#osm-gps-map-track-remove-all" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_image_add ()" link="OsmGpsMap.html#osm-gps-map-image-add" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_image_add_with_alignment ()" link="OsmGpsMap.html#osm-gps-map-image-add-with-alignment" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_image_remove ()" link="OsmGpsMap.html#osm-gps-map-image-remove" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_image_remove_all ()" link="OsmGpsMap.html#osm-gps-map-image-remove-all" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_layer_add ()" link="OsmGpsMap.html#osm-gps-map-layer-add" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_layer_remove ()" link="OsmGpsMap.html#osm-gps-map-layer-remove" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_layer_remove_all ()" link="OsmGpsMap.html#osm-gps-map-layer-remove-all" since="0.7.0"/>
-    <keyword type="property" name="The &quot;auto-center&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-center"/>
-    <keyword type="property" name="The &quot;auto-center-threshold&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-center-threshold"/>
-    <keyword type="property" name="The &quot;auto-download&quot; property" link="OsmGpsMap.html#OsmGpsMap--auto-download"/>
-    <keyword type="property" name="The &quot;drag-limit&quot; property" link="OsmGpsMap.html#OsmGpsMap--drag-limit"/>
-    <keyword type="property" name="The &quot;gps-track-highlight-radius&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius"/>
-    <keyword type="property" name="The &quot;gps-track-point-radius&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius"/>
-    <keyword type="property" name="The &quot;gps-track-width&quot; property" link="OsmGpsMap.html#OsmGpsMap--gps-track-width"/>
-    <keyword type="property" name="The &quot;image-format&quot; property" link="OsmGpsMap.html#OsmGpsMap--image-format"/>
-    <keyword type="property" name="The &quot;latitude&quot; property" link="OsmGpsMap.html#OsmGpsMap--latitude"/>
-    <keyword type="property" name="The &quot;longitude&quot; property" link="OsmGpsMap.html#OsmGpsMap--longitude"/>
-    <keyword type="property" name="The &quot;map-source&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-source"/>
-    <keyword type="property" name="The &quot;map-x&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-x"/>
-    <keyword type="property" name="The &quot;map-y&quot; property" link="OsmGpsMap.html#OsmGpsMap--map-y"/>
-    <keyword type="property" name="The &quot;max-zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--max-zoom"/>
-    <keyword type="property" name="The &quot;min-zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--min-zoom"/>
-    <keyword type="property" name="The &quot;proxy-uri&quot; property" link="OsmGpsMap.html#OsmGpsMap--proxy-uri"/>
-    <keyword type="property" name="The &quot;record-trip-history&quot; property" link="OsmGpsMap.html#OsmGpsMap--record-trip-history"/>
-    <keyword type="property" name="The &quot;repo-uri&quot; property" link="OsmGpsMap.html#OsmGpsMap--repo-uri"/>
-    <keyword type="property" name="The &quot;show-gps-point&quot; property" link="OsmGpsMap.html#OsmGpsMap--show-gps-point"/>
-    <keyword type="property" name="The &quot;show-trip-history&quot; property" link="OsmGpsMap.html#OsmGpsMap--show-trip-history"/>
-    <keyword type="property" name="The &quot;tile-cache&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache"/>
-    <keyword type="property" name="The &quot;tile-cache-base&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-base"/>
-    <keyword type="property" name="The &quot;tile-zoom-offset&quot; property" link="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset"/>
-    <keyword type="property" name="The &quot;tiles-queued&quot; property" link="OsmGpsMap.html#OsmGpsMap--tiles-queued"/>
-    <keyword type="property" name="The &quot;zoom&quot; property" link="OsmGpsMap.html#OsmGpsMap--zoom"/>
-    <keyword type="signal" name="The &quot;changed&quot; signal" link="OsmGpsMap.html#OsmGpsMap-changed"/>
+    <keyword type="property" name="The “auto-center” property" link="OsmGpsMap.html#OsmGpsMap--auto-center"/>
+    <keyword type="property" name="The “auto-center-threshold” property" link="OsmGpsMap.html#OsmGpsMap--auto-center-threshold"/>
+    <keyword type="property" name="The “auto-download” property" link="OsmGpsMap.html#OsmGpsMap--auto-download"/>
+    <keyword type="property" name="The “drag-limit” property" link="OsmGpsMap.html#OsmGpsMap--drag-limit"/>
+    <keyword type="property" name="The “gps-track-highlight-radius” property" link="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius"/>
+    <keyword type="property" name="The “gps-track-point-radius” property" link="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius"/>
+    <keyword type="property" name="The “gps-track-width” property" link="OsmGpsMap.html#OsmGpsMap--gps-track-width"/>
+    <keyword type="property" name="The “image-format” property" link="OsmGpsMap.html#OsmGpsMap--image-format"/>
+    <keyword type="property" name="The “latitude” property" link="OsmGpsMap.html#OsmGpsMap--latitude"/>
+    <keyword type="property" name="The “longitude” property" link="OsmGpsMap.html#OsmGpsMap--longitude"/>
+    <keyword type="property" name="The “map-source” property" link="OsmGpsMap.html#OsmGpsMap--map-source"/>
+    <keyword type="property" name="The “map-x” property" link="OsmGpsMap.html#OsmGpsMap--map-x"/>
+    <keyword type="property" name="The “map-y” property" link="OsmGpsMap.html#OsmGpsMap--map-y"/>
+    <keyword type="property" name="The “max-zoom” property" link="OsmGpsMap.html#OsmGpsMap--max-zoom"/>
+    <keyword type="property" name="The “min-zoom” property" link="OsmGpsMap.html#OsmGpsMap--min-zoom"/>
+    <keyword type="property" name="The “proxy-uri” property" link="OsmGpsMap.html#OsmGpsMap--proxy-uri"/>
+    <keyword type="property" name="The “record-trip-history” property" link="OsmGpsMap.html#OsmGpsMap--record-trip-history"/>
+    <keyword type="property" name="The “repo-uri” property" link="OsmGpsMap.html#OsmGpsMap--repo-uri"/>
+    <keyword type="property" name="The “show-gps-point” property" link="OsmGpsMap.html#OsmGpsMap--show-gps-point"/>
+    <keyword type="property" name="The “show-trip-history” property" link="OsmGpsMap.html#OsmGpsMap--show-trip-history"/>
+    <keyword type="property" name="The “tile-cache” property" link="OsmGpsMap.html#OsmGpsMap--tile-cache"/>
+    <keyword type="property" name="The “tile-cache-base” property" link="OsmGpsMap.html#OsmGpsMap--tile-cache-base"/>
+    <keyword type="property" name="The “tile-zoom-offset” property" link="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset"/>
+    <keyword type="property" name="The “tiles-queued” property" link="OsmGpsMap.html#OsmGpsMap--tiles-queued"/>
+    <keyword type="property" name="The “zoom” property" link="OsmGpsMap.html#OsmGpsMap--zoom"/>
+    <keyword type="signal" name="The “changed” signal" link="OsmGpsMap.html#OsmGpsMap-changed"/>
+    <keyword type="function" name="osm_gps_map_layer_render ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-render"/>
+    <keyword type="function" name="osm_gps_map_layer_draw ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-draw"/>
+    <keyword type="function" name="osm_gps_map_layer_busy ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-busy"/>
+    <keyword type="function" name="osm_gps_map_layer_button_press ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-button-press"/>
+    <keyword type="function" name="osm_gps_map_osd_new ()" link="OsmGpsMapLayer.html#osm-gps-map-osd-new"/>
     <keyword type="struct" name="OsmGpsMapLayer" link="OsmGpsMapLayer.html#OsmGpsMapLayer-struct"/>
-    <keyword type="function" name="osm_gps_map_layer_render ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-render"/>
-    <keyword type="function" name="osm_gps_map_layer_draw ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-draw"/>
-    <keyword type="function" name="osm_gps_map_layer_busy ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-busy"/>
-    <keyword type="function" name="osm_gps_map_layer_button_press ()" link="OsmGpsMapLayer.html#osm-gps-map-layer-button-press"/>
     <keyword type="struct" name="struct OsmGpsMapOsd" link="OsmGpsMapLayer.html#OsmGpsMapOsd-struct"/>
     <keyword type="struct" name="struct OsmGpsMapOsdClass" link="OsmGpsMapLayer.html#OsmGpsMapOsdClass"/>
-    <keyword type="function" name="osm_gps_map_osd_new ()" link="OsmGpsMapLayer.html#osm-gps-map-osd-new"/>
-    <keyword type="property" name="The &quot;dpad-radius&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius"/>
-    <keyword type="property" name="The &quot;osd-x&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x"/>
-    <keyword type="property" name="The &quot;osd-y&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y"/>
-    <keyword type="property" name="The &quot;show-coordinates&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates"/>
-    <keyword type="property" name="The &quot;show-crosshair&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair"/>
-    <keyword type="property" name="The &quot;show-dpad&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad"/>
-    <keyword type="property" name="The &quot;show-gps-in-dpad&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad"/>
-    <keyword type="property" name="The &quot;show-gps-in-zoom&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom"/>
-    <keyword type="property" name="The &quot;show-scale&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale"/>
-    <keyword type="property" name="The &quot;show-zoom&quot; property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom"/>
+    <keyword type="property" name="The “dpad-radius” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius"/>
+    <keyword type="property" name="The “osd-x” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x"/>
+    <keyword type="property" name="The “osd-y” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y"/>
+    <keyword type="property" name="The “show-coordinates” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates"/>
+    <keyword type="property" name="The “show-crosshair” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair"/>
+    <keyword type="property" name="The “show-dpad” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad"/>
+    <keyword type="property" name="The “show-gps-in-dpad” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad"/>
+    <keyword type="property" name="The “show-gps-in-zoom” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom"/>
+    <keyword type="property" name="The “show-scale” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale"/>
+    <keyword type="property" name="The “show-zoom” property" link="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom"/>
+    <keyword type="function" name="osm_gps_map_image_draw ()" link="OsmGpsMapImage.html#osm-gps-map-image-draw"/>
+    <keyword type="function" name="osm_gps_map_image_get_point ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-point"/>
+    <keyword type="function" name="osm_gps_map_image_get_type ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-type"/>
+    <keyword type="function" name="osm_gps_map_image_new ()" link="OsmGpsMapImage.html#osm-gps-map-image-new"/>
     <keyword type="struct" name="struct OsmGpsMapImage" link="OsmGpsMapImage.html#OsmGpsMapImage-struct"/>
     <keyword type="struct" name="struct OsmGpsMapImageClass" link="OsmGpsMapImage.html#OsmGpsMapImageClass"/>
-    <keyword type="function" name="osm_gps_map_image_draw ()" link="OsmGpsMapImage.html#osm-gps-map-image-draw"/>
-    <keyword type="function" name="osm_gps_map_image_get_point ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-point"/>
-    <keyword type="function" name="osm_gps_map_image_get_type ()" link="OsmGpsMapImage.html#osm-gps-map-image-get-type"/>
-    <keyword type="function" name="osm_gps_map_image_new ()" link="OsmGpsMapImage.html#osm-gps-map-image-new"/>
-    <keyword type="property" name="The &quot;pixbuf&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf"/>
-    <keyword type="property" name="The &quot;point&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--point"/>
-    <keyword type="property" name="The &quot;x-align&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--x-align"/>
-    <keyword type="property" name="The &quot;y-align&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--y-align"/>
-    <keyword type="property" name="The &quot;z-order&quot; property" link="OsmGpsMapImage.html#OsmGpsMapImage--z-order"/>
+    <keyword type="property" name="The “pixbuf” property" link="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf"/>
+    <keyword type="property" name="The “point” property" link="OsmGpsMapImage.html#OsmGpsMapImage--point"/>
+    <keyword type="property" name="The “rotation” property" link="OsmGpsMapImage.html#OsmGpsMapImage--rotation"/>
+    <keyword type="property" name="The “x-align” property" link="OsmGpsMapImage.html#OsmGpsMapImage--x-align"/>
+    <keyword type="property" name="The “y-align” property" link="OsmGpsMapImage.html#OsmGpsMapImage--y-align"/>
+    <keyword type="property" name="The “z-order” property" link="OsmGpsMapImage.html#OsmGpsMapImage--z-order"/>
+    <keyword type="function" name="osm_gps_map_track_add_point ()" link="OsmGpsMapTrack.html#osm-gps-map-track-add-point" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_track_get_color ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-color"/>
+    <keyword type="function" name="osm_gps_map_track_get_points ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-points" since="0.7.0"/>
+    <keyword type="function" name="osm_gps_map_track_new ()" link="OsmGpsMapTrack.html#osm-gps-map-track-new"/>
     <keyword type="struct" name="struct OsmGpsMapTrack" link="OsmGpsMapTrack.html#OsmGpsMapTrack-struct"/>
     <keyword type="struct" name="struct OsmGpsMapTrackClass" link="OsmGpsMapTrack.html#OsmGpsMapTrackClass"/>
-    <keyword type="function" name="osm_gps_map_track_add_point ()" link="OsmGpsMapTrack.html#osm-gps-map-track-add-point" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_track_get_color ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-color"/>
-    <keyword type="function" name="osm_gps_map_track_get_points ()" link="OsmGpsMapTrack.html#osm-gps-map-track-get-points" since="0.7.0"/>
-    <keyword type="function" name="osm_gps_map_track_new ()" link="OsmGpsMapTrack.html#osm-gps-map-track-new"/>
-    <keyword type="property" name="The &quot;alpha&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha"/>
-    <keyword type="property" name="The &quot;color&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--color"/>
-    <keyword type="property" name="The &quot;line-width&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width"/>
-    <keyword type="property" name="The &quot;track&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--track"/>
-    <keyword type="property" name="The &quot;visible&quot; property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--visible"/>
-    <keyword type="signal" name="The &quot;point-added&quot; signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added"/>
+    <keyword type="property" name="The “alpha” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha"/>
+    <keyword type="property" name="The “color” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--color"/>
+    <keyword type="property" name="The “editable” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--editable"/>
+    <keyword type="property" name="The “line-width” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width"/>
+    <keyword type="property" name="The “track” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--track"/>
+    <keyword type="property" name="The “visible” property" link="OsmGpsMapTrack.html#OsmGpsMapTrack--visible"/>
+    <keyword type="signal" name="The “point-added” signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added"/>
+    <keyword type="signal" name="The “point-changed” signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-changed"/>
+    <keyword type="signal" name="The “point-inserted” signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-inserted"/>
+    <keyword type="signal" name="The “point-removed” signal" link="OsmGpsMapTrack.html#OsmGpsMapTrack-point-removed"/>
+    <keyword type="function" name="osm_gps_map_point_get_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-get-degrees"/>
+    <keyword type="function" name="osm_gps_map_point_get_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-get-radians"/>
+    <keyword type="function" name="osm_gps_map_point_new_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees"/>
+    <keyword type="function" name="osm_gps_map_point_new_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-new-radians"/>
+    <keyword type="function" name="osm_gps_map_point_set_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-set-degrees"/>
+    <keyword type="function" name="osm_gps_map_point_set_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-set-radians"/>
+    <keyword type="function" name="osm_gps_map_point_copy ()" link="OsmGpsMapPoint.html#osm-gps-map-point-copy" since="0.7.2"/>
+    <keyword type="function" name="osm_gps_map_point_free ()" link="OsmGpsMapPoint.html#osm-gps-map-point-free" since="0.7.2"/>
     <keyword type="struct" name="struct OsmGpsMapPoint" link="OsmGpsMapPoint.html#OsmGpsMapPoint-struct"/>
-    <keyword type="function" name="osm_gps_map_point_get_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-get-degrees"/>
-    <keyword type="function" name="osm_gps_map_point_get_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-get-radians"/>
-    <keyword type="function" name="osm_gps_map_point_new_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees"/>
-    <keyword type="function" name="osm_gps_map_point_new_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-new-radians"/>
-    <keyword type="function" name="osm_gps_map_point_set_degrees ()" link="OsmGpsMapPoint.html#osm-gps-map-point-set-degrees"/>
-    <keyword type="function" name="osm_gps_map_point_set_radians ()" link="OsmGpsMapPoint.html#osm-gps-map-point-set-radians"/>
-    <keyword type="function" name="osm_gps_map_point_copy ()" link="OsmGpsMapPoint.html#osm-gps-map-point-copy" since="0.7.2"/>
-    <keyword type="function" name="osm_gps_map_point_free ()" link="OsmGpsMapPoint.html#osm-gps-map-point-free" since="0.7.2"/>
   </functions>
 </book>
