@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<refentry id="OsmGpsMapPoint">
+<refmeta>
+<refentrytitle role="top_of_page" id="OsmGpsMapPoint.top_of_page">OsmGpsMapPoint</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  LIBOSMGPSMAP Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>OsmGpsMapPoint</refname>
+<refpurpose>A geographic location (latitude, longitude)</refpurpose>
+</refnamediv>
+<refsect1 id="OsmGpsMapPoint.stability-level">
+<title>Stability Level</title>
+Stable, unless otherwise indicated
+</refsect1>
+
+<refsect1 id="OsmGpsMapPoint.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
+<tbody>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-get-degrees">osm_gps_map_point_get_degrees</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-get-radians">osm_gps_map_point_get_radians</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-new-degrees">osm_gps_map_point_new_degrees</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-new-radians">osm_gps_map_point_new_radians</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-set-degrees">osm_gps_map_point_set_degrees</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-set-radians">osm_gps_map_point_set_radians</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-copy">osm_gps_map_point_copy</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-point-free">osm_gps_map_point_free</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapPoint.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapPoint-struct">OsmGpsMapPoint</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapPoint.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<screen>    <link linkend="GBoxed">GBoxed</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMapPoint
+</screen>
+</refsect1>
+
+<refsect1 id="OsmGpsMapPoint.includes"><title>Includes</title><synopsis>#include &lt;osm-gps-map.h&gt;
+</synopsis></refsect1>
+
+<refsect1 id="OsmGpsMapPoint.description" role="desc">
+<title role="desc.title">Description</title>
+<para><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> describes a geographic location (latitude, longitude). 
+Helper functions exist to create such a point from either radian co-ordinates
+(<link linkend="osm-gps-map-point-new-radians"><function>osm_gps_map_point_new_radians()</function></link>) or degrees (<link linkend="osm-gps-map-new-degrees"><function>osm_gps_map_new_degrees()</function></link>).</para>
+
+</refsect1>
+<refsect1 id="OsmGpsMapPoint.functions_details" role="details">
+<title role="details.title">Functions</title>
+<refsect2 id="osm-gps-map-point-get-degrees" role="function">
+<title>osm_gps_map_point_get_degrees&#160;()</title>
+<indexterm zone="osm-gps-map-point-get-degrees"><primary sortas="point_get_degrees">osm_gps_map_point_get_degrees</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_point_get_degrees (<parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> *lat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> *lon</parameter>);</programlisting>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>point</para></entry>
+<entry role="parameter_description"><para>The point ( latitude and longitude in radian )</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>lat</para></entry>
+<entry role="parameter_description"><para> latitude in degrees. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+<row><entry role="parameter_name"><para>lon</para></entry>
+<entry role="parameter_description"><para> longitude in degrees. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-point-get-radians" role="function">
+<title>osm_gps_map_point_get_radians&#160;()</title>
+<indexterm zone="osm-gps-map-point-get-radians"><primary sortas="point_get_radians">osm_gps_map_point_get_radians</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_point_get_radians (<parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> *rlat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> *rlon</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-point-new-degrees" role="function">
+<title>osm_gps_map_point_new_degrees&#160;()</title>
+<indexterm zone="osm-gps-map-point-new-degrees"><primary sortas="point_new_degrees">osm_gps_map_point_new_degrees</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+osm_gps_map_point_new_degrees (<parameter><link linkend="float"><type>float</type></link> lat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> lon</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-point-new-radians" role="function">
+<title>osm_gps_map_point_new_radians&#160;()</title>
+<indexterm zone="osm-gps-map-point-new-radians"><primary sortas="point_new_radians">osm_gps_map_point_new_radians</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+osm_gps_map_point_new_radians (<parameter><link linkend="float"><type>float</type></link> rlat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> rlon</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-point-set-degrees" role="function">
+<title>osm_gps_map_point_set_degrees&#160;()</title>
+<indexterm zone="osm-gps-map-point-set-degrees"><primary sortas="point_set_degrees">osm_gps_map_point_set_degrees</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_point_set_degrees (<parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> lat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> lon</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-point-set-radians" role="function">
+<title>osm_gps_map_point_set_radians&#160;()</title>
+<indexterm zone="osm-gps-map-point-set-radians"><primary sortas="point_set_radians">osm_gps_map_point_set_radians</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_point_set_radians (<parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> rlat</parameter>,
+                               <parameter><link linkend="float"><type>float</type></link> rlon</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-point-copy" role="function" condition="since:0.7.2">
+<title>osm_gps_map_point_copy&#160;()</title>
+<indexterm zone="osm-gps-map-point-copy" role="0.7.2"><primary sortas="point_copy">osm_gps_map_point_copy</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+osm_gps_map_point_copy (<parameter>const <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3><para role="since">Since 0.7.2</para></refsect2>
+<refsect2 id="osm-gps-map-point-free" role="function" condition="since:0.7.2">
+<title>osm_gps_map_point_free&#160;()</title>
+<indexterm zone="osm-gps-map-point-free" role="0.7.2"><primary sortas="point_free">osm_gps_map_point_free</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_point_free (<parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>);</programlisting>
+<para role="since">Since 0.7.2</para></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapPoint.other_details" role="details">
+<title role="details.title">Types and Values</title>
+<refsect2 id="OsmGpsMapPoint-struct" role="struct">
+<title>struct OsmGpsMapPoint</title>
+<indexterm zone="OsmGpsMapPoint-struct"><primary>OsmGpsMapPoint</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapPoint {
+    /* radians */
+    float  rlat;
+    float  rlon;
+};
+</programlisting>
+<para>
+</para>
+</refsect2>
+
+</refsect1>
+
+</refentry>

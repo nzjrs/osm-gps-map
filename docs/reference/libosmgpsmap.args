@@ -1,0 +1,470 @@
+<ARG>
+<NAME>OsmGpsMap::auto-center</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>auto center</NICK>
+<BLURB>map auto center.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::auto-center-threshold</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[0,1]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>auto center threshold</NICK>
+<BLURB>the amount of the window the gps point must move before auto centering.</BLURB>
+<DEFAULT>0.25</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::auto-download</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>auto download</NICK>
+<BLURB>map auto download.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::drag-limit</NAME>
+<TYPE>gint</TYPE>
+<RANGE>>= 0</RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>drag limit</NICK>
+<BLURB>The number of pixels the user has to move the pointer in order to start dragging.</BLURB>
+<DEFAULT>10</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::gps-track-highlight-radius</NAME>
+<TYPE>gint</TYPE>
+<RANGE>>= 0</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>gps-track-highlight-radius</NICK>
+<BLURB>The radius of the gps point highlight circle.</BLURB>
+<DEFAULT>20</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::gps-track-point-radius</NAME>
+<TYPE>gint</TYPE>
+<RANGE>>= 0</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>gps-track-point-radius</NICK>
+<BLURB>The radius of the gps point inner circle.</BLURB>
+<DEFAULT>5</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::gps-track-width</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[1,100]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>gps-track-width</NICK>
+<BLURB>The width of the lines drawn for the gps track.</BLURB>
+<DEFAULT>4</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::image-format</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>image format</NICK>
+<BLURB>The map source tile repository image format (jpg, png).</BLURB>
+<DEFAULT>"png"</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::latitude</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[-90,90]</RANGE>
+<FLAGS>r</FLAGS>
+<NICK>latitude</NICK>
+<BLURB>Latitude in degrees.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::longitude</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[-180,180]</RANGE>
+<FLAGS>r</FLAGS>
+<NICK>longitude</NICK>
+<BLURB>Longitude in degrees.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::map-source</NAME>
+<TYPE>gint</TYPE>
+<RANGE>>= -1</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>map source</NICK>
+<BLURB>The map source ID.</BLURB>
+<DEFAULT>-1</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::map-x</NAME>
+<TYPE>gint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>map-x</NICK>
+<BLURB>Initial map x location.</BLURB>
+<DEFAULT>890</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::map-y</NAME>
+<TYPE>gint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>map-y</NICK>
+<BLURB>Initial map y location.</BLURB>
+<DEFAULT>515</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::max-zoom</NAME>
+<TYPE>gint</TYPE>
+<RANGE>[0,20]</RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>max zoom</NICK>
+<BLURB>Maximum zoom level.</BLURB>
+<DEFAULT>18</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::min-zoom</NAME>
+<TYPE>gint</TYPE>
+<RANGE>[0,20]</RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>min zoom</NICK>
+<BLURB>Minimum zoom level.</BLURB>
+<DEFAULT>1</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::proxy-uri</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>proxy uri</NICK>
+<BLURB>HTTP proxy uri or NULL.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::record-trip-history</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>record trip history</NICK>
+<BLURB>should all gps points be recorded in a trip history.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::repo-uri</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>repo uri</NICK>
+<BLURB>Map source tile repository uri.</BLURB>
+<DEFAULT>"http://tile.openstreetmap.org/#Z/#X/#Y.png"</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::show-gps-point</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show gps point</NICK>
+<BLURB>should the current gps point be shown on the map.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::show-trip-history</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show trip history</NICK>
+<BLURB>should the recorded trip history be shown on the map.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::tile-cache</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>tile cache</NICK>
+<BLURB>Tile cache dir.</BLURB>
+<DEFAULT>"auto://"</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::tile-cache-base</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>tile cache-base</NICK>
+<BLURB>Base directory to which friendly and auto paths are appended.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::tile-zoom-offset</NAME>
+<TYPE>gint</TYPE>
+<RANGE>[0,10]</RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>tile zoom-offset</NICK>
+<BLURB>Number of zoom-levels to upsample tiles.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::tiles-queued</NAME>
+<TYPE>gint</TYPE>
+<RANGE></RANGE>
+<FLAGS>r</FLAGS>
+<NICK>tiles-queued</NICK>
+<BLURB>The number of tiles currently waiting to download.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMap::zoom</NAME>
+<TYPE>gint</TYPE>
+<RANGE>[0,20]</RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>zoom</NICK>
+<BLURB>Map zoom level.</BLURB>
+<DEFAULT>3</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::dpad-radius</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>dpad-radius</NICK>
+<BLURB>dpad radius.</BLURB>
+<DEFAULT>30</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::osd-x</NAME>
+<TYPE>gint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>osd-x</NICK>
+<BLURB>osd-x.</BLURB>
+<DEFAULT>10</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::osd-y</NAME>
+<TYPE>gint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>osd-y</NICK>
+<BLURB>osd-y.</BLURB>
+<DEFAULT>10</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-coordinates</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-coordinates</NICK>
+<BLURB>show coordinates of map centre.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-crosshair</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-crosshair</NICK>
+<BLURB>show crosshair at map centre.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-dpad</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-dpad</NICK>
+<BLURB>show dpad for map navigation.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-gps-in-dpad</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-gps-in-dpad</NICK>
+<BLURB>show gps indicator in middle of dpad.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-gps-in-zoom</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-gps-in-zoom</NICK>
+<BLURB>show gps indicator in middle of zoom control.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-scale</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-scale</NICK>
+<BLURB>show scale on the map.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-zoom</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-zoom</NICK>
+<BLURB>show zoom control for map navigation.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::pixbuf</NAME>
+<TYPE>GdkPixbuf*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>pixbuf</NICK>
+<BLURB>the pixbuf for this image.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::point</NAME>
+<TYPE>OsmGpsMapPoint*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>point</NICK>
+<BLURB>location point.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::rotation</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[-180,180]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>rotation</NICK>
+<BLURB>image rotation.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::x-align</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[0,1]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>x-align</NICK>
+<BLURB>image x-alignment.</BLURB>
+<DEFAULT>0.5</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::y-align</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[0,1]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>y-align</NICK>
+<BLURB>image y-alignment.</BLURB>
+<DEFAULT>0.5</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapImage::z-order</NAME>
+<TYPE>gint</TYPE>
+<RANGE>[-100,100]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>z-order</NICK>
+<BLURB>image z-order.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::alpha</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[0,1]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>alpha</NICK>
+<BLURB>alpha transparency of the track.</BLURB>
+<DEFAULT>0.6</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::color</NAME>
+<TYPE>GdkRGBA*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>color</NICK>
+<BLURB>color of the track.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::editable</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>editable</NICK>
+<BLURB>should this track be editable.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::line-width</NAME>
+<TYPE>gfloat</TYPE>
+<RANGE>[0,100]</RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>line-width</NICK>
+<BLURB>width of the lines drawn for the track.</BLURB>
+<DEFAULT>4</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::track</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwX</FLAGS>
+<NICK>track</NICK>
+<BLURB>list of points for the track.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapTrack::visible</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>visible</NICK>
+<BLURB>should this track be visible.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+

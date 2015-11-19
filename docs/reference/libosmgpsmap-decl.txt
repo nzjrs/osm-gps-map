@@ -1,0 +1,909 @@
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_IMAGE</NAME>
+#define OSM_TYPE_GPS_MAP_IMAGE              osm_gps_map_image_get_type()
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_IMAGE</NAME>
+#define OSM_GPS_MAP_IMAGE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImage))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_IMAGE_CLASS</NAME>
+#define OSM_GPS_MAP_IMAGE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImageClass))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_IMAGE</NAME>
+#define OSM_IS_GPS_MAP_IMAGE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_IMAGE))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_IMAGE_CLASS</NAME>
+#define OSM_IS_GPS_MAP_IMAGE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_IMAGE))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_IMAGE_GET_CLASS</NAME>
+#define OSM_GPS_MAP_IMAGE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImageClass))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapImage</NAME>
+struct _OsmGpsMapImage
+{
+    GObject parent;
+
+    OsmGpsMapImagePrivate *priv;
+};
+</STRUCT>
+<STRUCT>
+<NAME>OsmGpsMapImageClass</NAME>
+struct _OsmGpsMapImageClass
+{
+    GObjectClass parent_class;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_image_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_new</NAME>
+<RETURNS>OsmGpsMapImage  *</RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_draw</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_get_point</NAME>
+<RETURNS>const OsmGpsMapPoint  *</RETURNS>
+OsmGpsMapImage *object 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_get_zorder</NAME>
+<RETURNS>gint  </RETURNS>
+OsmGpsMapImage *object 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_get_rotation</NAME>
+<RETURNS>float  </RETURNS>
+OsmGpsMapImage* object 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_set_rotation</NAME>
+<RETURNS>void  </RETURNS>
+OsmGpsMapImage* object, float rot 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapImagePrivate</NAME>
+</STRUCT>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_TRACK</NAME>
+#define OSM_TYPE_GPS_MAP_TRACK              osm_gps_map_track_get_type()
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_TRACK</NAME>
+#define OSM_GPS_MAP_TRACK(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrack))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_TRACK_CLASS</NAME>
+#define OSM_GPS_MAP_TRACK_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackClass))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_TRACK</NAME>
+#define OSM_IS_GPS_MAP_TRACK(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_TRACK))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_TRACK_CLASS</NAME>
+#define OSM_IS_GPS_MAP_TRACK_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_TRACK))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_TRACK_GET_CLASS</NAME>
+#define OSM_GPS_MAP_TRACK_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackClass))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapTrack</NAME>
+struct _OsmGpsMapTrack
+{
+    GObject parent;
+
+    OsmGpsMapTrackPrivate *priv;
+};
+</STRUCT>
+<STRUCT>
+<NAME>OsmGpsMapTrackClass</NAME>
+struct _OsmGpsMapTrackClass
+{
+    GObjectClass parent_class;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_track_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_new</NAME>
+<RETURNS>OsmGpsMapTrack  *    </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_add_point</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapTrack *track, const OsmGpsMapPoint *point 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_get_points</NAME>
+<RETURNS>GSList  *            </RETURNS>
+OsmGpsMapTrack *track 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_set_color</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapTrack *track, GdkRGBA *color 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_get_color</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapTrack *track, GdkRGBA *color 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_remove_point</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapTrack* track, int pos 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_n_points</NAME>
+<RETURNS>int                  </RETURNS>
+OsmGpsMapTrack* track 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_insert_point</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_get_point</NAME>
+<RETURNS>OsmGpsMapPoint *     </RETURNS>
+OsmGpsMapTrack* track, int pos 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_get_length</NAME>
+<RETURNS>double               </RETURNS>
+OsmGpsMapTrack* track 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapTrackPrivate</NAME>
+</STRUCT>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_POLYGON</NAME>
+#define OSM_TYPE_GPS_MAP_POLYGON              osm_gps_map_polygon_get_type()
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_POLYGON</NAME>
+#define OSM_GPS_MAP_POLYGON(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygon))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_POLYGON_CLASS</NAME>
+#define OSM_GPS_MAP_POLYGON_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonClass))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_POLYGON</NAME>
+#define OSM_IS_GPS_MAP_POLYGON(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_POLYGON))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_POLYGON_CLASS</NAME>
+#define OSM_IS_GPS_MAP_POLYGON_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_POLYGON))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_POLYGON_GET_CLASS</NAME>
+#define OSM_GPS_MAP_POLYGON_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonClass))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapPolygon</NAME>
+struct _OsmGpsMapPolygon
+{
+    GObject parent;
+
+    OsmGpsMapPolygonPrivate *priv;
+};
+</STRUCT>
+<STRUCT>
+<NAME>OsmGpsMapPolygonClass</NAME>
+struct _OsmGpsMapPolygonClass
+{
+    GObjectClass parent_class;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_new</NAME>
+<RETURNS>OsmGpsMapPolygon *		</RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_get_track</NAME>
+<RETURNS>OsmGpsMapTrack *			</RETURNS>
+OsmGpsMapPolygon* poly 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapPolygonPrivate</NAME>
+</STRUCT>
+<ENUM>
+<NAME>OsdControlPress_t</NAME>
+typedef enum {
+    OSD_NONE,
+    OSD_UP,
+    OSD_DOWN,
+    OSD_LEFT,
+    OSD_RIGHT,
+    OSD_GPS,
+    OSD_OUT,
+    OSD_IN
+} OsdControlPress_t;
+</ENUM>
+<FUNCTION>
+<NAME>osd_latitude_str</NAME>
+<RETURNS>char  *</RETURNS>
+float latitude 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_longitude_str</NAME>
+<RETURNS>char  *</RETURNS>
+float longitude 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_render_centered_text</NAME>
+<RETURNS>int  </RETURNS>
+cairo_t *cr, int y, int width, int font_size, char *text 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_render_crosshair_shape</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, int w, int h, int r, int tick 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_shape_shadow</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_shape</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, GdkRGBA *bg, GdkRGBA *fg 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_render_zoom</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, gint x, gint y, gint w, gint h, gint gps, gint shadow, GdkRGBA *bg, GdkRGBA *fg 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_render_dpad</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, gint x, gint y, gint r, gint gps, gint shadow, GdkRGBA *bg, GdkRGBA *fg 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_draw_bbox</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, gint x, gint y, gint w, gint h 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_in_circle</NAME>
+<RETURNS>gboolean  </RETURNS>
+gint x, gint y, gint cx, gint cy, gint rad 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_check_dpad</NAME>
+<RETURNS>OsdControlPress_t  </RETURNS>
+gint x, gint y, gint r, gboolean has_gps 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_check_zoom</NAME>
+<RETURNS>OsdControlPress_t  </RETURNS>
+gint x, gint y, guint w, guint h, guint gps_w 
+</FUNCTION>
+<FUNCTION>
+<NAME>osd_render_gps</NAME>
+<RETURNS>void  </RETURNS>
+cairo_t *cr, gint x, gint y, gint r, GdkRGBA *bg, GdkRGBA *fg 
+</FUNCTION>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_POINT</NAME>
+#define OSM_TYPE_GPS_MAP_POINT              osm_gps_map_point_get_type()
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapPoint</NAME>
+struct _OsmGpsMapPoint
+{
+    /* radians */
+    float  rlat;
+    float  rlon;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_point_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_new_degrees</NAME>
+<RETURNS>OsmGpsMapPoint  *    </RETURNS>
+float lat, float lon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_new_radians</NAME>
+<RETURNS>OsmGpsMapPoint  *    </RETURNS>
+float rlat, float rlon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_get_degrees</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapPoint *point, float *lat, float *lon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_get_radians</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapPoint *point, float *rlat, float *rlon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_set_degrees</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapPoint *point, float lat, float lon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_set_radians</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapPoint *point, float rlat, float rlon 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_free</NAME>
+<RETURNS>void                 </RETURNS>
+OsmGpsMapPoint *point 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_point_copy</NAME>
+<RETURNS>OsmGpsMapPoint  *    </RETURNS>
+const OsmGpsMapPoint *point 
+</FUNCTION>
+<MACRO>
+<NAME>TILESIZE</NAME>
+#define TILESIZE 256
+</MACRO>
+<MACRO>
+<NAME>MAX_ZOOM</NAME>
+#define MAX_ZOOM 20
+</MACRO>
+<MACRO>
+<NAME>MIN_ZOOM</NAME>
+#define MIN_ZOOM 0
+</MACRO>
+<MACRO>
+<NAME>MAX_TILE_ZOOM_OFFSET</NAME>
+#define MAX_TILE_ZOOM_OFFSET 10
+</MACRO>
+<MACRO>
+<NAME>MIN_TILE_ZOOM_OFFSET</NAME>
+#define MIN_TILE_ZOOM_OFFSET 0
+</MACRO>
+<MACRO>
+<NAME>OSM_REPO_URI</NAME>
+#define OSM_REPO_URI        "http://tile.openstreetmap.org/#Z/#X/#Y.png"
+</MACRO>
+<MACRO>
+<NAME>OSM_MIN_ZOOM</NAME>
+#define OSM_MIN_ZOOM        1
+</MACRO>
+<MACRO>
+<NAME>OSM_MAX_ZOOM</NAME>
+#define OSM_MAX_ZOOM        18
+</MACRO>
+<MACRO>
+<NAME>OSM_IMAGE_FORMAT</NAME>
+#define OSM_IMAGE_FORMAT    "png"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_X</NAME>
+#define URI_MARKER_X    "#X"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_Y</NAME>
+#define URI_MARKER_Y    "#Y"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_Z</NAME>
+#define URI_MARKER_Z    "#Z"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_S</NAME>
+#define URI_MARKER_S    "#S"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_Q</NAME>
+#define URI_MARKER_Q    "#Q"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_Q0</NAME>
+#define URI_MARKER_Q0   "#W"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_YS</NAME>
+#define URI_MARKER_YS   "#U"
+</MACRO>
+<MACRO>
+<NAME>URI_MARKER_R</NAME>
+#define URI_MARKER_R    "#R"
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_X</NAME>
+#define URI_HAS_X   (1 << 0)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_Y</NAME>
+#define URI_HAS_Y   (1 << 1)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_Z</NAME>
+#define URI_HAS_Z   (1 << 2)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_S</NAME>
+#define URI_HAS_S   (1 << 3)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_Q</NAME>
+#define URI_HAS_Q   (1 << 4)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_Q0</NAME>
+#define URI_HAS_Q0  (1 << 5)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_YS</NAME>
+#define URI_HAS_YS  (1 << 6)
+</MACRO>
+<MACRO>
+<NAME>URI_HAS_R</NAME>
+#define URI_HAS_R   (1 << 7)
+</MACRO>
+<MACRO>
+<NAME>URI_FLAG_END</NAME>
+#define URI_FLAG_END (1 << 8)
+</MACRO>
+<MACRO>
+<NAME>OSM_EQ_RADIUS</NAME>
+#define OSM_EQ_RADIUS   (6378137.0)
+</MACRO>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP</NAME>
+#define OSM_TYPE_GPS_MAP             (osm_gps_map_get_type ())
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP</NAME>
+#define OSM_GPS_MAP(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP, OsmGpsMap))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_CLASS</NAME>
+#define OSM_GPS_MAP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP</NAME>
+#define OSM_IS_GPS_MAP(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_CLASS</NAME>
+#define OSM_IS_GPS_MAP_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_GET_CLASS</NAME>
+#define OSM_GPS_MAP_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapClass</NAME>
+struct _OsmGpsMapClass
+{
+    GtkDrawingAreaClass parent_class;
+
+    void (*draw_gps_point) (OsmGpsMap *map, cairo_t *cr);
+};
+</STRUCT>
+<STRUCT>
+<NAME>OsmGpsMap</NAME>
+struct _OsmGpsMap
+{
+    GtkDrawingArea parent_instance;
+    OsmGpsMapPrivate *priv;
+};
+</STRUCT>
+<ENUM>
+<NAME>OsmGpsMapKey_t</NAME>
+typedef enum {
+    OSM_GPS_MAP_KEY_FULLSCREEN,
+    OSM_GPS_MAP_KEY_ZOOMIN,
+    OSM_GPS_MAP_KEY_ZOOMOUT,
+    OSM_GPS_MAP_KEY_UP,
+    OSM_GPS_MAP_KEY_DOWN,
+    OSM_GPS_MAP_KEY_LEFT,
+    OSM_GPS_MAP_KEY_RIGHT,
+    OSM_GPS_MAP_KEY_MAX
+} OsmGpsMapKey_t;
+</ENUM>
+<MACRO>
+<NAME>OSM_GPS_MAP_INVALID</NAME>
+#define OSM_GPS_MAP_INVALID         (0.0/0.0)
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_CACHE_DISABLED</NAME>
+#define OSM_GPS_MAP_CACHE_DISABLED  "none://"
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_CACHE_AUTO</NAME>
+#define OSM_GPS_MAP_CACHE_AUTO      "auto://"
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_CACHE_FRIENDLY</NAME>
+#define OSM_GPS_MAP_CACHE_FRIENDLY  "friendly://"
+</MACRO>
+<FUNCTION>
+<NAME>osm_gps_map_get_type</NAME>
+<RETURNS>GType            </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_new</NAME>
+<RETURNS>GtkWidget *      </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_get_default_cache_directory</NAME>
+<RETURNS>gchar *          </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_download_maps</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_download_cancel_all</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_get_bbox</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_zoom_fit_bbox</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, float latitude1, float latitude2, float longitude1, float longitude2 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_set_center_and_zoom</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, float latitude, float longitude, int zoom 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_set_center</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, float latitude, float longitude 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_set_zoom</NAME>
+<RETURNS>int              </RETURNS>
+OsmGpsMap *map, int zoom 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_set_zoom_offset</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, int zoom_offset 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_zoom_in</NAME>
+<RETURNS>int              </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_zoom_out</NAME>
+<RETURNS>int              </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_scroll</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, gint dx, gint dy 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_get_scale</NAME>
+<RETURNS>float            </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_set_keyboard_shortcut</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_add</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapTrack *track 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_remove_all</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_track_remove</NAME>
+<RETURNS>gboolean         </RETURNS>
+OsmGpsMap *map, OsmGpsMapTrack *track 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_add</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapPolygon *poly 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_remove_all</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_polygon_remove</NAME>
+<RETURNS>gboolean         </RETURNS>
+OsmGpsMap *map, OsmGpsMapPolygon *poly 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_gps_add</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, float latitude, float longitude, float heading 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_gps_clear</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_gps_get_track</NAME>
+<RETURNS>OsmGpsMapTrack  *</RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_add</NAME>
+<RETURNS>OsmGpsMapImage  *</RETURNS>
+OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_add_z</NAME>
+<RETURNS>OsmGpsMapImage  *</RETURNS>
+OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, gint zorder 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_add_with_alignment</NAME>
+<RETURNS>OsmGpsMapImage  *</RETURNS>
+OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_add_with_alignment_z</NAME>
+<RETURNS>OsmGpsMapImage  *</RETURNS>
+OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, float xalign, float yalign, gint zorder 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_remove</NAME>
+<RETURNS>gboolean         </RETURNS>
+OsmGpsMap *map, OsmGpsMapImage *image 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_image_remove_all</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_add</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapLayer *layer 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_remove</NAME>
+<RETURNS>gboolean         </RETURNS>
+OsmGpsMap *map, OsmGpsMapLayer *layer 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_remove_all</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_convert_screen_to_geographic</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, gint pixel_x, gint pixel_y, OsmGpsMapPoint *pt 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_convert_geographic_to_screen</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map, OsmGpsMapPoint *pt, gint *pixel_x, gint *pixel_y 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_get_event_location</NAME>
+<RETURNS>OsmGpsMapPoint  *</RETURNS>
+OsmGpsMap *map, GdkEventButton *event 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_map_redraw</NAME>
+<RETURNS>gboolean         </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_map_redraw_idle</NAME>
+<RETURNS>void             </RETURNS>
+OsmGpsMap *map 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapPrivate</NAME>
+</STRUCT>
+<ENUM>
+<NAME>OsmGpsMapSource_t</NAME>
+typedef enum {
+    OSM_GPS_MAP_SOURCE_NULL,
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP,
+    OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER,
+    OSM_GPS_MAP_SOURCE_OPENAERIALMAP,
+    OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE,
+    OSM_GPS_MAP_SOURCE_OPENCYCLEMAP,
+    OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT,
+    OSM_GPS_MAP_SOURCE_GOOGLE_STREET,
+    OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE,
+    OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE,
+    OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID,
+    OSM_GPS_MAP_SOURCE_OSMC_TRAILS,
+
+    OSM_GPS_MAP_SOURCE_LAST
+} OsmGpsMapSource_t;
+</ENUM>
+<FUNCTION>
+<NAME>osm_gps_map_source_get_friendly_name</NAME>
+<RETURNS>const char * </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_source_get_repo_uri</NAME>
+<RETURNS>const char * </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_source_get_image_format</NAME>
+<RETURNS>const char * </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_source_get_min_zoom</NAME>
+<RETURNS>int          </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_source_get_max_zoom</NAME>
+<RETURNS>int          </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_source_is_valid</NAME>
+<RETURNS>gboolean     </RETURNS>
+OsmGpsMapSource_t source 
+</FUNCTION>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_OSD</NAME>
+#define OSM_TYPE_GPS_MAP_OSD            (osm_gps_map_osd_get_type())
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_OSD</NAME>
+#define OSM_GPS_MAP_OSD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj),  OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsd))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_OSD_CLASS</NAME>
+#define OSM_GPS_MAP_OSD_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),   OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsdClass))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_OSD</NAME>
+#define OSM_IS_GPS_MAP_OSD(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj),  OSM_TYPE_GPS_MAP_OSD))
+</MACRO>
+<MACRO>
+<NAME>OSM_IS_GPS_MAP_OSD_CLASS</NAME>
+#define OSM_IS_GPS_MAP_OSD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),   OSM_TYPE_GPS_MAP_OSD))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_OSD_GET_CLASS</NAME>
+#define OSM_GPS_MAP_OSD_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),   OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsdClass))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapOsd</NAME>
+struct _OsmGpsMapOsd
+{
+    GObject parent;
+
+	/*< private >*/
+	OsmGpsMapOsdPrivate *priv;
+};
+</STRUCT>
+<STRUCT>
+<NAME>OsmGpsMapOsdClass</NAME>
+struct _OsmGpsMapOsdClass
+{
+	GObjectClass parent_class;
+
+	/* vtable */
+	
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_osd_get_type</NAME>
+<RETURNS>GType                </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_osd_new</NAME>
+<RETURNS>OsmGpsMapOsd *       </RETURNS>
+void 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapOsdPrivate</NAME>
+</STRUCT>
+<MACRO>
+<NAME>OSM_TYPE_GPS_MAP_LAYER</NAME>
+#define OSM_TYPE_GPS_MAP_LAYER                  (osm_gps_map_layer_get_type ())
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_LAYER</NAME>
+#define OSM_GPS_MAP_LAYER(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_LAYER, OsmGpsMapLayer))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_IS_LAYER</NAME>
+#define OSM_GPS_MAP_IS_LAYER(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_LAYER))
+</MACRO>
+<MACRO>
+<NAME>OSM_GPS_MAP_LAYER_GET_INTERFACE</NAME>
+#define OSM_GPS_MAP_LAYER_GET_INTERFACE(inst)   (G_TYPE_INSTANCE_GET_INTERFACE ((inst), OSM_TYPE_GPS_MAP_LAYER, OsmGpsMapLayerIface))
+</MACRO>
+<STRUCT>
+<NAME>OsmGpsMapLayerIface</NAME>
+struct _OsmGpsMapLayerIface {
+    GTypeInterface parent;
+
+    void (*render) (OsmGpsMapLayer *self, OsmGpsMap *map);
+    void (*draw) (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr);
+    gboolean (*busy) (OsmGpsMapLayer *self);
+    gboolean (*button_press) (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>osm_gps_map_layer_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_render</NAME>
+<RETURNS>void         </RETURNS>
+OsmGpsMapLayer *self, OsmGpsMap *map 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_draw</NAME>
+<RETURNS>void         </RETURNS>
+OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_busy</NAME>
+<RETURNS>gboolean     </RETURNS>
+OsmGpsMapLayer *self 
+</FUNCTION>
+<FUNCTION>
+<NAME>osm_gps_map_layer_button_press</NAME>
+<RETURNS>gboolean     </RETURNS>
+OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event 
+</FUNCTION>
+<STRUCT>
+<NAME>OsmGpsMapLayer</NAME>
+</STRUCT>

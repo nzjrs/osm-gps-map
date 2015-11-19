@@ -1,0 +1,38 @@
+GObject
+  GInitiallyUnowned
+    GtkWidget
+      GtkDrawingArea
+        OsmGpsMap
+      GtkContainer
+  OsmGpsMapOsd
+  OsmGpsMapImage
+  OsmGpsMapTrack
+  AtkObject
+    GtkAccessible
+      GtkWidgetAccessible
+  GtkStyle
+  GdkWindow
+  GdkDragContext
+  GtkTooltip
+  GdkScreen
+  GdkPixbuf
+GInterface
+  GTypePlugin
+  AtkImplementorIface
+  GtkBuildable
+  OsmGpsMapLayer
+  AtkComponent
+  GIcon
+  GLoadableIcon
+GBoxed
+  GValueArray
+  OsmGpsMapPoint
+  GdkRectangle
+  CairoContext
+  GdkEvent
+  GtkSelectionData
+  GdkColor
+  GtkRequisition
+  GtkBorder
+  GdkRGBA
+  GStrv

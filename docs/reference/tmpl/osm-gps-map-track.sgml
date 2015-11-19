@@ -1,0 +1,135 @@
+<!-- ##### SECTION Title ##### -->
+OsmGpsMapTrack
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### STRUCT OsmGpsMapTrack ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL OsmGpsMapTrack::point-added ##### -->
+<para>
+
+</para>
+
+@osmgpsmaptrack: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL OsmGpsMapTrack::point-changed ##### -->
+<para>
+
+</para>
+
+@osmgpsmaptrack: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL OsmGpsMapTrack::point-inserted ##### -->
+<para>
+
+</para>
+
+@osmgpsmaptrack: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL OsmGpsMapTrack::point-removed ##### -->
+<para>
+
+</para>
+
+@osmgpsmaptrack: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG OsmGpsMapTrack:alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMapTrack:color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMapTrack:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMapTrack:line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMapTrack:track ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMapTrack:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT OsmGpsMapTrackClass ##### -->
+<para>
+
+</para>
+
+@parent_class: 
+
+<!-- ##### FUNCTION osm_gps_map_track_add_point ##### -->
+<para>
+
+</para>
+
+@track: 
+@point: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_get_color ##### -->
+<para>
+
+</para>
+
+@track: 
+@color: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_get_points ##### -->
+<para>
+
+</para>
+
+@track: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_new ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+

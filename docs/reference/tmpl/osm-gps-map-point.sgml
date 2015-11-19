@@ -1,0 +1,107 @@
+<!-- ##### SECTION Title ##### -->
+OsmGpsMapPoint
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### STRUCT OsmGpsMapPoint ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION osm_gps_map_point_get_degrees ##### -->
+<para>
+
+</para>
+
+@point: 
+@lat: 
+@lon: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_get_radians ##### -->
+<para>
+
+</para>
+
+@point: 
+@rlat: 
+@rlon: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_new_degrees ##### -->
+<para>
+
+</para>
+
+@lat: 
+@lon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_new_radians ##### -->
+<para>
+
+</para>
+
+@rlat: 
+@rlon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_set_degrees ##### -->
+<para>
+
+</para>
+
+@point: 
+@lat: 
+@lon: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_set_radians ##### -->
+<para>
+
+</para>
+
+@point: 
+@rlat: 
+@rlon: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_copy ##### -->
+<para>
+
+</para>
+
+@point: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_point_free ##### -->
+<para>
+
+</para>
+
+@point: 
+
+

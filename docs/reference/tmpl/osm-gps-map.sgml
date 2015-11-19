@@ -1,0 +1,571 @@
+<!-- ##### SECTION Title ##### -->
+OsmGpsMap
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### STRUCT OsmGpsMap ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL OsmGpsMap::changed ##### -->
+<para>
+
+</para>
+
+@osmgpsmap: the object which received the signal.
+
+<!-- ##### ARG OsmGpsMap:auto-center ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:auto-center-threshold ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:auto-download ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:drag-limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:gps-track-highlight-radius ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:gps-track-point-radius ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:gps-track-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:image-format ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:latitude ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:longitude ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:map-source ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:map-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:map-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:max-zoom ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:min-zoom ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:proxy-uri ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:record-trip-history ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:repo-uri ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:show-gps-point ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:show-trip-history ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:tile-cache ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:tile-cache-base ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:tile-zoom-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:tiles-queued ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG OsmGpsMap:zoom ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT OsmGpsMapClass ##### -->
+<para>
+
+</para>
+
+@parent_class: 
+@draw_gps_point: 
+
+<!-- ##### MACRO OSM_GPS_MAP_INVALID ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO OSM_GPS_MAP_CACHE_DISABLED ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO OSM_GPS_MAP_CACHE_AUTO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO OSM_GPS_MAP_CACHE_FRIENDLY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION osm_gps_map_get_default_cache_directory ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### ENUM OsmGpsMapSource_t ##### -->
+<para>
+
+</para>
+
+@OSM_GPS_MAP_SOURCE_NULL: 
+@OSM_GPS_MAP_SOURCE_OPENSTREETMAP: 
+@OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER: 
+@OSM_GPS_MAP_SOURCE_OPENAERIALMAP: 
+@OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE: 
+@OSM_GPS_MAP_SOURCE_OPENCYCLEMAP: 
+@OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT: 
+@OSM_GPS_MAP_SOURCE_GOOGLE_STREET: 
+@OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE: 
+@OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID: 
+@OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET: 
+@OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE: 
+@OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID: 
+@OSM_GPS_MAP_SOURCE_OSMC_TRAILS: 
+@OSM_GPS_MAP_SOURCE_LAST: 
+
+<!-- ##### FUNCTION osm_gps_map_source_get_friendly_name ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_source_get_repo_uri ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_source_get_image_format ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_source_get_min_zoom ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_source_get_max_zoom ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_source_is_valid ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_new ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_download_maps ##### -->
+<para>
+
+</para>
+
+@map: 
+@pt1: 
+@pt2: 
+@zoom_start: 
+@zoom_end: 
+
+
+<!-- ##### FUNCTION osm_gps_map_download_cancel_all ##### -->
+<para>
+
+</para>
+
+@map: 
+
+
+<!-- ##### FUNCTION osm_gps_map_get_bbox ##### -->
+<para>
+
+</para>
+
+@map: 
+@pt1: 
+@pt2: 
+
+
+<!-- ##### FUNCTION osm_gps_map_set_center ##### -->
+<para>
+
+</para>
+
+@map: 
+@latitude: 
+@longitude: 
+
+
+<!-- ##### FUNCTION osm_gps_map_set_center_and_zoom ##### -->
+<para>
+
+</para>
+
+@map: 
+@latitude: 
+@longitude: 
+@zoom: 
+
+
+<!-- ##### FUNCTION osm_gps_map_set_zoom ##### -->
+<para>
+
+</para>
+
+@map: 
+@zoom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_zoom_in ##### -->
+<para>
+
+</para>
+
+@map: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_zoom_out ##### -->
+<para>
+
+</para>
+
+@map: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_scroll ##### -->
+<para>
+
+</para>
+
+@map: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION osm_gps_map_get_scale ##### -->
+<para>
+
+</para>
+
+@map: 
+@Returns: 
+
+
+<!-- ##### ENUM OsmGpsMapKey_t ##### -->
+<para>
+
+</para>
+
+@OSM_GPS_MAP_KEY_FULLSCREEN: 
+@OSM_GPS_MAP_KEY_ZOOMIN: 
+@OSM_GPS_MAP_KEY_ZOOMOUT: 
+@OSM_GPS_MAP_KEY_UP: 
+@OSM_GPS_MAP_KEY_DOWN: 
+@OSM_GPS_MAP_KEY_LEFT: 
+@OSM_GPS_MAP_KEY_RIGHT: 
+@OSM_GPS_MAP_KEY_MAX: 
+
+<!-- ##### FUNCTION osm_gps_map_set_keyboard_shortcut ##### -->
+<para>
+
+</para>
+
+@map: 
+@key: 
+@keyval: 
+
+
+<!-- ##### FUNCTION osm_gps_map_get_event_location ##### -->
+<para>
+
+</para>
+
+@map: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_convert_geographic_to_screen ##### -->
+<para>
+
+</para>
+
+@map: 
+@pt: 
+@pixel_x: 
+@pixel_y: 
+
+
+<!-- ##### FUNCTION osm_gps_map_convert_screen_to_geographic ##### -->
+<para>
+
+</para>
+
+@map: 
+@pixel_x: 
+@pixel_y: 
+@pt: 
+
+
+<!-- ##### FUNCTION osm_gps_map_gps_add ##### -->
+<para>
+
+</para>
+
+@map: 
+@latitude: 
+@longitude: 
+@heading: 
+
+
+<!-- ##### FUNCTION osm_gps_map_gps_clear ##### -->
+<para>
+
+</para>
+
+@map: 
+
+
+<!-- ##### FUNCTION osm_gps_map_gps_get_track ##### -->
+<para>
+
+</para>
+
+@map: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_add ##### -->
+<para>
+
+</para>
+
+@map: 
+@track: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_remove ##### -->
+<para>
+
+</para>
+
+@map: 
+@track: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_track_remove_all ##### -->
+<para>
+
+</para>
+
+@map: 
+
+
+<!-- ##### FUNCTION osm_gps_map_image_add ##### -->
+<para>
+
+</para>
+
+@map: 
+@latitude: 
+@longitude: 
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_image_add_with_alignment ##### -->
+<para>
+
+</para>
+
+@map: 
+@latitude: 
+@longitude: 
+@image: 
+@xalign: 
+@yalign: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_image_remove ##### -->
+<para>
+
+</para>
+
+@map: 
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_image_remove_all ##### -->
+<para>
+
+</para>
+
+@map: 
+
+
+<!-- ##### FUNCTION osm_gps_map_layer_add ##### -->
+<para>
+
+</para>
+
+@map: 
+@layer: 
+
+
+<!-- ##### FUNCTION osm_gps_map_layer_remove ##### -->
+<para>
+
+</para>
+
+@map: 
+@layer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION osm_gps_map_layer_remove_all ##### -->
+<para>
+
+</para>
+
+@map: 
+
+

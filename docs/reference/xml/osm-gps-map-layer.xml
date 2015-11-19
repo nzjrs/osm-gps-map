@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<refentry id="OsmGpsMapLayer">
+<refmeta>
+<refentrytitle role="top_of_page" id="OsmGpsMapLayer.top_of_page">OsmGpsMapLayer</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  LIBOSMGPSMAP Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>OsmGpsMapLayer</refname>
+<refpurpose>An interface for layers to be drawn on the map</refpurpose>
+</refnamediv>
+<refsect1 id="OsmGpsMapLayer.stability-level">
+<title>Stability Level</title>
+Stable, unless otherwise indicated
+</refsect1>
+
+<refsect1 id="OsmGpsMapLayer.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
+<tbody>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-render">osm_gps_map_layer_render</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-draw">osm_gps_map_layer_draw</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-busy">osm_gps_map_layer_busy</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-button-press">osm_gps_map_layer_button_press</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapOsd"><returnvalue>OsmGpsMapOsd</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-osd-new">osm_gps_map_osd_new</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.properties" role="properties">
+<title role="properties.title">Properties</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="properties_type" colwidth="150px"/>
+<colspec colname="properties_name" colwidth="300px"/>
+<colspec colname="properties_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="property_type"><link linkend="guint"><type>guint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--dpad-radius">dpad-radius</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--osd-x">osd-x</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--osd-y">osd-y</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-coordinates">show-coordinates</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-crosshair">show-crosshair</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-dpad">show-dpad</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-gps-in-dpad">show-gps-in-dpad</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-gps-in-zoom">show-gps-in-zoom</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-scale">show-scale</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapOsd--show-zoom">show-zoom</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<anchor id="OsmGpsMapOsd"/><refsect1 id="OsmGpsMapLayer.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+<row><entry role="datatype_keyword"></entry><entry role="function_name"><link linkend="OsmGpsMapLayer-struct">OsmGpsMapLayer</link></entry></row>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapOsd-struct">OsmGpsMapOsd</link></entry></row>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapOsdClass">OsmGpsMapOsdClass</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<screen>    <link linkend="GInterface">GInterface</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMapLayer
+    <link linkend="GObject">GObject</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMapOsd
+</screen>
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.implemented-interfaces" role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+OsmGpsMapOsd implements
+ <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link>.</para>
+
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.implementations" role="implementations">
+<title role="implementations.title">Known Implementations</title>
+<para>
+OsmGpsMapLayer is implemented by
+ <link linkend="OsmGpsMapOsd">OsmGpsMapOsd</link>.</para>
+
+</refsect1>
+
+<refsect1 id="OsmGpsMapLayer.includes"><title>Includes</title><synopsis>#include &lt;osm-gps-map.h&gt;
+</synopsis></refsect1>
+
+<refsect1 id="OsmGpsMapLayer.description" role="desc">
+<title role="desc.title">Description</title>
+<para><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> is an interface implemented by objects that wish
+to draw on top of the map respond to button press events. The most
+common implementation of this interface is <link linkend="OsmGpsMapOsd"><type>OsmGpsMapOsd</type></link></para>
+
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.functions_details" role="details">
+<title role="details.title">Functions</title>
+<refsect2 id="osm-gps-map-layer-render" role="function">
+<title>osm_gps_map_layer_render&#160;()</title>
+<indexterm zone="osm-gps-map-layer-render"><primary sortas="layer_render">osm_gps_map_layer_render</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_layer_render (<parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *self</parameter>,
+                          <parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-layer-draw" role="function">
+<title>osm_gps_map_layer_draw&#160;()</title>
+<indexterm zone="osm-gps-map-layer-draw"><primary sortas="layer_draw">osm_gps_map_layer_draw</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_layer_draw (<parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *self</parameter>,
+                        <parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                        <parameter><link linkend="cairo-t"><type>cairo_t</type></link> *cr</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-layer-busy" role="function">
+<title>osm_gps_map_layer_busy&#160;()</title>
+<indexterm zone="osm-gps-map-layer-busy"><primary sortas="layer_busy">osm_gps_map_layer_busy</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_layer_busy (<parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *self</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-layer-button-press" role="function">
+<title>osm_gps_map_layer_button_press&#160;()</title>
+<indexterm zone="osm-gps-map-layer-button-press"><primary sortas="layer_button_press">osm_gps_map_layer_button_press</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_layer_button_press (<parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *self</parameter>,
+                                <parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                <parameter><link linkend="GdkEventButton"><type>GdkEventButton</type></link> *event</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-osd-new" role="function">
+<title>osm_gps_map_osd_new&#160;()</title>
+<indexterm zone="osm-gps-map-osd-new"><primary sortas="osd_new">osm_gps_map_osd_new</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapOsd"><returnvalue>OsmGpsMapOsd</returnvalue></link>&#160;*
+osm_gps_map_osd_new (<parameter><type>void</type></parameter>);</programlisting>
+<para>Creates a new instance of <link linkend="OsmGpsMapOsd"><type>OsmGpsMapOsd</type></link>.</para>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> the newly created <link linkend="OsmGpsMapOsd"><type>OsmGpsMapOsd</type></link> instance</para>
+<para></para>
+</refsect3></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.other_details" role="details">
+<title role="details.title">Types and Values</title>
+<refsect2 id="OsmGpsMapLayer-struct" role="struct">
+<title>OsmGpsMapLayer</title>
+<indexterm zone="OsmGpsMapLayer-struct"><primary>OsmGpsMapLayer</primary></indexterm>
+<programlisting language="C">typedef struct _OsmGpsMapLayer OsmGpsMapLayer;</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd-struct" role="struct">
+<title>struct OsmGpsMapOsd</title>
+<indexterm zone="OsmGpsMapOsd-struct"><primary>OsmGpsMapOsd</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapOsd;</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsdClass" role="struct">
+<title>struct OsmGpsMapOsdClass</title>
+<indexterm zone="OsmGpsMapOsdClass"><primary>OsmGpsMapOsdClass</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapOsdClass {
+	GObjectClass parent_class;
+
+	/* vtable */
+};
+</programlisting>
+<para>
+</para>
+</refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapLayer.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="OsmGpsMapOsd--dpad-radius" role="property"><title>The <literal>“dpad-radius”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--dpad-radius"><primary>OsmGpsMapOsd:dpad-radius</primary></indexterm>
+<programlisting>  “dpad-radius”              <link linkend="guint"><type>guint</type></link></programlisting>
+<para>The dpad radius property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: 30</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--osd-x" role="property"><title>The <literal>“osd-x”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--osd-x"><primary>OsmGpsMapOsd:osd-x</primary></indexterm>
+<programlisting>  “osd-x”                    <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The osd x property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: 10</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--osd-y" role="property"><title>The <literal>“osd-y”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--osd-y"><primary>OsmGpsMapOsd:osd-y</primary></indexterm>
+<programlisting>  “osd-y”                    <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The osd y property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: 10</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-coordinates" role="property"><title>The <literal>“show-coordinates”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-coordinates"><primary>OsmGpsMapOsd:show-coordinates</primary></indexterm>
+<programlisting>  “show-coordinates”         <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show coordinates of map centre property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-crosshair" role="property"><title>The <literal>“show-crosshair”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-crosshair"><primary>OsmGpsMapOsd:show-crosshair</primary></indexterm>
+<programlisting>  “show-crosshair”           <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show crosshair at map centre property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-dpad" role="property"><title>The <literal>“show-dpad”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-dpad"><primary>OsmGpsMapOsd:show-dpad</primary></indexterm>
+<programlisting>  “show-dpad”                <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show dpad for map navigation property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-gps-in-dpad" role="property"><title>The <literal>“show-gps-in-dpad”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-gps-in-dpad"><primary>OsmGpsMapOsd:show-gps-in-dpad</primary></indexterm>
+<programlisting>  “show-gps-in-dpad”         <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show gps indicator in middle of dpad property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-gps-in-zoom" role="property"><title>The <literal>“show-gps-in-zoom”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-gps-in-zoom"><primary>OsmGpsMapOsd:show-gps-in-zoom</primary></indexterm>
+<programlisting>  “show-gps-in-zoom”         <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show gps indicator in middle of zoom control property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-scale" role="property"><title>The <literal>“show-scale”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-scale"><primary>OsmGpsMapOsd:show-scale</primary></indexterm>
+<programlisting>  “show-scale”               <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show scale on the map property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapOsd--show-zoom" role="property"><title>The <literal>“show-zoom”</literal> property</title>
+<indexterm zone="OsmGpsMapOsd--show-zoom"><primary>OsmGpsMapOsd:show-zoom</primary></indexterm>
+<programlisting>  “show-zoom”                <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>The show zoom control for map navigation property.</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+
+</refsect1>
+
+</refentry>

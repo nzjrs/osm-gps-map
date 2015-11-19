@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE informaltable PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colwidth="1*"/>
+<colspec colwidth="1*"/>
+<colspec colwidth="1*"/>
+<tbody>
+<row>
+<entry><link linkend="GBoxed">GBoxed</link></entry>
+<entry><link linkend="GInitiallyUnowned">GInitiallyUnowned</link></entry>
+<entry><link linkend="GInterface">GInterface</link></entry>
+</row>
+<row>
+<entry><link linkend="GObject">GObject</link></entry>
+<entry><link linkend="GtkDrawingArea">GtkDrawingArea</link></entry>
+<entry><link linkend="GtkWidget">GtkWidget</link></entry>
+</row>
+<row>
+<entry><link linkend="OsmGpsMap">OsmGpsMap</link></entry>
+<entry><link linkend="OsmGpsMapImage">OsmGpsMapImage</link></entry>
+<entry><link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></entry>
+</row>
+<row>
+<entry><link linkend="OsmGpsMapOsd">OsmGpsMapOsd</link></entry>
+<entry><link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></entry>
+<entry><link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></entry>
+</row>
+</tbody></tgroup></informaltable>

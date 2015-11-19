@@ -1,0 +1,314 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<refentry id="OsmGpsMapTrack">
+<refmeta>
+<refentrytitle role="top_of_page" id="OsmGpsMapTrack.top_of_page">OsmGpsMapTrack</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  LIBOSMGPSMAP Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>OsmGpsMapTrack</refname>
+<refpurpose>A list of GPS points</refpurpose>
+</refnamediv>
+<refsect1 id="OsmGpsMapTrack.stability-level">
+<title>Stability Level</title>
+Stable, unless otherwise indicated
+</refsect1>
+
+<refsect1 id="OsmGpsMapTrack.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
+<tbody>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-add-point">osm_gps_map_track_add_point</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-get-color">osm_gps_map_track_get_color</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="GSList"><returnvalue>GSList</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-get-points">osm_gps_map_track_get_points</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapTrack"><returnvalue>OsmGpsMapTrack</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-new">osm_gps_map_track_new</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.properties" role="properties">
+<title role="properties.title">Properties</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="properties_type" colwidth="150px"/>
+<colspec colname="properties_name" colwidth="300px"/>
+<colspec colname="properties_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapTrack--alpha">alpha</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="GdkRGBA"><type>GdkRGBA</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMapTrack--color">color</link></entry><entry role="property_flags">Read / Write</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapTrack--editable">editable</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapTrack--line-width">line-width</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gpointer"><type>gpointer</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapTrack--track">track</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapTrack--visible">visible</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.signals" role="signal_proto">
+<title role="signal_proto.title">Signals</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="signals_return" colwidth="150px"/>
+<colspec colname="signals_name" colwidth="300px"/>
+<colspec colname="signals_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="signal_type"><link linkend="void"><returnvalue>void</returnvalue></link></entry><entry role="signal_name"><link linkend="OsmGpsMapTrack-point-added">point-added</link></entry><entry role="signal_flags"><link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></entry></row>
+<row><entry role="signal_type"><link linkend="void"><returnvalue>void</returnvalue></link></entry><entry role="signal_name"><link linkend="OsmGpsMapTrack-point-changed">point-changed</link></entry><entry role="signal_flags"><link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></entry></row>
+<row><entry role="signal_type"><link linkend="void"><returnvalue>void</returnvalue></link></entry><entry role="signal_name"><link linkend="OsmGpsMapTrack-point-inserted">point-inserted</link></entry><entry role="signal_flags"><link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></entry></row>
+<row><entry role="signal_type"><link linkend="void"><returnvalue>void</returnvalue></link></entry><entry role="signal_name"><link linkend="OsmGpsMapTrack-point-removed">point-removed</link></entry><entry role="signal_flags"><link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapTrack-struct">OsmGpsMapTrack</link></entry></row>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapTrackClass">OsmGpsMapTrackClass</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<screen>    <link linkend="GObject">GObject</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMapTrack
+</screen>
+</refsect1>
+
+<refsect1 id="OsmGpsMapTrack.includes"><title>Includes</title><synopsis>#include &lt;osm-gps-map.h&gt;
+</synopsis></refsect1>
+
+<refsect1 id="OsmGpsMapTrack.description" role="desc">
+<title role="desc.title">Description</title>
+<para><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> stores multiple <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> objects, i.e. a track, and
+describes how such a track should be drawn on the map
+(see <link linkend="osm-gps-map-track-add"><function>osm_gps_map_track_add()</function></link>), including its colour, width, etc.</para>
+
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.functions_details" role="details">
+<title role="details.title">Functions</title>
+<refsect2 id="osm-gps-map-track-add-point" role="function" condition="since:0.7.0">
+<title>osm_gps_map_track_add_point&#160;()</title>
+<indexterm zone="osm-gps-map-track-add-point" role="0.7.0"><primary sortas="track_add_point">osm_gps_map_track_add_point</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_track_add_point (<parameter><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *track</parameter>,
+                             <parameter>const <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *point</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-track-get-color" role="function">
+<title>osm_gps_map_track_get_color&#160;()</title>
+<indexterm zone="osm-gps-map-track-get-color"><primary sortas="track_get_color">osm_gps_map_track_get_color</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_track_get_color (<parameter><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *track</parameter>,
+                             <parameter><link linkend="GdkRGBA"><type>GdkRGBA</type></link> *color</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-track-get-points" role="function" condition="since:0.7.0">
+<title>osm_gps_map_track_get_points&#160;()</title>
+<indexterm zone="osm-gps-map-track-get-points" role="0.7.0"><primary sortas="track_get_points">osm_gps_map_track_get_points</primary></indexterm>
+<programlisting language="C"><link linkend="GSList"><returnvalue>GSList</returnvalue></link>&#160;*
+osm_gps_map_track_get_points (<parameter><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *track</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> list of <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link>. </para>
+<para><emphasis role="annotation">[<acronym>element-type</acronym> OsmGpsMapPoint][<acronym>transfer full</acronym>]</emphasis></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-track-new" role="function">
+<title>osm_gps_map_track_new&#160;()</title>
+<indexterm zone="osm-gps-map-track-new"><primary sortas="track_new">osm_gps_map_track_new</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapTrack"><returnvalue>OsmGpsMapTrack</returnvalue></link>&#160;*
+osm_gps_map_track_new (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.other_details" role="details">
+<title role="details.title">Types and Values</title>
+<refsect2 id="OsmGpsMapTrack-struct" role="struct">
+<title>struct OsmGpsMapTrack</title>
+<indexterm zone="OsmGpsMapTrack-struct"><primary>OsmGpsMapTrack</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapTrack;</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrackClass" role="struct">
+<title>struct OsmGpsMapTrackClass</title>
+<indexterm zone="OsmGpsMapTrackClass"><primary>OsmGpsMapTrackClass</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapTrackClass {
+    GObjectClass parent_class;
+};
+</programlisting>
+<para>
+</para>
+</refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="OsmGpsMapTrack--alpha" role="property"><title>The <literal>“alpha”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--alpha"><primary>OsmGpsMapTrack:alpha</primary></indexterm>
+<programlisting>  “alpha”                    <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>alpha transparency of the track.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [0,1]</para>
+<para>Default value: 0.6</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrack--color" role="property"><title>The <literal>“color”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--color"><primary>OsmGpsMapTrack:color</primary></indexterm>
+<programlisting>  “color”                    <link linkend="GdkRGBA"><type>GdkRGBA</type></link>&#160;*</programlisting>
+<para>color of the track.</para><para>Flags: Read / Write</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrack--editable" role="property"><title>The <literal>“editable”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--editable"><primary>OsmGpsMapTrack:editable</primary></indexterm>
+<programlisting>  “editable”                 <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>should this track be editable.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: FALSE</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrack--line-width" role="property"><title>The <literal>“line-width”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--line-width"><primary>OsmGpsMapTrack:line-width</primary></indexterm>
+<programlisting>  “line-width”               <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>width of the lines drawn for the track.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [0,100]</para>
+<para>Default value: 4</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrack--track" role="property"><title>The <literal>“track”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--track"><primary>OsmGpsMapTrack:track</primary></indexterm>
+<programlisting>  “track”                    <link linkend="gpointer"><type>gpointer</type></link></programlisting>
+<para>list of points for the track.</para><para>Flags: Read / Write / Construct Only</para>
+</refsect2>
+<refsect2 id="OsmGpsMapTrack--visible" role="property"><title>The <literal>“visible”</literal> property</title>
+<indexterm zone="OsmGpsMapTrack--visible"><primary>OsmGpsMapTrack:visible</primary></indexterm>
+<programlisting>  “visible”                  <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>should this track be visible.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapTrack.signal-details" role="signals">
+<title role="signals.title">Signal Details</title>
+<refsect2 id="OsmGpsMapTrack-point-added" role="signal"><title>The <literal>“point-added”</literal> signal</title>
+<indexterm zone="OsmGpsMapTrack-point-added"><primary>OsmGpsMapTrack::point-added</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+user_function (<link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *self,
+               <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *arg1,
+               <link linkend="gpointer"><type>gpointer</type></link>        user_data)</programlisting>
+<para>The point-added signal.</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>self</para></entry>
+<entry role="parameter_description"><para>A <link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link></para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><simpara>user_data</simpara></entry>
+<entry role="parameter_description"><simpara>user data set when the signal handler was connected.</simpara></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para>Flags: <link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></para>
+</refsect2><refsect2 id="OsmGpsMapTrack-point-changed" role="signal"><title>The <literal>“point-changed”</literal> signal</title>
+<indexterm zone="OsmGpsMapTrack-point-changed"><primary>OsmGpsMapTrack::point-changed</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+user_function (<link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *osmgpsmaptrack,
+               <link linkend="gint"><type>gint</type></link>            arg1,
+               <link linkend="gpointer"><type>gpointer</type></link>        user_data)</programlisting>
+<para>
+</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>osmgpsmaptrack</para></entry>
+<entry role="parameter_description"><para>the object which received the signal.</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><simpara>user_data</simpara></entry>
+<entry role="parameter_description"><simpara>user data set when the signal handler was connected.</simpara></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para>Flags: <link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></para>
+</refsect2><refsect2 id="OsmGpsMapTrack-point-inserted" role="signal"><title>The <literal>“point-inserted”</literal> signal</title>
+<indexterm zone="OsmGpsMapTrack-point-inserted"><primary>OsmGpsMapTrack::point-inserted</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+user_function (<link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *osmgpsmaptrack,
+               <link linkend="gint"><type>gint</type></link>            arg1,
+               <link linkend="gpointer"><type>gpointer</type></link>        user_data)</programlisting>
+<para>
+</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>osmgpsmaptrack</para></entry>
+<entry role="parameter_description"><para>the object which received the signal.</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><simpara>user_data</simpara></entry>
+<entry role="parameter_description"><simpara>user data set when the signal handler was connected.</simpara></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para>Flags: <link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></para>
+</refsect2><refsect2 id="OsmGpsMapTrack-point-removed" role="signal"><title>The <literal>“point-removed”</literal> signal</title>
+<indexterm zone="OsmGpsMapTrack-point-removed"><primary>OsmGpsMapTrack::point-removed</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+user_function (<link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *osmgpsmaptrack,
+               <link linkend="gint"><type>gint</type></link>            arg1,
+               <link linkend="gpointer"><type>gpointer</type></link>        user_data)</programlisting>
+<para>
+</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>osmgpsmaptrack</para></entry>
+<entry role="parameter_description"><para>the object which received the signal.</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><simpara>user_data</simpara></entry>
+<entry role="parameter_description"><simpara>user data set when the signal handler was connected.</simpara></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para>Flags: <link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></para>
+</refsect2>
+</refsect1>
+
+</refentry>

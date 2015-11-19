@@ -1,0 +1,39 @@
+<SIGNAL>
+<NAME>OsmGpsMap::changed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>f</FLAGS>
+OsmGpsMap *osmgpsmap
+</SIGNAL>
+
+<SIGNAL>
+<NAME>OsmGpsMapTrack::point-added</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>f</FLAGS>
+OsmGpsMapTrack *osmgpsmaptrack
+OsmGpsMapPoint *arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>OsmGpsMapTrack::point-changed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>f</FLAGS>
+OsmGpsMapTrack *osmgpsmaptrack
+gint  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>OsmGpsMapTrack::point-inserted</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>f</FLAGS>
+OsmGpsMapTrack *osmgpsmaptrack
+gint  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>OsmGpsMapTrack::point-removed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>f</FLAGS>
+OsmGpsMapTrack *osmgpsmaptrack
+gint  arg1
+</SIGNAL>
+

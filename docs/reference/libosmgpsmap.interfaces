@@ -1,0 +1,7 @@
+GtkWidget AtkImplementorIface GtkBuildable
+GtkDrawingArea AtkImplementorIface GtkBuildable
+OsmGpsMap AtkImplementorIface GtkBuildable
+GtkContainer AtkImplementorIface GtkBuildable
+OsmGpsMapOsd OsmGpsMapLayer
+GtkWidgetAccessible AtkComponent
+GdkPixbuf GIcon GLoadableIcon

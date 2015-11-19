@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!DOCTYPE indexdiv PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<indexdiv>
+<indexdiv><title>C</title>
+<indexentry><primaryie linkends="OSM-GPS-MAP-CACHE-AUTO:CAPS"><link linkend="OSM-GPS-MAP-CACHE-AUTO:CAPS">OSM_GPS_MAP_CACHE_AUTO</link>, macro in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OSM-GPS-MAP-CACHE-DISABLED:CAPS"><link linkend="OSM-GPS-MAP-CACHE-DISABLED:CAPS">OSM_GPS_MAP_CACHE_DISABLED</link>, macro in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"><link linkend="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS">OSM_GPS_MAP_CACHE_FRIENDLY</link>, macro in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-convert-geographic-to-screen"><link linkend="osm-gps-map-convert-geographic-to-screen">osm_gps_map_convert_geographic_to_screen</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-convert-screen-to-geographic"><link linkend="osm-gps-map-convert-screen-to-geographic">osm_gps_map_convert_screen_to_geographic</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>D</title>
+<indexentry><primaryie linkends="osm-gps-map-download-cancel-all"><link linkend="osm-gps-map-download-cancel-all">osm_gps_map_download_cancel_all</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-download-maps"><link linkend="osm-gps-map-download-maps">osm_gps_map_download_maps</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>G</title>
+<indexentry><primaryie linkends="osm-gps-map-get-bbox"><link linkend="osm-gps-map-get-bbox">osm_gps_map_get_bbox</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-get-default-cache-directory"><link linkend="osm-gps-map-get-default-cache-directory">osm_gps_map_get_default_cache_directory</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-get-event-location"><link linkend="osm-gps-map-get-event-location">osm_gps_map_get_event_location</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-get-scale"><link linkend="osm-gps-map-get-scale">osm_gps_map_get_scale</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-gps-add"><link linkend="osm-gps-map-gps-add">osm_gps_map_gps_add</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-gps-clear"><link linkend="osm-gps-map-gps-clear">osm_gps_map_gps_clear</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-gps-get-track"><link linkend="osm-gps-map-gps-get-track">osm_gps_map_gps_get_track</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>I</title>
+<indexentry><primaryie linkends="osm-gps-map-image-add"><link linkend="osm-gps-map-image-add">osm_gps_map_image_add</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-add-with-alignment"><link linkend="osm-gps-map-image-add-with-alignment">osm_gps_map_image_add_with_alignment</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-draw"><link linkend="osm-gps-map-image-draw">osm_gps_map_image_draw</link>, function in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-get-point"><link linkend="osm-gps-map-image-get-point">osm_gps_map_image_get_point</link>, function in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-get-type"><link linkend="osm-gps-map-image-get-type">osm_gps_map_image_get_type</link>, function in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-new"><link linkend="osm-gps-map-image-new">osm_gps_map_image_new</link>, function in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-remove"><link linkend="osm-gps-map-image-remove">osm_gps_map_image_remove</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-image-remove-all"><link linkend="osm-gps-map-image-remove-all">osm_gps_map_image_remove_all</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OSM-GPS-MAP-INVALID:CAPS"><link linkend="OSM-GPS-MAP-INVALID:CAPS">OSM_GPS_MAP_INVALID</link>, macro in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>L</title>
+<indexentry><primaryie linkends="osm-gps-map-layer-add"><link linkend="osm-gps-map-layer-add">osm_gps_map_layer_add</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-busy"><link linkend="osm-gps-map-layer-busy">osm_gps_map_layer_busy</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-button-press"><link linkend="osm-gps-map-layer-button-press">osm_gps_map_layer_button_press</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-draw"><link linkend="osm-gps-map-layer-draw">osm_gps_map_layer_draw</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-remove"><link linkend="osm-gps-map-layer-remove">osm_gps_map_layer_remove</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-remove-all"><link linkend="osm-gps-map-layer-remove-all">osm_gps_map_layer_remove_all</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-render"><link linkend="osm-gps-map-layer-render">osm_gps_map_layer_render</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>N</title>
+<indexentry><primaryie linkends="osm-gps-map-new"><link linkend="osm-gps-map-new">osm_gps_map_new</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>O</title>
+<indexentry><primaryie linkends="osm-gps-map-osd-new"><link linkend="osm-gps-map-osd-new">osm_gps_map_osd_new</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap-struct"><link linkend="OsmGpsMap-struct">OsmGpsMap</link>, struct in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap-changed"><link linkend="OsmGpsMap-changed">OsmGpsMap::changed</link>, object signal in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--auto-center"><link linkend="OsmGpsMap--auto-center">OsmGpsMap:auto-center</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--auto-center-threshold"><link linkend="OsmGpsMap--auto-center-threshold">OsmGpsMap:auto-center-threshold</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--auto-download"><link linkend="OsmGpsMap--auto-download">OsmGpsMap:auto-download</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--drag-limit"><link linkend="OsmGpsMap--drag-limit">OsmGpsMap:drag-limit</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--gps-track-highlight-radius"><link linkend="OsmGpsMap--gps-track-highlight-radius">OsmGpsMap:gps-track-highlight-radius</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--gps-track-point-radius"><link linkend="OsmGpsMap--gps-track-point-radius">OsmGpsMap:gps-track-point-radius</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--gps-track-width"><link linkend="OsmGpsMap--gps-track-width">OsmGpsMap:gps-track-width</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--image-format"><link linkend="OsmGpsMap--image-format">OsmGpsMap:image-format</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--latitude"><link linkend="OsmGpsMap--latitude">OsmGpsMap:latitude</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--longitude"><link linkend="OsmGpsMap--longitude">OsmGpsMap:longitude</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--map-source"><link linkend="OsmGpsMap--map-source">OsmGpsMap:map-source</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--map-x"><link linkend="OsmGpsMap--map-x">OsmGpsMap:map-x</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--map-y"><link linkend="OsmGpsMap--map-y">OsmGpsMap:map-y</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--max-zoom"><link linkend="OsmGpsMap--max-zoom">OsmGpsMap:max-zoom</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--min-zoom"><link linkend="OsmGpsMap--min-zoom">OsmGpsMap:min-zoom</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--proxy-uri"><link linkend="OsmGpsMap--proxy-uri">OsmGpsMap:proxy-uri</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--record-trip-history"><link linkend="OsmGpsMap--record-trip-history">OsmGpsMap:record-trip-history</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--repo-uri"><link linkend="OsmGpsMap--repo-uri">OsmGpsMap:repo-uri</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--show-gps-point"><link linkend="OsmGpsMap--show-gps-point">OsmGpsMap:show-gps-point</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--show-trip-history"><link linkend="OsmGpsMap--show-trip-history">OsmGpsMap:show-trip-history</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--tile-cache"><link linkend="OsmGpsMap--tile-cache">OsmGpsMap:tile-cache</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--tile-cache-base"><link linkend="OsmGpsMap--tile-cache-base">OsmGpsMap:tile-cache-base</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--tile-zoom-offset"><link linkend="OsmGpsMap--tile-zoom-offset">OsmGpsMap:tile-zoom-offset</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--tiles-queued"><link linkend="OsmGpsMap--tiles-queued">OsmGpsMap:tiles-queued</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMap--zoom"><link linkend="OsmGpsMap--zoom">OsmGpsMap:zoom</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapClass"><link linkend="OsmGpsMapClass">OsmGpsMapClass</link>, struct in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage-struct"><link linkend="OsmGpsMapImage-struct">OsmGpsMapImage</link>, struct in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--pixbuf"><link linkend="OsmGpsMapImage--pixbuf">OsmGpsMapImage:pixbuf</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--point"><link linkend="OsmGpsMapImage--point">OsmGpsMapImage:point</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--rotation"><link linkend="OsmGpsMapImage--rotation">OsmGpsMapImage:rotation</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--x-align"><link linkend="OsmGpsMapImage--x-align">OsmGpsMapImage:x-align</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--y-align"><link linkend="OsmGpsMapImage--y-align">OsmGpsMapImage:y-align</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImage--z-order"><link linkend="OsmGpsMapImage--z-order">OsmGpsMapImage:z-order</link>, object property in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapImageClass"><link linkend="OsmGpsMapImageClass">OsmGpsMapImageClass</link>, struct in <link linkend="OsmGpsMapImage">OsmGpsMapImage</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapKey-t"><link linkend="OsmGpsMapKey-t">OsmGpsMapKey_t</link>, enum in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapLayer-struct"><link linkend="OsmGpsMapLayer-struct">OsmGpsMapLayer</link>, struct in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd-struct"><link linkend="OsmGpsMapOsd-struct">OsmGpsMapOsd</link>, struct in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--dpad-radius"><link linkend="OsmGpsMapOsd--dpad-radius">OsmGpsMapOsd:dpad-radius</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--osd-x"><link linkend="OsmGpsMapOsd--osd-x">OsmGpsMapOsd:osd-x</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--osd-y"><link linkend="OsmGpsMapOsd--osd-y">OsmGpsMapOsd:osd-y</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-coordinates"><link linkend="OsmGpsMapOsd--show-coordinates">OsmGpsMapOsd:show-coordinates</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-crosshair"><link linkend="OsmGpsMapOsd--show-crosshair">OsmGpsMapOsd:show-crosshair</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-dpad"><link linkend="OsmGpsMapOsd--show-dpad">OsmGpsMapOsd:show-dpad</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-gps-in-dpad"><link linkend="OsmGpsMapOsd--show-gps-in-dpad">OsmGpsMapOsd:show-gps-in-dpad</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-gps-in-zoom"><link linkend="OsmGpsMapOsd--show-gps-in-zoom">OsmGpsMapOsd:show-gps-in-zoom</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-scale"><link linkend="OsmGpsMapOsd--show-scale">OsmGpsMapOsd:show-scale</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-zoom"><link linkend="OsmGpsMapOsd--show-zoom">OsmGpsMapOsd:show-zoom</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsdClass"><link linkend="OsmGpsMapOsdClass">OsmGpsMapOsdClass</link>, struct in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapPoint-struct"><link linkend="OsmGpsMapPoint-struct">OsmGpsMapPoint</link>, struct in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapSource-t"><link linkend="OsmGpsMapSource-t">OsmGpsMapSource_t</link>, enum in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack-struct"><link linkend="OsmGpsMapTrack-struct">OsmGpsMapTrack</link>, struct in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack-point-added"><link linkend="OsmGpsMapTrack-point-added">OsmGpsMapTrack::point-added</link>, object signal in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack-point-changed"><link linkend="OsmGpsMapTrack-point-changed">OsmGpsMapTrack::point-changed</link>, object signal in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack-point-inserted"><link linkend="OsmGpsMapTrack-point-inserted">OsmGpsMapTrack::point-inserted</link>, object signal in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack-point-removed"><link linkend="OsmGpsMapTrack-point-removed">OsmGpsMapTrack::point-removed</link>, object signal in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--alpha"><link linkend="OsmGpsMapTrack--alpha">OsmGpsMapTrack:alpha</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--color"><link linkend="OsmGpsMapTrack--color">OsmGpsMapTrack:color</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--editable"><link linkend="OsmGpsMapTrack--editable">OsmGpsMapTrack:editable</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--line-width"><link linkend="OsmGpsMapTrack--line-width">OsmGpsMapTrack:line-width</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--track"><link linkend="OsmGpsMapTrack--track">OsmGpsMapTrack:track</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrack--visible"><link linkend="OsmGpsMapTrack--visible">OsmGpsMapTrack:visible</link>, object property in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapTrackClass"><link linkend="OsmGpsMapTrackClass">OsmGpsMapTrackClass</link>, struct in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>P</title>
+<indexentry><primaryie linkends="osm-gps-map-point-copy"><link linkend="osm-gps-map-point-copy">osm_gps_map_point_copy</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-free"><link linkend="osm-gps-map-point-free">osm_gps_map_point_free</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-get-degrees"><link linkend="osm-gps-map-point-get-degrees">osm_gps_map_point_get_degrees</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-get-radians"><link linkend="osm-gps-map-point-get-radians">osm_gps_map_point_get_radians</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-new-degrees"><link linkend="osm-gps-map-point-new-degrees">osm_gps_map_point_new_degrees</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-new-radians"><link linkend="osm-gps-map-point-new-radians">osm_gps_map_point_new_radians</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-set-degrees"><link linkend="osm-gps-map-point-set-degrees">osm_gps_map_point_set_degrees</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-set-radians"><link linkend="osm-gps-map-point-set-radians">osm_gps_map_point_set_radians</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>S</title>
+<indexentry><primaryie linkends="osm-gps-map-scroll"><link linkend="osm-gps-map-scroll">osm_gps_map_scroll</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-set-center"><link linkend="osm-gps-map-set-center">osm_gps_map_set_center</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-set-center-and-zoom"><link linkend="osm-gps-map-set-center-and-zoom">osm_gps_map_set_center_and_zoom</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-set-keyboard-shortcut"><link linkend="osm-gps-map-set-keyboard-shortcut">osm_gps_map_set_keyboard_shortcut</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-set-zoom"><link linkend="osm-gps-map-set-zoom">osm_gps_map_set_zoom</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-get-friendly-name"><link linkend="osm-gps-map-source-get-friendly-name">osm_gps_map_source_get_friendly_name</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-get-image-format"><link linkend="osm-gps-map-source-get-image-format">osm_gps_map_source_get_image_format</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-get-max-zoom"><link linkend="osm-gps-map-source-get-max-zoom">osm_gps_map_source_get_max_zoom</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-get-min-zoom"><link linkend="osm-gps-map-source-get-min-zoom">osm_gps_map_source_get_min_zoom</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-get-repo-uri"><link linkend="osm-gps-map-source-get-repo-uri">osm_gps_map_source_get_repo_uri</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-source-is-valid"><link linkend="osm-gps-map-source-is-valid">osm_gps_map_source_is_valid</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>T</title>
+<indexentry><primaryie linkends="osm-gps-map-track-add"><link linkend="osm-gps-map-track-add">osm_gps_map_track_add</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-add-point"><link linkend="osm-gps-map-track-add-point">osm_gps_map_track_add_point</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-get-color"><link linkend="osm-gps-map-track-get-color">osm_gps_map_track_get_color</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-get-points"><link linkend="osm-gps-map-track-get-points">osm_gps_map_track_get_points</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-new"><link linkend="osm-gps-map-track-new">osm_gps_map_track_new</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-remove"><link linkend="osm-gps-map-track-remove">osm_gps_map_track_remove</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-remove-all"><link linkend="osm-gps-map-track-remove-all">osm_gps_map_track_remove_all</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>Z</title>
+<indexentry><primaryie linkends="osm-gps-map-zoom-in"><link linkend="osm-gps-map-zoom-in">osm_gps_map_zoom_in</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-zoom-out"><link linkend="osm-gps-map-zoom-out">osm_gps_map_zoom_out</link>, function in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+</indexdiv>
+</indexdiv>

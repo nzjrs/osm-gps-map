@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<refentry id="OsmGpsMapImage">
+<refmeta>
+<refentrytitle role="top_of_page" id="OsmGpsMapImage.top_of_page">OsmGpsMapImage</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  LIBOSMGPSMAP Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>OsmGpsMapImage</refname>
+<refpurpose>An image shown on the map</refpurpose>
+</refnamediv>
+<refsect1 id="OsmGpsMapImage.stability-level">
+<title>Stability Level</title>
+Stable, unless otherwise indicated
+</refsect1>
+
+<refsect1 id="OsmGpsMapImage.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
+<tbody>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-draw">osm_gps_map_image_draw</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type">const <link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-get-point">osm_gps_map_image_get_point</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="GType"><returnvalue>GType</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-get-type">osm_gps_map_image_get_type</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-new">osm_gps_map_image_new</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapImage.properties" role="properties">
+<title role="properties.title">Properties</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="properties_type" colwidth="150px"/>
+<colspec colname="properties_name" colwidth="300px"/>
+<colspec colname="properties_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="property_type"><link linkend="GdkPixbuf"><type>GdkPixbuf</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMapImage--pixbuf">pixbuf</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMapImage--point">point</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapImage--rotation">rotation</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapImage--x-align">x-align</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapImage--y-align">y-align</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMapImage--z-order">z-order</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapImage.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapImage-struct">OsmGpsMapImage</link></entry></row>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapImageClass">OsmGpsMapImageClass</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMapImage.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<screen>    <link linkend="GObject">GObject</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMapImage
+</screen>
+</refsect1>
+
+<refsect1 id="OsmGpsMapImage.includes"><title>Includes</title><synopsis>#include &lt;osm-gps-map.h&gt;
+</synopsis></refsect1>
+
+<refsect1 id="OsmGpsMapImage.description" role="desc">
+<title role="desc.title">Description</title>
+<para><link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> represents an image (a <link linkend="GdkPixbuf"><type>GdkPixbuf</type></link>) shown on the map
+(<link linkend="osm-gps-map-image-add"><function>osm_gps_map_image_add()</function></link>) at a specific location (a <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link>).</para>
+
+</refsect1>
+<refsect1 id="OsmGpsMapImage.functions_details" role="details">
+<title role="details.title">Functions</title>
+<refsect2 id="osm-gps-map-image-draw" role="function">
+<title>osm_gps_map_image_draw&#160;()</title>
+<indexterm zone="osm-gps-map-image-draw"><primary sortas="image_draw">osm_gps_map_image_draw</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_image_draw (<parameter><link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> *object</parameter>,
+                        <parameter><link linkend="cairo-t"><type>cairo_t</type></link> *cr</parameter>,
+                        <parameter><link linkend="GdkRectangle"><type>GdkRectangle</type></link> *rect</parameter>);</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-image-get-point" role="function">
+<title>osm_gps_map_image_get_point&#160;()</title>
+<indexterm zone="osm-gps-map-image-get-point"><primary sortas="image_get_point">osm_gps_map_image_get_point</primary></indexterm>
+<programlisting language="C">const <link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+osm_gps_map_image_get_point (<parameter><link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> *object</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-image-get-type" role="function">
+<title>osm_gps_map_image_get_type&#160;()</title>
+<indexterm zone="osm-gps-map-image-get-type"><primary sortas="image_get_type">osm_gps_map_image_get_type</primary></indexterm>
+<programlisting language="C"><link linkend="GType"><returnvalue>GType</returnvalue></link>
+osm_gps_map_image_get_type (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-image-new" role="function">
+<title>osm_gps_map_image_new&#160;()</title>
+<indexterm zone="osm-gps-map-image-new"><primary sortas="image_new">osm_gps_map_image_new</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+osm_gps_map_image_new (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapImage.other_details" role="details">
+<title role="details.title">Types and Values</title>
+<refsect2 id="OsmGpsMapImage-struct" role="struct">
+<title>struct OsmGpsMapImage</title>
+<indexterm zone="OsmGpsMapImage-struct"><primary>OsmGpsMapImage</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapImage;</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImageClass" role="struct">
+<title>struct OsmGpsMapImageClass</title>
+<indexterm zone="OsmGpsMapImageClass"><primary>OsmGpsMapImageClass</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapImageClass {
+    GObjectClass parent_class;
+};
+</programlisting>
+<para>
+</para>
+</refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMapImage.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="OsmGpsMapImage--pixbuf" role="property"><title>The <literal>“pixbuf”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--pixbuf"><primary>OsmGpsMapImage:pixbuf</primary></indexterm>
+<programlisting>  “pixbuf”                   <link linkend="GdkPixbuf"><type>GdkPixbuf</type></link>&#160;*</programlisting>
+<para>the pixbuf for this image.</para><para>Flags: Read / Write / Construct</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImage--point" role="property"><title>The <literal>“point”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--point"><primary>OsmGpsMapImage:point</primary></indexterm>
+<programlisting>  “point”                    <link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link>&#160;*</programlisting>
+<para>location point.</para><para>Flags: Read / Write / Construct</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImage--rotation" role="property"><title>The <literal>“rotation”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--rotation"><primary>OsmGpsMapImage:rotation</primary></indexterm>
+<programlisting>  “rotation”                 <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>image rotation.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [-180,180]</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImage--x-align" role="property"><title>The <literal>“x-align”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--x-align"><primary>OsmGpsMapImage:x-align</primary></indexterm>
+<programlisting>  “x-align”                  <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>image x-alignment.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [0,1]</para>
+<para>Default value: 0.5</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImage--y-align" role="property"><title>The <literal>“y-align”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--y-align"><primary>OsmGpsMapImage:y-align</primary></indexterm>
+<programlisting>  “y-align”                  <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>image y-alignment.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [0,1]</para>
+<para>Default value: 0.5</para>
+</refsect2>
+<refsect2 id="OsmGpsMapImage--z-order" role="property"><title>The <literal>“z-order”</literal> property</title>
+<indexterm zone="OsmGpsMapImage--z-order"><primary>OsmGpsMapImage:z-order</primary></indexterm>
+<programlisting>  “z-order”                  <link linkend="gint"><type>gint</type></link></programlisting>
+<para>image z-order.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [-100,100]</para>
+<para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+</refentry>

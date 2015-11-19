@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE indexdiv PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<indexdiv>
+<indexdiv><title>P</title>
+<indexentry><primaryie linkends="osm-gps-map-point-copy"><link linkend="osm-gps-map-point-copy">osm_gps_map_point_copy</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-free"><link linkend="osm-gps-map-point-free">osm_gps_map_point_free</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+</indexdiv>
+</indexdiv>

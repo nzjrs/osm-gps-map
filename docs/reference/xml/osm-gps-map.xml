@@ -1,0 +1,1242 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<refentry id="OsmGpsMap">
+<refmeta>
+<refentrytitle role="top_of_page" id="OsmGpsMap.top_of_page">OsmGpsMap</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  LIBOSMGPSMAP Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>OsmGpsMap</refname>
+<refpurpose>The map display widget</refpurpose>
+</refnamediv>
+<refsect1 id="OsmGpsMap.stability-level">
+<title>Stability Level</title>
+Stable, unless otherwise indicated
+</refsect1>
+
+<refsect1 id="OsmGpsMap.functions" role="functions_proto">
+<title role="functions_proto.title">Functions</title>
+<informaltable pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="functions_return" colwidth="150px"/>
+<colspec colname="functions_name"/>
+<tbody>
+<row><entry role="define_keyword">#define</entry><entry role="function_name"><link linkend="OSM-GPS-MAP-INVALID:CAPS">OSM_GPS_MAP_INVALID</link></entry></row>
+<row><entry role="function_type"><link linkend="gchar"><returnvalue>gchar</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-get-default-cache-directory">osm_gps_map_get_default_cache_directory</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-get-friendly-name">osm_gps_map_source_get_friendly_name</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-get-repo-uri">osm_gps_map_source_get_repo_uri</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-get-image-format">osm_gps_map_source_get_image_format</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="int"><returnvalue>int</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-get-min-zoom">osm_gps_map_source_get_min_zoom</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="int"><returnvalue>int</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-get-max-zoom">osm_gps_map_source_get_max_zoom</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-source-is-valid">osm_gps_map_source_is_valid</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="GtkWidget"><returnvalue>GtkWidget</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-new">osm_gps_map_new</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-download-maps">osm_gps_map_download_maps</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-download-cancel-all">osm_gps_map_download_cancel_all</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-get-bbox">osm_gps_map_get_bbox</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-set-center">osm_gps_map_set_center</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-set-center-and-zoom">osm_gps_map_set_center_and_zoom</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="int"><returnvalue>int</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-set-zoom">osm_gps_map_set_zoom</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="int"><returnvalue>int</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-zoom-in">osm_gps_map_zoom_in</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="int"><returnvalue>int</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-zoom-out">osm_gps_map_zoom_out</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-scroll">osm_gps_map_scroll</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="float"><returnvalue>float</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-get-scale">osm_gps_map_get_scale</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-set-keyboard-shortcut">osm_gps_map_set_keyboard_shortcut</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-get-event-location">osm_gps_map_get_event_location</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-convert-geographic-to-screen">osm_gps_map_convert_geographic_to_screen</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-convert-screen-to-geographic">osm_gps_map_convert_screen_to_geographic</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-gps-add">osm_gps_map_gps_add</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-gps-clear">osm_gps_map_gps_clear</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapTrack"><returnvalue>OsmGpsMapTrack</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-gps-get-track">osm_gps_map_gps_get_track</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-add">osm_gps_map_track_add</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-remove">osm_gps_map_track_remove</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-track-remove-all">osm_gps_map_track_remove_all</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-add">osm_gps_map_image_add</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-add-with-alignment">osm_gps_map_image_add_with_alignment</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-remove">osm_gps_map_image_remove</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-image-remove-all">osm_gps_map_image_remove_all</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-add">osm_gps_map_layer_add</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-remove">osm_gps_map_layer_remove</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+<row><entry role="function_type"><link linkend="void"><returnvalue>void</returnvalue></link>
+</entry><entry role="function_name"><link linkend="osm-gps-map-layer-remove-all">osm_gps_map_layer_remove_all</link>&#160;<phrase role="c_punctuation">()</phrase></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMap.properties" role="properties">
+<title role="properties.title">Properties</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="properties_type" colwidth="150px"/>
+<colspec colname="properties_name" colwidth="300px"/>
+<colspec colname="properties_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--auto-center">auto-center</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--auto-center-threshold">auto-center-threshold</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--auto-download">auto-download</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--drag-limit">drag-limit</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--gps-track-highlight-radius">gps-track-highlight-radius</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--gps-track-point-radius">gps-track-point-radius</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--gps-track-width">gps-track-width</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gchar"><type>gchar</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMap--image-format">image-format</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--latitude">latitude</link></entry><entry role="property_flags">Read</entry></row>
+<row><entry role="property_type"><link linkend="gfloat"><type>gfloat</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--longitude">longitude</link></entry><entry role="property_flags">Read</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--map-source">map-source</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--map-x">map-x</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--map-y">map-y</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--max-zoom">max-zoom</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--min-zoom">min-zoom</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gchar"><type>gchar</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMap--proxy-uri">proxy-uri</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--record-trip-history">record-trip-history</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gchar"><type>gchar</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMap--repo-uri">repo-uri</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--show-gps-point">show-gps-point</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gboolean"><type>gboolean</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--show-trip-history">show-trip-history</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gchar"><type>gchar</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMap--tile-cache">tile-cache</link></entry><entry role="property_flags">Read / Write / Construct</entry></row>
+<row><entry role="property_type"><link linkend="gchar"><type>gchar</type></link>&#160;*</entry><entry role="property_name"><link linkend="OsmGpsMap--tile-cache-base">tile-cache-base</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--tile-zoom-offset">tile-zoom-offset</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--tiles-queued">tiles-queued</link></entry><entry role="property_flags">Read</entry></row>
+<row><entry role="property_type"><link linkend="gint"><type>gint</type></link></entry><entry role="property_name"><link linkend="OsmGpsMap--zoom">zoom</link></entry><entry role="property_flags">Read / Write / Construct Only</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMap.signals" role="signal_proto">
+<title role="signal_proto.title">Signals</title>
+<informaltable frame="none">
+<tgroup cols="3">
+<colspec colname="signals_return" colwidth="150px"/>
+<colspec colname="signals_name" colwidth="300px"/>
+<colspec colname="signals_flags" colwidth="200px"/>
+<tbody>
+<row><entry role="signal_type"><link linkend="void"><returnvalue>void</returnvalue></link></entry><entry role="signal_name"><link linkend="OsmGpsMap-changed">changed</link></entry><entry role="signal_flags"><link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMap.other" role="other_proto">
+<title role="other_proto.title">Types and Values</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="2">
+<colspec colname="name" colwidth="150px"/>
+<colspec colname="description"/>
+<tbody>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMap-struct">OsmGpsMap</link></entry></row>
+<row><entry role="datatype_keyword">struct</entry><entry role="function_name"><link linkend="OsmGpsMapClass">OsmGpsMapClass</link></entry></row>
+<row><entry role="define_keyword">#define</entry><entry role="function_name"><link linkend="OSM-GPS-MAP-CACHE-DISABLED:CAPS">OSM_GPS_MAP_CACHE_DISABLED</link></entry></row>
+<row><entry role="define_keyword">#define</entry><entry role="function_name"><link linkend="OSM-GPS-MAP-CACHE-AUTO:CAPS">OSM_GPS_MAP_CACHE_AUTO</link></entry></row>
+<row><entry role="define_keyword">#define</entry><entry role="function_name"><link linkend="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS">OSM_GPS_MAP_CACHE_FRIENDLY</link></entry></row>
+<row><entry role="datatype_keyword">enum</entry><entry role="function_name"><link linkend="OsmGpsMapSource-t">OsmGpsMapSource_t</link></entry></row>
+<row><entry role="datatype_keyword">enum</entry><entry role="function_name"><link linkend="OsmGpsMapKey-t">OsmGpsMapKey_t</link></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+</refsect1>
+<refsect1 id="OsmGpsMap.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<screen>    <link linkend="GObject">GObject</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="GInitiallyUnowned">GInitiallyUnowned</link>
+        <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="GtkWidget">GtkWidget</link>
+            <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="GtkDrawingArea">GtkDrawingArea</link>
+                <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> OsmGpsMap
+</screen>
+</refsect1>
+<refsect1 id="OsmGpsMap.implemented-interfaces" role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+OsmGpsMap implements
+ <link linkend="AtkImplementorIface">AtkImplementorIface</link> and  <link linkend="GtkBuildable">GtkBuildable</link>.</para>
+
+</refsect1>
+
+<refsect1 id="OsmGpsMap.includes"><title>Includes</title><synopsis>#include &lt;osm-gps-map.h&gt;
+</synopsis></refsect1>
+
+<refsect1 id="OsmGpsMap.description" role="desc">
+<title role="desc.title">Description</title>
+<para><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> is a widget for displaying a map, optionally overlaid with a
+track(s) of GPS co-ordinates, images, points of interest or on screen display
+controls. <link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> downloads (and caches for offline use) map data from a
+number of websites, including</para>
+<ulink url="http://www.openstreetmap.org"><citetitle>OpenStreetMap</citetitle></ulink>
+<example>
+ <title>Showing a map</title>
+ <programlisting>
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+
+    GtkWidget *map = osm_gps_map_new ();
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </programlisting>
+</example>
+<para><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> allows great flexibility in customizing how the map tiles are
+cached, see <link linkend="OsmGpsMap--tile-cache-base"><type>“tile-cache-base”</type></link> and <link linkend="OsmGpsMap--tile-cache"><type>“tile-cache”</type></link> for more
+information.</para>
+<para>A number of different map sources are supported, see <link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link>. The
+default source, <link linkend="OSM-GPS-MAP-SOURCE-OPENSTREETMAP:CAPS"><literal>OSM_GPS_MAP_SOURCE_OPENSTREETMAP</literal></link> always works. Other sources,
+particular those from proprietary providers may work occasionally, and then
+cease to work. To check if a source is supported for the given version of
+this library, call <link linkend="osm-gps-map-source-is-valid"><function>osm_gps_map_source_is_valid()</function></link>.</para>
+<example>
+ <title>Map with custom source and cache dir</title>
+ <programlisting>
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+    OsmGpsMapSource_t source = OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE;
+
+    if ( !osm_gps_map_source_is_valid(source) )
+        return 1;
+
+    GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+                     "map-source", source,
+                     "tile-cache", "/tmp/",
+                      NULL);
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </programlisting>
+</example>
+<para>Finally, if you wish to use a custom map source not supported by <link linkend="OsmGpsMap"><type>OsmGpsMap</type></link>, 
+such as a custom map created with</para>
+<ulink url="http://www.cloudmade.com"><citetitle>CloudMade</citetitle></ulink>
+<para>then you can also pass a specially formatted string to <link linkend="OsmGpsMap--repo-uri"><type>“repo-uri”</type></link>.</para>
+<example>
+ <title>Map using custom CloudMade map and on screen display</title>
+ <programlisting>
+int main (int argc, char **argv)
+{
+    g_thread_init(NULL);
+    gtk_init (&amp;argc, &amp;argv);
+    const gchar *cloudmate = "http://a.tile.cloudmade.com/YOUR_API_KEY/1/256/&num;Z/&num;X/&num;Y.png";
+
+    GtkWidget *map = g_object_new (OSM_TYPE_GPS_MAP,
+                     "repo-uri", cloudmate,
+                      NULL);
+    OsmGpsMapOsd *osd = osm_gps_map_osd_new ();
+    GtkWidget *w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    osm_gps_map_layer_add (OSM_GPS_MAP(map), OSM_GPS_MAP_LAYER(osd));
+    gtk_container_add (GTK_CONTAINER(w), map);
+    gtk_widget_show_all (w);
+
+    gtk_main ();
+    return 0;
+}
+ </programlisting>
+</example>
+
+</refsect1>
+<refsect1 id="OsmGpsMap.functions_details" role="details">
+<title role="details.title">Functions</title>
+<refsect2 id="OSM-GPS-MAP-INVALID:CAPS" role="macro">
+<title>OSM_GPS_MAP_INVALID</title>
+<indexterm zone="OSM-GPS-MAP-INVALID:CAPS"><primary sortas="INVALID">OSM_GPS_MAP_INVALID</primary></indexterm>
+<programlisting language="C">#define OSM_GPS_MAP_INVALID         (0.0/0.0)
+</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="osm-gps-map-get-default-cache-directory" role="function">
+<title>osm_gps_map_get_default_cache_directory&#160;()</title>
+<indexterm zone="osm-gps-map-get-default-cache-directory"><primary sortas="get_default_cache_directory">osm_gps_map_get_default_cache_directory</primary></indexterm>
+<programlisting language="C"><link linkend="gchar"><returnvalue>gchar</returnvalue></link>&#160;*
+osm_gps_map_get_default_cache_directory
+                               (<parameter><type>void</type></parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> the default cache directory for the library, that is the base
+directory to which the full cache path is appended. If
+<link linkend="OsmGpsMap--tile-cache-base"><type>“tile-cache-base”</type></link> is omitted from the constructor then this value
+is used.</para>
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-get-friendly-name" role="function">
+<title>osm_gps_map_source_get_friendly_name&#160;()</title>
+<indexterm zone="osm-gps-map-source-get-friendly-name"><primary sortas="source_get_friendly_name">osm_gps_map_source_get_friendly_name</primary></indexterm>
+<programlisting language="C">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+osm_gps_map_source_get_friendly_name (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-get-repo-uri" role="function">
+<title>osm_gps_map_source_get_repo_uri&#160;()</title>
+<indexterm zone="osm-gps-map-source-get-repo-uri"><primary sortas="source_get_repo_uri">osm_gps_map_source_get_repo_uri</primary></indexterm>
+<programlisting language="C">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+osm_gps_map_source_get_repo_uri (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-get-image-format" role="function">
+<title>osm_gps_map_source_get_image_format&#160;()</title>
+<indexterm zone="osm-gps-map-source-get-image-format"><primary sortas="source_get_image_format">osm_gps_map_source_get_image_format</primary></indexterm>
+<programlisting language="C">const <link linkend="char"><returnvalue>char</returnvalue></link>&#160;*
+osm_gps_map_source_get_image_format (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-get-min-zoom" role="function">
+<title>osm_gps_map_source_get_min_zoom&#160;()</title>
+<indexterm zone="osm-gps-map-source-get-min-zoom"><primary sortas="source_get_min_zoom">osm_gps_map_source_get_min_zoom</primary></indexterm>
+<programlisting language="C"><link linkend="int"><returnvalue>int</returnvalue></link>
+osm_gps_map_source_get_min_zoom (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-get-max-zoom" role="function">
+<title>osm_gps_map_source_get_max_zoom&#160;()</title>
+<indexterm zone="osm-gps-map-source-get-max-zoom"><primary sortas="source_get_max_zoom">osm_gps_map_source_get_max_zoom</primary></indexterm>
+<programlisting language="C"><link linkend="int"><returnvalue>int</returnvalue></link>
+osm_gps_map_source_get_max_zoom (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-source-is-valid" role="function">
+<title>osm_gps_map_source_is_valid&#160;()</title>
+<indexterm zone="osm-gps-map-source-is-valid"><primary sortas="source_is_valid">osm_gps_map_source_is_valid</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_source_is_valid (<parameter><link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> source</parameter>);</programlisting>
+<para>
+</para>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-new" role="function">
+<title>osm_gps_map_new&#160;()</title>
+<indexterm zone="osm-gps-map-new"><primary sortas="new">osm_gps_map_new</primary></indexterm>
+<programlisting language="C"><link linkend="GtkWidget"><returnvalue>GtkWidget</returnvalue></link>&#160;*
+osm_gps_map_new (<parameter><type>void</type></parameter>);</programlisting>
+<para>Returns a new <link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> object, defaults to showing data from</para>
+<ulink url="http://www.openstreetmap.org"><citetitle>OpenStreetMap</citetitle></ulink>
+<para>See the properties description for more information about construction
+parameters than could be passed to <link linkend="g-object-new"><function>g_object_new()</function></link></para>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> a newly created <link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> object.</para>
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-download-maps" role="function">
+<title>osm_gps_map_download_maps&#160;()</title>
+<indexterm zone="osm-gps-map-download-maps"><primary sortas="download_maps">osm_gps_map_download_maps</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_download_maps (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                           <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt1</parameter>,
+                           <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt2</parameter>,
+                           <parameter><link linkend="int"><type>int</type></link> zoom_start</parameter>,
+                           <parameter><link linkend="int"><type>int</type></link> zoom_end</parameter>);</programlisting>
+<para>Downloads all tiles over the supplied zoom range in the rectangular
+region specified by pt1 (north west corner) to pt2 (south east corner)</para>
+</refsect2>
+<refsect2 id="osm-gps-map-download-cancel-all" role="function" condition="since:0.7.0">
+<title>osm_gps_map_download_cancel_all&#160;()</title>
+<indexterm zone="osm-gps-map-download-cancel-all" role="0.7.0"><primary sortas="download_cancel_all">osm_gps_map_download_cancel_all</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_download_cancel_all (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para>Cancels all tiles currently being downloaded. Typically used if you wish to
+cacel a large number of tiles queued using <link linkend="osm-gps-map-download-maps"><function>osm_gps_map_download_maps()</function></link></para>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-get-bbox" role="function">
+<title>osm_gps_map_get_bbox&#160;()</title>
+<indexterm zone="osm-gps-map-get-bbox"><primary sortas="get_bbox">osm_gps_map_get_bbox</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_get_bbox (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                      <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt1</parameter>,
+                      <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt2</parameter>);</programlisting>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>pt1</para></entry>
+<entry role="parameter_description"><para> point to be filled with the top left location. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+<row><entry role="parameter_name"><para>pt2</para></entry>
+<entry role="parameter_description"><para> point to be filled with the bottom right location. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-set-center" role="function">
+<title>osm_gps_map_set_center&#160;()</title>
+<indexterm zone="osm-gps-map-set-center"><primary sortas="set_center">osm_gps_map_set_center</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_set_center (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                        <parameter><link linkend="float"><type>float</type></link> latitude</parameter>,
+                        <parameter><link linkend="float"><type>float</type></link> longitude</parameter>);</programlisting>
+</refsect2>
+<refsect2 id="osm-gps-map-set-center-and-zoom" role="function" condition="since:0.7.0">
+<title>osm_gps_map_set_center_and_zoom&#160;()</title>
+<indexterm zone="osm-gps-map-set-center-and-zoom" role="0.7.0"><primary sortas="set_center_and_zoom">osm_gps_map_set_center_and_zoom</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_set_center_and_zoom (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                 <parameter><link linkend="float"><type>float</type></link> latitude</parameter>,
+                                 <parameter><link linkend="float"><type>float</type></link> longitude</parameter>,
+                                 <parameter><link linkend="int"><type>int</type></link> zoom</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-set-zoom" role="function">
+<title>osm_gps_map_set_zoom&#160;()</title>
+<indexterm zone="osm-gps-map-set-zoom"><primary sortas="set_zoom">osm_gps_map_set_zoom</primary></indexterm>
+<programlisting language="C"><link linkend="int"><returnvalue>int</returnvalue></link>
+osm_gps_map_set_zoom (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                      <parameter><link linkend="int"><type>int</type></link> zoom</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-zoom-in" role="function">
+<title>osm_gps_map_zoom_in&#160;()</title>
+<indexterm zone="osm-gps-map-zoom-in"><primary sortas="zoom_in">osm_gps_map_zoom_in</primary></indexterm>
+<programlisting language="C"><link linkend="int"><returnvalue>int</returnvalue></link>
+osm_gps_map_zoom_in (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-zoom-out" role="function">
+<title>osm_gps_map_zoom_out&#160;()</title>
+<indexterm zone="osm-gps-map-zoom-out"><primary sortas="zoom_out">osm_gps_map_zoom_out</primary></indexterm>
+<programlisting language="C"><link linkend="int"><returnvalue>int</returnvalue></link>
+osm_gps_map_zoom_out (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-scroll" role="function">
+<title>osm_gps_map_scroll&#160;()</title>
+<indexterm zone="osm-gps-map-scroll"><primary sortas="scroll">osm_gps_map_scroll</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_scroll (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                    <parameter><link linkend="gint"><type>gint</type></link> dx</parameter>,
+                    <parameter><link linkend="gint"><type>gint</type></link> dy</parameter>);</programlisting>
+<para>Scrolls the map by <parameter>dx</parameter>
+, <parameter>dy</parameter>
+ pixels (positive north, east)</para>
+</refsect2>
+<refsect2 id="osm-gps-map-get-scale" role="function">
+<title>osm_gps_map_get_scale&#160;()</title>
+<indexterm zone="osm-gps-map-get-scale"><primary sortas="get_scale">osm_gps_map_get_scale</primary></indexterm>
+<programlisting language="C"><link linkend="float"><returnvalue>float</returnvalue></link>
+osm_gps_map_get_scale (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> the scale of the map at the center, in meters/pixel.</para>
+<para></para>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-set-keyboard-shortcut" role="function">
+<title>osm_gps_map_set_keyboard_shortcut&#160;()</title>
+<indexterm zone="osm-gps-map-set-keyboard-shortcut"><primary sortas="set_keyboard_shortcut">osm_gps_map_set_keyboard_shortcut</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_set_keyboard_shortcut (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                   <parameter><link linkend="OsmGpsMapKey-t"><type>OsmGpsMapKey_t</type></link> key</parameter>,
+                                   <parameter><link linkend="guint"><type>guint</type></link> keyval</parameter>);</programlisting>
+<para>Associates a keyboard shortcut with the supplied <parameter>keyval</parameter>
+
+(as returned by <link linkend="gdk-keyval-from-name"><type>gdk_keyval_from_name</type></link> or simiar). The action given in <parameter>key</parameter>
+
+will be triggered when the corresponding <parameter>keyval</parameter>
+ is pressed. By default
+no keyboard shortcuts are associated.</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>key</para></entry>
+<entry role="parameter_description"><para>a <link linkend="OsmGpsMapKey-t"><type>OsmGpsMapKey_t</type></link></para></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3></refsect2>
+<refsect2 id="osm-gps-map-get-event-location" role="function" condition="since:0.7.0">
+<title>osm_gps_map_get_event_location&#160;()</title>
+<indexterm zone="osm-gps-map-get-event-location" role="0.7.0"><primary sortas="get_event_location">osm_gps_map_get_event_location</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapPoint"><returnvalue>OsmGpsMapPoint</returnvalue></link>&#160;*
+osm_gps_map_get_event_location (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                <parameter><link linkend="GdkEventButton"><type>GdkEventButton</type></link> *event</parameter>);</programlisting>
+<para>A convenience function for getting the geographic location of events,
+such as mouse clicks, on the map</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>event</para></entry>
+<entry role="parameter_description"><para>A <link linkend="GtkEventButton"><type>GtkEventButton</type></link> that occured on the map</para></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><refsect3 role="returns">
+<title>Returns</title>
+<para> The point on the globe corresponding to the click. </para>
+<para><emphasis role="annotation">[<acronym>transfer full</acronym>]</emphasis></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-convert-geographic-to-screen" role="function" condition="since:0.7.0">
+<title>osm_gps_map_convert_geographic_to_screen&#160;()</title>
+<indexterm zone="osm-gps-map-convert-geographic-to-screen" role="0.7.0"><primary sortas="convert_geographic_to_screen">osm_gps_map_convert_geographic_to_screen</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_convert_geographic_to_screen
+                               (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt</parameter>,
+                                <parameter><link linkend="gint"><type>gint</type></link> *pixel_x</parameter>,
+                                <parameter><link linkend="gint"><type>gint</type></link> *pixel_y</parameter>);</programlisting>
+<para>Convert the given location on the globe to the corresponding
+pixel locations on the map.</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>pt</para></entry>
+<entry role="parameter_description"><para>location</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>pixel_x</para></entry>
+<entry role="parameter_description"><para> pixel location on map, x axis. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+<row><entry role="parameter_name"><para>pixel_y</para></entry>
+<entry role="parameter_description"><para> pixel location on map, y axis. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-convert-screen-to-geographic" role="function" condition="since:0.7.0">
+<title>osm_gps_map_convert_screen_to_geographic&#160;()</title>
+<indexterm zone="osm-gps-map-convert-screen-to-geographic" role="0.7.0"><primary sortas="convert_screen_to_geographic">osm_gps_map_convert_screen_to_geographic</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_convert_screen_to_geographic
+                               (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                <parameter><link linkend="gint"><type>gint</type></link> pixel_x</parameter>,
+                                <parameter><link linkend="gint"><type>gint</type></link> pixel_y</parameter>,
+                                <parameter><link linkend="OsmGpsMapPoint"><type>OsmGpsMapPoint</type></link> *pt</parameter>);</programlisting>
+<para>Convert the given pixel location on the map into corresponding
+location on the globe</para>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>pixel_x</para></entry>
+<entry role="parameter_description"><para>pixel location on map, x axis</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>pixel_y</para></entry>
+<entry role="parameter_description"><para>pixel location on map, y axis</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>pt</para></entry>
+<entry role="parameter_description"><para> location. </para></entry>
+<entry role="parameter_annotations"><emphasis role="annotation">[<acronym>out</acronym>]</emphasis></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-gps-add" role="function" condition="since:0.7.0">
+<title>osm_gps_map_gps_add&#160;()</title>
+<indexterm zone="osm-gps-map-gps-add" role="0.7.0"><primary sortas="gps_add">osm_gps_map_gps_add</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_gps_add (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                     <parameter><link linkend="float"><type>float</type></link> latitude</parameter>,
+                     <parameter><link linkend="float"><type>float</type></link> longitude</parameter>,
+                     <parameter><link linkend="float"><type>float</type></link> heading</parameter>);</programlisting>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>latitude</para></entry>
+<entry role="parameter_description"><para>degrees</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>longitude</para></entry>
+<entry role="parameter_description"><para>degrees</para></entry>
+<entry role="parameter_annotations"></entry></row>
+<row><entry role="parameter_name"><para>heading</para></entry>
+<entry role="parameter_description"><para>degrees or <link linkend="OSM-GPS-MAP-INVALID:CAPS"><type>OSM_GPS_MAP_INVALID</type></link> to disable showing heading</para></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-gps-clear" role="function" condition="since:0.7.0">
+<title>osm_gps_map_gps_clear&#160;()</title>
+<indexterm zone="osm-gps-map-gps-clear" role="0.7.0"><primary sortas="gps_clear">osm_gps_map_gps_clear</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_gps_clear (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-gps-get-track" role="function" condition="since:0.7.0">
+<title>osm_gps_map_gps_get_track&#160;()</title>
+<indexterm zone="osm-gps-map-gps-get-track" role="0.7.0"><primary sortas="gps_get_track">osm_gps_map_gps_get_track</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapTrack"><returnvalue>OsmGpsMapTrack</returnvalue></link>&#160;*
+osm_gps_map_gps_get_track (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> The <link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> of the internal GPS track,
+i.e. that which is modified when calling <link linkend="osm-gps-map-gps-add"><function>osm_gps_map_gps_add()</function></link>. You must
+not free this. </para>
+<para><emphasis role="annotation">[<acronym>transfer none</acronym>]</emphasis></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-track-add" role="function" condition="since:0.7.0">
+<title>osm_gps_map_track_add&#160;()</title>
+<indexterm zone="osm-gps-map-track-add" role="0.7.0"><primary sortas="track_add">osm_gps_map_track_add</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_track_add (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                       <parameter><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *track</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-track-remove" role="function" condition="since:0.7.0">
+<title>osm_gps_map_track_remove&#160;()</title>
+<indexterm zone="osm-gps-map-track-remove" role="0.7.0"><primary sortas="track_remove">osm_gps_map_track_remove</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_track_remove (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                          <parameter><link linkend="OsmGpsMapTrack"><type>OsmGpsMapTrack</type></link> *track</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-track-remove-all" role="function" condition="since:0.7.0">
+<title>osm_gps_map_track_remove_all&#160;()</title>
+<indexterm zone="osm-gps-map-track-remove-all" role="0.7.0"><primary sortas="track_remove_all">osm_gps_map_track_remove_all</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_track_remove_all (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-image-add" role="function" condition="since:0.7.0">
+<title>osm_gps_map_image_add&#160;()</title>
+<indexterm zone="osm-gps-map-image-add" role="0.7.0"><primary sortas="image_add">osm_gps_map_image_add</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+osm_gps_map_image_add (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                       <parameter><link linkend="float"><type>float</type></link> latitude</parameter>,
+                       <parameter><link linkend="float"><type>float</type></link> longitude</parameter>,
+                       <parameter><link linkend="GdkPixbuf"><type>GdkPixbuf</type></link> *image</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> A <link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> representing the added pixbuf. </para>
+<para><emphasis role="annotation">[<acronym>transfer full</acronym>]</emphasis></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-image-add-with-alignment" role="function" condition="since:0.7.0">
+<title>osm_gps_map_image_add_with_alignment&#160;()</title>
+<indexterm zone="osm-gps-map-image-add-with-alignment" role="0.7.0"><primary sortas="image_add_with_alignment">osm_gps_map_image_add_with_alignment</primary></indexterm>
+<programlisting language="C"><link linkend="OsmGpsMapImage"><returnvalue>OsmGpsMapImage</returnvalue></link>&#160;*
+osm_gps_map_image_add_with_alignment (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                                      <parameter><link linkend="float"><type>float</type></link> latitude</parameter>,
+                                      <parameter><link linkend="float"><type>float</type></link> longitude</parameter>,
+                                      <parameter><link linkend="GdkPixbuf"><type>GdkPixbuf</type></link> *image</parameter>,
+                                      <parameter><link linkend="float"><type>float</type></link> xalign</parameter>,
+                                      <parameter><link linkend="float"><type>float</type></link> yalign</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+<para> A <link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> representing the added pixbuf. </para>
+<para><emphasis role="annotation">[<acronym>transfer full</acronym>]</emphasis></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-image-remove" role="function" condition="since:0.7.0">
+<title>osm_gps_map_image_remove&#160;()</title>
+<indexterm zone="osm-gps-map-image-remove" role="0.7.0"><primary sortas="image_remove">osm_gps_map_image_remove</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_image_remove (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                          <parameter><link linkend="OsmGpsMapImage"><type>OsmGpsMapImage</type></link> *image</parameter>);</programlisting>
+<refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-image-remove-all" role="function" condition="since:0.7.0">
+<title>osm_gps_map_image_remove_all&#160;()</title>
+<indexterm zone="osm-gps-map-image-remove-all" role="0.7.0"><primary sortas="image_remove_all">osm_gps_map_image_remove_all</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_image_remove_all (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-layer-add" role="function" condition="since:0.7.0">
+<title>osm_gps_map_layer_add&#160;()</title>
+<indexterm zone="osm-gps-map-layer-add" role="0.7.0"><primary sortas="layer_add">osm_gps_map_layer_add</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_layer_add (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                       <parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *layer</parameter>);</programlisting>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>layer</para></entry>
+<entry role="parameter_description"><para>a <link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> object</para></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-layer-remove" role="function" condition="since:0.7.0">
+<title>osm_gps_map_layer_remove&#160;()</title>
+<indexterm zone="osm-gps-map-layer-remove" role="0.7.0"><primary sortas="layer_remove">osm_gps_map_layer_remove</primary></indexterm>
+<programlisting language="C"><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>
+osm_gps_map_layer_remove (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>,
+                          <parameter><link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> *layer</parameter>);</programlisting>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><para>layer</para></entry>
+<entry role="parameter_description"><para>a <link linkend="OsmGpsMapLayer"><type>OsmGpsMapLayer</type></link> object</para></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><refsect3 role="returns">
+<title>Returns</title>
+
+<para></para>
+</refsect3><para role="since">Since 0.7.0</para></refsect2>
+<refsect2 id="osm-gps-map-layer-remove-all" role="function" condition="since:0.7.0">
+<title>osm_gps_map_layer_remove_all&#160;()</title>
+<indexterm zone="osm-gps-map-layer-remove-all" role="0.7.0"><primary sortas="layer_remove_all">osm_gps_map_layer_remove_all</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+osm_gps_map_layer_remove_all (<parameter><link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *map</parameter>);</programlisting>
+<para role="since">Since 0.7.0</para></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMap.other_details" role="details">
+<title role="details.title">Types and Values</title>
+<refsect2 id="OsmGpsMap-struct" role="struct">
+<title>struct OsmGpsMap</title>
+<indexterm zone="OsmGpsMap-struct"><primary>OsmGpsMap</primary></indexterm>
+<programlisting language="C">struct OsmGpsMap;</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapClass" role="struct">
+<title>struct OsmGpsMapClass</title>
+<indexterm zone="OsmGpsMapClass"><primary>OsmGpsMapClass</primary></indexterm>
+<programlisting language="C">struct OsmGpsMapClass {
+    GtkDrawingAreaClass parent_class;
+
+    void (*draw_gps_point) (OsmGpsMap *map, cairo_t *cr);
+};
+</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OSM-GPS-MAP-CACHE-DISABLED:CAPS" role="macro">
+<title>OSM_GPS_MAP_CACHE_DISABLED</title>
+<indexterm zone="OSM-GPS-MAP-CACHE-DISABLED:CAPS"><primary sortas="CACHE_DISABLED">OSM_GPS_MAP_CACHE_DISABLED</primary></indexterm>
+<programlisting language="C">#define OSM_GPS_MAP_CACHE_DISABLED  "none://"
+</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OSM-GPS-MAP-CACHE-AUTO:CAPS" role="macro">
+<title>OSM_GPS_MAP_CACHE_AUTO</title>
+<indexterm zone="OSM-GPS-MAP-CACHE-AUTO:CAPS"><primary sortas="CACHE_AUTO">OSM_GPS_MAP_CACHE_AUTO</primary></indexterm>
+<programlisting language="C">#define OSM_GPS_MAP_CACHE_AUTO      "auto://"
+</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS" role="macro">
+<title>OSM_GPS_MAP_CACHE_FRIENDLY</title>
+<indexterm zone="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"><primary sortas="CACHE_FRIENDLY">OSM_GPS_MAP_CACHE_FRIENDLY</primary></indexterm>
+<programlisting language="C">#define OSM_GPS_MAP_CACHE_FRIENDLY  "friendly://"
+</programlisting>
+<para>
+</para>
+</refsect2>
+<refsect2 id="OsmGpsMapSource-t" role="enum">
+<title>enum OsmGpsMapSource_t</title>
+<indexterm zone="OsmGpsMapSource-t"><primary>OsmGpsMapSource_t</primary></indexterm>
+<para>
+</para>
+<refsect3 role="enum_members">
+<title>Members</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="enum_members_name" colwidth="300px"/>
+<colspec colname="enum_members_description"/>
+<colspec colname="enum_members_annotations" colwidth="200px"/>
+<tbody>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-NULL:CAPS">OSM_GPS_MAP_SOURCE_NULL</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OPENSTREETMAP:CAPS">OSM_GPS_MAP_SOURCE_OPENSTREETMAP</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OPENSTREETMAP-RENDERER:CAPS">OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OPENAERIALMAP:CAPS">OSM_GPS_MAP_SOURCE_OPENAERIALMAP</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-MAPS-FOR-FREE:CAPS">OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OPENCYCLEMAP:CAPS">OSM_GPS_MAP_SOURCE_OPENCYCLEMAP</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OSM-PUBLIC-TRANSPORT:CAPS">OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-GOOGLE-STREET:CAPS">OSM_GPS_MAP_SOURCE_GOOGLE_STREET</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-GOOGLE-SATELLITE:CAPS">OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-GOOGLE-HYBRID:CAPS">OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-VIRTUAL-EARTH-STREET:CAPS">OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-VIRTUAL-EARTH-SATELLITE:CAPS">OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-VIRTUAL-EARTH-HYBRID:CAPS">OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-OSMC-TRAILS:CAPS">OSM_GPS_MAP_SOURCE_OSMC_TRAILS</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-SOURCE-LAST:CAPS">OSM_GPS_MAP_SOURCE_LAST</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+</tbody></tgroup></informaltable>
+</refsect3></refsect2>
+<refsect2 id="OsmGpsMapKey-t" role="enum">
+<title>enum OsmGpsMapKey_t</title>
+<indexterm zone="OsmGpsMapKey-t"><primary>OsmGpsMapKey_t</primary></indexterm>
+<para>
+</para>
+<refsect3 role="enum_members">
+<title>Members</title>
+<informaltable role="enum_members_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="enum_members_name" colwidth="300px"/>
+<colspec colname="enum_members_description"/>
+<colspec colname="enum_members_annotations" colwidth="200px"/>
+<tbody>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-FULLSCREEN:CAPS">OSM_GPS_MAP_KEY_FULLSCREEN</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-ZOOMIN:CAPS">OSM_GPS_MAP_KEY_ZOOMIN</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-ZOOMOUT:CAPS">OSM_GPS_MAP_KEY_ZOOMOUT</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-UP:CAPS">OSM_GPS_MAP_KEY_UP</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-DOWN:CAPS">OSM_GPS_MAP_KEY_DOWN</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-LEFT:CAPS">OSM_GPS_MAP_KEY_LEFT</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-RIGHT:CAPS">OSM_GPS_MAP_KEY_RIGHT</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+<row role="constant"><entry role="enum_member_name"><para id="OSM-GPS-MAP-KEY-MAX:CAPS">OSM_GPS_MAP_KEY_MAX</para></entry>
+<entry role="enum_member_description"></entry>
+<entry role="enum_member_annotations"></entry>
+</row>
+</tbody></tgroup></informaltable>
+</refsect3></refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMap.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="OsmGpsMap--auto-center" role="property"><title>The <literal>“auto-center”</literal> property</title>
+<indexterm zone="OsmGpsMap--auto-center"><primary>OsmGpsMap:auto-center</primary></indexterm>
+<programlisting>  “auto-center”              <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>map auto center.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--auto-center-threshold" role="property"><title>The <literal>“auto-center-threshold”</literal> property</title>
+<indexterm zone="OsmGpsMap--auto-center-threshold"><primary>OsmGpsMap:auto-center-threshold</primary></indexterm>
+<programlisting>  “auto-center-threshold”    <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>the amount of the window the gps point must move before auto centering.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [0,1]</para>
+<para>Default value: 0.25</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--auto-download" role="property"><title>The <literal>“auto-download”</literal> property</title>
+<indexterm zone="OsmGpsMap--auto-download"><primary>OsmGpsMap:auto-download</primary></indexterm>
+<programlisting>  “auto-download”            <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>map auto download.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--drag-limit" role="property"><title>The <literal>“drag-limit”</literal> property</title>
+<indexterm zone="OsmGpsMap--drag-limit"><primary>OsmGpsMap:drag-limit</primary></indexterm>
+<programlisting>  “drag-limit”               <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The number of pixels the user has to move the pointer in order to start dragging.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Allowed values: &gt;= 0</para>
+<para>Default value: 10</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--gps-track-highlight-radius" role="property"><title>The <literal>“gps-track-highlight-radius”</literal> property</title>
+<indexterm zone="OsmGpsMap--gps-track-highlight-radius"><primary>OsmGpsMap:gps-track-highlight-radius</primary></indexterm>
+<programlisting>  “gps-track-highlight-radius” <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The radius of the gps point highlight circle.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: &gt;= 0</para>
+<para>Default value: 20</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--gps-track-point-radius" role="property"><title>The <literal>“gps-track-point-radius”</literal> property</title>
+<indexterm zone="OsmGpsMap--gps-track-point-radius"><primary>OsmGpsMap:gps-track-point-radius</primary></indexterm>
+<programlisting>  “gps-track-point-radius”   <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The radius of the gps point inner circle.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: &gt;= 0</para>
+<para>Default value: 5</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--gps-track-width" role="property"><title>The <literal>“gps-track-width”</literal> property</title>
+<indexterm zone="OsmGpsMap--gps-track-width"><primary>OsmGpsMap:gps-track-width</primary></indexterm>
+<programlisting>  “gps-track-width”          <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>The width of the lines drawn for the gps track.</para><para>Flags: Read / Write / Construct</para>
+<para>Allowed values: [1,100]</para>
+<para>Default value: 4</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--image-format" role="property"><title>The <literal>“image-format”</literal> property</title>
+<indexterm zone="OsmGpsMap--image-format"><primary>OsmGpsMap:image-format</primary></indexterm>
+<programlisting>  “image-format”             <link linkend="gchar"><type>gchar</type></link>&#160;*</programlisting>
+<para>The map source tile repository image format (jpg, png).</para><para>Flags: Read / Write / Construct Only</para>
+<para>Default value: "png"</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--latitude" role="property"><title>The <literal>“latitude”</literal> property</title>
+<indexterm zone="OsmGpsMap--latitude"><primary>OsmGpsMap:latitude</primary></indexterm>
+<programlisting>  “latitude”                 <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>Latitude in degrees.</para><para>Flags: Read</para>
+<para>Allowed values: [-90,90]</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--longitude" role="property"><title>The <literal>“longitude”</literal> property</title>
+<indexterm zone="OsmGpsMap--longitude"><primary>OsmGpsMap:longitude</primary></indexterm>
+<programlisting>  “longitude”                <link linkend="gfloat"><type>gfloat</type></link></programlisting>
+<para>Longitude in degrees.</para><para>Flags: Read</para>
+<para>Allowed values: [-180,180]</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--map-source" role="property"><title>The <literal>“map-source”</literal> property</title>
+<indexterm zone="OsmGpsMap--map-source"><primary>OsmGpsMap:map-source</primary></indexterm>
+<programlisting>  “map-source”               <link linkend="gint"><type>gint</type></link></programlisting>
+<para>A <link linkend="OsmGpsMapSource-t"><type>OsmGpsMapSource_t</type></link> representing the tile repository to use</para>
+<note>
+<para>
+If you do not wish to use the default map tiles (provided by OpenStreeMap)
+it is recommened that you set this property at construction, instead
+of setting <link linkend="OsmGpsMap--repo-uri"><type>“repo-uri”</type></link>.
+</para>
+</note>
+<para>Flags: Read / Write / Construct</para>
+<para>Allowed values: &gt;= -1</para>
+<para>Default value: -1</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--map-x" role="property"><title>The <literal>“map-x”</literal> property</title>
+<indexterm zone="OsmGpsMap--map-x"><primary>OsmGpsMap:map-x</primary></indexterm>
+<programlisting>  “map-x”                    <link linkend="gint"><type>gint</type></link></programlisting>
+<para>Initial map x location.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Default value: 890</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--map-y" role="property"><title>The <literal>“map-y”</literal> property</title>
+<indexterm zone="OsmGpsMap--map-y"><primary>OsmGpsMap:map-y</primary></indexterm>
+<programlisting>  “map-y”                    <link linkend="gint"><type>gint</type></link></programlisting>
+<para>Initial map y location.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Default value: 515</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--max-zoom" role="property"><title>The <literal>“max-zoom”</literal> property</title>
+<indexterm zone="OsmGpsMap--max-zoom"><primary>OsmGpsMap:max-zoom</primary></indexterm>
+<programlisting>  “max-zoom”                 <link linkend="gint"><type>gint</type></link></programlisting>
+<para>Maximum zoom level.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Allowed values: [0,20]</para>
+<para>Default value: 18</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--min-zoom" role="property"><title>The <literal>“min-zoom”</literal> property</title>
+<indexterm zone="OsmGpsMap--min-zoom"><primary>OsmGpsMap:min-zoom</primary></indexterm>
+<programlisting>  “min-zoom”                 <link linkend="gint"><type>gint</type></link></programlisting>
+<para>Minimum zoom level.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Allowed values: [0,20]</para>
+<para>Default value: 1</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--proxy-uri" role="property"><title>The <literal>“proxy-uri”</literal> property</title>
+<indexterm zone="OsmGpsMap--proxy-uri"><primary>OsmGpsMap:proxy-uri</primary></indexterm>
+<programlisting>  “proxy-uri”                <link linkend="gchar"><type>gchar</type></link>&#160;*</programlisting>
+<para>HTTP proxy uri or NULL.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Default value: NULL</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--record-trip-history" role="property"><title>The <literal>“record-trip-history”</literal> property</title>
+<indexterm zone="OsmGpsMap--record-trip-history"><primary>OsmGpsMap:record-trip-history</primary></indexterm>
+<programlisting>  “record-trip-history”      <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>should all gps points be recorded in a trip history.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--repo-uri" role="property"><title>The <literal>“repo-uri”</literal> property</title>
+<indexterm zone="OsmGpsMap--repo-uri"><primary>OsmGpsMap:repo-uri</primary></indexterm>
+<programlisting>  “repo-uri”                 <link linkend="gchar"><type>gchar</type></link>&#160;*</programlisting>
+<para>A URI string which defines the location and format to fetch tiles
+for the map. The string is of the format
+"http://tile.openstreetmap.org/&num;Z/&num;X/&num;Y.png". Characters
+that begin with &num; are treated as tokens and replaced according to
+the following rules;</para>
+<itemizedlist>
+<listitem>
+<para>
+#X - X-tile, slippy map format
+</para>
+</listitem>
+<listitem>
+<para>
+#Y - Y-tile, slippy map format, mercator projection
+</para>
+</listitem>
+<listitem>
+<para>
+#Z - Zoom level, where min_zoom &gt;= zoom &lt;= max_zoom
+</para>
+</listitem>
+<listitem>
+<para>
+#S - Zoom level, where -max_zoom &gt;= (zoom-max_zoom) &lt;= min_zoom
+</para>
+</listitem>
+<listitem>
+<para>
+#Q - Quad tree format, set of "qrts"
+</para>
+</listitem>
+<listitem>
+<para>
+#Q0 - Quad tree format, set of "0123"
+</para>
+</listitem>
+<listitem>
+<para>
+#YS - Not Implemented
+</para>
+</listitem>
+<listitem>
+<para>
+#R - Random integer in range [0,4]
+</para>
+</listitem>
+</itemizedlist>
+<note>
+<para>
+If you do not wish to use the default map tiles (provided by OpenStreeMap)
+it is recommened that you use one of the predefined map sources, and thus
+you should construct the map by setting <link linkend="OsmGpsMap--map-source"><type>“map-source”</type></link> and not
+<link linkend="OsmGpsMap--repo-uri"><type>“repo-uri”</type></link>. The <link linkend="OsmGpsMap--repo-uri"><type>“repo-uri”</type></link> property is primarily
+designed for applications that wish complete control of tile repository
+management, or wish to use <link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> with a tile repository it does not
+explicitly support.
+</para>
+</note>
+<para>Flags: Read / Write / Construct Only</para>
+<para>Default value: "http://tile.openstreetmap.org/#Z/#X/#Y.png"</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--show-gps-point" role="property"><title>The <literal>“show-gps-point”</literal> property</title>
+<indexterm zone="OsmGpsMap--show-gps-point"><primary>OsmGpsMap:show-gps-point</primary></indexterm>
+<programlisting>  “show-gps-point”           <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>Controls whether the current gps point is shown on the map. Note that
+for derived classes that implement the draw_gps_point vfunc, if this
+property is <link linkend="FALSE:CAPS"><literal>FALSE</literal></link></para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--show-trip-history" role="property"><title>The <literal>“show-trip-history”</literal> property</title>
+<indexterm zone="OsmGpsMap--show-trip-history"><primary>OsmGpsMap:show-trip-history</primary></indexterm>
+<programlisting>  “show-trip-history”        <link linkend="gboolean"><type>gboolean</type></link></programlisting>
+<para>should the recorded trip history be shown on the map.</para><para>Flags: Read / Write / Construct</para>
+<para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--tile-cache" role="property"><title>The <literal>“tile-cache”</literal> property</title>
+<indexterm zone="OsmGpsMap--tile-cache"><primary>OsmGpsMap:tile-cache</primary></indexterm>
+<programlisting>  “tile-cache”               <link linkend="gchar"><type>gchar</type></link>&#160;*</programlisting>
+<para>Either a full path or one of the special format URIs
+<link linkend="OSM-GPS-MAP-CACHE-DISABLED:CAPS"><type>OSM_GPS_MAP_CACHE_DISABLED</type></link>, <link linkend="OSM-GPS-MAP-CACHE-AUTO:CAPS"><type>OSM_GPS_MAP_CACHE_AUTO</type></link>,
+<link linkend="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"><type>OSM_GPS_MAP_CACHE_FRIENDLY</type></link>. Also see <link linkend="OsmGpsMap--tile-cache-base"><type>“tile-cache-base”</type></link> for a
+full understanding.</para>
+<para><link linkend="OSM-GPS-MAP-CACHE-DISABLED:CAPS"><type>OSM_GPS_MAP_CACHE_DISABLED</type></link> disables the on disk tile cache (so all tiles
+are fetched from the network. <link linkend="OSM-GPS-MAP-CACHE-AUTO:CAPS"><type>OSM_GPS_MAP_CACHE_AUTO</type></link> causes the tile
+cache to be /tile-cache-base/md5(repo-uri), where md5 is the md5sum
+of <link linkend="OsmGpsMap--repo-uri"><type>“repo-uri”</type></link>. <link linkend="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"><type>OSM_GPS_MAP_CACHE_FRIENDLY</type></link>
+causes the tile cache to be /tile-cache-base/friendlyname(repo-uri).</para>
+<para>Any other string is interpreted as a local path, i.e. /path/to/cache</para>
+<para>Flags: Read / Write / Construct</para>
+<para>Default value: "auto://"</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--tile-cache-base" role="property"><title>The <literal>“tile-cache-base”</literal> property</title>
+<indexterm zone="OsmGpsMap--tile-cache-base"><primary>OsmGpsMap:tile-cache-base</primary></indexterm>
+<programlisting>  “tile-cache-base”          <link linkend="gchar"><type>gchar</type></link>&#160;*</programlisting>
+<para>The base directory of the tile cache when you have constructed
+the map with <link linkend="OsmGpsMap--tile-cache"><type>“tile-cache”</type></link> set to <link linkend="OSM-GPS-MAP-CACHE-AUTO:CAPS"><type>OSM_GPS_MAP_CACHE_AUTO</type></link> or
+<link linkend="OSM-GPS-MAP-CACHE-FRIENDLY:CAPS"><type>OSM_GPS_MAP_CACHE_FRIENDLY</type></link></para>
+<para>The string is interpreted as a local path, i.e. /path/to/cache. If NULL
+is supplied, map tiles are cached starting in the users cache directory,
+(as outlined in the</para>
+<ulink url="http://www.freedesktop.org/wiki/Specifications/basedir-spec">
+<citetitle>XDG Base Directory Specification</citetitle></ulink>). To get the
+<para>base directory where map tiles will be cached call
+<link linkend="osm-gps-map-get-default-cache-directory"><function>osm_gps_map_get_default_cache_directory()</function></link></para>
+<para>Flags: Read / Write / Construct Only</para>
+<para>Default value: NULL</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--tile-zoom-offset" role="property"><title>The <literal>“tile-zoom-offset”</literal> property</title>
+<indexterm zone="OsmGpsMap--tile-zoom-offset"><primary>OsmGpsMap:tile-zoom-offset</primary></indexterm>
+<programlisting>  “tile-zoom-offset”         <link linkend="gint"><type>gint</type></link></programlisting>
+<para>Number of zoom-levels to upsample tiles.</para><para>Flags: Read / Write / Construct Only</para>
+<para>Allowed values: [0,10]</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--tiles-queued" role="property"><title>The <literal>“tiles-queued”</literal> property</title>
+<indexterm zone="OsmGpsMap--tiles-queued"><primary>OsmGpsMap:tiles-queued</primary></indexterm>
+<programlisting>  “tiles-queued”             <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The number of tiles currently waiting to download. Connect to
+::notify::tiles-queued if you want to be informed when this changes</para>
+<para>Flags: Read</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="OsmGpsMap--zoom" role="property"><title>The <literal>“zoom”</literal> property</title>
+<indexterm zone="OsmGpsMap--zoom"><primary>OsmGpsMap:zoom</primary></indexterm>
+<programlisting>  “zoom”                     <link linkend="gint"><type>gint</type></link></programlisting>
+<para>The map zoom level. Connect to ::notify::zoom if you want to be informed
+when this changes.</para>
+<para>Flags: Read / Write / Construct Only</para>
+<para>Allowed values: [0,20]</para>
+<para>Default value: 3</para>
+</refsect2>
+
+</refsect1>
+<refsect1 id="OsmGpsMap.signal-details" role="signals">
+<title role="signals.title">Signal Details</title>
+<refsect2 id="OsmGpsMap-changed" role="signal"><title>The <literal>“changed”</literal> signal</title>
+<indexterm zone="OsmGpsMap-changed"><primary>OsmGpsMap::changed</primary></indexterm>
+<programlisting language="C"><link linkend="void"><returnvalue>void</returnvalue></link>
+user_function (<link linkend="OsmGpsMap"><type>OsmGpsMap</type></link> *arg0,
+               <link linkend="gpointer"><type>gpointer</type></link>   user_data)</programlisting>
+<para>The <link linkend="OsmGpsMap-changed"><type>“changed”</type></link> signal is emitted any time the map zoom or map center
+is chaged (such as by dragging or zooming).</para>
+<note>
+<para>
+If you are only interested in the map zoom, then you can simply connect
+to ::notify::zoom
+</para>
+</note>
+<refsect3 role="parameters">
+<title>Parameters</title>
+<informaltable role="parameters_table" pgwide="1" frame="none">
+<tgroup cols="3">
+<colspec colname="parameters_name" colwidth="150px"/>
+<colspec colname="parameters_description"/>
+<colspec colname="parameters_annotations" colwidth="200px"/>
+<tbody>
+<row><entry role="parameter_name"><simpara>user_data</simpara></entry>
+<entry role="parameter_description"><simpara>user data set when the signal handler was connected.</simpara></entry>
+<entry role="parameter_annotations"></entry></row>
+</tbody></tgroup></informaltable>
+</refsect3><para>Flags: <link linkend="G-SIGNAL-RUN-FIRST:CAPS">Run First</link></para>
+</refsect2>
+</refsect1>
+
+</refentry>

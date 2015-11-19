@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE screen PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<screen>
+    <link linkend="GObject">GObject</link>
+    <phrase role="lineart">&#9500;&#9472;&#9472;</phrase> <link linkend="GInitiallyUnowned">GInitiallyUnowned</link>
+    <phrase role="lineart">&#9474;</phrase>   <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="GtkWidget">GtkWidget</link>
+    <phrase role="lineart">&#9474;</phrase>       <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="GtkDrawingArea">GtkDrawingArea</link>
+    <phrase role="lineart">&#9474;</phrase>           <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="OsmGpsMap">OsmGpsMap</link>
+    <phrase role="lineart">&#9500;&#9472;&#9472;</phrase> <link linkend="OsmGpsMapOsd">OsmGpsMapOsd</link>
+    <phrase role="lineart">&#9500;&#9472;&#9472;</phrase> <link linkend="OsmGpsMapImage">OsmGpsMapImage</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link>
+    <link linkend="GInterface">GInterface</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link>
+    <link linkend="GBoxed">GBoxed</link>
+    <phrase role="lineart">&#9584;&#9472;&#9472;</phrase> <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link>
+</screen>

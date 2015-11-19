@@ -1,0 +1,6 @@
+osm_gps_map_get_type
+osm_gps_map_layer_get_type
+osm_gps_map_osd_get_type
+osm_gps_map_image_get_type
+osm_gps_map_track_get_type
+osm_gps_map_point_get_type
