@@ -228,14 +228,14 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
                                                            FALSE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
-	/**
-	 * OsmGpsMapTrack::point-added:
-	 * @self: A #OsmGpsMapTrack
-	 * @arg1: A #OsmGpsMapPoint
-	 * @userdata: user data set when the signal handler was connected.
-	 *
-	 * The point-added signal.
-	 */
+    /**
+    * OsmGpsMapTrack::point-added:
+    * @self: A #OsmGpsMapTrack
+    * @arg1: The added #OsmGpsMapPoint
+    *
+    * The #OsmGpsMapTrack::point-added signal is emitted whenever a #OsmGpsMapPoint
+    * is added to the #OsmGpsMapTrack.
+    */
 	signals [POINT_ADDED] = g_signal_new ("point-added",
 	                            OSM_TYPE_GPS_MAP_TRACK,
 	                            G_SIGNAL_RUN_FIRST,
@@ -247,7 +247,6 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            1,
                                 OSM_TYPE_GPS_MAP_POINT);
 
-    
     signals [POINT_CHANGED] = g_signal_new ("point-changed",
 	                            OSM_TYPE_GPS_MAP_TRACK,
 	                            G_SIGNAL_RUN_FIRST,
