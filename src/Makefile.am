@@ -76,7 +76,7 @@ CLEANFILES =
 ## GObject Introspection Support
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = $(INTROSPECTION_FLAGS) --add-include-path=$(srcdir) --add-include-path=$(builddir) --warn-all
+INTROSPECTION_SCANNER_ARGS = $(INTROSPECTION_FLAGS) --add-include-path=$(srcdir) --add-include-path=$(builddir) --warn-all --warn-error
 INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir) --includedir=$(builddir)
 
 if HAVE_INTROSPECTION
