@@ -1,0 +1,10 @@
+language: c
+sudo: required
+dist: trusty
+before_install:
+- sudo apt-get -qq update
+- sudo apt-get -qq install gnome-common gtk-doc-tools libglib2.0-dev libgtk-3-dev libsoup2.4-dev libgirepository1.0-dev
+before_script:
+- ./autogen.sh
+script:
+- make

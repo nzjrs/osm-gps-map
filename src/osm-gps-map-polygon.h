@@ -53,6 +53,13 @@ struct _OsmGpsMapPolygonClass
 GType osm_gps_map_polygon_get_type (void) G_GNUC_CONST;
 
 OsmGpsMapPolygon*		osm_gps_map_polygon_new           (void);
+
+/**
+ * osm_gps_map_polygon_get_track:
+ * @poly: a #OsmGpsMapPolygon
+ *
+ * Returns: (transfer none): The #OsmGpsMapTrack of the polygon
+ **/
 OsmGpsMapTrack*			osm_gps_map_polygon_get_track(OsmGpsMapPolygon* poly);
 
 G_END_DECLS
