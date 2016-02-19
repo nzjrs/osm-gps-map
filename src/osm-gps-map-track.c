@@ -231,6 +231,8 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	/**
 	 * OsmGpsMapTrack::point-added:
 	 * @self: A #OsmGpsMapTrack
+	 * @arg1: A #OsmGpsMapPoint
+	 * @userdata: user data set when the signal handler was connected.
 	 *
 	 * The point-added signal.
 	 */
