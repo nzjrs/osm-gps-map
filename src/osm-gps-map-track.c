@@ -133,8 +133,6 @@ osm_gps_map_track_set_property (GObject      *object,
             priv->color.red = c->red;
             priv->color.green = c->green;
             priv->color.blue = c->blue;
-            printf("\n%f %f %f\n", c->red, c->green, c->blue);
-            fflush(stdout);
             } break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
