@@ -73,7 +73,7 @@ void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, cons
  * osm_gps_map_track_get_points:
  * @track: (in): a #OsmGpsMapTrack
  *
- * Returns: (element-type OsmGpsMapPoint) (transfer full): list of #OsmGpsMapPoint
+ * Returns: (element-type OsmGpsMapPoint) (transfer none): list of #OsmGpsMapPoint
  *
  * Since: 0.7.0
  **/

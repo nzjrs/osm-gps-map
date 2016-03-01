@@ -145,7 +145,7 @@
 #define ENABLE_DEBUG                (0)
 #define EXTRA_BORDER                (0)
 #define OSM_GPS_MAP_SCROLL_STEP     (10)
-#define USER_AGENT                  "libosmgpsmap/1.0"
+#define USER_AGENT                  "libosmgpsmap/" VERSION
 #define DOWNLOAD_RETRIES            3
 #define MAX_DOWNLOAD_TILES          10000
 #define DOT_RADIUS                  4.0

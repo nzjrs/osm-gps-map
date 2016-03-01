@@ -114,7 +114,6 @@ osm_gps_map_track_get_color
 osm_gps_map_track_get_points
 osm_gps_map_track_get_length
 osm_gps_map_track_get_point
-osm_gps_map_track_get_type
 osm_gps_map_track_insert_point
 osm_gps_map_track_n_points
 osm_gps_map_track_remove_point
