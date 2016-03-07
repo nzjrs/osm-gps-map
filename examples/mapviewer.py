@@ -70,7 +70,7 @@ class UI(Gtk.Window):
         if 0:
             self.osm = DummyMapNoGpsPoint()
         else:
-            self.osm = osmgpsmap.Map()
+            self.osm = osmgpsmap.Map(user_agent="mapviewer.py/%s" % osmgpsmap._version)
         self.osm.layer_add(
                     osmgpsmap.MapOsd(
                         show_dpad=True,

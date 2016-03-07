@@ -181,6 +181,7 @@ struct _OsmGpsMapPrivate
     //how we download tiles
     SoupSession *soup_session;
     char *proxy_uri;
+    char *user_agent;
 
     //where downloaded tiles are cached
     char *tile_dir;
@@ -285,6 +286,7 @@ enum
     PROP_AUTO_DOWNLOAD,
     PROP_REPO_URI,
     PROP_PROXY_URI,
+    PROP_USER_AGENT,
     PROP_TILE_CACHE_DIR,
     PROP_TILE_CACHE_BASE_DIR,
     PROP_TILE_ZOOM_OFFSET,
@@ -1837,6 +1839,7 @@ osm_gps_map_finalize (GObject *object)
 
     g_free(priv->repo_uri);
     g_free(priv->proxy_uri);
+    g_free(priv->user_agent);
     g_free(priv->image_format);
 
     /* trip and tracks contain simple non GObject types, so free them here */
@@ -1886,6 +1889,21 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 g_free(priv->proxy_uri);
                 priv->proxy_uri = NULL;
             }
+            break;
+        case PROP_USER_AGENT:
+            g_free(priv->user_agent);
+            GValue full_user_agent = G_VALUE_INIT;
+            g_value_init(&full_user_agent, G_TYPE_STRING);
+            if ( g_value_get_string(value) ) {
+                priv->user_agent = g_value_dup_string (value);
+                g_value_set_string (&full_user_agent, g_strdup_printf("%s %s",
+                                                                        USER_AGENT,
+                                                                        g_value_get_string(value)));
+            } else {
+                priv->user_agent = NULL;
+                g_value_set_string (&full_user_agent, USER_AGENT);
+            }
+            g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_USER_AGENT, &full_user_agent);
             break;
         case PROP_TILE_CACHE_DIR:
             if ( g_value_get_string(value) ) {
@@ -2002,6 +2020,9 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             break;
         case PROP_PROXY_URI:
             g_value_set_string(value, priv->proxy_uri);
+            break;
+        case PROP_USER_AGENT:
+            g_value_set_string(value, priv->user_agent);
             break;
         case PROP_TILE_CACHE_DIR:
             g_value_set_string(value, priv->cache_dir);
@@ -2597,7 +2618,20 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                           NULL,
                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-
+    /**
+     * OsmGpsMap:user-agent:
+     *
+     * The default user-agent for downloading tiles from the #OsmGpsMap:map-source
+     * is "libosmgpsmap/VERSION". The value of #OsmGpsMap:user-agent will be
+     * appended to it.
+     **/
+     g_object_class_install_property (object_class,
+                                     PROP_USER_AGENT,
+                                     g_param_spec_string ("user-agent",
+                                                          "user agent",
+                                                          "HTTP user agent or NULL",
+                                                          NULL,
+                                                          G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
     /**
      * OsmGpsMap:tile-cache:
      *
