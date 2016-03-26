@@ -25,6 +25,7 @@
 
 #include "osm-gps-map-layer.h"
 #include "osm-gps-map-osd.h"
+#include "osm-gps-map-source.h"
 
 static void osm_gps_map_osd_interface_init (OsmGpsMapLayerIface *iface);
 
@@ -44,7 +45,8 @@ enum
 	PROP_SHOW_DPAD,
 	PROP_SHOW_ZOOM,
 	PROP_SHOW_GPS_IN_DPAD,
-	PROP_SHOW_GPS_IN_ZOOM
+	PROP_SHOW_GPS_IN_ZOOM,
+	PROP_SHOW_COPYRIGHT,
 };
 
 typedef struct _OsdScale {
@@ -69,12 +71,18 @@ typedef struct _OsdControls {
     gint gps_enabled;
 } OsdControls_t;
 
+typedef struct _OsdCopyright {
+    cairo_surface_t *surface;
+    gint map_source;
+} OsdCopyright_t;
+
 struct _OsmGpsMapOsdPrivate
 {
     OsdScale_t          *scale;
     OsdCoordinates_t    *coordinates;
     OsdCrosshair_t      *crosshair;
     OsdControls_t       *controls;
+    OsdCopyright_t      *copyright;
     guint               osd_w;
     guint               osd_h;
     guint               osd_shadow;
@@ -93,6 +101,7 @@ struct _OsmGpsMapOsdPrivate
 	gboolean            show_zoom;
 	gboolean            show_gps_in_dpad;
 	gboolean            show_gps_in_zoom;
+	gboolean            show_copyright;
 };
 
 static void                 osm_gps_map_osd_render       (OsmGpsMapLayer *osd, OsmGpsMap *map);
@@ -108,6 +117,8 @@ static void                 crosshair_render                     (OsmGpsMapOsd *
 static void                 crosshair_draw                       (OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr);
 static void                 controls_render                      (OsmGpsMapOsd *self, OsmGpsMap *map);
 static void                 controls_draw                        (OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr);
+static void                 copyright_render                     (OsmGpsMapOsd *self, OsmGpsMap *map);
+static void                 copyright_draw                       (OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr);
 
 #define OSD_MAX_SHADOW (4)
 
@@ -131,6 +142,10 @@ static void                 controls_draw                        (OsmGpsMapOsd *
 #define OSD_CROSSHAIR_BORDER (OSD_CROSSHAIR_TICK + OSD_CROSSHAIR_RADIUS/4)
 #define OSD_CROSSHAIR_W  ((OSD_CROSSHAIR_RADIUS+OSD_CROSSHAIR_BORDER)*2)
 #define OSD_CROSSHAIR_H  ((OSD_CROSSHAIR_RADIUS+OSD_CROSSHAIR_BORDER)*2)
+
+#define OSD_COPYRIGHT_FONT_SIZE (10.0)
+#define OSD_COPYRIGHT_W  360
+#define OSD_COPYRIGHT_H  (OSD_COPYRIGHT_FONT_SIZE)
 
 static void
 osm_gps_map_osd_interface_init (OsmGpsMapLayerIface *iface)
@@ -178,6 +193,9 @@ osm_gps_map_osd_get_property (GObject    *object,
 	case PROP_SHOW_GPS_IN_ZOOM:
 		g_value_set_boolean (value, OSM_GPS_MAP_OSD (object)->priv->show_gps_in_zoom);
 		break;
+	case PROP_SHOW_COPYRIGHT:
+		g_value_set_boolean (value, OSM_GPS_MAP_OSD (object)->priv->show_copyright);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 	}
@@ -219,6 +237,9 @@ osm_gps_map_osd_set_property (GObject      *object,
 		break;
 	case PROP_SHOW_GPS_IN_ZOOM:
 		OSM_GPS_MAP_OSD (object)->priv->show_gps_in_zoom = g_value_get_boolean (value);
+		break;
+	case PROP_SHOW_COPYRIGHT:
+		OSM_GPS_MAP_OSD (object)->priv->show_copyright = g_value_get_boolean (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -268,6 +289,10 @@ osm_gps_map_osd_constructor (GType gtype, guint n_properties, GObjectConstructPa
     priv->controls->rendered = FALSE;
     priv->controls->gps_enabled = -1;
 
+    priv->copyright = g_new0(OsdCopyright_t, 1);
+    priv->copyright->surface = FALSE;
+    priv->copyright->map_source = FALSE;
+
     return object;
 }
 
@@ -287,6 +312,7 @@ osm_gps_map_osd_finalize (GObject *object)
     OSD_STRUCT_DESTROY(priv->coordinates)
     OSD_STRUCT_DESTROY(priv->crosshair)
     OSD_STRUCT_DESTROY(priv->controls)
+    OSD_STRUCT_DESTROY(priv->copyright)
 
 	G_OBJECT_CLASS (osm_gps_map_osd_parent_class)->finalize (object);
 }
@@ -429,6 +455,18 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 	                                                       "show gps indicator in middle of zoom control",
 	                                                       FALSE,
 	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+	/**
+	 * OsmGpsMapOsd:show-copyright:
+	 *
+	 * The show copyright property.
+	 */
+	g_object_class_install_property (object_class,
+	                                 PROP_SHOW_COPYRIGHT,
+	                                 g_param_spec_boolean ("show-copyright",
+	                                                       "show-copyright",
+	                                                       "show copyright information for build-in map-sources on the map",
+	                                                       TRUE,
+	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 }
 
 static void
@@ -459,6 +497,8 @@ osm_gps_map_osd_render (OsmGpsMapLayer *osd,
         crosshair_render(self, map);
     if (priv->show_zoom || priv->show_dpad)
         controls_render(self, map);
+    if (priv->show_copyright)
+        copyright_render(self, map);
 
 }
 
@@ -486,6 +526,8 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
         crosshair_draw(self, &allocation, cr);
     if (priv->show_zoom || priv->show_dpad)
         controls_draw(self, &allocation, cr);
+    if (priv->show_copyright)
+        copyright_draw(self, &allocation, cr);
 
 }
 
@@ -919,3 +961,56 @@ controls_draw(OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr)
     cairo_paint(cr);
 }
 
+static void
+copyright_render(OsmGpsMapOsd *self, OsmGpsMap *map)
+{
+    OsdCopyright_t *copyright = self->priv->copyright;
+
+    /* get current map source */
+    gint map_source;
+    g_object_get(G_OBJECT(map), "map-source", &map_source, NULL);
+
+    /* render only if the map source changed */
+    if(copyright->map_source == map_source)
+        return;
+    copyright->map_source = map_source;
+
+    if(copyright->surface)
+        g_free(copyright->surface);
+    copyright->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, OSD_COPYRIGHT_W, OSD_COPYRIGHT_H);
+
+    /* first fill with transparency */
+    g_assert(copyright->surface);
+    cairo_t *cr = cairo_create(copyright->surface);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
+    cairo_paint(cr);
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+
+    cairo_select_font_face (cr, "Sans",
+                            CAIRO_FONT_SLANT_NORMAL,
+                            CAIRO_FONT_WEIGHT_BOLD);
+    cairo_set_font_size (cr, OSD_COPYRIGHT_FONT_SIZE);
+
+    /* get the copyright and draw them */
+    char* text = (char *)osm_gps_map_source_get_copyright(map_source);
+    if(text)
+        osd_render_centered_text(cr, 0, OSD_COPYRIGHT_W, OSD_COPYRIGHT_FONT_SIZE, text);
+
+    cairo_destroy(cr);
+}
+
+static void
+copyright_draw(OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr)
+{
+    OsmGpsMapOsdPrivate *priv = self->priv;
+    OsdCopyright_t *copyright = self->priv->copyright;
+    gint x,y;
+
+    x = -priv->osd_x;
+    y = -priv->osd_y;
+    if(x < 0) x += (allocation->width - OSD_COPYRIGHT_W) / 2 + 20;
+    if(y < 0) y += allocation->height - OSD_COPYRIGHT_H;
+    cairo_set_source_surface(cr, copyright->surface, x, y);
+    cairo_paint(cr);
+}

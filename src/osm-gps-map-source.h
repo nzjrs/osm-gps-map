@@ -44,6 +44,7 @@ typedef enum {
 } OsmGpsMapSource_t;
 
 const char* osm_gps_map_source_get_friendly_name    (OsmGpsMapSource_t source);
+const char* osm_gps_map_source_get_copyright        (OsmGpsMapSource_t source);
 const char* osm_gps_map_source_get_repo_uri         (OsmGpsMapSource_t source);
 const char* osm_gps_map_source_get_image_format     (OsmGpsMapSource_t source);
 int         osm_gps_map_source_get_min_zoom         (OsmGpsMapSource_t source);
