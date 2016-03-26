@@ -60,6 +60,39 @@ osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
     return NULL;
 }
 
+const char*
+osm_gps_map_source_get_copyright(OsmGpsMapSource_t source)
+{
+    switch(source)
+    {
+        case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+            // https://www.openstreetmap.org/copyright
+            return "© OpenStreetMap contributors";
+        case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
+            // http://www.thunderforest.com/terms/
+            return "Maps © thunderforest.com, Data © osm.org/copyright";
+        case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
+            return "Maps © ÖPNVKarte, Data © OpenStreetMap contributors";
+        case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
+            return "Maps © Maps-For-Free";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+            return "Map provided by Google";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
+            return "Map provided by Google ";
+        case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+            return "Map provided by Google";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
+            return "Map provided by Microsoft";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
+            return "Map provided by Microsoft";
+        case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
+            return "Map provided by Microsoft";
+        default:
+            return NULL;
+    }
+    return NULL;
+}
+
 //http://www.internettablettalk.com/forums/showthread.php?t=5209
 //https://garage.maemo.org/plugins/scmsvn/viewcvs.php/trunk/src/maps.c?root=maemo-mapper&view=markup
 //http://www.ponies.me.uk/maps/GoogleTileUtils.java
