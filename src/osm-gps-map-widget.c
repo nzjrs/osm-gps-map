@@ -1257,6 +1257,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     gfloat lw, alpha;
     int map_x0, map_y0;
     GdkRGBA color;
+    gfloat shade_alpha;
 
     OsmGpsMapTrack* track = osm_gps_map_polygon_get_track(poly);
 
@@ -1276,6 +1277,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     gboolean poly_shaded = FALSE;
     g_object_get(poly, "editable", &path_editable, NULL);
     g_object_get(poly, "shaded", &poly_shaded, NULL);
+    g_object_get(poly, "shade_alpha", &shade_alpha, NULL);
 
     cairo_set_line_width (cr, lw);
     cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
@@ -1304,10 +1306,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     }
     //close off polygon
     cairo_line_to(cr, first_x, first_y);
-    if(poly_shaded)
-        cairo_fill(cr);
-    else
-        cairo_stroke(cr);
+    cairo_stroke(cr);
 
     if(path_editable)
     {
@@ -1337,6 +1336,32 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
         cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
         cairo_stroke(cr);
         cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
+    }
+
+    if(poly_shaded)
+    {
+        cairo_set_source_rgba (cr, color.red, color.green, color.blue, shade_alpha);
+        first_x = 0;
+        first_y = 0;
+        for(pt = points; pt != NULL; pt = pt->next)
+        {
+            OsmGpsMapPoint *tp = pt->data;
+
+            x = lon2pixel(priv->map_zoom, tp->rlon) - map_x0;
+            y = lat2pixel(priv->map_zoom, tp->rlat) - map_y0;
+
+            /* first time through loop */
+            if (pt == points)
+            {
+                cairo_move_to(cr, x, y);
+                first_x = x; first_y = y;
+            }
+
+            cairo_line_to(cr, x, y);
+        }
+        //close off polygon
+        cairo_line_to(cr, first_x, first_y);
+        cairo_fill(cr);
     }
 
     gtk_widget_queue_draw_area (
