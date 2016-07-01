@@ -13,7 +13,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -90,7 +90,7 @@
  *  </programlisting>
  * </example>
  *
- * Finally, if you wish to use a custom map source not supported by #OsmGpsMap, 
+ * Finally, if you wish to use a custom map source not supported by #OsmGpsMap,
  * such as a custom map created with
  * <ulink url="http://www.cloudmade.com"><citetitle>CloudMade</citetitle></ulink>
  * then you can also pass a specially formatted string to #OsmGpsMap:repo-uri.
@@ -796,7 +796,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
                     g_warning("Error: Unable to determine image file format");
                 }
             }
-                
+
             /* Store the tile into the cache */
             if (G_LIKELY (pixbuf)) {
                 OsmCachedTile *tile = g_slice_new (OsmCachedTile);
@@ -1517,8 +1517,8 @@ maybe_autocenter_map (OsmGpsMap *map)
     }
 }
 
-static gboolean 
-on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *priv) 
+static gboolean
+on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *priv)
 {
     int i;
     int step;
@@ -1639,7 +1639,7 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->uri_format = 0;
     priv->is_google = FALSE;
 
-    priv->map_source = -1;
+    priv->map_source = 0;
 
     priv->keybindings_enabled = FALSE;
     for (i = 0; i < OSM_GPS_MAP_KEY_MAX; i++)
@@ -1963,7 +1963,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
         case PROP_MAP_SOURCE: {
             gint old = priv->map_source;
             priv->map_source = g_value_get_int (value);
-            if(old >= OSM_GPS_MAP_SOURCE_NULL && 
+            if(old >= OSM_GPS_MAP_SOURCE_NULL &&
                priv->map_source != old &&
                priv->map_source >= OSM_GPS_MAP_SOURCE_NULL &&
                priv->map_source <= OSM_GPS_MAP_SOURCE_LAST) {
@@ -2830,9 +2830,9 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                      g_param_spec_int ("map-source",
                                                        "map source",
                                                        "The map source ID",
-                                                       -1,          /* minimum property value */
+                                                       0,          /* minimum property value */
                                                        G_MAXINT,    /* maximum property value */
-                                                       -1,
+                                                       0,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
@@ -3053,7 +3053,7 @@ osm_gps_map_set_zoom_offset (OsmGpsMap *map, int zoom_offset)
  * osm_gps_map_set_zoom:
  *
  **/
-int 
+int
 osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 {
     int width_center, height_center;
@@ -3325,8 +3325,8 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
 /**
  * osm_gps_map_gps_get_track:
  *
- * Returns: (transfer none): The #OsmGpsMapTrack of the internal GPS track, 
- * i.e. that which is modified when calling osm_gps_map_gps_add(). You must 
+ * Returns: (transfer none): The #OsmGpsMapTrack of the internal GPS track,
+ * i.e. that which is modified when calling osm_gps_map_gps_add(). You must
  * not free this.
  * Since: 0.7.0
  **/
@@ -3536,7 +3536,7 @@ osm_gps_map_layer_remove_all (OsmGpsMap *map)
  * @map:
  * @pixel_x: pixel location on map, x axis
  * @pixel_y: pixel location on map, y axis
- * @pt: (out): location 
+ * @pt: (out): location
  *
  * Convert the given pixel location on the map into corresponding
  * location on the globe
@@ -3609,4 +3609,3 @@ osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
     osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, p);
     return p;
 }
-
