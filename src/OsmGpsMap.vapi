@@ -9,16 +9,16 @@ namespace OsmGps {
 		[Version (since = "0.7.0")]
 		public void convert_geographic_to_screen (OsmGps.MapPoint pt, out int pixel_x, out int pixel_y);
 		[Version (since = "0.7.0")]
-		public OsmGps.MapPoint convert_screen_to_geographic (int pixel_x, int pixel_y);
+		public void convert_screen_to_geographic (int pixel_x, int pixel_y, out unowned OsmGps.MapPoint pt);
 		[Version (since = "0.7.0")]
 		public void download_cancel_all ();
 		public void download_maps (OsmGps.MapPoint pt1, OsmGps.MapPoint pt2, int zoom_start, int zoom_end);
 		[NoWrapper]
 		public virtual void draw_gps_point (Cairo.Context cr);
-		public void get_bbox (out OsmGps.MapPoint pt1, out OsmGps.MapPoint pt2);
+		public void get_bbox (out unowned OsmGps.MapPoint pt1, out unowned OsmGps.MapPoint pt2);
 		public static string get_default_cache_directory ();
 		[Version (since = "0.7.0")]
-		public OsmGps.MapPoint? get_event_location (Gdk.EventButton event);
+		public OsmGps.MapPoint get_event_location (Gdk.EventButton event);
 		public float get_scale ();
 		[Version (since = "0.7.0")]
 		public void gps_add (float latitude, float longitude, float heading);
@@ -131,14 +131,14 @@ namespace OsmGps {
 		[CCode (has_construct_function = false)]
 		public MapImage ();
 		public void draw (Cairo.Context cr, Gdk.Rectangle rect);
-		public unowned OsmGps.MapPoint? get_point ();
+		public unowned OsmGps.MapPoint get_point ();
 		public float get_rotation ();
 		public int get_zorder ();
 		public void set_rotation (float rot);
 		[NoAccessorMethod]
 		public Gdk.Pixbuf pixbuf { owned get; set construct; }
 		[NoAccessorMethod]
-		public OsmGps.MapPoint point { get; set construct; }
+		public OsmGps.MapPoint point { owned get; set construct; }
 		public float rotation { get; set construct; }
 		[NoAccessorMethod]
 		public float x_align { get; set construct; }
@@ -174,6 +174,24 @@ namespace OsmGps {
 		[NoAccessorMethod]
 		public bool show_zoom { get; set construct; }
 	}
+	[CCode (cheader_filename = "osm-gps-map.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "osm_gps_map_point_get_type ()")]
+	[Compact]
+	public class MapPoint {
+		public float rlat;
+		public float rlon;
+		[Version (since = "0.7.2")]
+		public OsmGps.MapPoint copy ();
+		[CCode (has_construct_function = false)]
+		public MapPoint.degrees (float lat, float lon);
+		[Version (since = "0.7.2")]
+		public void free ();
+		public void get_degrees (out float lat, out float lon);
+		public void get_radians (float rlat, float rlon);
+		[CCode (has_construct_function = false)]
+		public MapPoint.radians (float rlat, float rlon);
+		public void set_degrees (float lat, float lon);
+		public void set_radians (float rlat, float rlon);
+	}
 	[CCode (cheader_filename = "osm-gps-map.h", type_id = "osm_gps_map_polygon_get_type ()")]
 	public class MapPolygon : GLib.Object {
 		[CCode (has_construct_function = false)]
@@ -198,7 +216,7 @@ namespace OsmGps {
 		public void add_point (OsmGps.MapPoint point);
 		public void get_color (Gdk.RGBA color);
 		public double get_length ();
-		public OsmGps.MapPoint? get_point (int pos);
+		public OsmGps.MapPoint get_point (int pos);
 		[Version (since = "0.7.0")]
 		public unowned GLib.SList<OsmGps.MapPoint> get_points ();
 		public void insert_point (OsmGps.MapPoint np, int pos);
@@ -228,23 +246,6 @@ namespace OsmGps {
 		public abstract bool button_press (OsmGps.Map map, Gdk.EventButton event);
 		public abstract void draw (OsmGps.Map map, Cairo.Context cr);
 		public abstract void render (OsmGps.Map map);
-	}
-	[CCode (cheader_filename = "osm-gps-map.h", type_id = "osm_gps_map_point_get_type ()")]
-	public struct MapPoint {
-		public float rlat;
-		public float rlon;
-		[Version (since = "0.7.2")]
-		public OsmGps.MapPoint? copy ();
-		[CCode (has_construct_function = false, type = "OsmGpsMapPoint*")]
-		public MapPoint.degrees (float lat, float lon);
-		[Version (since = "0.7.2")]
-		public void free ();
-		public void get_degrees (out float lat, out float lon);
-		public void get_radians (float rlat, float rlon);
-		[CCode (has_construct_function = false, type = "OsmGpsMapPoint*")]
-		public MapPoint.radians (float rlat, float rlon);
-		public void set_degrees (float lat, float lon);
-		public void set_radians (float rlat, float rlon);
 	}
 	[CCode (cheader_filename = "osm-gps-map.h", cprefix = "OSM_GPS_MAP_KEY_", has_type_id = false)]
 	public enum MapKey_t {
