@@ -29,7 +29,8 @@ enum
     PROP_VISIBLE,
     PROP_TRACK,
 	PROP_SHADED,
-    PROP_EDITABLE
+    PROP_EDITABLE,
+    PROP_SHADE_ALPHA
 };
 
 struct _OsmGpsMapPolygonPrivate
@@ -38,6 +39,7 @@ struct _OsmGpsMapPolygonPrivate
 	gboolean visible;
     gboolean editable;
 	gboolean shaded;
+    gfloat shade_alpha;
 };
 
 #define DEFAULT_R   (60000)
@@ -67,6 +69,9 @@ osm_gps_map_polygon_get_property (GObject    *object,
         case PROP_EDITABLE:
             g_value_set_boolean(value, priv->editable);
             break;
+        case PROP_SHADE_ALPHA:
+            g_value_set_float(value, priv->shade_alpha);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -93,6 +98,9 @@ osm_gps_map_polygon_set_property (GObject      *object,
 			break;
         case PROP_EDITABLE:
             priv->editable = g_value_get_boolean(value);
+            break;
+        case PROP_SHADE_ALPHA:
+            priv->shade_alpha = g_value_get_float(value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -158,6 +166,16 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
                                                            "should this polygon be shaded",
                                                            TRUE,
                                                            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_SHADE_ALPHA,
+                                    g_param_spec_float ("shade_alpha",
+                                                        "shade_alpha",
+                                                        "sets the translucency of the shaded area of a polygon",
+                                                        0.0,
+                                                        1.0,
+                                                        0.5,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
 }
 
