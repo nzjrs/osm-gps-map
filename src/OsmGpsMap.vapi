@@ -9,13 +9,13 @@ namespace OsmGps {
 		[Version (since = "0.7.0")]
 		public void convert_geographic_to_screen (OsmGps.MapPoint pt, out int pixel_x, out int pixel_y);
 		[Version (since = "0.7.0")]
-		public void convert_screen_to_geographic (int pixel_x, int pixel_y, out unowned OsmGps.MapPoint pt);
+		public void convert_screen_to_geographic (int pixel_x, int pixel_y, OsmGps.MapPoint pt);
 		[Version (since = "0.7.0")]
 		public void download_cancel_all ();
 		public void download_maps (OsmGps.MapPoint pt1, OsmGps.MapPoint pt2, int zoom_start, int zoom_end);
 		[NoWrapper]
 		public virtual void draw_gps_point (Cairo.Context cr);
-		public void get_bbox (out unowned OsmGps.MapPoint pt1, out unowned OsmGps.MapPoint pt2);
+		public void get_bbox (OsmGps.MapPoint pt1, OsmGps.MapPoint pt2);
 		public static string get_default_cache_directory ();
 		[Version (since = "0.7.0")]
 		public OsmGps.MapPoint get_event_location (Gdk.EventButton event);
@@ -207,6 +207,8 @@ namespace OsmGps {
 		public void* track { get; set construct; }
 		[NoAccessorMethod]
 		public bool visible { get; set construct; }
+		[NoAccessorMethod]
+		public bool breakable { get; set construct; }
 	}
 	[CCode (cheader_filename = "osm-gps-map.h", type_id = "osm_gps_map_track_get_type ()")]
 	public class MapTrack : GLib.Object {
@@ -216,7 +218,7 @@ namespace OsmGps {
 		public void add_point (OsmGps.MapPoint point);
 		public void get_color (Gdk.RGBA color);
 		public double get_length ();
-		public OsmGps.MapPoint get_point (int pos);
+		public unowned OsmGps.MapPoint get_point (int pos);
 		[Version (since = "0.7.0")]
 		public unowned GLib.SList<OsmGps.MapPoint> get_points ();
 		public void insert_point (OsmGps.MapPoint np, int pos);
