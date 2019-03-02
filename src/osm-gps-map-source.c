@@ -184,9 +184,10 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_NULL:
             return 18;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
+            return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
         case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
-            return OSM_MAX_ZOOM;
+            return 18;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
