@@ -487,41 +487,39 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
     url = g_strdup(uri);
     while (i < URI_FLAG_END)
     {
-        char *s = NULL;
+        char s[16];
         char *old;
 
         old = url;
         switch(i & priv->uri_format)
         {
             case URI_HAS_X:
-                s = g_strdup_printf("%d", x);
+                g_snprintf(s, sizeof(s), "%d", x);
                 url = replace_string(url, URI_MARKER_X, s);
                 break;
             case URI_HAS_Y:
-                s = g_strdup_printf("%d", y);
+                g_snprintf(s, sizeof(s), "%d", y);
                 url = replace_string(url, URI_MARKER_Y, s);
                 break;
             case URI_HAS_Z:
-                s = g_strdup_printf("%d", zoom);
+                g_snprintf(s, sizeof(s), "%d", zoom);
                 url = replace_string(url, URI_MARKER_Z, s);
                 break;
             case URI_HAS_S:
-                s = g_strdup_printf("%d", priv->max_zoom-zoom);
+                g_snprintf(s, sizeof(s), "%d", priv->max_zoom-zoom);
                 url = replace_string(url, URI_MARKER_S, s);
                 break;
             case URI_HAS_Q:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'t',"qrts");
-                s = g_strdup_printf("%s", location);
-                url = replace_string(url, URI_MARKER_Q, s);
+                url = replace_string(url, URI_MARKER_Q, location);
                 break;
             case URI_HAS_Q0:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'\0', "0123");
-                s = g_strdup_printf("%s", location);
-                url = replace_string(url, URI_MARKER_Q0, s);
+                url = replace_string(url, URI_MARKER_Q0, location);
                 //g_debug("FOUND " URI_MARKER_Q0);
                 break;
             case URI_HAS_YS:
-                //              s = g_strdup_printf("%d", y);
+                //              g_snprintf(s, sizeof(s), "%d", y);
                 //              url = replace_string(url, URI_MARKER_YS, s);
                 g_warning("FOUND " URI_MARKER_YS " NOT IMPLEMENTED");
                 //            retval = g_strdup_printf(repo->url,
@@ -530,16 +528,14 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
                 //                    zoom - (MAX_ZOOM - 17));
                 break;
             case URI_HAS_R:
-                s = g_strdup_printf("%d", g_random_int_range(0,4));
+                g_snprintf(s, sizeof(s), "%d", g_random_int_range(0,4));
                 url = replace_string(url, URI_MARKER_R, s);
                 break;
             default:
-                s = NULL;
                 break;
         }
 
-        if (s) {
-            g_free(s);
+        if (old != url) {
             g_free(old);
         }
 
