@@ -1111,8 +1111,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
     tiles_nx = (allocation.width  - offset_x) / TILESIZE + 1;
     tiles_ny = (allocation.height - offset_y) / TILESIZE + 1;
 
-    tile_x0 =  floor((float)priv->map_x / (float)TILESIZE);
-    tile_y0 =  floor((float)priv->map_y / (float)TILESIZE);
+    tile_x0 =  floorf((float)priv->map_x / (float)TILESIZE);
+    tile_y0 =  floorf((float)priv->map_y / (float)TILESIZE);
 
     for (i=tile_x0; i<(tile_x0+tiles_nx);i++)
     {
@@ -2919,11 +2919,11 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
         for(zoom=zoom_start; zoom<=zoom_end; zoom++) {
             int x1,y1,x2,y2;
 
-            x1 = (int)floor((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
-            y1 = (int)floor((float)lat2pixel(zoom, pt1->rlat) / (float)TILESIZE);
+            x1 = (int)floorf((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
+            y1 = (int)floorf((float)lat2pixel(zoom, pt1->rlat) / (float)TILESIZE);
 
-            x2 = (int)floor((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
-            y2 = (int)floor((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
+            x2 = (int)floorf((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
+            y2 = (int)floorf((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
 
             /* check for insane ranges */
             if ( (x2-x1) * (y2-y1) > MAX_DOWNLOAD_TILES ) {
