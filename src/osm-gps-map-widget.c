@@ -487,41 +487,39 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
     url = g_strdup(uri);
     while (i < URI_FLAG_END)
     {
-        char *s = NULL;
+        char s[16];
         char *old;
 
         old = url;
         switch(i & priv->uri_format)
         {
             case URI_HAS_X:
-                s = g_strdup_printf("%d", x);
+                g_snprintf(s, sizeof(s), "%d", x);
                 url = replace_string(url, URI_MARKER_X, s);
                 break;
             case URI_HAS_Y:
-                s = g_strdup_printf("%d", y);
+                g_snprintf(s, sizeof(s), "%d", y);
                 url = replace_string(url, URI_MARKER_Y, s);
                 break;
             case URI_HAS_Z:
-                s = g_strdup_printf("%d", zoom);
+                g_snprintf(s, sizeof(s), "%d", zoom);
                 url = replace_string(url, URI_MARKER_Z, s);
                 break;
             case URI_HAS_S:
-                s = g_strdup_printf("%d", priv->max_zoom-zoom);
+                g_snprintf(s, sizeof(s), "%d", priv->max_zoom-zoom);
                 url = replace_string(url, URI_MARKER_S, s);
                 break;
             case URI_HAS_Q:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'t',"qrts");
-                s = g_strdup_printf("%s", location);
-                url = replace_string(url, URI_MARKER_Q, s);
+                url = replace_string(url, URI_MARKER_Q, location);
                 break;
             case URI_HAS_Q0:
                 map_convert_coords_to_quadtree_string(map,x,y,zoom,location,'\0', "0123");
-                s = g_strdup_printf("%s", location);
-                url = replace_string(url, URI_MARKER_Q0, s);
+                url = replace_string(url, URI_MARKER_Q0, location);
                 //g_debug("FOUND " URI_MARKER_Q0);
                 break;
             case URI_HAS_YS:
-                //              s = g_strdup_printf("%d", y);
+                //              g_snprintf(s, sizeof(s), "%d", y);
                 //              url = replace_string(url, URI_MARKER_YS, s);
                 g_warning("FOUND " URI_MARKER_YS " NOT IMPLEMENTED");
                 //            retval = g_strdup_printf(repo->url,
@@ -530,16 +528,14 @@ replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y)
                 //                    zoom - (MAX_ZOOM - 17));
                 break;
             case URI_HAS_R:
-                s = g_strdup_printf("%d", g_random_int_range(0,4));
+                g_snprintf(s, sizeof(s), "%d", g_random_int_range(0,4));
                 url = replace_string(url, URI_MARKER_R, s);
                 break;
             default:
-                s = NULL;
                 break;
         }
 
-        if (s) {
-            g_free(s);
+        if (old != url) {
             g_free(old);
         }
 
@@ -869,10 +865,8 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
                             priv->cache_dir, G_DIR_SEPARATOR,
                             zoom, G_DIR_SEPARATOR,
                             x, G_DIR_SEPARATOR);
-        dl->filename = g_strdup_printf("%s%c%d%c%d%c%d.%s",
-                            priv->cache_dir, G_DIR_SEPARATOR,
-                            zoom, G_DIR_SEPARATOR,
-                            x, G_DIR_SEPARATOR,
+        dl->filename = g_strdup_printf("%s%d.%s",
+                            dl->folder,
                             y,
                             priv->image_format);
         dl->map = map;
@@ -1117,8 +1111,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
     tiles_nx = (allocation.width  - offset_x) / TILESIZE + 1;
     tiles_ny = (allocation.height - offset_y) / TILESIZE + 1;
 
-    tile_x0 =  floor((float)priv->map_x / (float)TILESIZE);
-    tile_y0 =  floor((float)priv->map_y / (float)TILESIZE);
+    tile_x0 =  floorf((float)priv->map_x / (float)TILESIZE);
+    tile_y0 =  floorf((float)priv->map_y / (float)TILESIZE);
 
     for (i=tile_x0; i<(tile_x0+tiles_nx);i++)
     {
@@ -2925,11 +2919,11 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
         for(zoom=zoom_start; zoom<=zoom_end; zoom++) {
             int x1,y1,x2,y2;
 
-            x1 = (int)floor((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
-            y1 = (int)floor((float)lat2pixel(zoom, pt1->rlat) / (float)TILESIZE);
+            x1 = (int)floorf((float)lon2pixel(zoom, pt1->rlon) / (float)TILESIZE);
+            y1 = (int)floorf((float)lat2pixel(zoom, pt1->rlat) / (float)TILESIZE);
 
-            x2 = (int)floor((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
-            y2 = (int)floor((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
+            x2 = (int)floorf((float)lon2pixel(zoom, pt2->rlon) / (float)TILESIZE);
+            y2 = (int)floorf((float)lat2pixel(zoom, pt2->rlat) / (float)TILESIZE);
 
             /* check for insane ranges */
             if ( (x2-x1) * (y2-y1) > MAX_DOWNLOAD_TILES ) {
