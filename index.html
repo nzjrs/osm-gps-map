@@ -103,11 +103,11 @@
 
     <h2>Install Instructions</h2>
     <p>osm-gps-map should be packaged by your distibution. On Debian, Ubuntu or
-      similar, you can install using the following;
-<pre>sudo apt-get install libosmgpsmap-dev python-osmgpsmap</pre></p>
+    similar, you can install the GTK+ library and its Python bindings like this:
+<pre>sudo apt-get install libosmgpsmap-1.0-1 gir1.2-osmgpsmap-1.0</pre></p>
 
     <h3>Installing From Source</h3>
-    <p>To build from source on Linux you will need to install the following dependencies;
+    <p>To build from source on Linux you will need to install the following dependencies:
     <ul>
         <li>libsoup-2.4</li>
         <li>gtk+-3.0</li>
@@ -115,7 +115,7 @@
         <li>gobject-introspection</li>
     </ul></p>
 
-    <p>Once the dependencies have been installed you can build osm-gps-map. On Linux perform the following;
+    <p>Once the dependencies have been installed you can build osm-gps-map. On Linux perform the following:
 <pre>./configure; make; make install #C library
 cd python; ./configure; make; make install #Python bindings</pre>
     </p>
