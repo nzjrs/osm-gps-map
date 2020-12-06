@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glade-catalog name="osmgpsmap" library="osmgpsmap-1.0" depends="gtk+" book="osm-gps-map">
+    <glade-widget-classes>
+        <glade-widget-class name="OsmGpsMap" generic-name="map" title="Map">
+            <signals>
+                <signal id="point-added" />
+                <signal id="key_press_event" />
+                <signal id="point-changed" />
+            </signals>
+        </glade-widget-class>
+    </glade-widget-classes>
+
+    <glade-widget-group name="osmgpsmap" title="OsmGpsMap Widgets">
+        <glade-widget-class-ref name="OsmGpsMap" />
+    </glade-widget-group>
+</glade-catalog>
