@@ -111,7 +111,7 @@ void                osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGps
  * @track: a #OsmGpsMapTrack
  * @pos: Position of the point to get
  *
- * Returns: a #OsmGpsMapPoint
+ * Returns: (transfer none): a #OsmGpsMapPoint 
  **/
 OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
 
