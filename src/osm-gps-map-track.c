@@ -145,7 +145,7 @@ osm_gps_map_track_set_property (GObject      *object,
 static void
 osm_gps_map_track_dispose (GObject *object)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (object));
     OsmGpsMapTrackPrivate *priv = OSM_GPS_MAP_TRACK(object)->priv;
 
     if (priv->track) {
@@ -292,7 +292,7 @@ osm_gps_map_track_init (OsmGpsMapTrack *self)
 void
 osm_gps_map_track_add_point (OsmGpsMapTrack *track, const OsmGpsMapPoint *point)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     OsmGpsMapTrackPrivate *priv = track->priv;
 
     OsmGpsMapPoint *p = g_boxed_copy (OSM_TYPE_GPS_MAP_POINT, point);
@@ -331,14 +331,14 @@ OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos)
 GSList *
 osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_TRACK (track), NULL);
     return track->priv->track;
 }
 
 void                
 osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     track->priv->color.red = color->red;
     track->priv->color.green = color->green;
     track->priv->color.blue = color->blue;
@@ -347,7 +347,7 @@ osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
 void
 osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;

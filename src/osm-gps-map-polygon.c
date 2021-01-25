@@ -118,7 +118,7 @@ osm_gps_map_polygon_set_property (GObject      *object,
 static void
 osm_gps_map_polygon_dispose (GObject *object)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_POLYGON (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_POLYGON (object));
 	OsmGpsMapPolygon* poly = OSM_GPS_MAP_POLYGON(object);
 	g_object_unref(poly->priv->track);
 

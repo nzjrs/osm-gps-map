@@ -30,8 +30,8 @@ G_BEGIN_DECLS
 #define OSM_TYPE_GPS_MAP_POLYGON              osm_gps_map_polygon_get_type()
 #define OSM_GPS_MAP_POLYGON(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygon))
 #define OSM_GPS_MAP_POLYGON_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonClass))
-#define OSM_IS_GPS_MAP_POLYGON(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_POLYGON))
-#define OSM_IS_GPS_MAP_POLYGON_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_POLYGON))
+#define OSM_GPS_MAP_IS_POLYGON(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_POLYGON))
+#define OSM_GPS_MAP_IS_POLYGON_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_POLYGON))
 #define OSM_GPS_MAP_POLYGON_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonClass))
 
 typedef struct _OsmGpsMapPolygon OsmGpsMapPolygon;
