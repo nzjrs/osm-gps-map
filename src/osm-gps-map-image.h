@@ -31,8 +31,8 @@ G_BEGIN_DECLS
 #define OSM_TYPE_GPS_MAP_IMAGE              osm_gps_map_image_get_type()
 #define OSM_GPS_MAP_IMAGE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImage))
 #define OSM_GPS_MAP_IMAGE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImageClass))
-#define OSM_IS_GPS_MAP_IMAGE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_IMAGE))
-#define OSM_IS_GPS_MAP_IMAGE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_IMAGE))
+#define OSM_GPS_MAP_IS_IMAGE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_IMAGE))
+#define OSM_GPS_MAP_IS_IMAGE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_IMAGE))
 #define OSM_GPS_MAP_IMAGE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImageClass))
 
 typedef struct _OsmGpsMapImage OsmGpsMapImage;

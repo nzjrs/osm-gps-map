@@ -232,7 +232,7 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
     int xoffset, yoffset;
     gdouble x,y;
 
-    g_return_if_fail (OSM_IS_GPS_MAP_IMAGE (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_IMAGE (object));
     priv = OSM_GPS_MAP_IMAGE(object)->priv;
 
     xoffset =  priv->xalign * priv->w;
@@ -258,14 +258,14 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
 const OsmGpsMapPoint *
 osm_gps_map_image_get_point(OsmGpsMapImage *object)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_IMAGE (object), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_IMAGE (object), NULL);
     return object->priv->pt;
 }
 
 gint
 osm_gps_map_image_get_zorder(OsmGpsMapImage *object)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_IMAGE (object), 0);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_IMAGE (object), 0);
     return object->priv->zorder;
 }
 

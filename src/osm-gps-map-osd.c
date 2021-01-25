@@ -484,7 +484,7 @@ osm_gps_map_osd_render (OsmGpsMapLayer *osd,
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
 
-    g_return_if_fail(OSM_IS_GPS_MAP_OSD(osd));
+    g_return_if_fail(OSM_GPS_MAP_IS_OSD(osd));
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
@@ -511,7 +511,7 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_if_fail(OSM_IS_GPS_MAP_OSD(osd));
+    g_return_if_fail(OSM_GPS_MAP_IS_OSD(osd));
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
@@ -548,7 +548,7 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_val_if_fail(OSM_IS_GPS_MAP_OSD(osd), FALSE);
+    g_return_val_if_fail(OSM_GPS_MAP_IS_OSD(osd), FALSE);
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;

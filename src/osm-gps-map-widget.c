@@ -1520,7 +1520,7 @@ maybe_autocenter_map (OsmGpsMap *map)
     OsmGpsMapPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
@@ -1875,7 +1875,7 @@ osm_gps_map_finalize (GObject *object)
 static void
 osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (object));
     OsmGpsMap *map = OSM_GPS_MAP(object);
     OsmGpsMapPrivate *priv = map->priv;
 
@@ -2021,7 +2021,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
 static void
 osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (object));
     OsmGpsMap *map = OSM_GPS_MAP(object);
     OsmGpsMapPrivate *priv = map->priv;
 
@@ -3036,7 +3036,7 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
     OsmGpsMapPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
 
     priv = map->priv;
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
@@ -3065,7 +3065,7 @@ osm_gps_map_set_zoom_offset (OsmGpsMap *map, int zoom_offset)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP(map));
     priv = map->priv;
 
     if (zoom_offset != priv->tile_zoom_offset)
@@ -3086,7 +3086,7 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
     OsmGpsMapPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), 0);
     priv = map->priv;
 
     if (zoom != priv->map_zoom)
@@ -3115,7 +3115,7 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 int
 osm_gps_map_zoom_in (OsmGpsMap *map)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), 0);
     return osm_gps_map_set_zoom(map, map->priv->map_zoom+1);
 }
 
@@ -3126,7 +3126,7 @@ osm_gps_map_zoom_in (OsmGpsMap *map)
 int
 osm_gps_map_zoom_out (OsmGpsMap *map)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), 0);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), 0);
     return osm_gps_map_set_zoom(map, map->priv->map_zoom-1);
 }
 
@@ -3139,7 +3139,7 @@ osm_gps_map_zoom_out (OsmGpsMap *map)
  * See the properties description for more information about construction
  * parameters than could be passed to g_object_new()
  *
- * Returns: a newly created #OsmGpsMap object.
+ * Returns: (transfer full): a newly created #OsmGpsMap object.
  **/
 GtkWidget *
 osm_gps_map_new (void)
@@ -3161,7 +3161,7 @@ osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
 
     priv->map_x += dx;
@@ -3183,7 +3183,7 @@ osm_gps_map_get_scale (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), OSM_GPS_MAP_INVALID);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), OSM_GPS_MAP_INVALID);
     priv = map->priv;
 
     return osm_gps_map_get_scale_at_point(priv->map_zoom, priv->center_rlat, priv->center_rlon);
@@ -3221,7 +3221,7 @@ osm_gps_map_get_default_cache_directory (void)
 void
 osm_gps_map_set_keyboard_shortcut (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     g_return_if_fail(key < OSM_GPS_MAP_KEY_MAX);
 
     map->priv->keybindings[key] = keyval;
@@ -3238,7 +3238,7 @@ osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
 
     g_object_ref(track);
@@ -3259,7 +3259,7 @@ osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
 void
 osm_gps_map_track_remove_all (OsmGpsMap *map)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
 
     gslist_of_gobjects_free(&map->priv->tracks);
     osm_gps_map_map_redraw_idle(map);
@@ -3275,7 +3275,7 @@ osm_gps_map_track_remove (OsmGpsMap *map, OsmGpsMapTrack *track)
 {
     GSList *data;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), FALSE);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), FALSE);
     g_return_val_if_fail (track != NULL, FALSE);
 
     data = gslist_remove_one_gobject (&map->priv->tracks, G_OBJECT(track));
@@ -3288,7 +3288,7 @@ osm_gps_map_polygon_add (OsmGpsMap *map, OsmGpsMapPolygon *poly)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
 
     g_object_ref(poly);
@@ -3306,7 +3306,7 @@ osm_gps_map_polygon_add (OsmGpsMap *map, OsmGpsMapPolygon *poly)
 void
 osm_gps_map_polygon_remove_all(OsmGpsMap *map)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
 
     gslist_of_gobjects_free(&map->priv->polygons);
     osm_gps_map_map_redraw_idle(map);
@@ -3317,7 +3317,7 @@ osm_gps_map_polygon_remove(OsmGpsMap *map, OsmGpsMapPolygon *poly)
 {
     GSList *data;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), FALSE);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), FALSE);
     g_return_val_if_fail (poly != NULL, FALSE);
 
     data = gslist_remove_one_gobject (&map->priv->polygons, G_OBJECT(poly));
@@ -3336,7 +3336,7 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
 
     g_object_unref(priv->gps_track);
@@ -3359,7 +3359,7 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
 OsmGpsMapTrack *
 osm_gps_map_gps_get_track (OsmGpsMap *map)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), NULL);
     return map->priv->gps_track;
 }
 
@@ -3376,7 +3376,7 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
 {
     OsmGpsMapPrivate *priv;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     priv = map->priv;
 
     /* update the current point */
@@ -3460,7 +3460,7 @@ osm_gps_map_image_add_with_alignment_z (OsmGpsMap *map, float latitude, float lo
     OsmGpsMapImage *im;
     OsmGpsMapPoint pt;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), NULL);
     pt.rlat = deg2rad(latitude);
     pt.rlon = deg2rad(longitude);
 
@@ -3486,7 +3486,7 @@ osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
 {
     GSList *data;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), FALSE);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), FALSE);
     g_return_val_if_fail (image != NULL, FALSE);
 
     data = gslist_remove_one_gobject (&map->priv->images, G_OBJECT(image));
@@ -3502,7 +3502,7 @@ osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
 void
 osm_gps_map_image_remove_all (OsmGpsMap *map)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
 
     gslist_of_gobjects_free(&map->priv->images);
     osm_gps_map_map_redraw_idle(map);
@@ -3517,7 +3517,7 @@ osm_gps_map_image_remove_all (OsmGpsMap *map)
 void
 osm_gps_map_layer_add (OsmGpsMap *map, OsmGpsMapLayer *layer)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     g_return_if_fail (OSM_GPS_MAP_IS_LAYER (layer));
 
     g_object_ref(G_OBJECT(layer));
@@ -3535,7 +3535,7 @@ osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
 {
     GSList *data;
 
-    g_return_val_if_fail (OSM_IS_GPS_MAP (map), FALSE);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_MAP (map), FALSE);
     g_return_val_if_fail (layer != NULL, FALSE);
 
     data = gslist_remove_one_gobject (&map->priv->layers, G_OBJECT(layer));
@@ -3551,7 +3551,7 @@ osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
 void
 osm_gps_map_layer_remove_all (OsmGpsMap *map)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
 
     gslist_of_gobjects_free(&map->priv->layers);
     osm_gps_map_map_redraw_idle(map);
@@ -3575,7 +3575,7 @@ osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixe
     OsmGpsMapPrivate *priv;
     int map_x0, map_y0;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     g_return_if_fail (pt);
 
     priv = map->priv;
@@ -3604,7 +3604,7 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
     OsmGpsMapPrivate *priv;
     int map_x0, map_y0;
 
-    g_return_if_fail (OSM_IS_GPS_MAP (map));
+    g_return_if_fail (OSM_GPS_MAP_IS_MAP (map));
     g_return_if_fail (pt);
 
     priv = map->priv;
