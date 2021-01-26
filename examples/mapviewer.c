@@ -288,6 +288,7 @@ main (int argc, char **argv)
                         "tile-cache",cachedir,
                         "tile-cache-base", cachebasedir,
                         "proxy-uri",g_getenv("http_proxy"),
+                        "user-agent", "mapviewer.c", // Always set user-agent, for better tile-usage compliance
                         NULL);
 
     osd = g_object_new (OSM_TYPE_GPS_MAP_OSD,
