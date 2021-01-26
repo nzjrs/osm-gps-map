@@ -2379,9 +2379,6 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     OsmGpsMapPrivate *priv = map->priv;
     gint x, y;
 
-    GdkDeviceManager* manager = gdk_display_get_device_manager( gdk_display_get_default() );
-    GdkDevice* pointer = gdk_device_manager_get_client_pointer( manager);
-
     if(!priv->is_button_down)
         return FALSE;
 
@@ -2393,9 +2390,18 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     }
 
     if (event->is_hint)
+    {
         // gdk_window_get_pointer (event->window, &x, &y, &state);
-        gdk_window_get_device_position( event->window, pointer, &x, &y, &state);
 
+#if GTK_CHECK_VERSION(3, 20, 0)
+        // TODO: check if we can use gtk_widget_get_display(widget) instead of default
+        GdkDevice* pointer = gdk_seat_get_pointer(gdk_display_get_default_seat(gdk_display_get_default()));
+#else
+        GdkDevice* pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager( gdk_display_get_default()));
+#endif
+
+        gdk_window_get_device_position( event->window, pointer, &x, &y, &state);
+    }
     else
     {
         x = event->x;
