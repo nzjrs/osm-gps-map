@@ -34,16 +34,21 @@ struct _OsmGpsMapPoint
     /* radians */
     float  rlat;
     float  rlon;
+    gpointer user_data;
 };
 
 GType osm_gps_map_point_get_type (void) G_GNUC_CONST;
 
 OsmGpsMapPoint *    osm_gps_map_point_new_degrees   (float lat, float lon);
 OsmGpsMapPoint *    osm_gps_map_point_new_radians   (float rlat, float rlon);
+OsmGpsMapPoint *    osm_gps_map_point_new_degrees_with_user_data   (float lat, float lon, gpointer user_data);
+OsmGpsMapPoint *    osm_gps_map_point_new_radians_with_user_data   (float rlat, float rlon, gpointer user_data);
 void                osm_gps_map_point_get_degrees   (OsmGpsMapPoint *point, float *lat, float *lon);
 void                osm_gps_map_point_get_radians   (OsmGpsMapPoint *point, float *rlat, float *rlon);
 void                osm_gps_map_point_set_degrees   (OsmGpsMapPoint *point, float lat, float lon);
 void                osm_gps_map_point_set_radians   (OsmGpsMapPoint *point, float rlat, float rlon);
+gpointer            osm_gps_map_point_get_user_data (OsmGpsMapPoint *point);
+void                osm_gps_map_point_set_user_data (OsmGpsMapPoint *point, gpointer user_data);
 void                osm_gps_map_point_free          (OsmGpsMapPoint *point);
 OsmGpsMapPoint *    osm_gps_map_point_copy          (const OsmGpsMapPoint *point);
 
