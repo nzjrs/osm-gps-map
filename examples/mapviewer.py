@@ -89,7 +89,7 @@ class UI(Gtk.Window):
         self.last_image = None
 
         self.osm.connect("button_press_event", self.on_button_press)
-        self.osm.connect("button_release_event", self.on_button_release)
+        self.osm.connect("changed", self.on_map_change)
 
         # connect keyboard shortcuts
         self.osm.set_keyboard_shortcut(
@@ -255,7 +255,7 @@ from in the box below. Special metacharacters may be included in this url
             zoom_end=self.osm.props.max_zoom
         )
 
-    def on_button_release(self, osm, event):
+    def on_map_change(self, osm):
         self.latlon_entry.set_text(
             f"Map Centre: latitude {self.osm.props.latitude} "
             f"longitude {self.osm.props.longitude}"

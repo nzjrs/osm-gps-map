@@ -90,7 +90,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 }
 
 static gboolean
-on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_map_changed_event (GtkWidget *widget, gpointer user_data)
 {
     float lat,lon;
     GtkEntry *entry = GTK_ENTRY(user_data);
@@ -390,8 +390,8 @@ main (int argc, char **argv)
                 G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
     g_signal_connect (G_OBJECT (map), "button-press-event",
                 G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
-    g_signal_connect (G_OBJECT (map), "button-release-event",
-                G_CALLBACK (on_button_release_event),
+    g_signal_connect (G_OBJECT (map), "changed",
+                G_CALLBACK (on_map_changed_event),
                 (gpointer) gtk_builder_get_object(builder, "text_entry"));
     g_signal_connect (G_OBJECT (map), "notify::tiles-queued",
                 G_CALLBACK (on_tiles_queued_changed),
