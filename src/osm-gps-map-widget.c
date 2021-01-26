@@ -390,7 +390,7 @@ replace_string(const gchar *src, const gchar *from, const gchar *to)
                  * move the source pointer ahead by the amount we copied. And
                  * move the destination pointer ahead by the same amount.
                  */
-                g_memmove(dst, src, count);
+                memmove(dst, src, count);
                 src += count;
                 dst += count;
 
@@ -398,7 +398,7 @@ replace_string(const gchar *src, const gchar *from, const gchar *to)
                  * the match. Adjust the source pointer by the text we replaced.
                  * Adjust the destination pointer by the amount of replacement
                  * text. */
-                g_memmove(dst, to, tolen);
+                memmove(dst, to, tolen);
                 src += fromlen;
                 dst += tolen;
             }
