@@ -28,7 +28,6 @@
 static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean opt_friendly_cache = FALSE;
 static gboolean opt_no_cache = FALSE;
-static gboolean opt_debug = FALSE;
 static char *opt_cache_base_dir = NULL;
 static gboolean opt_editable_tracks = FALSE;
 static GOptionEntry entries[] =
@@ -36,11 +35,20 @@ static GOptionEntry entries[] =
   { "friendly-cache", 'f', 0, G_OPTION_ARG_NONE, &opt_friendly_cache, "Store maps using friendly cache style (source name)", NULL },
   { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &opt_no_cache, "Disable cache", NULL },
   { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
-  { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
   { "map", 'm', 0, G_OPTION_ARG_INT, &opt_map_provider, "Map source", "N" },
   { "editable-tracks", 'e', 0, G_OPTION_ARG_NONE, &opt_editable_tracks, "Make the tracks editable", NULL },
   { NULL }
 };
+
+#if !GTK_CHECK_VERSION(3,22,0)
+// use --gtk-debug=updates instead on newer GTK
+static gboolean opt_debug = FALSE;
+static GOptionEntry debug_entries[] =
+{
+  { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
+  { NULL }
+};
+#endif
 
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
@@ -250,6 +258,9 @@ main (int argc, char **argv)
     context = g_option_context_new ("- Map browser");
     g_option_context_set_help_enabled(context, FALSE);
     g_option_context_add_main_entries (context, entries, NULL);
+#if !GTK_CHECK_VERSION(3,22,0)
+    g_option_context_add_main_entries (context, debug_entries, NULL);
+#endif
 
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         usage(context);
@@ -277,8 +288,11 @@ main (int argc, char **argv)
         cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
     }
 
+#if !GTK_CHECK_VERSION(3,22,0)
+// use --gtk-debug=updates on newer gtk
     if (opt_debug)
         gdk_window_set_debug_updates(TRUE);
+#endif
 
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", osm_gps_map_source_get_friendly_name(opt_map_provider), opt_map_provider);
