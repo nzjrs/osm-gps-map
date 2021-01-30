@@ -63,6 +63,11 @@ osm_gps_map_point_new_radians(float rlat, float rlon)
     return p;
 }
 
+/**
+ * osm_gps_map_point_new_degrees_with_user_data:
+ *
+ * Since: 1.2.0
+ **/
 OsmGpsMapPoint *
 osm_gps_map_point_new_degrees_with_user_data(float lat, float lon, gpointer user_data)
 {
@@ -73,6 +78,11 @@ osm_gps_map_point_new_degrees_with_user_data(float lat, float lon, gpointer user
     return p;
 }
 
+/**
+ * osm_gps_map_point_new_radians_with_user_data:
+ *
+ * Since: 1.2.0
+ **/
 OsmGpsMapPoint *
 osm_gps_map_point_new_radians_with_user_data(float rlat, float rlon, gpointer user_data)
 {
@@ -120,12 +130,23 @@ osm_gps_map_point_set_radians(OsmGpsMapPoint *point, float rlat, float rlon)
     point->rlon = rlon;
 }
 
+/**
+ * osm_gps_map_point_get_user_data:
+ *
+ * Returns: (transfer none): The #OsmGpsMapPoint user data
+ * Since: 1.2.0
+ **/
 gpointer
 osm_gps_map_point_get_user_data(OsmGpsMapPoint *point)
 {
     return point->user_data;
 }
 
+/**
+ * osm_gps_map_point_set_user_data:
+ *
+ * Since: 1.2.0
+ **/
 void
 osm_gps_map_point_set_user_data(OsmGpsMapPoint *point, gpointer user_data)
 {
