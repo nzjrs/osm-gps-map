@@ -13,10 +13,6 @@ PKG_NAME="osm-gps-map"
     exit 1
 }
 
-which gnome-autogen.sh || {
-	echo "You need to install gnome-common from the GNOME SVN"
-	exit 1
-}
 
 REQUIRED_AUTOMAKE_VERSION=1.11 USE_GNOME2_MACROS=1 USE_COMMON_DOC_BUILD=yes . gnome-autogen.sh --enable-gtk-doc "$@"
 
