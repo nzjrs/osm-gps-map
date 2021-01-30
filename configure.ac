@@ -4,11 +4,15 @@ AC_INIT([osm-gps-map],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
 
+AX_IS_RELEASE([git-directory])
+
 AM_INIT_AUTOMAKE([1.11 foreign subdir-objects parallel-tests])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
 AC_CONFIG_MACRO_DIR([m4])
+
+AX_REQUIRE_DEFINED([GTK_DOC_CHECK])
 
 AM_PROG_CC_C_O
 
@@ -55,8 +59,6 @@ GOBJECT_INTROSPECTION_REQS=0.10.0
 GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_REQS])
 
 GTK_DOC_CHECK([1.12])
-
-GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([
 osmgpsmap-1.0.pc
