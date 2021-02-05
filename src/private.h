@@ -9,7 +9,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,7 +36,7 @@
 
 #define OSM_REPO_URI        "https://tile.openstreetmap.org/#Z/#X/#Y.png"
 #define OSM_MIN_ZOOM        1
-#define OSM_MAX_ZOOM        19
+#define OSM_MAX_ZOOM        20
 #define OSM_IMAGE_FORMAT    "png"
 
 #define URI_MARKER_X    "#X"
