@@ -80,6 +80,9 @@ osm_gps_map_point_new_degrees_with_user_data(float lat, float lon, gpointer user
 
 /**
  * osm_gps_map_point_new_radians_with_user_data:
+ * @rlat: (in): latitude in radians
+ * @rlon: (in): longtitude in radians
+ * @user_data: (in): user data
  *
  * Since: 1.2.0
  **/
@@ -109,6 +112,15 @@ osm_gps_map_point_get_degrees(OsmGpsMapPoint *point, float *lat, float *lon)
     *lon = rad2deg(point->rlon);
 }
 
+/**
+ * osm_gps_map_point_get_radians:
+ * @point: The point ( latitude and longitude in radian )
+ * @rlat: (out): latitude in radians
+ * @rlon: (out): longitude in radians
+ *
+ * Returns the lagitude and longitude in radians.
+ * of the current window, i.e the top left and bottom right corners.
+ **/
 void
 osm_gps_map_point_get_radians(OsmGpsMapPoint *point, float *rlat, float *rlon)
 {
@@ -144,6 +156,7 @@ osm_gps_map_point_get_user_data(OsmGpsMapPoint *point)
 
 /**
  * osm_gps_map_point_set_user_data:
+ * @user_data: (in): user data
  *
  * Since: 1.2.0
  **/

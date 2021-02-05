@@ -2674,6 +2674,8 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
      * The default user-agent for downloading tiles from the #OsmGpsMap:map-source
      * is "libosmgpsmap/VERSION". The value of #OsmGpsMap:user-agent will be
      * appended to it.
+     * 
+     * Since: 1.2.0
      **/
      g_object_class_install_property (object_class,
                                      PROP_USER_AGENT,

@@ -1,3 +1,14 @@
+Changes in 1.2.0
+======================
+  * Change max allowed zoom for various maps (Rolf Eike Beer, Philipe Weyland)
+  * Add copyright notices to maps (Patrick Salecker)
+  * Add configureable user-agent property for apps to clearly identify themselves (Patrick Salecker)
+  * Remove dependency on gnome-common (Patrick Salecker, Hubert Kowalski)
+  * Add user_data support to points (Martijn Goedhart)
+  * Add breakable and shade_alpha properties to polygons (Samuel Cowen)
+  * Python example updated to Python3 (Felipe S. S. Schneider)
+  * Add Glade catalog file for better glade integration (Davide Gessa)
+
 Changes in 1.1.0
 ======================
   * Add polygon support Samuel Cowen <samuel.cowen89@gmail.com>
