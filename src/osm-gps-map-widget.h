@@ -9,7 +9,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -100,7 +100,7 @@ void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
 gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
 void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
-gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+gboolean        osm_gps_map_polygon_remove              (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
 void            osm_gps_map_gps_clear                   (OsmGpsMap *map);
 OsmGpsMapTrack *osm_gps_map_gps_get_track               (OsmGpsMap *map);

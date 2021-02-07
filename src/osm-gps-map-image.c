@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -240,7 +240,7 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
     x = rect->x - xoffset;
     y = rect->y - yoffset;
 
-     cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
+    cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
     cairo_rotate(cr, deg2rad(priv->rotation));
     cairo_translate(cr,  -(x+(priv->w/2)), -(y+(priv->h/2)));
 

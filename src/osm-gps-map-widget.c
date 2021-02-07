@@ -2674,7 +2674,7 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
      * The default user-agent for downloading tiles from the #OsmGpsMap:map-source
      * is "libosmgpsmap/VERSION". The value of #OsmGpsMap:user-agent will be
      * appended to it.
-     * 
+     *
      * Since: 1.2.0
      **/
      g_object_class_install_property (object_class,
@@ -2925,6 +2925,11 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 
 /**
  * osm_gps_map_download_maps:
+ * @map: a #OsmGpsMap widget
+ * @pt1: (in): nort west corner
+ * @pt2: (in): south east corner
+ * @zoom_start: (in): start of zoom range
+ * @zoom_end: (in): end of zoom range
  *
  * Downloads all tiles over the supplied zoom range in the rectangular
  * region specified by pt1 (north west corner) to pt2 (south east corner)
@@ -2989,6 +2994,7 @@ cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
 
 /**
  * osm_gps_map_download_cancel_all:
+ * @map: a #OsmGpsMap widget
  *
  * Cancels all tiles currently being downloaded. Typically used if you wish to
  * cacel a large number of tiles queued using osm_gps_map_download_maps()
@@ -3004,6 +3010,7 @@ osm_gps_map_download_cancel_all (OsmGpsMap *map)
 
 /**
  * osm_gps_map_get_bbox:
+ * @map: a #OsmGpsMap widget
  * @pt1: (out): point to be filled with the top left location
  * @pt2: (out): point to be filled with the bottom right location
  *
@@ -3027,7 +3034,15 @@ osm_gps_map_get_bbox (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2)
 
 /**
  * osm_gps_map_zoom_fit_bbox:
+ * @map: a #OsmGpsMap widget
+ * @latitude1: (in): latitude of 1st point in degrees
+ * @latitude2: (in): latitude of 2nd point in degrees
+ * @longitude1: (in): longtitude of 1st point in degrees
+ * @longitude2: (in): longtitude of 2nd point in degrees
+ *
  * Zoom and center the map so that both points fit inside the window.
+ *
+ * Since: 1.1.0
  **/
 void
 osm_gps_map_zoom_fit_bbox (OsmGpsMap *map, float latitude1, float latitude2, float longitude1, float longitude2)
@@ -3036,12 +3051,17 @@ osm_gps_map_zoom_fit_bbox (OsmGpsMap *map, float latitude1, float latitude2, flo
     int zoom;
     gtk_widget_get_allocation (GTK_WIDGET (map), &allocation);
     zoom = latlon2zoom (allocation.height, allocation.width, deg2rad(latitude1), deg2rad(latitude2), deg2rad(longitude1), deg2rad(longitude2));
-    osm_gps_map_set_center (map, (latitude1 + latitude2) / 2, (longitude1 + longitude2) / 2);
-    osm_gps_map_set_zoom (map, zoom);
+    osm_gps_map_set_center_and_zoom (map, (latitude1 + latitude2) / 2, (longitude1 + longitude2) / 2, zoom);
 }
 
 /**
  * osm_gps_map_set_center_and_zoom:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @zoom: desired zoom level
+ *
+ * Set map center and desired zoom level
  *
  * Since: 0.7.0
  **/
@@ -3053,6 +3073,11 @@ void osm_gps_map_set_center_and_zoom (OsmGpsMap *map, float latitude, float long
 
 /**
  * osm_gps_map_set_center:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ *
+ * Set map center, does not change zoom level
  *
  **/
 void
@@ -3084,6 +3109,10 @@ osm_gps_map_set_center (OsmGpsMap *map, float latitude, float longitude)
 
 /**
  * osm_gps_map_set_zoom_offset:
+ * @map: a #OsmGpsMap widget
+ * @zoom_offset: tile zoom offset
+ *
+ * Set tile zoom offset
  *
  **/
 void
@@ -3103,6 +3132,12 @@ osm_gps_map_set_zoom_offset (OsmGpsMap *map, int zoom_offset)
 
 /**
  * osm_gps_map_set_zoom:
+ * @map: a #OsmGpsMap widget
+ * @zoom: (in): Desired zoom level
+ *
+ * Set map zoom to the desired zoom level
+ *
+ * Returns: zoom level
  *
  **/
 int
@@ -3136,6 +3171,11 @@ osm_gps_map_set_zoom (OsmGpsMap *map, int zoom)
 
 /**
  * osm_gps_map_zoom_in:
+ * @map: a #OsmGpsMap widget
+  *
+ * Zoom in by 1 step
+ *
+ * Returns: zoom level
  *
  **/
 int
@@ -3147,6 +3187,11 @@ osm_gps_map_zoom_in (OsmGpsMap *map)
 
 /**
  * osm_gps_map_zoom_out:
+ * @map: a #OsmGpsMap widget
+ *
+ * Zoom out by 1 step
+ *
+ * Returns: zoom level
  *
  **/
 int
@@ -3175,9 +3220,9 @@ osm_gps_map_new (void)
 
 /**
  * osm_gps_map_scroll:
- * @map:
- * @dx:
- * @dy:
+ * @map: a #OsmGpsMap widget
+ * @dx: pixels to scroll in NS (positive: scroll nort, negative: scroll south)
+ * @dy: pixels to scroll in EW (positive: scroll east, negative: scroll west)
  *
  * Scrolls the map by @dx, @dy pixels (positive north, east)
  *
@@ -3199,7 +3244,9 @@ osm_gps_map_scroll (OsmGpsMap *map, gint dx, gint dy)
 
 /**
  * osm_gps_map_get_scale:
- * @map:
+ * @map: a #OsmGpsMap widget
+ *
+ * Get the scale of the map at the center, in meters/pixel.
  *
  * Returns: the scale of the map at the center, in meters/pixel.
  *
@@ -3218,7 +3265,7 @@ osm_gps_map_get_scale (OsmGpsMap *map)
 /**
  * osm_gps_map_get_default_cache_directory:
  *
- * Returns: the default cache directory for the library, that is the base
+ * Returns (transfer full): the default cache directory for the library, that is the base
  * directory to which the full cache path is appended. If
  * #OsmGpsMap:tile-cache-base is omitted from the constructor then this value
  * is used.
@@ -3235,8 +3282,9 @@ osm_gps_map_get_default_cache_directory (void)
 
 /**
  * osm_gps_map_set_keyboard_shortcut:
+ * @map: a #OsmGpsMap widget
  * @key: a #OsmGpsMapKey_t
- * @keyval:
+ * @keyval: a keyval to bind
  *
  * Associates a keyboard shortcut with the supplied @keyval
  * (as returned by #gdk_keyval_from_name or simiar). The action given in @key
@@ -3256,6 +3304,10 @@ osm_gps_map_set_keyboard_shortcut (OsmGpsMap *map, OsmGpsMapKey_t key, guint key
 
 /**
  * osm_gps_map_track_add:
+ * @map: a #OsmGpsMap widget
+ * @track: a @OsmGpsMapTrack object
+ *
+ * Add a track to map
  *
  * Since: 0.7.0
  **/
@@ -3279,6 +3331,9 @@ osm_gps_map_track_add (OsmGpsMap *map, OsmGpsMapTrack *track)
 
 /**
  * osm_gps_map_track_remove_all:
+ * @map: a #OsmGpsMap widget
+ *
+ * Remove all tracks
  *
  * Since: 0.7.0
  **/
@@ -3293,6 +3348,10 @@ osm_gps_map_track_remove_all (OsmGpsMap *map)
 
 /**
  * osm_gps_map_track_remove:
+ * @map: a #OsmGpsMap widget
+ * @track: a #OsmGpsMapTrack object
+ *
+ * Remove given track from map
  *
  * Since: 0.7.0
  **/
@@ -3354,6 +3413,9 @@ osm_gps_map_polygon_remove(OsmGpsMap *map, OsmGpsMapPolygon *poly)
 
 /**
  * osm_gps_map_gps_clear:
+ * @map: a #OsmGpsMap widget
+ *
+ * Clear GPS track history
  *
  * Since: 0.7.0
  **/
@@ -3376,6 +3438,9 @@ osm_gps_map_gps_clear (OsmGpsMap *map)
 
 /**
  * osm_gps_map_gps_get_track:
+ * @map: a #OsmGpsMap widget
+ *
+ * Get internal GPS track history
  *
  * Returns: (transfer none): The #OsmGpsMapTrack of the internal GPS track,
  * i.e. that which is modified when calling osm_gps_map_gps_add(). You must
@@ -3391,9 +3456,13 @@ osm_gps_map_gps_get_track (OsmGpsMap *map)
 
 /**
  * osm_gps_map_gps_add:
- * @latitude: degrees
- * @longitude: degrees
- * @heading: degrees or #OSM_GPS_MAP_INVALID to disable showing heading
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @heading: GPS degrees or #OSM_GPS_MAP_INVALID to disable showing heading
+ *
+ * Set current GPS point to given lat/lon point with given heading.
+ * If record-trip-history is set, add point to trip history
  *
  * Since: 0.7.0
  **/
@@ -3425,6 +3494,12 @@ osm_gps_map_gps_add (OsmGpsMap *map, float latitude, float longitude, float head
 
 /**
  * osm_gps_map_image_add:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @image: (in): Image pixbuf
+ *
+ * Creates @OsmGpsMapImage with given params and adds it to map images
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
  * Since: 0.7.0
@@ -3437,6 +3512,13 @@ osm_gps_map_image_add (OsmGpsMap *map, float latitude, float longitude, GdkPixbu
 
 /**
  * osm_gps_map_image_add_z:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @image: (in): Image pixbuf
+ * @zorder: z-order of image
+ *
+ * Creates @OsmGpsMapImage with given params and adds it to map images
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
  * Since: 0.7.4
@@ -3455,6 +3537,14 @@ on_image_changed (OsmGpsMapImage *image, GParamSpec *pspec, OsmGpsMap *map)
 
 /**
  * osm_gps_map_image_add_with_alignment:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @image: (in): Image pixbuf
+ * @xalign: x-align of image
+ * @yalign: y-align of image
+ *
+ * Creates @OsmGpsMapImage with given params and adds it to map images
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
  * Since: 0.7.0
@@ -3476,6 +3566,15 @@ osm_gps_map_image_z_compare(gconstpointer item1, gconstpointer item2)
 
 /**
  * osm_gps_map_image_add_with_alignment_z:
+ * @map: a #OsmGpsMap widget
+ * @latitude: latitude in degrees
+ * @longitude: longitude in degrees
+ * @image: (in): Image pixbuf
+ * @xalign: x-align of image
+ * @yalign: y-align of image
+ * @zorder: z-order of image
+ *
+ * Creates @OsmGpsMapImage with given params and adds it to map images
  *
  * Returns: (transfer full): A #OsmGpsMapImage representing the added pixbuf
  * Since: 0.7.4
@@ -3504,6 +3603,12 @@ osm_gps_map_image_add_with_alignment_z (OsmGpsMap *map, float latitude, float lo
 
 /**
  * osm_gps_map_image_remove:
+ * @map: a #OsmGpsMap widget
+ * @image: (in): a @OsmGpsMapImage to remove
+ *
+ * Remove image from list of images
+ *
+ * Returns: true if image was on list of images
  *
  * Since: 0.7.0
  **/
@@ -3522,6 +3627,9 @@ osm_gps_map_image_remove (OsmGpsMap *map, OsmGpsMapImage *image)
 
 /**
  * osm_gps_map_image_remove_all:
+ * @map: a #OsmGpsMap widget
+ *
+ * Remove all images from map
  *
  * Since: 0.7.0
  **/
@@ -3536,7 +3644,10 @@ osm_gps_map_image_remove_all (OsmGpsMap *map)
 
 /**
  * osm_gps_map_layer_add:
+ * @map: a #OsmGpsMap widget
  * @layer: a #OsmGpsMapLayer object
+ *
+ * Add layer to map
  *
  * Since: 0.7.0
  **/
@@ -3552,8 +3663,12 @@ osm_gps_map_layer_add (OsmGpsMap *map, OsmGpsMapLayer *layer)
 
 /**
  * osm_gps_map_layer_remove:
+ * @map: a #OsmGpsMap widget
  * @layer: a #OsmGpsMapLayer object
  *
+ * Remove layer from map
+ *
+ * Returns: whether layer was found and removed
  * Since: 0.7.0
  **/
 gboolean
@@ -3571,6 +3686,9 @@ osm_gps_map_layer_remove (OsmGpsMap *map, OsmGpsMapLayer *layer)
 
 /**
  * osm_gps_map_layer_remove_all:
+ * @map: a #OsmGpsMap widget
+ *
+ * Remove all layers from map
  *
  * Since: 0.7.0
  **/
@@ -3585,7 +3703,7 @@ osm_gps_map_layer_remove_all (OsmGpsMap *map)
 
 /**
  * osm_gps_map_convert_screen_to_geographic:
- * @map:
+ * @map: a #OsmGpsMap widget
  * @pixel_x: pixel location on map, x axis
  * @pixel_y: pixel location on map, y axis
  * @pt: (out): location
@@ -3614,7 +3732,7 @@ osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixe
 
 /**
  * osm_gps_map_convert_geographic_to_screen:
- * @map:
+ * @map: a #OsmGpsMap widget
  * @pt: location
  * @pixel_x: (out): pixel location on map, x axis
  * @pixel_y: (out): pixel location on map, y axis
@@ -3645,11 +3763,13 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
 
 /**
  * osm_gps_map_get_event_location:
- * @map:
+ * @map: a #OsmGpsMap widget
  * @event: A #GtkEventButton that occured on the map
  *
  * A convenience function for getting the geographic location of events,
  * such as mouse clicks, on the map
+ *
+ * Free returned point with g_free
  *
  * Returns: (transfer full): The point on the globe corresponding to the click
  * Since: 0.7.0

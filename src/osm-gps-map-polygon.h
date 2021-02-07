@@ -58,6 +58,8 @@ OsmGpsMapPolygon*		osm_gps_map_polygon_new           (void);
  * osm_gps_map_polygon_get_track:
  * @poly: a #OsmGpsMapPolygon
  *
+ * Get track from the polygon
+ *
  * Returns: (transfer none): The #OsmGpsMapTrack of the polygon
  **/
 OsmGpsMapTrack*			osm_gps_map_polygon_get_track(OsmGpsMapPolygon* poly);

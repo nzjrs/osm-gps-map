@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -335,7 +335,7 @@ osm_gps_map_track_get_points (OsmGpsMapTrack *track)
     return track->priv->track;
 }
 
-void                
+void
 osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
     g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
@@ -360,14 +360,14 @@ osm_gps_map_track_get_length(OsmGpsMapTrack* track)
     double ret = 0;
     OsmGpsMapPoint* point_a = NULL;
     OsmGpsMapPoint* point_b = NULL;
-       
+
     while(points)
     {
         point_a = point_b;
         point_b = points->data;
         if(point_a)
         {
-            ret += acos(sin(point_a->rlat)*sin(point_b->rlat) 
+            ret += acos(sin(point_a->rlat)*sin(point_b->rlat)
                     + cos(point_a->rlat)*cos(point_b->rlat)*cos(point_b->rlon-point_a->rlon)) * 6371109; //the mean raduis of earth
         }
         points = points->next;

@@ -12,7 +12,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,11 +51,61 @@ struct _OsmGpsMapLayerIface {
     gboolean (*button_press) (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
 };
 
+/**
+ * osm_gps_map_layer_get_type:
+ *
+ * Get layer type
+ *
+ * Return value: (element-type GType): The type of the layer
+ * Since: 0.6.0
+ **/
 GType osm_gps_map_layer_get_type (void);
 
+/**
+ * osm_gps_map_layer_render:
+ * @self: (in): a #OsmGpsMapLayer object
+ * @map: (in): a #OsmGpsMap widget
+ *
+ * Render layer on map
+ *
+ * Since: 0.6.0
+ **/
 void        osm_gps_map_layer_render            (OsmGpsMapLayer *self, OsmGpsMap *map);
+
+/**
+ * osm_gps_map_layer_draw:
+ * @self: (in): a #OsmGpsMapLayer object
+ * @map: (in): a #OsmGpsMap widget
+ * @cr: (in): a cairo context to draw to
+ *
+ * Draw layer on map
+ *
+ * Since: 0.6.0
+ **/
 void        osm_gps_map_layer_draw              (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr);
+
+/**
+ * osm_gps_map_layer_busy:
+ * @self: (in): a #OsmGpsMapLayer object
+ *
+ * Check whether layer is busy (eg drawing an animation)
+ *
+ * Returns: layer busy state
+ * Since: 0.6.0
+ **/
 gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
+
+/**
+ * osm_gps_map_layer_button_press:
+ * @self: (in): a #OsmGpsMapLayer object
+ * @map: (in): a #OsmGpsMap widget
+ * @event: (in): a #GdkEventButton event
+ *
+ * Handle button event
+ *
+ * Returns: whether even had been handled
+ * Since: 0.6.0
+ **/
 gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
 
 G_END_DECLS
