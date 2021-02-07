@@ -101,11 +101,11 @@
 <ARG>
 <NAME>OsmGpsMap::map-source</NAME>
 <TYPE>gint</TYPE>
-<RANGE>>= -1</RANGE>
+<RANGE>>= 0</RANGE>
 <FLAGS>rwx</FLAGS>
 <NICK>map source</NICK>
 <BLURB>The map source ID.</BLURB>
-<DEFAULT>-1</DEFAULT>
+<DEFAULT>0</DEFAULT>
 </ARG>
 
 <ARG>
@@ -135,7 +135,7 @@
 <FLAGS>rwX</FLAGS>
 <NICK>max zoom</NICK>
 <BLURB>Maximum zoom level.</BLURB>
-<DEFAULT>18</DEFAULT>
+<DEFAULT>20</DEFAULT>
 </ARG>
 
 <ARG>
@@ -175,7 +175,7 @@
 <FLAGS>rwX</FLAGS>
 <NICK>repo uri</NICK>
 <BLURB>Map source tile repository uri.</BLURB>
-<DEFAULT>"http://tile.openstreetmap.org/#Z/#X/#Y.png"</DEFAULT>
+<DEFAULT>"https://tile.openstreetmap.org/#Z/#X/#Y.png"</DEFAULT>
 </ARG>
 
 <ARG>
@@ -239,6 +239,16 @@
 </ARG>
 
 <ARG>
+<NAME>OsmGpsMap::user-agent</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>user agent</NICK>
+<BLURB>HTTP user agent or NULL.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
 <NAME>OsmGpsMap::zoom</NAME>
 <TYPE>gint</TYPE>
 <RANGE>[0,20]</RANGE>
@@ -285,6 +295,16 @@
 <FLAGS>rwx</FLAGS>
 <NICK>show-coordinates</NICK>
 <BLURB>show coordinates of map centre.</BLURB>
+<DEFAULT>TRUE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>OsmGpsMapOsd::show-copyright</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rwx</FLAGS>
+<NICK>show-copyright</NICK>
+<BLURB>show copyright information for build-in map-sources on the map.</BLURB>
 <DEFAULT>TRUE</DEFAULT>
 </ARG>
 

@@ -4,7 +4,6 @@
 	<!ENTITY version SYSTEM "version.xml">
 	<!ENTITY slash "/">
 ]>
-
 <glossary id="annotation-glossary">
   <title>Annotation Glossary</title>
 <glossdiv><title>E</title>
@@ -15,11 +14,45 @@
       </glossdef>
     </glossentry>
 </glossdiv>
+<glossdiv><title>I</title>
+    <glossentry>
+      <glossterm><anchor id="annotation-glossterm-in"/>in</glossterm>
+      <glossdef>
+        <para>Parameter for input. Default is <acronym>transfer none</acronym>.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm><anchor id="annotation-glossterm-inout"/>inout</glossterm>
+      <glossdef>
+        <para>Parameter for input and for returning results. Default is <acronym>transfer full</acronym>.</para>
+      </glossdef>
+    </glossentry>
+</glossdiv>
 <glossdiv><title>O</title>
     <glossentry>
       <glossterm><anchor id="annotation-glossterm-out"/>out</glossterm>
       <glossdef>
         <para>Parameter for returning results. Default is <acronym>transfer full</acronym>.</para>
+      </glossdef>
+    </glossentry>
+    <glossentry>
+      <glossterm><anchor id="annotation-glossterm-out caller-allocates"/>out caller-allocates</glossterm>
+      <glossdef>
+        <para>Out parameter, where caller must allocate storage.</para>
+      </glossdef>
+    </glossentry>
+</glossdiv>
+<glossdiv><title>S</title>
+    <glossentry>
+      <glossterm><anchor id="annotation-glossterm-Stable"/>Stable</glossterm>
+      <glossdef>
+        <para>The intention of a Stable interface is to enable arbitrary third parties to
+develop applications to these interfaces, release them, and have confidence that
+they will run on all minor releases of the product (after the one in which the
+interface was introduced, and within the same major release). Even at a major
+release, incompatible changes are expected to be rare, and to have strong
+justifications.
+</para>
       </glossdef>
     </glossentry>
 </glossdiv>

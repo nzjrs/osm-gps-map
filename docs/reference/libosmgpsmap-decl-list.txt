@@ -17,24 +17,33 @@ osd_render_gps
 </SECTION>
 
 <SECTION>
+<FILE>osm-gps-map</FILE>
+
+</SECTION>
+
+<SECTION>
+<FILE>osm-gps-map-compat</FILE>
+
+</SECTION>
+
+<SECTION>
 <FILE>osm-gps-map-image</FILE>
 <TITLE>OsmGpsMapImage</TITLE>
+OsmGpsMapImage
+OsmGpsMapImageClass
 osm_gps_map_image_new
 osm_gps_map_image_draw
 osm_gps_map_image_get_point
 osm_gps_map_image_get_zorder
 osm_gps_map_image_get_rotation
 osm_gps_map_image_set_rotation
+OsmGpsMapImagePrivate
 <SUBSECTION Standard>
-OSM_GPS_MAP_IMAGE
 OSM_GPS_MAP_IMAGE_CLASS
 OSM_GPS_MAP_IMAGE_GET_CLASS
-OSM_IS_GPS_MAP_IMAGE
-OSM_IS_GPS_MAP_IMAGE_CLASS
+OSM_GPS_MAP_IS_IMAGE
+OSM_GPS_MAP_IS_IMAGE_CLASS
 OSM_TYPE_GPS_MAP_IMAGE
-OsmGpsMapImage
-OsmGpsMapImageClass
-OsmGpsMapImagePrivate
 osm_gps_map_image_get_type
 </SECTION>
 
@@ -49,7 +58,6 @@ osm_gps_map_layer_button_press
 OsmGpsMapLayer
 <SUBSECTION Standard>
 OSM_GPS_MAP_IS_LAYER
-OSM_GPS_MAP_LAYER
 OSM_GPS_MAP_LAYER_GET_INTERFACE
 OSM_TYPE_GPS_MAP_LAYER
 osm_gps_map_layer_get_type
@@ -58,17 +66,16 @@ osm_gps_map_layer_get_type
 <SECTION>
 <FILE>osm-gps-map-osd</FILE>
 <TITLE>OsmGpsMapOsd</TITLE>
-osm_gps_map_osd_new
-<SUBSECTION Standard>
-OSM_GPS_MAP_OSD
-OSM_GPS_MAP_OSD_CLASS
-OSM_GPS_MAP_OSD_GET_CLASS
-OSM_IS_GPS_MAP_OSD
-OSM_IS_GPS_MAP_OSD_CLASS
-OSM_TYPE_GPS_MAP_OSD
 OsmGpsMapOsd
 OsmGpsMapOsdClass
+osm_gps_map_osd_new
 OsmGpsMapOsdPrivate
+<SUBSECTION Standard>
+OSM_GPS_MAP_IS_OSD
+OSM_GPS_MAP_IS_OSD_CLASS
+OSM_GPS_MAP_OSD_CLASS
+OSM_GPS_MAP_OSD_GET_CLASS
+OSM_TYPE_GPS_MAP_OSD
 osm_gps_map_osd_get_type
 </SECTION>
 
@@ -76,10 +83,14 @@ osm_gps_map_osd_get_type
 <FILE>osm-gps-map-point</FILE>
 osm_gps_map_point_new_degrees
 osm_gps_map_point_new_radians
+osm_gps_map_point_new_degrees_with_user_data
+osm_gps_map_point_new_radians_with_user_data
 osm_gps_map_point_get_degrees
 osm_gps_map_point_get_radians
 osm_gps_map_point_set_degrees
 osm_gps_map_point_set_radians
+osm_gps_map_point_get_user_data
+osm_gps_map_point_set_user_data
 osm_gps_map_point_free
 osm_gps_map_point_copy
 <SUBSECTION Standard>
@@ -91,18 +102,17 @@ osm_gps_map_point_get_type
 <SECTION>
 <FILE>osm-gps-map-polygon</FILE>
 <TITLE>OsmGpsMapPolygon</TITLE>
-osm_gps_map_polygon_new
-osm_gps_map_polygon_get_track
-<SUBSECTION Standard>
-OSM_GPS_MAP_POLYGON
-OSM_GPS_MAP_POLYGON_CLASS
-OSM_GPS_MAP_POLYGON_GET_CLASS
-OSM_IS_GPS_MAP_POLYGON
-OSM_IS_GPS_MAP_POLYGON_CLASS
-OSM_TYPE_GPS_MAP_POLYGON
 OsmGpsMapPolygon
 OsmGpsMapPolygonClass
+osm_gps_map_polygon_new
+osm_gps_map_polygon_get_track
 OsmGpsMapPolygonPrivate
+<SUBSECTION Standard>
+OSM_GPS_MAP_IS_POLYGON
+OSM_GPS_MAP_IS_POLYGON_CLASS
+OSM_GPS_MAP_POLYGON_CLASS
+OSM_GPS_MAP_POLYGON_GET_CLASS
+OSM_TYPE_GPS_MAP_POLYGON
 osm_gps_map_polygon_get_type
 </SECTION>
 
@@ -110,6 +120,7 @@ osm_gps_map_polygon_get_type
 <FILE>osm-gps-map-source</FILE>
 OsmGpsMapSource_t
 osm_gps_map_source_get_friendly_name
+osm_gps_map_source_get_copyright
 osm_gps_map_source_get_repo_uri
 osm_gps_map_source_get_image_format
 osm_gps_map_source_get_min_zoom
@@ -120,6 +131,8 @@ osm_gps_map_source_is_valid
 <SECTION>
 <FILE>osm-gps-map-track</FILE>
 <TITLE>OsmGpsMapTrack</TITLE>
+OsmGpsMapTrack
+OsmGpsMapTrackClass
 osm_gps_map_track_new
 osm_gps_map_track_add_point
 osm_gps_map_track_get_points
@@ -130,22 +143,21 @@ osm_gps_map_track_n_points
 osm_gps_map_track_insert_point
 osm_gps_map_track_get_point
 osm_gps_map_track_get_length
+OsmGpsMapTrackPrivate
 <SUBSECTION Standard>
-OSM_GPS_MAP_TRACK
+OSM_GPS_MAP_IS_TRACK
+OSM_GPS_MAP_IS_TRACK_CLASS
 OSM_GPS_MAP_TRACK_CLASS
 OSM_GPS_MAP_TRACK_GET_CLASS
-OSM_IS_GPS_MAP_TRACK
-OSM_IS_GPS_MAP_TRACK_CLASS
 OSM_TYPE_GPS_MAP_TRACK
-OsmGpsMapTrack
-OsmGpsMapTrackClass
-OsmGpsMapTrackPrivate
 osm_gps_map_track_get_type
 </SECTION>
 
 <SECTION>
 <FILE>osm-gps-map-widget</FILE>
 <TITLE>OsmGpsMap</TITLE>
+OsmGpsMapClass
+OsmGpsMap
 OsmGpsMapKey_t
 OSM_GPS_MAP_INVALID
 OSM_GPS_MAP_CACHE_DISABLED
@@ -189,16 +201,13 @@ osm_gps_map_convert_geographic_to_screen
 osm_gps_map_get_event_location
 osm_gps_map_map_redraw
 osm_gps_map_map_redraw_idle
+OsmGpsMapPrivate
 <SUBSECTION Standard>
-OSM_GPS_MAP
 OSM_GPS_MAP_CLASS
 OSM_GPS_MAP_GET_CLASS
-OSM_IS_GPS_MAP
-OSM_IS_GPS_MAP_CLASS
+OSM_GPS_MAP_IS_MAP
+OSM_GPS_MAP_IS_MAP_CLASS
 OSM_TYPE_GPS_MAP
-OsmGpsMap
-OsmGpsMapClass
-OsmGpsMapPrivate
 osm_gps_map_get_type
 </SECTION>
 

@@ -2,26 +2,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OsmGpsMap Reference Manual: OsmGpsMapPoint</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<title>OsmGpsMapPoint: OsmGpsMap Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack">
-<link rel="next" href="api-reference-deprecated.html" title="Deprecated API">
-<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
+<link rel="next" href="api-index-full.html" title="Index of all symbols">
+<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
 <td width="100%" align="left" class="shortcuts">
-<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
-                  <a href="#OsmGpsMapPoint.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#OsmGpsMapPoint.description" class="shortcut">Description</a></span><span id="nav_hierarchy">  <span class="dim">|</span> 
                   <a href="#OsmGpsMapPoint.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
 </td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><a accesskey="u" href="api-reference.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
 <td><a accesskey="p" href="OsmGpsMapTrack.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
-<td><a accesskey="n" href="api-reference-deprecated.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
 </tr></table>
 <div class="refentry">
 <a name="OsmGpsMapPoint"></a><div class="titlepage"></div>
@@ -34,14 +34,20 @@
 </tr></table></div>
 <div class="refsect1">
 <a name="OsmGpsMapPoint.stability-level"></a><h2>Stability Level</h2>
-Stable, unless otherwise indicated
+<acronym title="The intention of a Stable interface is to enable arbitrary third parties to
+develop applications to these interfaces, release them, and have confidence that
+they will run on all minor releases of the product (after the one in which the
+interface was introduced, and within the same major release). Even at a major
+release, incompatible changes are expected to be rare, and to have strong
+justifications.
+"><span class="acronym">Stable</span></acronym>, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapPoint.functions"></a><h2>Functions</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="functions_return">
-<col class="functions_name">
+<col width="150px" class="functions_proto_type">
+<col class="functions_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -62,6 +68,14 @@ Stable, unless otherwise indicated
 </tr>
 <tr>
 <td class="function_type">
+<span class="returnvalue">gpointer</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-get-user-data" title="osm_gps_map_point_get_user_data ()">osm_gps_map_point_get_user_data</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
 <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
 </td>
 <td class="function_name">
@@ -73,7 +87,23 @@ Stable, unless otherwise indicated
 <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
 </td>
 <td class="function_name">
+<a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees-with-user-data" title="osm_gps_map_point_new_degrees_with_user_data ()">osm_gps_map_point_new_degrees_with_user_data</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+</td>
+<td class="function_name">
 <a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians" title="osm_gps_map_point_new_radians ()">osm_gps_map_point_new_radians</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians-with-user-data" title="osm_gps_map_point_new_radians_with_user_data ()">osm_gps_map_point_new_radians_with_user_data</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -90,6 +120,14 @@ Stable, unless otherwise indicated
 </td>
 <td class="function_name">
 <a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-set-radians" title="osm_gps_map_point_set_radians ()">osm_gps_map_point_set_radians</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-set-user-data" title="osm_gps_map_point_set_user_data ()">osm_gps_map_point_set_user_data</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -113,10 +151,10 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapPoint.other"></a><h2>Types and Values</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -126,7 +164,7 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapPoint.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="screen">    GBoxed
+<pre class="screen">    <a href="/usr/share/gtk-doc/html/gobject/gobject-Boxed-Types.html">GBoxed</a>
     <span class="lineart">╰──</span> OsmGpsMapPoint
 </pre>
 </div>
@@ -137,7 +175,7 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapPoint.description"></a><h2>Description</h2>
-<p><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> describes a geographic location (latitude, longitude). 
+<p><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> describes a geographic location (latitude, longitude).
 Helper functions exist to create such a point from either radian co-ordinates
 (<a class="link" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians" title="osm_gps_map_point_new_radians ()"><code class="function">osm_gps_map_point_new_radians()</code></a>) or degrees (<code class="function">osm_gps_map_new_degrees()</code>).</p>
 </div>
@@ -149,9 +187,10 @@ Helper functions exist to create such a point from either radian co-ordinates
 osm_gps_map_point_get_degrees (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>,
                                <em class="parameter"><code><span class="type">float</span> *lat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> *lon</code></em>);</pre>
+<p>Returns the lagitude and longitude in degrees.</p>
 <div class="refsect3">
-<a name="id-1.2.6.9.2.4"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="osm-gps-map-point-get-degrees.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
 <col class="parameters_description">
@@ -165,17 +204,18 @@ osm_gps_map_point_get_degrees (<em class="parameter"><code><a class="link" href=
 </tr>
 <tr>
 <td class="parameter_name"><p>lat</p></td>
-<td class="parameter_description"><p> latitude in degrees. </p></td>
+<td class="parameter_description"><p>latitude in degrees. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>lon</p></td>
-<td class="parameter_description"><p> longitude in degrees. </p></td>
+<td class="parameter_description"><p>longitude in degrees. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<p class="since">Since: 0.7.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -184,8 +224,63 @@ osm_gps_map_point_get_degrees (<em class="parameter"><code><a class="link" href=
 osm_gps_map_point_get_radians (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>,
                                <em class="parameter"><code><span class="type">float</span> *rlat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> *rlon</code></em>);</pre>
-<p>
-</p>
+<p>Returns the lagitude and longitude in radians.</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-get-radians.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point ( latitude and longitude in radian )</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlat</p></td>
+<td class="parameter_description"><p>latitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlon</p></td>
+<td class="parameter_description"><p>longitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for returning results. Default is transfer full."><span class="acronym">out</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-point-get-user-data"></a><h3>osm_gps_map_point_get_user_data ()</h3>
+<pre class="programlisting"><span class="returnvalue">gpointer</span>
+osm_gps_map_point_get_user_data (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>);</pre>
+<p>Get user data stored in point</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-get-user-data.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-point-get-user-data.returns"></a><h4>Returns</h4>
+<p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> user data. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 1.2.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -193,12 +288,78 @@ osm_gps_map_point_get_radians (<em class="parameter"><code><a class="link" href=
 <pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
 osm_gps_map_point_new_degrees (<em class="parameter"><code><span class="type">float</span> lat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> lon</code></em>);</pre>
-<p>
-</p>
+<p>Create point with specified params</p>
 <div class="refsect3">
-<a name="id-1.2.6.9.4.5"></a><h4>Returns</h4>
-<p></p>
+<a name="osm-gps-map-point-new-degrees.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>lat</p></td>
+<td class="parameter_description"><p>latitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>lon</p></td>
+<td class="parameter_description"><p>longtitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
 </div>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-degrees.returns"></a><h4>Returns</h4>
+<p>new point object. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-point-new-degrees-with-user-data"></a><h3>osm_gps_map_point_new_degrees_with_user_data ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+osm_gps_map_point_new_degrees_with_user_data
+                               (<em class="parameter"><code><span class="type">float</span> lat</code></em>,
+                                <em class="parameter"><code><span class="type">float</span> lon</code></em>,
+                                <em class="parameter"><code><span class="type">gpointer</span> user_data</code></em>);</pre>
+<p>Create point with specified params</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-degrees-with-user-data.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>lat</p></td>
+<td class="parameter_description"><p>latitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>lon</p></td>
+<td class="parameter_description"><p>longtitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>user_data</p></td>
+<td class="parameter_description"><p>user data. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-degrees-with-user-data.returns"></a><h4>Returns</h4>
+<p>new point object. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 1.2.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -206,12 +367,78 @@ osm_gps_map_point_new_degrees (<em class="parameter"><code><span class="type">fl
 <pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
 osm_gps_map_point_new_radians (<em class="parameter"><code><span class="type">float</span> rlat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> rlon</code></em>);</pre>
-<p>
-</p>
+<p>Create point with specified params</p>
 <div class="refsect3">
-<a name="id-1.2.6.9.5.5"></a><h4>Returns</h4>
-<p></p>
+<a name="osm-gps-map-point-new-radians.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>rlat</p></td>
+<td class="parameter_description"><p>latitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlon</p></td>
+<td class="parameter_description"><p>longtitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
 </div>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-radians.returns"></a><h4>Returns</h4>
+<p>new point object. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-point-new-radians-with-user-data"></a><h3>osm_gps_map_point_new_radians_with_user_data ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+osm_gps_map_point_new_radians_with_user_data
+                               (<em class="parameter"><code><span class="type">float</span> rlat</code></em>,
+                                <em class="parameter"><code><span class="type">float</span> rlon</code></em>,
+                                <em class="parameter"><code><span class="type">gpointer</span> user_data</code></em>);</pre>
+<p>Create point with specified params</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-radians-with-user-data.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>rlat</p></td>
+<td class="parameter_description"><p>latitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlon</p></td>
+<td class="parameter_description"><p>longtitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>user_data</p></td>
+<td class="parameter_description"><p>user data. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-point-new-radians-with-user-data.returns"></a><h4>Returns</h4>
+<p>new point object. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 1.2.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -220,8 +447,35 @@ osm_gps_map_point_new_radians (<em class="parameter"><code><span class="type">fl
 osm_gps_map_point_set_degrees (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>,
                                <em class="parameter"><code><span class="type">float</span> lat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> lon</code></em>);</pre>
-<p>
-</p>
+<p>Sets the lagitude and longitude in degrees.</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-set-degrees.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point ( latitude and longitude in radian )</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>lat</p></td>
+<td class="parameter_description"><p>latitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>lon</p></td>
+<td class="parameter_description"><p>longitude in degrees. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -230,26 +484,117 @@ osm_gps_map_point_set_degrees (<em class="parameter"><code><a class="link" href=
 osm_gps_map_point_set_radians (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>,
                                <em class="parameter"><code><span class="type">float</span> rlat</code></em>,
                                <em class="parameter"><code><span class="type">float</span> rlon</code></em>);</pre>
-<p>
-</p>
+<p>Sets the lagitude and longitude in radians.</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-set-radians.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point ( latitude and longitude in radian )</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlat</p></td>
+<td class="parameter_description"><p>latitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>rlon</p></td>
+<td class="parameter_description"><p>longitude in radians. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-point-set-user-data"></a><h3>osm_gps_map_point_set_user_data ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_point_set_user_data (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>,
+                                 <em class="parameter"><code><span class="type">gpointer</span> user_data</code></em>);</pre>
+<p>Store user data in point</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-set-user-data.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>The <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>user_data</p></td>
+<td class="parameter_description"><p>user data. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 1.2.0</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="osm-gps-map-point-copy"></a><h3>osm_gps_map_point_copy ()</h3>
 <pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
 osm_gps_map_point_copy (<em class="parameter"><code>const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>);</pre>
+<p>Create a copy of a point</p>
 <div class="refsect3">
-<a name="id-1.2.6.9.8.4"></a><h4>Returns</h4>
-<p></p>
+<a name="osm-gps-map-point-copy.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> object. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
 </div>
-<p class="since">Since 0.7.2</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-copy.returns"></a><h4>Returns</h4>
+<p>Copied point. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 0.7.2</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="osm-gps-map-point-free"></a><h3>osm_gps_map_point_free ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_point_free (<em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>);</pre>
-<p class="since">Since 0.7.2</p>
+<p>Free point object</p>
+<div class="refsect3">
+<a name="osm-gps-map-point-free.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> object</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.2</p>
 </div>
 </div>
 <div class="refsect1">
@@ -260,15 +605,13 @@ osm_gps_map_point_free (<em class="parameter"><code><a class="link" href="OsmGps
     /* radians */
     float  rlat;
     float  rlon;
+    gpointer user_data;
 };
 </pre>
-<p>
-</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.20</div>
+<hr>Generated by GTK-Doc V1.32</div>
 </body>
 </html>

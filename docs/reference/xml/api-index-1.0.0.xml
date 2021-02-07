@@ -4,5 +4,5 @@
 	<!ENTITY version SYSTEM "version.xml">
 	<!ENTITY slash "/">
 ]>
-<indexdiv id="api-index-deprecated">
+<indexdiv id="api-index-1.0.0">
 </indexdiv>

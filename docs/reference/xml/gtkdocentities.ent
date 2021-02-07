@@ -1,0 +1,7 @@
+<!ENTITY package "osm-gps-map">
+<!ENTITY package_bugreport "http://github.com/nzjrs/osm-gps-map/issues">
+<!ENTITY package_name "osm-gps-map">
+<!ENTITY package_string "osm-gps-map 1.2.0">
+<!ENTITY package_tarname "osm-gps-map">
+<!ENTITY package_url "">
+<!ENTITY package_version "1.2.0">

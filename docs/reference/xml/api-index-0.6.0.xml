@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE indexdiv PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<indexdiv id="api-index-0.6.0">
+<indexdiv><title>L</title>
+<indexentry><primaryie linkends="osm-gps-map-layer-busy"><link linkend="osm-gps-map-layer-busy">osm_gps_map_layer_busy</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-button-press"><link linkend="osm-gps-map-layer-button-press">osm_gps_map_layer_button_press</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-draw"><link linkend="osm-gps-map-layer-draw">osm_gps_map_layer_draw</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-layer-render"><link linkend="osm-gps-map-layer-render">osm_gps_map_layer_render</link>, function in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+</indexdiv>
+</indexdiv>

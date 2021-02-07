@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE indexdiv PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<indexdiv id="api-index-1.2.0">
+<indexdiv><title>O</title>
+<indexentry><primaryie linkends="OsmGpsMap--user-agent"><link linkend="OsmGpsMap--user-agent">OsmGpsMap:user-agent</link>, object property in <link linkend="OsmGpsMap">OsmGpsMap</link></primaryie></indexentry>
+<indexentry><primaryie linkends="OsmGpsMapOsd--show-copyright"><link linkend="OsmGpsMapOsd--show-copyright">OsmGpsMapOsd:show-copyright</link>, object property in <link linkend="OsmGpsMapLayer">OsmGpsMapLayer</link></primaryie></indexentry>
+</indexdiv>
+<indexdiv><title>P</title>
+<indexentry><primaryie linkends="osm-gps-map-point-get-user-data"><link linkend="osm-gps-map-point-get-user-data">osm_gps_map_point_get_user_data</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-new-degrees-with-user-data"><link linkend="osm-gps-map-point-new-degrees-with-user-data">osm_gps_map_point_new_degrees_with_user_data</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-new-radians-with-user-data"><link linkend="osm-gps-map-point-new-radians-with-user-data">osm_gps_map_point_new_radians_with_user_data</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-point-set-user-data"><link linkend="osm-gps-map-point-set-user-data">osm_gps_map_point_set_user_data</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
+</indexdiv>
+</indexdiv>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE indexdiv PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+	<!ENTITY version SYSTEM "version.xml">
+	<!ENTITY slash "/">
+]>
+<indexdiv id="api-index-1.1.0">
+<indexdiv><title>T</title>
+<indexentry><primaryie linkends="osm-gps-map-track-get-length"><link linkend="osm-gps-map-track-get-length">osm_gps_map_track_get_length</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-get-point"><link linkend="osm-gps-map-track-get-point">osm_gps_map_track_get_point</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-insert-point"><link linkend="osm-gps-map-track-insert-point">osm_gps_map_track_insert_point</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-n-points"><link linkend="osm-gps-map-track-n-points">osm_gps_map_track_n_points</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-remove-point"><link linkend="osm-gps-map-track-remove-point">osm_gps_map_track_remove_point</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+<indexentry><primaryie linkends="osm-gps-map-track-set-color"><link linkend="osm-gps-map-track-set-color">osm_gps_map_track_set_color</link>, function in <link linkend="OsmGpsMapTrack">OsmGpsMapTrack</link></primaryie></indexentry>
+</indexdiv>
+</indexdiv>

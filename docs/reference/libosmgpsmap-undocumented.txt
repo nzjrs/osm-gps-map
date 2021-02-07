@@ -1,7 +1,7 @@
-43% symbol docs coverage.
-68 symbols documented.
-14 symbols incomplete.
-90 not documented.
+88% symbol docs coverage.
+137 symbols documented.
+4 symbols incomplete.
+19 not documented.
 
 
 OSM_GPS_MAP_CACHE_AUTO
@@ -11,95 +11,15 @@ OSM_GPS_MAP_INVALID
 OsmGpsMap
 OsmGpsMapClass (<items>)
 OsmGpsMapImage
-OsmGpsMapImageClass (<items>)
+OsmGpsMapImageClass
 OsmGpsMapKey_t (<items>)
 OsmGpsMapLayer
-OsmGpsMapLayerClass
 OsmGpsMapOsd
-OsmGpsMapOsdClass (<items>)
+OsmGpsMapOsdClass
 OsmGpsMapPoint (<items>)
 OsmGpsMapSource_t (<items>)
 OsmGpsMapTrack
 OsmGpsMapTrack::point-changed
 OsmGpsMapTrack::point-inserted
 OsmGpsMapTrack::point-removed
-OsmGpsMapTrackClass (<items>)
-osm_gps_map_add_image
-osm_gps_map_add_image_with_alignment
-osm_gps_map_add_layer
-osm_gps_map_add_track
-osm_gps_map_clear_gps
-osm_gps_map_clear_images
-osm_gps_map_clear_tracks
-osm_gps_map_convert_geographic_to_screen (map, map)
-osm_gps_map_convert_screen_to_geographic (map, map)
-osm_gps_map_download_cancel_all (map)
-osm_gps_map_download_maps (map, pt1, pt2, zoom_start, zoom_end)
-osm_gps_map_draw_gps
-osm_gps_map_geographic_to_screen
-osm_gps_map_get_bbox
-osm_gps_map_get_co_ordinates
-osm_gps_map_get_default_cache_directory
-osm_gps_map_get_event_location (map, map)
-osm_gps_map_get_scale
-osm_gps_map_gps_add
-osm_gps_map_gps_clear
-osm_gps_map_gps_get_track
-osm_gps_map_image_add
-osm_gps_map_image_add_with_alignment
-osm_gps_map_image_add_with_alignment_z
-osm_gps_map_image_add_z
-osm_gps_map_image_draw
-osm_gps_map_image_get_point
-osm_gps_map_image_get_type
-osm_gps_map_image_new
-osm_gps_map_image_remove
-osm_gps_map_image_remove_all
-osm_gps_map_layer_add
-osm_gps_map_layer_busy
-osm_gps_map_layer_button_press
-osm_gps_map_layer_draw
-osm_gps_map_layer_remove
-osm_gps_map_layer_remove_all
-osm_gps_map_layer_render
-osm_gps_map_point_copy
-osm_gps_map_point_free
-osm_gps_map_point_get_degrees
-osm_gps_map_point_get_radians
-osm_gps_map_point_new_degrees
-osm_gps_map_point_new_radians
-osm_gps_map_point_set_degrees
-osm_gps_map_point_set_radians
-osm_gps_map_remove_image
-osm_gps_map_replace_track
-osm_gps_map_screen_to_geographic
-osm_gps_map_scroll (map, dx, dy, map, dx, dy)
-osm_gps_map_set_center
-osm_gps_map_set_center_and_zoom
-osm_gps_map_set_keyboard_shortcut (keyval, map, keyval)
-osm_gps_map_set_mapcenter
-osm_gps_map_set_zoom
-osm_gps_map_set_zoom_offset
-osm_gps_map_source_get_friendly_name
-osm_gps_map_source_get_image_format
-osm_gps_map_source_get_max_zoom
-osm_gps_map_source_get_min_zoom
-osm_gps_map_source_get_repo_uri
-osm_gps_map_source_is_valid
-osm_gps_map_track_add
-osm_gps_map_track_add_point
-osm_gps_map_track_get_color
-osm_gps_map_track_get_length
-osm_gps_map_track_get_points
-osm_gps_map_track_get_type
-osm_gps_map_track_new
-osm_gps_map_track_remove
-osm_gps_map_track_remove_all
-osm_gps_map_track_remove_point
-osm_gps_map_zoom_fit_bbox
-osm_gps_map_zoom_in
-osm_gps_map_zoom_out
-
-
-osm-gps-map-deprecated:Long_Description
-osm-gps-map-deprecated:Short_Description
+OsmGpsMapTrackClass

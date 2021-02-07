@@ -4,5 +4,5 @@
 	<!ENTITY version SYSTEM "version.xml">
 	<!ENTITY slash "/">
 ]>
-<indexdiv>
+<indexdiv id="api-index-0.7.4">
 </indexdiv>

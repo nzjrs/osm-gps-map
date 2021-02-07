@@ -2,22 +2,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OsmGpsMap Reference Manual: OsmGpsMapTrack</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<title>OsmGpsMapTrack: OsmGpsMap Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapImage.html" title="OsmGpsMapImage">
 <link rel="next" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint">
-<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
 <td width="100%" align="left" class="shortcuts">
-<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
-                  <a href="#OsmGpsMapTrack.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
-                  <a href="#OsmGpsMapTrack.object-hierarchy" class="shortcut">Object Hierarchy</a></span><span id="nav_properties"> <span class="dim">|</span> 
-                  <a href="#OsmGpsMapTrack.properties" class="shortcut">Properties</a></span><span id="nav_signals"> <span class="dim">|</span> 
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#OsmGpsMapTrack.description" class="shortcut">Description</a></span><span id="nav_hierarchy">  <span class="dim">|</span> 
+                  <a href="#OsmGpsMapTrack.object-hierarchy" class="shortcut">Object Hierarchy</a></span><span id="nav_properties">  <span class="dim">|</span> 
+                  <a href="#OsmGpsMapTrack.properties" class="shortcut">Properties</a></span><span id="nav_signals">  <span class="dim">|</span> 
                   <a href="#OsmGpsMapTrack.signals" class="shortcut">Signals</a></span>
 </td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
@@ -36,14 +36,20 @@
 </tr></table></div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.stability-level"></a><h2>Stability Level</h2>
-Stable, unless otherwise indicated
+<acronym title="The intention of a Stable interface is to enable arbitrary third parties to
+develop applications to these interfaces, release them, and have confidence that
+they will run on all minor releases of the product (after the one in which the
+interface was introduced, and within the same major release). Even at a major
+release, incompatible changes are expected to be rare, and to have strong
+justifications.
+"><span class="acronym">Stable</span></acronym>, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.functions"></a><h2>Functions</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="functions_return">
-<col class="functions_name">
+<col width="150px" class="functions_proto_type">
+<col class="functions_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -64,10 +70,58 @@ Stable, unless otherwise indicated
 </tr>
 <tr>
 <td class="function_type">
-<a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="returnvalue">GSList</span></a> *
+<span class="returnvalue">GSList</span> *
 </td>
 <td class="function_name">
 <a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-get-points" title="osm_gps_map_track_get_points ()">osm_gps_map_track_get_points</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">double</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-get-length" title="osm_gps_map_track_get_length ()">osm_gps_map_track_get_length</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-get-point" title="osm_gps_map_track_get_point ()">osm_gps_map_track_get_point</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-insert-point" title="osm_gps_map_track_insert_point ()">osm_gps_map_track_insert_point</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">int</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-n-points" title="osm_gps_map_track_n_points ()">osm_gps_map_track_n_points</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-remove-point" title="osm_gps_map_track_remove_point ()">osm_gps_map_track_remove_point</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="OsmGpsMapTrack.html#osm-gps-map-track-set-color" title="osm_gps_map_track_set_color ()">osm_gps_map_track_set_color</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -83,7 +137,7 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.properties"></a><h2>Properties</h2>
-<div class="informaltable"><table border="0">
+<div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
 <col width="150px" class="properties_type">
 <col width="300px" class="properties_name">
@@ -91,7 +145,7 @@ Stable, unless otherwise indicated
 </colgroup>
 <tbody>
 <tr>
-<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></td>
+<td class="property_type"><span class="type">gfloat</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha" title="The “alpha” property">alpha</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
@@ -102,22 +156,22 @@ Stable, unless otherwise indicated
 <td class="property_flags">Read / Write</td>
 </tr>
 <tr>
-<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_type"><span class="type">gboolean</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--editable" title="The “editable” property">editable</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></td>
+<td class="property_type"><span class="type">gfloat</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width" title="The “line-width” property">line-width</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a></td>
+<td class="property_type"><span class="type">gpointer</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--track" title="The “track” property">track</a></td>
-<td class="property_flags">Read / Write / Construct Only</td>
+<td class="property_flags">Read / Write / Construct Only</td>
 </tr>
 <tr>
-<td class="property_type"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_type"><span class="type">gboolean</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--visible" title="The “visible” property">visible</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
@@ -126,11 +180,11 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.signals"></a><h2>Signals</h2>
-<div class="informaltable"><table border="0">
+<div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody>
 <tr>
@@ -158,10 +212,10 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.other"></a><h2>Types and Values</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -177,7 +231,7 @@ Stable, unless otherwise indicated
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="screen">    <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+<pre class="screen">    GObject
     <span class="lineart">╰──</span> OsmGpsMapTrack
 </pre>
 </div>
@@ -199,7 +253,30 @@ describes how such a track should be drawn on the map
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_track_add_point (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
                              <em class="parameter"><code>const <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *point</code></em>);</pre>
-<p class="since">Since 0.7.0</p>
+<p>Add a point to track</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-add-point.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input and for returning results. Default is transfer full."><span class="acronym">inout</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>point</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point to add. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.0</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -207,32 +284,264 @@ osm_gps_map_track_add_point (<em class="parameter"><code><a class="link" href="O
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_track_get_color (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
                              <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *color</code></em>);</pre>
-<p>
-</p>
+<p>Get track color</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-color.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>color</p></td>
+<td class="parameter_description"><p>track color. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Out parameter, where caller must allocate storage."><span class="acronym">out caller-allocates</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 0.7.0</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="osm-gps-map-track-get-points"></a><h3>osm_gps_map_track_get_points ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"><span class="returnvalue">GSList</span></a> *
+<pre class="programlisting"><span class="returnvalue">GSList</span> *
 osm_gps_map_track_get_points (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);</pre>
+<p>Get list of points in the track</p>
 <div class="refsect3">
-<a name="id-1.2.5.11.4.4"></a><h4>Returns</h4>
-<p> list of <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>. </p>
-<p><span class="annotation">[<acronym title="Generics and defining elements of containers and arrays."><span class="acronym">element-type</span></acronym> OsmGpsMapPoint][<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+<a name="osm-gps-map-track-get-points.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
 </div>
-<p class="since">Since 0.7.0</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-points.returns"></a><h4>Returns</h4>
+<p>list of <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>. </p>
+<p><span class="annotation">[<acronym title="Generics and defining elements of containers and arrays."><span class="acronym">element-type</span></acronym> OsmGpsMapPoint][<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 0.7.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-get-length"></a><h3>osm_gps_map_track_get_length ()</h3>
+<pre class="programlisting"><span class="returnvalue">double</span>
+osm_gps_map_track_get_length (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);</pre>
+<p>Get track length in meters</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-length.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-length.returns"></a><h4>Returns</h4>
+<p> the length of the track in meters.</p>
+</div>
+<p class="since">Since: 1.1.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-get-point"></a><h3>osm_gps_map_track_get_point ()</h3>
+<pre class="programlisting"><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="returnvalue">OsmGpsMapPoint</span></a> *
+osm_gps_map_track_get_point (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
+                             <em class="parameter"><code><span class="type">int</span> pos</code></em>);</pre>
+<p>Get a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> point at <em class="parameter"><code>pos</code></em>
+ of given track</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-point.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a></p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>pos</p></td>
+<td class="parameter_description"><p>Position of the point to get</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-track-get-point.returns"></a><h4>Returns</h4>
+<p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
+<p class="since">Since: 1.1.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-insert-point"></a><h3>osm_gps_map_track_insert_point ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_track_insert_point (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
+                                <em class="parameter"><code><a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *np</code></em>,
+                                <em class="parameter"><code><span class="type">int</span> pos</code></em>);</pre>
+<p>Instert point <em class="parameter"><code>np</code></em>
+ at given postition <em class="parameter"><code>pos</code></em>
+</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-insert-point.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a></p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>np</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a></p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>pos</p></td>
+<td class="parameter_description"><p>Position for the point</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 1.1.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-n-points"></a><h3>osm_gps_map_track_n_points ()</h3>
+<pre class="programlisting"><span class="returnvalue">int</span>
+osm_gps_map_track_n_points (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>);</pre>
+<p>Get number of points in the track</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-n-points.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a></p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="osm-gps-map-track-n-points.returns"></a><h4>Returns</h4>
+<p> the number of points in the track.</p>
+</div>
+<p class="since">Since: 1.1.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-remove-point"></a><h3>osm_gps_map_track_remove_point ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_track_remove_point (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
+                                <em class="parameter"><code><span class="type">int</span> pos</code></em>);</pre>
+<p>Remove track point at <em class="parameter"><code>pos</code></em>
+ position in point list</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-remove-point.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>pos</p></td>
+<td class="parameter_description"><p>Position of the point to remove</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 1.1.0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="osm-gps-map-track-set-color"></a><h3>osm_gps_map_track_set_color ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+osm_gps_map_track_set_color (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
+                             <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *color</code></em>);</pre>
+<p>Set track color</p>
+<div class="refsect3">
+<a name="osm-gps-map-track-set-color.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>track</p></td>
+<td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>color</p></td>
+<td class="parameter_description"><p>new track color. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p class="since">Since: 1.1.0</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="osm-gps-map-track-new"></a><h3>osm_gps_map_track_new ()</h3>
 <pre class="programlisting"><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="returnvalue">OsmGpsMapTrack</span></a> *
 osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-</p>
+<p>Create new track</p>
 <div class="refsect3">
-<a name="id-1.2.5.11.5.5"></a><h4>Returns</h4>
-<p></p>
+<a name="osm-gps-map-track-new.returns"></a><h4>Returns</h4>
+<p>New track. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
 </div>
+<p class="since">Since: 0.7.0</p>
 </div>
 </div>
 <div class="refsect1">
@@ -240,8 +549,6 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <div class="refsect2">
 <a name="OsmGpsMapTrack-struct"></a><h3>struct OsmGpsMapTrack</h3>
 <pre class="programlisting">struct OsmGpsMapTrack;</pre>
-<p>
-</p>
 </div>
 <hr>
 <div class="refsect2">
@@ -250,16 +557,15 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
     GObjectClass parent_class;
 };
 </pre>
-<p>
-</p>
 </div>
 </div>
 <div class="refsect1">
 <a name="OsmGpsMapTrack.property-details"></a><h2>Property Details</h2>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--alpha"></a><h3>The <code class="literal">“alpha”</code> property</h3>
-<pre class="programlisting">  “alpha”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
+<pre class="programlisting">  “alpha”                    <span class="type">gfloat</span></pre>
 <p>alpha transparency of the track.</p>
+<p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0.6</p>
@@ -269,21 +575,24 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <a name="OsmGpsMapTrack--color"></a><h3>The <code class="literal">“color”</code> property</h3>
 <pre class="programlisting">  “color”                    <a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *</pre>
 <p>color of the track.</p>
+<p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--editable"></a><h3>The <code class="literal">“editable”</code> property</h3>
-<pre class="programlisting">  “editable”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<pre class="programlisting">  “editable”                 <span class="type">gboolean</span></pre>
 <p>should this track be editable.</p>
+<p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--line-width"></a><h3>The <code class="literal">“line-width”</code> property</h3>
-<pre class="programlisting">  “line-width”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
+<pre class="programlisting">  “line-width”               <span class="type">gfloat</span></pre>
 <p>width of the lines drawn for the track.</p>
+<p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 4</p>
@@ -291,15 +600,17 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--track"></a><h3>The <code class="literal">“track”</code> property</h3>
-<pre class="programlisting">  “track”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a></pre>
+<pre class="programlisting">  “track”                    <span class="type">gpointer</span></pre>
 <p>list of points for the track.</p>
-<p>Flags: Read / Write / Construct Only</p>
+<p>Owner: OsmGpsMapTrack</p>
+<p>Flags: Read / Write / Construct Only</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--visible"></a><h3>The <code class="literal">“visible”</code> property</h3>
-<pre class="programlisting">  “visible”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<pre class="programlisting">  “visible”                  <span class="type">gboolean</span></pre>
 <p>should this track be visible.</p>
+<p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
@@ -311,11 +622,12 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *self,
                <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a> *arg1,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>        user_data)</pre>
-<p>The point-added signal.</p>
+               <span class="type">gpointer</span>        user_data)</pre>
+<p>The <a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added" title="The “point-added” signal"><span class="type">“point-added”</span></a> signal is emitted whenever a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>
+is added to the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>.</p>
 <div class="refsect3">
-<a name="id-1.2.5.14.2.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="OsmGpsMapTrack-point-added.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
 <col class="parameters_description">
@@ -325,6 +637,11 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <tr>
 <td class="parameter_name"><p>self</p></td>
 <td class="parameter_description"><p>A <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a></p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>arg1</p></td>
+<td class="parameter_description"><p>The added <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a></p></td>
 <td class="parameter_annotations"> </td>
 </tr>
 <tr>
@@ -342,32 +659,8 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <a name="OsmGpsMapTrack-point-changed"></a><h3>The <code class="literal">“point-changed”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>            arg1,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>        user_data)</pre>
-<p>
-</p>
-<div class="refsect3">
-<a name="id-1.2.5.14.3.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
-<colgroup>
-<col width="150px" class="parameters_name">
-<col class="parameters_description">
-<col width="200px" class="parameters_annotations">
-</colgroup>
-<tbody>
-<tr>
-<td class="parameter_name"><p>osmgpsmaptrack</p></td>
-<td class="parameter_description"><p>the object which received the signal.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-<tr>
-<td class="parameter_name"><p>user_data</p></td>
-<td class="parameter_description"><p>user data set when the signal handler was connected.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-</tbody>
-</table></div>
-</div>
+               <span class="type">gint</span>            arg1,
+               <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
 <hr>
@@ -375,32 +668,8 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <a name="OsmGpsMapTrack-point-inserted"></a><h3>The <code class="literal">“point-inserted”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>            arg1,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>        user_data)</pre>
-<p>
-</p>
-<div class="refsect3">
-<a name="id-1.2.5.14.4.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
-<colgroup>
-<col width="150px" class="parameters_name">
-<col class="parameters_description">
-<col width="200px" class="parameters_annotations">
-</colgroup>
-<tbody>
-<tr>
-<td class="parameter_name"><p>osmgpsmaptrack</p></td>
-<td class="parameter_description"><p>the object which received the signal.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-<tr>
-<td class="parameter_name"><p>user_data</p></td>
-<td class="parameter_description"><p>user data set when the signal handler was connected.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-</tbody>
-</table></div>
-</div>
+               <span class="type">gint</span>            arg1,
+               <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
 <hr>
@@ -408,38 +677,13 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <a name="OsmGpsMapTrack-point-removed"></a><h3>The <code class="literal">“point-removed”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a>            arg1,
-               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>        user_data)</pre>
-<p>
-</p>
-<div class="refsect3">
-<a name="id-1.2.5.14.5.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
-<colgroup>
-<col width="150px" class="parameters_name">
-<col class="parameters_description">
-<col width="200px" class="parameters_annotations">
-</colgroup>
-<tbody>
-<tr>
-<td class="parameter_name"><p>osmgpsmaptrack</p></td>
-<td class="parameter_description"><p>the object which received the signal.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-<tr>
-<td class="parameter_name"><p>user_data</p></td>
-<td class="parameter_description"><p>user data set when the signal handler was connected.</p></td>
-<td class="parameter_annotations"> </td>
-</tr>
-</tbody>
-</table></div>
-</div>
+               <span class="type">gint</span>            arg1,
+               <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.20</div>
+<hr>Generated by GTK-Doc V1.32</div>
 </body>
 </html>

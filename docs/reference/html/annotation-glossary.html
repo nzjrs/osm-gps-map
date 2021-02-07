@@ -2,16 +2,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OsmGpsMap Reference Manual: Annotation glossary</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<title>Annotation glossary: OsmGpsMap Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="prev" href="api-index-deprecated.html" title="Index of deprecated symbols">
-<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
 <td width="100%" align="left" class="shortcuts"></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><img src="up-insensitive.png" width="16" height="16" border="0"></td>
@@ -27,321 +27,360 @@
 <a name="glsE"></a><h3 class="title">E</h3>
 <dt><span class="glossterm"><a name="annotation-glossterm-element-type"></a>element-type</span></dt>
 <dd class="glossdef"><p>Generics and defining elements of containers and arrays.</p></dd>
+<a name="glsI"></a><h3 class="title">I</h3>
+<dt><span class="glossterm"><a name="annotation-glossterm-in"></a>in</span></dt>
+<dd class="glossdef"><p>Parameter for input. Default is <acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>.</p></dd>
+<dt><span class="glossterm"><a name="annotation-glossterm-inout"></a>inout</span></dt>
+<dd class="glossdef"><p>Parameter for input and for returning results. Default is <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>.</p></dd>
 <a name="glsO"></a><h3 class="title">O</h3>
 <dt><span class="glossterm"><a name="annotation-glossterm-out"></a>out</span></dt>
 <dd class="glossdef"><p>Parameter for returning results. Default is <acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>.</p></dd>
+<dt><span class="glossterm"><a name="annotation-glossterm-out%20caller-allocates"></a>out caller-allocates</span></dt>
+<dd class="glossdef"><p>Out parameter, where caller must allocate storage.</p></dd>
+<a name="glsS"></a><h3 class="title">S</h3>
+<dt><span class="glossterm"><a name="annotation-glossterm-Stable"></a>Stable</span></dt>
+<dd class="glossdef"><p>The intention of a Stable interface is to enable arbitrary third parties to
+develop applications to these interfaces, release them, and have confidence that
+they will run on all minor releases of the product (after the one in which the
+interface was introduced, and within the same major release). Even at a major
+release, incompatible changes are expected to be rare, and to have strong
+justifications.
+</p></dd>
 <a name="glsT"></a><h3 class="title">T</h3>
 <dt><span class="glossterm"><a name="annotation-glossterm-transfer%20full"></a>transfer full</span></dt>
 <dd class="glossdef"><p>Free data after the code is done.</p></dd>
 <dt><span class="glossterm"><a name="annotation-glossterm-transfer%20none"></a>transfer none</span></dt>
 <dd class="glossdef"><p>Don't free data after the code is done.</p></dd>
 </div>
-<div class="index">
+<div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
 <div class="indexdiv">
 <h3>C</h3>
 <dl>
-<dt>OSM_GPS_MAP_CACHE_AUTO, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS">OSM_GPS_MAP_CACHE_AUTO</a>
+<dt id="ientry-idm45474053881920">OSM_GPS_MAP_CACHE_AUTO, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-AUTO:CAPS">OSM_GPS_MAP_CACHE_AUTO</a>
 </dt>
-<dt>OSM_GPS_MAP_CACHE_DISABLED, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS">OSM_GPS_MAP_CACHE_DISABLED</a>
+<dt id="ientry-idm45474053886336">OSM_GPS_MAP_CACHE_DISABLED, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-DISABLED:CAPS">OSM_GPS_MAP_CACHE_DISABLED</a>
 </dt>
-<dt>OSM_GPS_MAP_CACHE_FRIENDLY, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS">OSM_GPS_MAP_CACHE_FRIENDLY</a>
+<dt id="ientry-idm45474053877664">OSM_GPS_MAP_CACHE_FRIENDLY, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-CACHE-FRIENDLY:CAPS">OSM_GPS_MAP_CACHE_FRIENDLY</a>
 </dt>
-<dt>osm_gps_map_convert_geographic_to_screen, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen">osm_gps_map_convert_geographic_to_screen ()</a>
+<dt id="ientry-idm45474054282608">osm_gps_map_convert_geographic_to_screen, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-convert-geographic-to-screen">osm_gps_map_convert_geographic_to_screen ()</a>
 </dt>
-<dt>osm_gps_map_convert_screen_to_geographic, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic">osm_gps_map_convert_screen_to_geographic ()</a>
+<dt id="ientry-idm45474054250864">osm_gps_map_convert_screen_to_geographic, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-convert-screen-to-geographic">osm_gps_map_convert_screen_to_geographic ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>D</h3>
 <dl>
-<dt>osm_gps_map_download_cancel_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-download-cancel-all">osm_gps_map_download_cancel_all ()</a>
+<dt id="ientry-idm45474054522960">osm_gps_map_download_cancel_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-download-cancel-all">osm_gps_map_download_cancel_all ()</a>
 </dt>
-<dt>osm_gps_map_download_maps, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-download-maps">osm_gps_map_download_maps ()</a>
+<dt id="ientry-idm45474054553808">osm_gps_map_download_maps, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-download-maps">osm_gps_map_download_maps ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>G</h3>
 <dl>
-<dt>osm_gps_map_get_bbox, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-bbox">osm_gps_map_get_bbox ()</a>
+<dt id="ientry-idm45474054507312">osm_gps_map_get_bbox, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-bbox">osm_gps_map_get_bbox ()</a>
 </dt>
-<dt>osm_gps_map_get_default_cache_directory, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-default-cache-directory">osm_gps_map_get_default_cache_directory ()</a>
+<dt id="ientry-idm45474058677664">osm_gps_map_get_default_cache_directory, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-default-cache-directory">osm_gps_map_get_default_cache_directory ()</a>
 </dt>
-<dt>osm_gps_map_get_event_location, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-event-location">osm_gps_map_get_event_location ()</a>
+<dt id="ientry-idm45474054308976">osm_gps_map_get_event_location, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-event-location">osm_gps_map_get_event_location ()</a>
 </dt>
-<dt>osm_gps_map_get_scale, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-scale">osm_gps_map_get_scale ()</a>
+<dt id="ientry-idm45474054355344">osm_gps_map_get_scale, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-get-scale">osm_gps_map_get_scale ()</a>
 </dt>
-<dt>osm_gps_map_gps_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-add">osm_gps_map_gps_add ()</a>
+<dt id="ientry-idm45474054220192">osm_gps_map_gps_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-add">osm_gps_map_gps_add ()</a>
 </dt>
-<dt>osm_gps_map_gps_clear, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-clear">osm_gps_map_gps_clear ()</a>
+<dt id="ientry-idm45474054189984">osm_gps_map_gps_clear, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-clear">osm_gps_map_gps_clear ()</a>
 </dt>
-<dt>osm_gps_map_gps_get_track, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-get-track">osm_gps_map_gps_get_track ()</a>
+<dt id="ientry-idm45474054172384">osm_gps_map_gps_get_track, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-gps-get-track">osm_gps_map_gps_get_track ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>I</h3>
 <dl>
-<dt>osm_gps_map_image_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-add">osm_gps_map_image_add ()</a>
+<dt id="ientry-idm45474054086784">osm_gps_map_image_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-add">osm_gps_map_image_add ()</a>
 </dt>
-<dt>osm_gps_map_image_add_with_alignment, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-add-with-alignment">osm_gps_map_image_add_with_alignment ()</a>
+<dt id="ientry-idm45474054051344">osm_gps_map_image_add_with_alignment, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-add-with-alignment">osm_gps_map_image_add_with_alignment ()</a>
 </dt>
-<dt>osm_gps_map_image_draw, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-draw">osm_gps_map_image_draw ()</a>
+<dt id="ientry-idm45474056352432">osm_gps_map_image_draw, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-draw">osm_gps_map_image_draw ()</a>
 </dt>
-<dt>osm_gps_map_image_get_point, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-get-point">osm_gps_map_image_get_point ()</a>
+<dt id="ientry-idm45474057463680">osm_gps_map_image_get_point, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-get-point">osm_gps_map_image_get_point ()</a>
 </dt>
-<dt>osm_gps_map_image_get_type, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-get-type">osm_gps_map_image_get_type ()</a>
+<dt id="ientry-idm45474055726320">osm_gps_map_image_get_type, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-get-type">osm_gps_map_image_get_type ()</a>
 </dt>
-<dt>osm_gps_map_image_new, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-new">osm_gps_map_image_new ()</a>
+<dt id="ientry-idm45474059539328">osm_gps_map_image_new, <a class="indexterm" href="OsmGpsMapImage.html#osm-gps-map-image-new">osm_gps_map_image_new ()</a>
 </dt>
-<dt>osm_gps_map_image_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-remove">osm_gps_map_image_remove ()</a>
+<dt id="ientry-idm45474054007840">osm_gps_map_image_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-remove">osm_gps_map_image_remove ()</a>
 </dt>
-<dt>osm_gps_map_image_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-remove-all">osm_gps_map_image_remove_all ()</a>
+<dt id="ientry-idm45474053982368">osm_gps_map_image_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-image-remove-all">osm_gps_map_image_remove_all ()</a>
 </dt>
-<dt>OSM_GPS_MAP_INVALID, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS">OSM_GPS_MAP_INVALID</a>
+<dt id="ientry-idm45474053890592">OSM_GPS_MAP_INVALID, <a class="indexterm" href="OsmGpsMap.html#OSM-GPS-MAP-INVALID:CAPS">OSM_GPS_MAP_INVALID</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>L</h3>
 <dl>
-<dt>osm_gps_map_layer_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-add">osm_gps_map_layer_add ()</a>
+<dt id="ientry-idm45474053964688">osm_gps_map_layer_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-add">osm_gps_map_layer_add ()</a>
 </dt>
-<dt>osm_gps_map_layer_busy, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-busy">osm_gps_map_layer_busy ()</a>
+<dt id="ientry-idm45474060718512">osm_gps_map_layer_busy, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-busy">osm_gps_map_layer_busy ()</a>
 </dt>
-<dt>osm_gps_map_layer_button_press, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-button-press">osm_gps_map_layer_button_press ()</a>
+<dt id="ientry-idm45474060698464">osm_gps_map_layer_button_press, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-button-press">osm_gps_map_layer_button_press ()</a>
 </dt>
-<dt>osm_gps_map_layer_draw, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-draw">osm_gps_map_layer_draw ()</a>
+<dt id="ientry-idm45474056518448">osm_gps_map_layer_draw, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-draw">osm_gps_map_layer_draw ()</a>
 </dt>
-<dt>osm_gps_map_layer_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-remove">osm_gps_map_layer_remove ()</a>
+<dt id="ientry-idm45474053942224">osm_gps_map_layer_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-remove">osm_gps_map_layer_remove ()</a>
 </dt>
-<dt>osm_gps_map_layer_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-remove-all">osm_gps_map_layer_remove_all ()</a>
+<dt id="ientry-idm45474053917856">osm_gps_map_layer_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-layer-remove-all">osm_gps_map_layer_remove_all ()</a>
 </dt>
-<dt>osm_gps_map_layer_render, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-render">osm_gps_map_layer_render ()</a>
+<dt id="ientry-idm45474057099392">osm_gps_map_layer_render, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-layer-render">osm_gps_map_layer_render ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>N</h3>
-<dl><dt>osm_gps_map_new, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-new">osm_gps_map_new ()</a>
+<dl><dt id="ientry-idm45474054565184">osm_gps_map_new, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-new">osm_gps_map_new ()</a>
 </dt></dl>
 </div>
 <div class="indexdiv">
 <h3>O</h3>
 <dl>
-<dt>osm_gps_map_osd_new, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-osd-new">osm_gps_map_osd_new ()</a>
+<dt id="ientry-idm45474060667264">osm_gps_map_osd_new, <a class="indexterm" href="OsmGpsMapLayer.html#osm-gps-map-osd-new">osm_gps_map_osd_new ()</a>
 </dt>
-<dt>OsmGpsMap, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap-struct">struct OsmGpsMap</a>
+<dt id="ientry-idm45474053898672">OsmGpsMap, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap-struct">struct OsmGpsMap</a>
 </dt>
-<dt>OsmGpsMap::changed, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap-changed">The “changed” signal</a>
+<dt id="ientry-idm45474053582096">OsmGpsMap::changed, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap-changed">The “changed” signal</a>
 </dt>
-<dt>OsmGpsMap:auto-center, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-center">The “auto-center” property</a>
+<dt id="ientry-idm45474053801456">OsmGpsMap:auto-center, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-center">The “auto-center” property</a>
 </dt>
-<dt>OsmGpsMap:auto-center-threshold, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-center-threshold">The “auto-center-threshold” property</a>
+<dt id="ientry-idm45474053794624">OsmGpsMap:auto-center-threshold, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-center-threshold">The “auto-center-threshold” property</a>
 </dt>
-<dt>OsmGpsMap:auto-download, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-download">The “auto-download” property</a>
+<dt id="ientry-idm45474053787344">OsmGpsMap:auto-download, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--auto-download">The “auto-download” property</a>
 </dt>
-<dt>OsmGpsMap:drag-limit, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--drag-limit">The “drag-limit” property</a>
+<dt id="ientry-idm45474053780544">OsmGpsMap:drag-limit, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--drag-limit">The “drag-limit” property</a>
 </dt>
-<dt>OsmGpsMap:gps-track-highlight-radius, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius">The “gps-track-highlight-radius” property</a>
+<dt id="ientry-idm45474053773200">OsmGpsMap:gps-track-highlight-radius, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-highlight-radius">The “gps-track-highlight-radius” property</a>
 </dt>
-<dt>OsmGpsMap:gps-track-point-radius, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius">The “gps-track-point-radius” property</a>
+<dt id="ientry-idm45474053765856">OsmGpsMap:gps-track-point-radius, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-point-radius">The “gps-track-point-radius” property</a>
 </dt>
-<dt>OsmGpsMap:gps-track-width, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-width">The “gps-track-width” property</a>
+<dt id="ientry-idm45474053758592">OsmGpsMap:gps-track-width, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--gps-track-width">The “gps-track-width” property</a>
 </dt>
-<dt>OsmGpsMap:image-format, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--image-format">The “image-format” property</a>
+<dt id="ientry-idm45474053751360">OsmGpsMap:image-format, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--image-format">The “image-format” property</a>
 </dt>
-<dt>OsmGpsMap:latitude, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--latitude">The “latitude” property</a>
+<dt id="ientry-idm45474053744384">OsmGpsMap:latitude, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--latitude">The “latitude” property</a>
 </dt>
-<dt>OsmGpsMap:longitude, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--longitude">The “longitude” property</a>
+<dt id="ientry-idm45474053737152">OsmGpsMap:longitude, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--longitude">The “longitude” property</a>
 </dt>
-<dt>OsmGpsMap:map-source, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-source">The “map-source” property</a>
+<dt id="ientry-idm45474053729920">OsmGpsMap:map-source, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-source">The “map-source” property</a>
 </dt>
-<dt>OsmGpsMap:map-x, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-x">The “map-x” property</a>
+<dt id="ientry-idm45474053719936">OsmGpsMap:map-x, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-x">The “map-x” property</a>
 </dt>
-<dt>OsmGpsMap:map-y, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-y">The “map-y” property</a>
+<dt id="ientry-idm45474053713216">OsmGpsMap:map-y, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--map-y">The “map-y” property</a>
 </dt>
-<dt>OsmGpsMap:max-zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--max-zoom">The “max-zoom” property</a>
+<dt id="ientry-idm45474053706432">OsmGpsMap:max-zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--max-zoom">The “max-zoom” property</a>
 </dt>
-<dt>OsmGpsMap:min-zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--min-zoom">The “min-zoom” property</a>
+<dt id="ientry-idm45474053699200">OsmGpsMap:min-zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--min-zoom">The “min-zoom” property</a>
 </dt>
-<dt>OsmGpsMap:proxy-uri, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--proxy-uri">The “proxy-uri” property</a>
+<dt id="ientry-idm45474053692032">OsmGpsMap:proxy-uri, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--proxy-uri">The “proxy-uri” property</a>
 </dt>
-<dt>OsmGpsMap:record-trip-history, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--record-trip-history">The “record-trip-history” property</a>
+<dt id="ientry-idm45474053685104">OsmGpsMap:record-trip-history, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--record-trip-history">The “record-trip-history” property</a>
 </dt>
-<dt>OsmGpsMap:repo-uri, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--repo-uri">The “repo-uri” property</a>
+<dt id="ientry-idm45474053678320">OsmGpsMap:repo-uri, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--repo-uri">The “repo-uri” property</a>
 </dt>
-<dt>OsmGpsMap:show-gps-point, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--show-gps-point">The “show-gps-point” property</a>
+<dt id="ientry-idm45474053659024">OsmGpsMap:show-gps-point, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--show-gps-point">The “show-gps-point” property</a>
 </dt>
-<dt>OsmGpsMap:show-trip-history, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--show-trip-history">The “show-trip-history” property</a>
+<dt id="ientry-idm45474053650784">OsmGpsMap:show-trip-history, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--show-trip-history">The “show-trip-history” property</a>
 </dt>
-<dt>OsmGpsMap:tile-cache, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-cache">The “tile-cache” property</a>
+<dt id="ientry-idm45474053643936">OsmGpsMap:tile-cache, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-cache">The “tile-cache” property</a>
 </dt>
-<dt>OsmGpsMap:tile-cache-base, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base">The “tile-cache-base” property</a>
+<dt id="ientry-idm45474053628800">OsmGpsMap:tile-cache-base, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-cache-base">The “tile-cache-base” property</a>
 </dt>
-<dt>OsmGpsMap:tile-zoom-offset, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset">The “tile-zoom-offset” property</a>
+<dt id="ientry-idm45474053616080">OsmGpsMap:tile-zoom-offset, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tile-zoom-offset">The “tile-zoom-offset” property</a>
 </dt>
-<dt>OsmGpsMap:tiles-queued, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tiles-queued">The “tiles-queued” property</a>
+<dt id="ientry-idm45474053608784">OsmGpsMap:tiles-queued, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--tiles-queued">The “tiles-queued” property</a>
 </dt>
-<dt>OsmGpsMap:zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--zoom">The “zoom” property</a>
+<dt id="ientry-idm45474053601744">OsmGpsMap:user-agent, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--user-agent">The “user-agent” property</a>
 </dt>
-<dt>OsmGpsMapClass, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapClass">struct OsmGpsMapClass</a>
+<dt id="ientry-idm45474053591472">OsmGpsMap:zoom, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMap--zoom">The “zoom” property</a>
 </dt>
-<dt>OsmGpsMapImage, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage-struct">struct OsmGpsMapImage</a>
+<dt id="ientry-idm45474053894784">OsmGpsMapClass, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapClass">struct OsmGpsMapClass</a>
 </dt>
-<dt>OsmGpsMapImage:pixbuf, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf">The “pixbuf” property</a>
+<dt id="ientry-idm45474058323296">OsmGpsMapImage, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage-struct">struct OsmGpsMapImage</a>
 </dt>
-<dt>OsmGpsMapImage:point, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--point">The “point” property</a>
+<dt id="ientry-idm45474058313456">OsmGpsMapImage:pixbuf, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--pixbuf">The “pixbuf” property</a>
 </dt>
-<dt>OsmGpsMapImage:rotation, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--rotation">The “rotation” property</a>
+<dt id="ientry-idm45474058307264">OsmGpsMapImage:point, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--point">The “point” property</a>
 </dt>
-<dt>OsmGpsMapImage:x-align, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align">The “x-align” property</a>
+<dt id="ientry-idm45474058301056">OsmGpsMapImage:rotation, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--rotation">The “rotation” property</a>
 </dt>
-<dt>OsmGpsMapImage:y-align, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align">The “y-align” property</a>
+<dt id="ientry-idm45474058294112">OsmGpsMapImage:x-align, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align">The “x-align” property</a>
 </dt>
-<dt>OsmGpsMapImage:z-order, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--z-order">The “z-order” property</a>
+<dt id="ientry-idm45474058287200">OsmGpsMapImage:y-align, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align">The “y-align” property</a>
 </dt>
-<dt>OsmGpsMapImageClass, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImageClass">struct OsmGpsMapImageClass</a>
+<dt id="ientry-idm45474058280288">OsmGpsMapImage:z-order, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImage--z-order">The “z-order” property</a>
 </dt>
-<dt>OsmGpsMapKey_t, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapKey-t">enum OsmGpsMapKey_t</a>
+<dt id="ientry-idm45474058319584">OsmGpsMapImageClass, <a class="indexterm" href="OsmGpsMapImage.html#OsmGpsMapImageClass">struct OsmGpsMapImageClass</a>
 </dt>
-<dt>OsmGpsMapLayer, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapLayer-struct">OsmGpsMapLayer</a>
+<dt id="ientry-idm45474053830528">OsmGpsMapKey_t, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapKey-t">enum OsmGpsMapKey_t</a>
 </dt>
-<dt>OsmGpsMapOsd, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd-struct">struct OsmGpsMapOsd</a>
+<dt id="ientry-idm45474060655840">OsmGpsMapLayer, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapLayer-struct">OsmGpsMapLayer</a>
 </dt>
-<dt>OsmGpsMapOsd:dpad-radius, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius">The “dpad-radius” property</a>
+<dt id="ientry-idm45474060652176">OsmGpsMapOsd, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd-struct">struct OsmGpsMapOsd</a>
 </dt>
-<dt>OsmGpsMapOsd:osd-x, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x">The “osd-x” property</a>
+<dt id="ientry-idm45474060642256">OsmGpsMapOsd:dpad-radius, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--dpad-radius">The “dpad-radius” property</a>
 </dt>
-<dt>OsmGpsMapOsd:osd-y, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y">The “osd-y” property</a>
+<dt id="ientry-idm45474060635584">OsmGpsMapOsd:osd-x, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x">The “osd-x” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-coordinates, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates">The “show-coordinates” property</a>
+<dt id="ientry-idm45474060628960">OsmGpsMapOsd:osd-y, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y">The “osd-y” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-crosshair, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair">The “show-crosshair” property</a>
+<dt id="ientry-idm45474060622304">OsmGpsMapOsd:show-coordinates, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-coordinates">The “show-coordinates” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-dpad, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad">The “show-dpad” property</a>
+<dt id="ientry-idm45474060615648">OsmGpsMapOsd:show-copyright, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-copyright">The “show-copyright” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-gps-in-dpad, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad">The “show-gps-in-dpad” property</a>
+<dt id="ientry-idm45474060607552">OsmGpsMapOsd:show-crosshair, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-crosshair">The “show-crosshair” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-gps-in-zoom, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom">The “show-gps-in-zoom” property</a>
+<dt id="ientry-idm45474060600928">OsmGpsMapOsd:show-dpad, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-dpad">The “show-dpad” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-scale, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale">The “show-scale” property</a>
+<dt id="ientry-idm45474060594304">OsmGpsMapOsd:show-gps-in-dpad, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-dpad">The “show-gps-in-dpad” property</a>
 </dt>
-<dt>OsmGpsMapOsd:show-zoom, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom">The “show-zoom” property</a>
+<dt id="ientry-idm45474060587648">OsmGpsMapOsd:show-gps-in-zoom, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-gps-in-zoom">The “show-gps-in-zoom” property</a>
 </dt>
-<dt>OsmGpsMapOsdClass, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsdClass">struct OsmGpsMapOsdClass</a>
+<dt id="ientry-idm45474060580992">OsmGpsMapOsd:show-scale, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-scale">The “show-scale” property</a>
 </dt>
-<dt>OsmGpsMapPoint, <a class="indexterm" href="OsmGpsMapPoint.html#OsmGpsMapPoint-struct">struct OsmGpsMapPoint</a>
+<dt id="ientry-idm45474060574336">OsmGpsMapOsd:show-zoom, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsd--show-zoom">The “show-zoom” property</a>
 </dt>
-<dt>OsmGpsMapSource_t, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapSource-t">enum OsmGpsMapSource_t</a>
+<dt id="ientry-idm45474060648416">OsmGpsMapOsdClass, <a class="indexterm" href="OsmGpsMapLayer.html#OsmGpsMapOsdClass">struct OsmGpsMapOsdClass</a>
 </dt>
-<dt>OsmGpsMapTrack, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-struct">struct OsmGpsMapTrack</a>
+<dt id="ientry-idm45474053322576">OsmGpsMapPoint, <a class="indexterm" href="OsmGpsMapPoint.html#OsmGpsMapPoint-struct">struct OsmGpsMapPoint</a>
 </dt>
-<dt>OsmGpsMapTrack::point-added, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added">The “point-added” signal</a>
+<dt id="ientry-idm45474053873328">OsmGpsMapSource_t, <a class="indexterm" href="OsmGpsMap.html#OsmGpsMapSource-t">enum OsmGpsMapSource_t</a>
 </dt>
-<dt>OsmGpsMapTrack::point-changed, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-changed">The “point-changed” signal</a>
+<dt id="ientry-idm45474055172368">OsmGpsMapTrack, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-struct">struct OsmGpsMapTrack</a>
 </dt>
-<dt>OsmGpsMapTrack::point-inserted, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-inserted">The “point-inserted” signal</a>
+<dt id="ientry-idm45474052683856">OsmGpsMapTrack::point-added, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-added">The “point-added” signal</a>
 </dt>
-<dt>OsmGpsMapTrack::point-removed, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-removed">The “point-removed” signal</a>
+<dt id="ientry-idm45474052661408">OsmGpsMapTrack::point-changed, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-changed">The “point-changed” signal</a>
 </dt>
-<dt>OsmGpsMapTrack:alpha, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha">The “alpha” property</a>
+<dt id="ientry-idm45474052654176">OsmGpsMapTrack::point-inserted, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-inserted">The “point-inserted” signal</a>
 </dt>
-<dt>OsmGpsMapTrack:color, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--color">The “color” property</a>
+<dt id="ientry-idm45474052646944">OsmGpsMapTrack::point-removed, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack-point-removed">The “point-removed” signal</a>
 </dt>
-<dt>OsmGpsMapTrack:editable, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--editable">The “editable” property</a>
+<dt id="ientry-idm45474055162528">OsmGpsMapTrack:alpha, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha">The “alpha” property</a>
 </dt>
-<dt>OsmGpsMapTrack:line-width, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width">The “line-width” property</a>
+<dt id="ientry-idm45474055155600">OsmGpsMapTrack:color, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--color">The “color” property</a>
 </dt>
-<dt>OsmGpsMapTrack:track, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--track">The “track” property</a>
+<dt id="ientry-idm45474055149408">OsmGpsMapTrack:editable, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--editable">The “editable” property</a>
 </dt>
-<dt>OsmGpsMapTrack:visible, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--visible">The “visible” property</a>
+<dt id="ientry-idm45474055142880">OsmGpsMapTrack:line-width, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width">The “line-width” property</a>
 </dt>
-<dt>OsmGpsMapTrackClass, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrackClass">struct OsmGpsMapTrackClass</a>
+<dt id="ientry-idm45474055135920">OsmGpsMapTrack:track, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--track">The “track” property</a>
+</dt>
+<dt id="ientry-idm45474055129888">OsmGpsMapTrack:visible, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrack--visible">The “visible” property</a>
+</dt>
+<dt id="ientry-idm45474055168656">OsmGpsMapTrackClass, <a class="indexterm" href="OsmGpsMapTrack.html#OsmGpsMapTrackClass">struct OsmGpsMapTrackClass</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>P</h3>
 <dl>
-<dt>osm_gps_map_point_copy, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-copy">osm_gps_map_point_copy ()</a>
+<dt id="ientry-idm45474053362880">osm_gps_map_point_copy, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-copy">osm_gps_map_point_copy ()</a>
 </dt>
-<dt>osm_gps_map_point_free, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-free">osm_gps_map_point_free ()</a>
+<dt id="ientry-idm45474053341360">osm_gps_map_point_free, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-free">osm_gps_map_point_free ()</a>
 </dt>
-<dt>osm_gps_map_point_get_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-get-degrees">osm_gps_map_point_get_degrees ()</a>
+<dt id="ientry-idm45474060212896">osm_gps_map_point_get_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-get-degrees">osm_gps_map_point_get_degrees ()</a>
 </dt>
-<dt>osm_gps_map_point_get_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-get-radians">osm_gps_map_point_get_radians ()</a>
+<dt id="ientry-idm45474059973616">osm_gps_map_point_get_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-get-radians">osm_gps_map_point_get_radians ()</a>
 </dt>
-<dt>osm_gps_map_point_new_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees">osm_gps_map_point_new_degrees ()</a>
+<dt id="ientry-idm45474058251120">osm_gps_map_point_get_user_data, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-get-user-data">osm_gps_map_point_get_user_data ()</a>
 </dt>
-<dt>osm_gps_map_point_new_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians">osm_gps_map_point_new_radians ()</a>
+<dt id="ientry-idm45474053549424">osm_gps_map_point_new_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees">osm_gps_map_point_new_degrees ()</a>
 </dt>
-<dt>osm_gps_map_point_set_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-set-degrees">osm_gps_map_point_set_degrees ()</a>
+<dt id="ientry-idm45474053524144">osm_gps_map_point_new_degrees_with_user_data, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-degrees-with-user-data">osm_gps_map_point_new_degrees_with_user_data ()</a>
 </dt>
-<dt>osm_gps_map_point_set_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-set-radians">osm_gps_map_point_set_radians ()</a>
+<dt id="ientry-idm45474053494144">osm_gps_map_point_new_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians">osm_gps_map_point_new_radians ()</a>
+</dt>
+<dt id="ientry-idm45474053468864">osm_gps_map_point_new_radians_with_user_data, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-new-radians-with-user-data">osm_gps_map_point_new_radians_with_user_data ()</a>
+</dt>
+<dt id="ientry-idm45474053438864">osm_gps_map_point_set_degrees, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-set-degrees">osm_gps_map_point_set_degrees ()</a>
+</dt>
+<dt id="ientry-idm45474053411920">osm_gps_map_point_set_radians, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-set-radians">osm_gps_map_point_set_radians ()</a>
+</dt>
+<dt id="ientry-idm45474053384976">osm_gps_map_point_set_user_data, <a class="indexterm" href="OsmGpsMapPoint.html#osm-gps-map-point-set-user-data">osm_gps_map_point_set_user_data ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>S</h3>
 <dl>
-<dt>osm_gps_map_scroll, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-scroll">osm_gps_map_scroll ()</a>
+<dt id="ientry-idm45474054380880">osm_gps_map_scroll, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-scroll">osm_gps_map_scroll ()</a>
 </dt>
-<dt>osm_gps_map_set_center, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-center">osm_gps_map_set_center ()</a>
+<dt id="ientry-idm45474054485216">osm_gps_map_set_center, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-center">osm_gps_map_set_center ()</a>
 </dt>
-<dt>osm_gps_map_set_center_and_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-center-and-zoom">osm_gps_map_set_center_and_zoom ()</a>
+<dt id="ientry-idm45474054464800">osm_gps_map_set_center_and_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-center-and-zoom">osm_gps_map_set_center_and_zoom ()</a>
 </dt>
-<dt>osm_gps_map_set_keyboard_shortcut, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut">osm_gps_map_set_keyboard_shortcut ()</a>
+<dt id="ientry-idm45474054337472">osm_gps_map_set_keyboard_shortcut, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-keyboard-shortcut">osm_gps_map_set_keyboard_shortcut ()</a>
 </dt>
-<dt>osm_gps_map_set_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-zoom">osm_gps_map_set_zoom ()</a>
+<dt id="ientry-idm45474054439232">osm_gps_map_set_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-set-zoom">osm_gps_map_set_zoom ()</a>
 </dt>
-<dt>osm_gps_map_source_get_friendly_name, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-friendly-name">osm_gps_map_source_get_friendly_name ()</a>
+<dt id="ientry-idm45474058670240">osm_gps_map_source_get_friendly_name, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-friendly-name">osm_gps_map_source_get_friendly_name ()</a>
 </dt>
-<dt>osm_gps_map_source_get_image_format, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-image-format">osm_gps_map_source_get_image_format ()</a>
+<dt id="ientry-idm45474058630064">osm_gps_map_source_get_image_format, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-image-format">osm_gps_map_source_get_image_format ()</a>
 </dt>
-<dt>osm_gps_map_source_get_max_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-max-zoom">osm_gps_map_source_get_max_zoom ()</a>
+<dt id="ientry-idm45474054599504">osm_gps_map_source_get_max_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-max-zoom">osm_gps_map_source_get_max_zoom ()</a>
 </dt>
-<dt>osm_gps_map_source_get_min_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-min-zoom">osm_gps_map_source_get_min_zoom ()</a>
+<dt id="ientry-idm45474058610000">osm_gps_map_source_get_min_zoom, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-min-zoom">osm_gps_map_source_get_min_zoom ()</a>
 </dt>
-<dt>osm_gps_map_source_get_repo_uri, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-repo-uri">osm_gps_map_source_get_repo_uri ()</a>
+<dt id="ientry-idm45474058650208">osm_gps_map_source_get_repo_uri, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-get-repo-uri">osm_gps_map_source_get_repo_uri ()</a>
 </dt>
-<dt>osm_gps_map_source_is_valid, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-is-valid">osm_gps_map_source_is_valid ()</a>
+<dt id="ientry-idm45474054582224">osm_gps_map_source_is_valid, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-source-is-valid">osm_gps_map_source_is_valid ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>T</h3>
 <dl>
-<dt>osm_gps_map_track_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-add">osm_gps_map_track_add ()</a>
+<dt id="ientry-idm45474054149440">osm_gps_map_track_add, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-add">osm_gps_map_track_add ()</a>
 </dt>
-<dt>osm_gps_map_track_add_point, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-add-point">osm_gps_map_track_add_point ()</a>
+<dt id="ientry-idm45474057523088">osm_gps_map_track_add_point, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-add-point">osm_gps_map_track_add_point ()</a>
 </dt>
-<dt>osm_gps_map_track_get_color, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-color">osm_gps_map_track_get_color ()</a>
+<dt id="ientry-idm45474055369712">osm_gps_map_track_get_color, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-color">osm_gps_map_track_get_color ()</a>
 </dt>
-<dt>osm_gps_map_track_get_points, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-points">osm_gps_map_track_get_points ()</a>
+<dt id="ientry-idm45474055323776">osm_gps_map_track_get_length, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-length">osm_gps_map_track_get_length ()</a>
 </dt>
-<dt>osm_gps_map_track_new, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-new">osm_gps_map_track_new ()</a>
+<dt id="ientry-idm45474055303632">osm_gps_map_track_get_point, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-point">osm_gps_map_track_get_point ()</a>
 </dt>
-<dt>osm_gps_map_track_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-remove">osm_gps_map_track_remove ()</a>
+<dt id="ientry-idm45474055346496">osm_gps_map_track_get_points, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-get-points">osm_gps_map_track_get_points ()</a>
 </dt>
-<dt>osm_gps_map_track_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-remove-all">osm_gps_map_track_remove_all ()</a>
+<dt id="ientry-idm45474055276992">osm_gps_map_track_insert_point, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-insert-point">osm_gps_map_track_insert_point ()</a>
+</dt>
+<dt id="ientry-idm45474055184768">osm_gps_map_track_new, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-new">osm_gps_map_track_new ()</a>
+</dt>
+<dt id="ientry-idm45474055249872">osm_gps_map_track_n_points, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-n-points">osm_gps_map_track_n_points ()</a>
+</dt>
+<dt id="ientry-idm45474054127024">osm_gps_map_track_remove, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-remove">osm_gps_map_track_remove ()</a>
+</dt>
+<dt id="ientry-idm45474054104448">osm_gps_map_track_remove_all, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-track-remove-all">osm_gps_map_track_remove_all ()</a>
+</dt>
+<dt id="ientry-idm45474055230896">osm_gps_map_track_remove_point, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-remove-point">osm_gps_map_track_remove_point ()</a>
+</dt>
+<dt id="ientry-idm45474055207952">osm_gps_map_track_set_color, <a class="indexterm" href="OsmGpsMapTrack.html#osm-gps-map-track-set-color">osm_gps_map_track_set_color ()</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>Z</h3>
 <dl>
-<dt>osm_gps_map_zoom_in, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-zoom-in">osm_gps_map_zoom_in ()</a>
+<dt id="ientry-idm45474054416480">osm_gps_map_zoom_in, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-zoom-in">osm_gps_map_zoom_in ()</a>
 </dt>
-<dt>osm_gps_map_zoom_out, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-zoom-out">osm_gps_map_zoom_out ()</a>
+<dt id="ientry-idm45474054398720">osm_gps_map_zoom_out, <a class="indexterm" href="OsmGpsMap.html#osm-gps-map-zoom-out">osm_gps_map_zoom_out ()</a>
 </dt>
 </dl>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.20</div>
+<hr>Generated by GTK-Doc V1.32</div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	<!ENTITY version SYSTEM "version.xml">
 	<!ENTITY slash "/">
 ]>
-<indexdiv>
+<indexdiv id="api-index-0.7.2">
 <indexdiv><title>P</title>
 <indexentry><primaryie linkends="osm-gps-map-point-copy"><link linkend="osm-gps-map-point-copy">osm_gps_map_point_copy</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>
 <indexentry><primaryie linkends="osm-gps-map-point-free"><link linkend="osm-gps-map-point-free">osm_gps_map_point_free</link>, function in <link linkend="OsmGpsMapPoint">OsmGpsMapPoint</link></primaryie></indexentry>

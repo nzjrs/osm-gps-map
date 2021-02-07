@@ -1,5 +1,4 @@
     <xi:include href="xml/osm-gps-map.xml"/>
-    <xi:include href="xml/osm-gps-map-deprecated.xml"/>
     <xi:include href="xml/osm-gps-map-layer.xml"/>
     <xi:include href="xml/osm-gps-map-image.xml"/>
     <xi:include href="xml/osm-gps-map-point.xml"/>
