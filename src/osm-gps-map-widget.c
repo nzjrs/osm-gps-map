@@ -317,7 +317,7 @@ enum
     PROP_SHOW_GPS_POINT
 };
 
-G_DEFINE_TYPE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
+G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 
 /*
  * Drawing function forward defintions
@@ -1643,7 +1643,7 @@ osm_gps_map_init (OsmGpsMap *object)
     int i;
     OsmGpsMapPrivate *priv;
 
-    priv = G_TYPE_INSTANCE_GET_PRIVATE (object, OSM_TYPE_GPS_MAP, OsmGpsMapPrivate);
+    priv = osm_gps_map_get_instance_private (object);
     object->priv = priv;
 
     priv->pixmap = NULL;
@@ -2508,8 +2508,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
 {
     GObjectClass* object_class;
     GtkWidgetClass *widget_class;
-
-    g_type_class_add_private (klass, sizeof (OsmGpsMapPrivate));
 
     object_class = G_OBJECT_CLASS (klass);
     object_class->dispose = osm_gps_map_dispose;
