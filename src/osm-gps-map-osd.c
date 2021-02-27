@@ -29,10 +29,6 @@
 
 static void osm_gps_map_osd_interface_init (OsmGpsMapLayerIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (OsmGpsMapOsd, osm_gps_map_osd, G_TYPE_OBJECT,
-         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
-                                osm_gps_map_osd_interface_init));
-
 enum
 {
 	PROP_0,
@@ -103,6 +99,11 @@ struct _OsmGpsMapOsdPrivate
 	gboolean            show_gps_in_zoom;
 	gboolean            show_copyright;
 };
+
+G_DEFINE_TYPE_WITH_CODE (OsmGpsMapOsd, osm_gps_map_osd, G_TYPE_OBJECT,
+         G_ADD_PRIVATE(OsmGpsMapOsd)
+         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
+                                osm_gps_map_osd_interface_init));
 
 static void                 osm_gps_map_osd_render       (OsmGpsMapLayer *osd, OsmGpsMap *map);
 static void                 osm_gps_map_osd_draw         (OsmGpsMapLayer *osd, OsmGpsMap *map, cairo_t *cr);
@@ -322,8 +323,6 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (klass, sizeof (OsmGpsMapOsdPrivate));
-
 	object_class->get_property = osm_gps_map_osd_get_property;
 	object_class->set_property = osm_gps_map_osd_set_property;
 	object_class->constructor = osm_gps_map_osd_constructor;
@@ -473,9 +472,7 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 static void
 osm_gps_map_osd_init (OsmGpsMapOsd *self)
 {
-	self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-	                                          OSM_TYPE_GPS_MAP_OSD,
-	                                          OsmGpsMapOsdPrivate);
+	self->priv = osm_gps_map_osd_get_instance_private (self);
 }
 
 static void

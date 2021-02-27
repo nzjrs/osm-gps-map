@@ -34,8 +34,6 @@
 #include "converter.h"
 #include "osm-gps-map-track.h"
 
-G_DEFINE_TYPE (OsmGpsMapTrack, osm_gps_map_track, G_TYPE_OBJECT)
-
 enum
 {
     PROP_0,
@@ -67,6 +65,8 @@ struct _OsmGpsMapTrackPrivate
     GdkRGBA color;
     gboolean editable;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE(OsmGpsMapTrack, osm_gps_map_track, G_TYPE_OBJECT)
 
 #define DEFAULT_R   (0.6)
 #define DEFAULT_G   (0)
@@ -167,8 +167,6 @@ static void
 osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-    g_type_class_add_private (klass, sizeof (OsmGpsMapTrackPrivate));
 
     object_class->get_property = osm_gps_map_track_get_property;
     object_class->set_property = osm_gps_map_track_set_property;
@@ -282,7 +280,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 static void
 osm_gps_map_track_init (OsmGpsMapTrack *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackPrivate);
+    self->priv = osm_gps_map_track_get_instance_private(self);
 
     self->priv->color.red = DEFAULT_R;
     self->priv->color.green = DEFAULT_G;

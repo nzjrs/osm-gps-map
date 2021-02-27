@@ -21,8 +21,6 @@
 #include "converter.h"
 #include "osm-gps-map-polygon.h"
 
-G_DEFINE_TYPE (OsmGpsMapPolygon, osm_gps_map_polygon, G_TYPE_OBJECT)
-
 enum
 {
     PROP_0,
@@ -43,6 +41,8 @@ struct _OsmGpsMapPolygonPrivate
     gfloat shade_alpha;
     gboolean breakable;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMapPolygon, osm_gps_map_polygon, G_TYPE_OBJECT)
 
 #define DEFAULT_R   (60000)
 #define DEFAULT_G   (0)
@@ -136,8 +136,6 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    g_type_class_add_private (klass, sizeof (OsmGpsMapPolygonPrivate));
-
     object_class->get_property = osm_gps_map_polygon_get_property;
     object_class->set_property = osm_gps_map_polygon_set_property;
     object_class->dispose = osm_gps_map_polygon_dispose;
@@ -198,7 +196,7 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
 static void
 osm_gps_map_polygon_init (OsmGpsMapPolygon *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_POLYGON, OsmGpsMapPolygonPrivate);
+    self->priv = osm_gps_map_polygon_get_instance_private(self);
 	self->priv->track = osm_gps_map_track_new();
 }
 

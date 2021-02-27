@@ -34,8 +34,6 @@
 #include "osm-gps-map-track.h"
 #include "osm-gps-map-image.h"
 
-G_DEFINE_TYPE (OsmGpsMapImage, osm_gps_map_image, G_TYPE_OBJECT)
-
 enum
 {
     PROP_0,
@@ -58,6 +56,8 @@ struct _OsmGpsMapImagePrivate
     int             zorder;
     float           rotation;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMapImage, osm_gps_map_image, G_TYPE_OBJECT)
 
 static void
 osm_gps_map_image_get_property (GObject    *object,
@@ -149,8 +149,6 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    g_type_class_add_private (klass, sizeof (OsmGpsMapImagePrivate));
-
     object_class->get_property = osm_gps_map_image_get_property;
     object_class->set_property = osm_gps_map_image_set_property;
     object_class->dispose = osm_gps_map_image_dispose;
@@ -216,7 +214,7 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
 static void
 osm_gps_map_image_init (OsmGpsMapImage *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE ((self), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImagePrivate);
+    self->priv = osm_gps_map_image_get_instance_private (self);
 }
 
 OsmGpsMapImage *
