@@ -1,3 +1,7 @@
+Changes in 1.2.1
+  * Replace deprecated G_TYPE_INSTANCE_GET_PRIVATE and g_type_class_add_private (Patrick Salecker)
+  * Add python unit tests (Patrick Salecker)
+
 Changes in 1.2.0
 ======================
   * Change max allowed zoom for various maps (Rolf Eike Beer, Philipe Weyland)
