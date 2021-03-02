@@ -84,6 +84,7 @@ class UI(Gtk.Window):
                              show_zoom=True,
                              show_crosshair=True)
         )
+        self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
         self.osm.layer_add(DummyLayer())
 
         self.last_image = None
