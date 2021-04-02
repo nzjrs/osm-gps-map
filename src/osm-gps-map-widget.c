@@ -1051,7 +1051,7 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
 
     g_debug("Load actual tile %d,%d (%d,%d) z:%d", x, y, offset_x, offset_y, zoom);
 
-    if (priv->map_source == OSM_GPS_MAP_SOURCE_NULL) {
+    if (priv->map_source == OSM_GPS_MAP_SOURCE_NULL && priv->repo_uri == NULL) {
         osm_gps_map_blit_tile(map, priv->null_tile, cr, offset_x, offset_y,
                               priv->map_zoom, target_x, target_y);
         return;
