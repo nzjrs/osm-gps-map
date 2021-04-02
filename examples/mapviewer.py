@@ -218,7 +218,6 @@ from in the box below. Special metacharacters may be included in this url
                 self.osm = osmgpsmap.Map()
 
             self.vbox.pack_start(self.osm, True, True, 0)
-            self.osm.connect("button_release_event", self.map_clicked)
             self.osm.show()
 
     def print_tiles(self):
