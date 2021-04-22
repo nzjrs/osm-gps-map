@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
  * @stability: Stable
  * @include: osm-gps-map.h
  *
- * #OsmGpsMapPoint describes a geographic location (latitude, longitude). 
+ * #OsmGpsMapPoint describes a geographic location (latitude, longitude).
  * Helper functions exist to create such a point from either radian co-ordinates
  * (osm_gps_map_point_new_radians()) or degrees (osm_gps_map_new_degrees()).
  **/
@@ -43,21 +43,85 @@ osm_gps_map_point_get_type (void)
     return our_type;
 }
 
+/**
+ * osm_gps_map_point_new_degrees:
+ * @lat: (in): latitude in degrees
+ * @lon: (in): longtitude in degrees
+ *
+ * Create point with specified params
+ *
+ * Returns: (transfer full): new point object
+ * Since: 0.7.0
+ **/
 OsmGpsMapPoint *
 osm_gps_map_point_new_degrees(float lat, float lon)
 {
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = deg2rad(lat);
     p->rlon = deg2rad(lon);
+    p->user_data = NULL;
     return p;
 }
 
+/**
+ * osm_gps_map_point_new_radians:
+ * @rlat: (in): latitude in radians
+ * @rlon: (in): longtitude in radians
+ *
+ * Create point with specified params
+ *
+ * Returns: (transfer full): new point object
+ * Since: 0.7.0
+ **/
 OsmGpsMapPoint *
 osm_gps_map_point_new_radians(float rlat, float rlon)
 {
     OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
     p->rlat = rlat;
     p->rlon = rlon;
+    p->user_data = NULL;
+    return p;
+}
+
+/**
+ * osm_gps_map_point_new_degrees_with_user_data:
+ * @lat: (in): latitude in degrees
+ * @lon: (in): longtitude in degrees
+ * @user_data: (in): user data
+ *
+ * Create point with specified params
+ *
+ * Returns: (transfer full): new point object
+ * Since: 1.2.0
+ **/
+OsmGpsMapPoint *
+osm_gps_map_point_new_degrees_with_user_data(float lat, float lon, gpointer user_data)
+{
+    OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
+    p->rlat = deg2rad(lat);
+    p->rlon = deg2rad(lon);
+    p->user_data = user_data;
+    return p;
+}
+
+/**
+ * osm_gps_map_point_new_radians_with_user_data:
+ * @rlat: (in): latitude in radians
+ * @rlon: (in): longtitude in radians
+ * @user_data: (in): user data
+ *
+ * Create point with specified params
+ *
+ * Returns: (transfer full): new point object
+ * Since: 1.2.0
+ **/
+OsmGpsMapPoint *
+osm_gps_map_point_new_radians_with_user_data(float rlat, float rlon, gpointer user_data)
+{
+    OsmGpsMapPoint *p = g_new0(OsmGpsMapPoint, 1);
+    p->rlat = rlat;
+    p->rlon = rlon;
+    p->user_data = user_data;
     return p;
 }
 
@@ -68,7 +132,8 @@ osm_gps_map_point_new_radians(float rlat, float rlon)
  * @lon: (out): longitude in degrees
  *
  * Returns the lagitude and longitude in degrees.
- * of the current window, i.e the top left and bottom right corners.
+ *
+ * Since: 0.7.0
  **/
 void
 osm_gps_map_point_get_degrees(OsmGpsMapPoint *point, float *lat, float *lon)
@@ -77,6 +142,16 @@ osm_gps_map_point_get_degrees(OsmGpsMapPoint *point, float *lat, float *lon)
     *lon = rad2deg(point->rlon);
 }
 
+/**
+ * osm_gps_map_point_get_radians:
+ * @point: The #OsmGpsMapPoint point ( latitude and longitude in radian )
+ * @rlat: (out): latitude in radians
+ * @rlon: (out): longitude in radians
+ *
+ * Returns the lagitude and longitude in radians.
+ *
+ * Since: 0.7.0
+ **/
 void
 osm_gps_map_point_get_radians(OsmGpsMapPoint *point, float *rlat, float *rlon)
 {
@@ -84,6 +159,16 @@ osm_gps_map_point_get_radians(OsmGpsMapPoint *point, float *rlat, float *rlon)
     *rlon = point->rlon;
 }
 
+/**
+ * osm_gps_map_point_set_degrees:
+ * @point: The #OsmGpsMapPoint point ( latitude and longitude in radian )
+ * @lat: (in): latitude in degrees
+ * @lon: (in): longitude in degrees
+ *
+ * Sets the lagitude and longitude in degrees.
+ *
+ * Since: 0.7.0
+ **/
 void
 osm_gps_map_point_set_degrees(OsmGpsMapPoint *point, float lat, float lon)
 {
@@ -91,6 +176,16 @@ osm_gps_map_point_set_degrees(OsmGpsMapPoint *point, float lat, float lon)
     point->rlon = deg2rad(lon);
 }
 
+/**
+ * osm_gps_map_point_set_radians:
+ * @point: The #OsmGpsMapPoint point ( latitude and longitude in radian )
+ * @rlat: (in): latitude in radians
+ * @rlon: (in): longitude in radians
+ *
+ * Sets the lagitude and longitude in radians.
+ *
+ * Since: 0.7.0
+ **/
 void
 osm_gps_map_point_set_radians(OsmGpsMapPoint *point, float rlat, float rlon)
 {
@@ -99,8 +194,42 @@ osm_gps_map_point_set_radians(OsmGpsMapPoint *point, float rlat, float rlon)
 }
 
 /**
- * osm_gps_map_point_copy:
+ * osm_gps_map_point_get_user_data:
+ * @point: The #OsmGpsMapPoint point
  *
+ * Get user data stored in point
+ *
+ * Returns: (transfer none): The #OsmGpsMapPoint user data
+ * Since: 1.2.0
+ **/
+gpointer
+osm_gps_map_point_get_user_data(OsmGpsMapPoint *point)
+{
+    return point->user_data;
+}
+
+/**
+ * osm_gps_map_point_set_user_data:
+ * @point: The #OsmGpsMapPoint point
+ * @user_data: (in): user data
+ *
+ * Store user data in point
+ *
+ * Since: 1.2.0
+ **/
+void
+osm_gps_map_point_set_user_data(OsmGpsMapPoint *point, gpointer user_data)
+{
+    point->user_data = user_data;
+}
+
+/**
+ * osm_gps_map_point_copy:
+ * @point: (in): a #OsmGpsMapPoint object
+ *
+ * Create a copy of a point
+ *
+ * Returns: (transfer full): Copied point
  * Since: 0.7.2
  */
 OsmGpsMapPoint *
@@ -114,6 +243,9 @@ osm_gps_map_point_copy (const OsmGpsMapPoint *point)
 
 /**
  * osm_gps_map_point_free:
+ * @point: a #OsmGpsMapPoint object
+ *
+ * Free point object
  *
  * Since: 0.7.2
  */

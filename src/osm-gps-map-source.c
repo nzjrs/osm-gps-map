@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@
 #include "private.h"
 #include "osm-gps-map-source.h"
 
-const char* 
+const char*
 osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
 {
     switch(source)
@@ -97,7 +97,7 @@ osm_gps_map_source_get_copyright(OsmGpsMapSource_t source)
 //https://garage.maemo.org/plugins/scmsvn/viewcvs.php/trunk/src/maps.c?root=maemo-mapper&view=markup
 //http://www.ponies.me.uk/maps/GoogleTileUtils.java
 //http://www.mgmaps.com/cache/MapTileCacher.perl
-const char* 
+const char*
 osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
 {
     switch(source)
@@ -123,7 +123,7 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
             // Appears to be shut down
             return NULL;
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
-            return "http://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg";
+            return "https://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg";
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
             return "http://mt#R.google.com/vt/lyrs=m&hl=en&x=#X&s=&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
@@ -171,37 +171,39 @@ osm_gps_map_source_get_image_format(OsmGpsMapSource_t source)
 }
 
 
-int 
+int
 osm_gps_map_source_get_min_zoom(OsmGpsMapSource_t source)
 {
     return 1;
 }
 
-int 
+int
 osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
 {
     switch(source) {
         case OSM_GPS_MAP_SOURCE_NULL:
             return 18;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP:
-            return OSM_MAX_ZOOM;
+            return 19;
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
-        case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
             return 18;
+        case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
+            return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+            return 17;
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
+        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
         case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
+            return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE:
         case OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID:
-            return 17;
+            return 19;
         case OSM_GPS_MAP_SOURCE_OSMC_TRAILS:
             return 15;
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             return 11;
-        case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
-            return 18;
         case OSM_GPS_MAP_SOURCE_LAST:
         default:
             return 17;
@@ -214,4 +216,3 @@ osm_gps_map_source_is_valid(OsmGpsMapSource_t source)
 {
     return osm_gps_map_source_get_repo_uri(source) != NULL;
 }
-

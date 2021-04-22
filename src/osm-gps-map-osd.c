@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,10 +28,6 @@
 #include "osm-gps-map-source.h"
 
 static void osm_gps_map_osd_interface_init (OsmGpsMapLayerIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (OsmGpsMapOsd, osm_gps_map_osd, G_TYPE_OBJECT,
-         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
-                                osm_gps_map_osd_interface_init));
 
 enum
 {
@@ -103,6 +99,11 @@ struct _OsmGpsMapOsdPrivate
 	gboolean            show_gps_in_zoom;
 	gboolean            show_copyright;
 };
+
+G_DEFINE_TYPE_WITH_CODE (OsmGpsMapOsd, osm_gps_map_osd, G_TYPE_OBJECT,
+         G_ADD_PRIVATE(OsmGpsMapOsd)
+         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
+                                osm_gps_map_osd_interface_init));
 
 static void                 osm_gps_map_osd_render       (OsmGpsMapLayer *osd, OsmGpsMap *map);
 static void                 osm_gps_map_osd_draw         (OsmGpsMapLayer *osd, OsmGpsMap *map, cairo_t *cr);
@@ -322,8 +323,6 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (klass, sizeof (OsmGpsMapOsdPrivate));
-
 	object_class->get_property = osm_gps_map_osd_get_property;
 	object_class->set_property = osm_gps_map_osd_set_property;
 	object_class->constructor = osm_gps_map_osd_constructor;
@@ -459,6 +458,7 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 	 * OsmGpsMapOsd:show-copyright:
 	 *
 	 * The show copyright property.
+     * Since: 1.2.0
 	 */
 	g_object_class_install_property (object_class,
 	                                 PROP_SHOW_COPYRIGHT,
@@ -472,9 +472,7 @@ osm_gps_map_osd_class_init (OsmGpsMapOsdClass *klass)
 static void
 osm_gps_map_osd_init (OsmGpsMapOsd *self)
 {
-	self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-	                                          OSM_TYPE_GPS_MAP_OSD,
-	                                          OsmGpsMapOsdPrivate);
+	self->priv = osm_gps_map_osd_get_instance_private (self);
 }
 
 static void
@@ -484,7 +482,7 @@ osm_gps_map_osd_render (OsmGpsMapLayer *osd,
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
 
-    g_return_if_fail(OSM_IS_GPS_MAP_OSD(osd));
+    g_return_if_fail(OSM_GPS_MAP_IS_OSD(osd));
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
@@ -511,7 +509,7 @@ osm_gps_map_osd_draw (OsmGpsMapLayer *osd,
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_if_fail(OSM_IS_GPS_MAP_OSD(osd));
+    g_return_if_fail(OSM_GPS_MAP_IS_OSD(osd));
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
@@ -548,7 +546,7 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
 
-    g_return_val_if_fail(OSM_IS_GPS_MAP_OSD(osd), FALSE);
+    g_return_val_if_fail(OSM_GPS_MAP_IS_OSD(osd), FALSE);
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
@@ -560,7 +558,7 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
 
         if(priv->osd_x < 0)
             mx -= (allocation.width - priv->osd_w);
-    
+
         if(priv->osd_y < 0)
             my -= (allocation.height - priv->osd_h);
 
@@ -815,11 +813,11 @@ coordinates_render(OsmGpsMapOsd *self, OsmGpsMap *map)
 
     char *latitude = osd_latitude_str(lat);
     char *longitude = osd_longitude_str(lon);
-    
+
     int y = OSD_COORDINATES_OFFSET;
     y = osd_render_centered_text(cr, y, OSD_COORDINATES_W, OSD_COORDINATES_FONT_SIZE, latitude);
     y = osd_render_centered_text(cr, y, OSD_COORDINATES_W, OSD_COORDINATES_FONT_SIZE, longitude);
-    
+
     g_free(latitude);
     g_free(longitude);
 

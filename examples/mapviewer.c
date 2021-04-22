@@ -28,7 +28,6 @@
 static OsmGpsMapSource_t opt_map_provider = OSM_GPS_MAP_SOURCE_OPENSTREETMAP;
 static gboolean opt_friendly_cache = FALSE;
 static gboolean opt_no_cache = FALSE;
-static gboolean opt_debug = FALSE;
 static char *opt_cache_base_dir = NULL;
 static gboolean opt_editable_tracks = FALSE;
 static GOptionEntry entries[] =
@@ -36,11 +35,20 @@ static GOptionEntry entries[] =
   { "friendly-cache", 'f', 0, G_OPTION_ARG_NONE, &opt_friendly_cache, "Store maps using friendly cache style (source name)", NULL },
   { "no-cache", 'n', 0, G_OPTION_ARG_NONE, &opt_no_cache, "Disable cache", NULL },
   { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
-  { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
   { "map", 'm', 0, G_OPTION_ARG_INT, &opt_map_provider, "Map source", "N" },
   { "editable-tracks", 'e', 0, G_OPTION_ARG_NONE, &opt_editable_tracks, "Make the tracks editable", NULL },
   { NULL }
 };
+
+#if !GTK_CHECK_VERSION(3,22,0)
+// use --gtk-debug=updates instead on newer GTK
+static gboolean opt_debug = FALSE;
+static GOptionEntry debug_entries[] =
+{
+  { "debug", 'd', 0, G_OPTION_ARG_NONE, &opt_debug, "Enable debugging", NULL },
+  { NULL }
+};
+#endif
 
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
@@ -90,7 +98,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 }
 
 static gboolean
-on_button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_map_changed_event (GtkWidget *widget, gpointer user_data)
 {
     float lat,lon;
     GtkEntry *entry = GTK_ENTRY(user_data);
@@ -250,6 +258,9 @@ main (int argc, char **argv)
     context = g_option_context_new ("- Map browser");
     g_option_context_set_help_enabled(context, FALSE);
     g_option_context_add_main_entries (context, entries, NULL);
+#if !GTK_CHECK_VERSION(3,22,0)
+    g_option_context_add_main_entries (context, debug_entries, NULL);
+#endif
 
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         usage(context);
@@ -277,8 +288,11 @@ main (int argc, char **argv)
         cachedir = g_strdup(OSM_GPS_MAP_CACHE_AUTO);
     }
 
+#if !GTK_CHECK_VERSION(3,22,0)
+// use --gtk-debug=updates on newer gtk
     if (opt_debug)
         gdk_window_set_debug_updates(TRUE);
+#endif
 
     g_debug("Map Cache Dir: %s", cachedir);
     g_debug("Map Provider: %s (%d)", osm_gps_map_source_get_friendly_name(opt_map_provider), opt_map_provider);
@@ -288,6 +302,7 @@ main (int argc, char **argv)
                         "tile-cache",cachedir,
                         "tile-cache-base", cachebasedir,
                         "proxy-uri",g_getenv("http_proxy"),
+                        "user-agent", "mapviewer.c", // Always set user-agent, for better tile-usage compliance
                         NULL);
 
     osd = g_object_new (OSM_TYPE_GPS_MAP_OSD,
@@ -390,8 +405,8 @@ main (int argc, char **argv)
                 G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
     g_signal_connect (G_OBJECT (map), "button-press-event",
                 G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
-    g_signal_connect (G_OBJECT (map), "button-release-event",
-                G_CALLBACK (on_button_release_event),
+    g_signal_connect (G_OBJECT (map), "changed",
+                G_CALLBACK (on_map_changed_event),
                 (gpointer) gtk_builder_get_object(builder, "text_entry"));
     g_signal_connect (G_OBJECT (map), "notify::tiles-queued",
                 G_CALLBACK (on_tiles_queued_changed),

@@ -47,29 +47,9 @@ osm_gps_map_layer_remove_all
 </SECTION>
 
 <SECTION>
-<FILE>osm-gps-map-deprecated</FILE>
-<TITLE>OsmGpsMap Deprecated</TITLE>
-osm_gps_map_draw_gps
-osm_gps_map_clear_gps
-osm_gps_map_add_track
-osm_gps_map_replace_track
-osm_gps_map_clear_tracks
-osm_gps_map_add_image
-osm_gps_map_add_image_with_alignment
-osm_gps_map_remove_image
-osm_gps_map_clear_images
-osm_gps_map_add_layer
-osm_gps_map_get_co_ordinates
-osm_gps_map_screen_to_geographic
-osm_gps_map_geographic_to_screen
-osm_gps_map_set_mapcenter
-</SECTION>
-
-<SECTION>
 <FILE>osm-gps-map-layer</FILE>
 <TITLE>OsmGpsMapLayer</TITLE>
 OsmGpsMapLayer
-OsmGpsMapLayerClass
 osm_gps_map_layer_render
 osm_gps_map_layer_draw
 osm_gps_map_layer_busy
@@ -96,10 +76,14 @@ osm_gps_map_image_new
 OsmGpsMapPoint
 osm_gps_map_point_get_degrees
 osm_gps_map_point_get_radians
+osm_gps_map_point_get_user_data
 osm_gps_map_point_new_degrees
+osm_gps_map_point_new_degrees_with_user_data
 osm_gps_map_point_new_radians
+osm_gps_map_point_new_radians_with_user_data
 osm_gps_map_point_set_degrees
 osm_gps_map_point_set_radians
+osm_gps_map_point_set_user_data
 osm_gps_map_point_copy
 osm_gps_map_point_free
 </SECTION>

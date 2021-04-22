@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,8 +34,6 @@
 #include "osm-gps-map-track.h"
 #include "osm-gps-map-image.h"
 
-G_DEFINE_TYPE (OsmGpsMapImage, osm_gps_map_image, G_TYPE_OBJECT)
-
 enum
 {
     PROP_0,
@@ -58,6 +56,8 @@ struct _OsmGpsMapImagePrivate
     int             zorder;
     float           rotation;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMapImage, osm_gps_map_image, G_TYPE_OBJECT)
 
 static void
 osm_gps_map_image_get_property (GObject    *object,
@@ -149,8 +149,6 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    g_type_class_add_private (klass, sizeof (OsmGpsMapImagePrivate));
-
     object_class->get_property = osm_gps_map_image_get_property;
     object_class->set_property = osm_gps_map_image_set_property;
     object_class->dispose = osm_gps_map_image_dispose;
@@ -216,7 +214,7 @@ osm_gps_map_image_class_init (OsmGpsMapImageClass *klass)
 static void
 osm_gps_map_image_init (OsmGpsMapImage *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE ((self), OSM_TYPE_GPS_MAP_IMAGE, OsmGpsMapImagePrivate);
+    self->priv = osm_gps_map_image_get_instance_private (self);
 }
 
 OsmGpsMapImage *
@@ -232,7 +230,7 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
     int xoffset, yoffset;
     gdouble x,y;
 
-    g_return_if_fail (OSM_IS_GPS_MAP_IMAGE (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_IMAGE (object));
     priv = OSM_GPS_MAP_IMAGE(object)->priv;
 
     xoffset =  priv->xalign * priv->w;
@@ -240,7 +238,7 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
     x = rect->x - xoffset;
     y = rect->y - yoffset;
 
-     cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
+    cairo_translate(cr, x+(priv->w/2), y+(priv->h/2));
     cairo_rotate(cr, deg2rad(priv->rotation));
     cairo_translate(cr,  -(x+(priv->w/2)), -(y+(priv->h/2)));
 
@@ -258,14 +256,14 @@ osm_gps_map_image_draw (OsmGpsMapImage *object, cairo_t *cr, GdkRectangle *rect)
 const OsmGpsMapPoint *
 osm_gps_map_image_get_point(OsmGpsMapImage *object)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_IMAGE (object), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_IMAGE (object), NULL);
     return object->priv->pt;
 }
 
 gint
 osm_gps_map_image_get_zorder(OsmGpsMapImage *object)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_IMAGE (object), 0);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_IMAGE (object), 0);
     return object->priv->zorder;
 }
 

@@ -1,14 +1,18 @@
 AC_PREREQ([2.63])
 AC_INIT([osm-gps-map],
-        [1.1.0],
+        [1.2.1],
         [http://github.com/nzjrs/osm-gps-map/issues],
         [osm-gps-map])
+
+AX_IS_RELEASE([git-directory])
 
 AM_INIT_AUTOMAKE([1.11 foreign subdir-objects parallel-tests])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/osm-gps-map.h])
 AC_CONFIG_MACRO_DIR([m4])
+
+AX_REQUIRE_DEFINED([GTK_DOC_CHECK])
 
 AM_PROG_CC_C_O
 
@@ -48,15 +52,13 @@ AM_CONDITIONAL(OS_WIN32, [test $os_win32 = yes])
 # - If binary compatibility has been broken (eg removed or changed interfaces)
 #   change to C+1:0:0
 # - If the interface is the same as the previous version, change to C:R+1:A
-LT_VERSION_INFO=1:0:0
+LT_VERSION_INFO=2:1:1
 AC_SUBST(LT_VERSION_INFO)
 
 GOBJECT_INTROSPECTION_REQS=0.10.0
 GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_REQS])
 
 GTK_DOC_CHECK([1.12])
-
-GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([
 osmgpsmap-1.2.pc

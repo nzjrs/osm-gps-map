@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,8 +31,8 @@ G_BEGIN_DECLS
 #define OSM_TYPE_GPS_MAP_TRACK              osm_gps_map_track_get_type()
 #define OSM_GPS_MAP_TRACK(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrack))
 #define OSM_GPS_MAP_TRACK_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackClass))
-#define OSM_IS_GPS_MAP_TRACK(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_TRACK))
-#define OSM_IS_GPS_MAP_TRACK_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_TRACK))
+#define OSM_GPS_MAP_IS_TRACK(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP_TRACK))
+#define OSM_GPS_MAP_IS_TRACK_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP_TRACK))
 #define OSM_GPS_MAP_TRACK_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackClass))
 
 typedef struct _OsmGpsMapTrack OsmGpsMapTrack;
@@ -54,17 +54,28 @@ struct _OsmGpsMapTrackClass
 /**
  * osm_gps_map_track_get_type:
  *
- * Return value: (element-type GType): The type of the track
+ * Get track type
  *
+ * Return value: (element-type GType): The type of the track
  * Since: 0.7.0
  **/
 GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
 
+/**
+ * osm_gps_map_track_new:
+ *
+ * Create new track
+ *
+ * Returns: (transfer full): New track
+ * Since: 0.7.0
+ **/
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
 /**
  * osm_gps_map_track_add_point:
  * @track: (inout): a #OsmGpsMapTrack
- * @point: (in): point to add
+ * @point: (in): a #OsmGpsMapPoint point to add
+ *
+ * Add a point to track
  *
  * Since: 0.7.0
  **/
@@ -73,12 +84,31 @@ void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, cons
  * osm_gps_map_track_get_points:
  * @track: (in): a #OsmGpsMapTrack
  *
- * Returns: (element-type OsmGpsMapPoint) (transfer none): list of #OsmGpsMapPoint
+ * Get list of points in the track
  *
+ * Returns: (element-type OsmGpsMapPoint) (transfer none): list of #OsmGpsMapPoint
  * Since: 0.7.0
  **/
 GSList *            osm_gps_map_track_get_points    (OsmGpsMapTrack *track);
+/**
+ * osm_gps_map_track_set_color:
+ * @track: (in): a #OsmGpsMapTrack
+ * @color: (in): new track color
+ *
+ * Set track color
+ *
+ * Since: 1.1.0
+ **/
 void                osm_gps_map_track_set_color     (OsmGpsMapTrack *track, GdkRGBA *color);
+/**
+ * osm_gps_map_track_get_color:
+ * @track: (in): a #OsmGpsMapTrack
+ * @color: (out caller-allocates): track color
+ *
+ * Get track color
+ *
+ * Since: 0.7.0
+ **/
 void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
 
 /**
@@ -86,6 +116,9 @@ void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkR
  * @track: (in): a #OsmGpsMapTrack
  * @pos: Position of the point to remove
  *
+ * Remove track point at @pos position in point list
+ *
+ * Since: 1.1.0
  **/
 void                osm_gps_map_track_remove_point(OsmGpsMapTrack* track, int pos);
 
@@ -93,7 +126,10 @@ void                osm_gps_map_track_remove_point(OsmGpsMapTrack* track, int po
  * osm_gps_map_track_n_points:
  * @track: a #OsmGpsMapTrack
  *
- * Returns: the number of points of the track.
+ * Get number of points in the track
+ *
+ * Returns: the number of points in the track.
+ * Since: 1.1.0
  **/
 int                 osm_gps_map_track_n_points(OsmGpsMapTrack* track);
 
@@ -103,6 +139,9 @@ int                 osm_gps_map_track_n_points(OsmGpsMapTrack* track);
  * @np: a #OsmGpsMapPoint
  * @pos: Position for the point
  *
+ * Instert point @np at given postition @pos
+ *
+ * Since: 1.1.0
  **/
 void                osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos);
 
@@ -111,7 +150,10 @@ void                osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGps
  * @track: a #OsmGpsMapTrack
  * @pos: Position of the point to get
  *
- * Returns: a #OsmGpsMapPoint
+ * Get a #OsmGpsMapPoint point at @pos of given track
+ *
+ * Returns: (transfer none): a #OsmGpsMapPoint
+ * Since: 1.1.0
  **/
 OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
 
@@ -119,7 +161,10 @@ OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
  * osm_gps_map_track_get_length:
  * @track: (in): a #OsmGpsMapTrack
  *
+ * Get track length in meters
+ *
  * Returns: the length of the track in meters.
+ * Since: 1.1.0
  **/
 double              osm_gps_map_track_get_length(OsmGpsMapTrack* track);
 

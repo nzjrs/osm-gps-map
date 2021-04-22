@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,8 +27,8 @@ G_BEGIN_DECLS
 #define OSM_TYPE_GPS_MAP_OSD            (osm_gps_map_osd_get_type())
 #define OSM_GPS_MAP_OSD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj),  OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsd))
 #define OSM_GPS_MAP_OSD_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),   OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsdClass))
-#define OSM_IS_GPS_MAP_OSD(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj),  OSM_TYPE_GPS_MAP_OSD))
-#define OSM_IS_GPS_MAP_OSD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),   OSM_TYPE_GPS_MAP_OSD))
+#define OSM_GPS_MAP_IS_OSD(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj),  OSM_TYPE_GPS_MAP_OSD))
+#define OSM_GPS_MAP_IS_OSD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),   OSM_TYPE_GPS_MAP_OSD))
 #define OSM_GPS_MAP_OSD_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),   OSM_TYPE_GPS_MAP_OSD, OsmGpsMapOsdClass))
 
 typedef struct _OsmGpsMapOsd        OsmGpsMapOsd;
@@ -48,7 +48,7 @@ struct _OsmGpsMapOsdClass
 	GObjectClass parent_class;
 
 	/* vtable */
-	
+
 };
 
 GType               osm_gps_map_osd_get_type (void);

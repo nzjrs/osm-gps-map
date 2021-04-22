@@ -9,7 +9,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,8 +33,8 @@ G_BEGIN_DECLS
 #define OSM_TYPE_GPS_MAP             (osm_gps_map_get_type ())
 #define OSM_GPS_MAP(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), OSM_TYPE_GPS_MAP, OsmGpsMap))
 #define OSM_GPS_MAP_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
-#define OSM_IS_GPS_MAP(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP))
-#define OSM_IS_GPS_MAP_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP))
+#define OSM_GPS_MAP_IS_MAP(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OSM_TYPE_GPS_MAP))
+#define OSM_GPS_MAP_IS_MAP_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), OSM_TYPE_GPS_MAP))
 #define OSM_GPS_MAP_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), OSM_TYPE_GPS_MAP, OsmGpsMapClass))
 
 typedef struct _OsmGpsMapClass OsmGpsMapClass;
@@ -100,7 +100,7 @@ void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
 gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
 void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
-gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+gboolean        osm_gps_map_polygon_remove              (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
 void            osm_gps_map_gps_clear                   (OsmGpsMap *map);
 OsmGpsMapTrack *osm_gps_map_gps_get_track               (OsmGpsMap *map);

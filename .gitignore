@@ -56,3 +56,5 @@ docs/reference/libosmgpsmap.signals
 docs/reference/version.xml
 examples/editable_track
 examples/polygon
+m4/gnome-compiler-flags.m4
+m4/pkg.m4

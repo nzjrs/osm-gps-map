@@ -1,8 +1,23 @@
+Changes in 1.2.1
+  * Replace deprecated G_TYPE_INSTANCE_GET_PRIVATE and g_type_class_add_private (Patrick Salecker)
+  * Add python unit tests (Patrick Salecker)
+
+Changes in 1.2.0
+======================
+  * Change max allowed zoom for various maps (Rolf Eike Beer, Philipe Weyland)
+  * Add copyright notices to maps (Patrick Salecker)
+  * Add configureable user-agent property for apps to clearly identify themselves (Patrick Salecker)
+  * Remove dependency on gnome-common (Patrick Salecker, Hubert Kowalski)
+  * Add user_data support to points (Martijn Goedhart)
+  * Add breakable and shade_alpha properties to polygons (Samuel Cowen)
+  * Python example updated to Python3 (Felipe S. S. Schneider)
+  * Add Glade catalog file for better glade integration (Davide Gessa)
+
 Changes in 1.1.0
 ======================
   * Add polygon support Samuel Cowen <samuel.cowen89@gmail.com>
   * Add osm_gps_map_zoom_fit_bbox Martijn Goedhart <goedhart.martijn@gmail.com>
-  * Fix leaks oman Lebedev <lebedev.ri@gmail.com>
+  * Fix leaks Roman Lebedev <lebedev.ri@gmail.com>
   * Remove Yahoo (API break) Quentin Glidic <sardemff7+git@sardemff7.net>
   * Build fixes Quentin Glidic <sardemff7+git@sardemff7.net>
   * Fix image rotation Christoph Gysin <christoph.gysin@gmail.com>

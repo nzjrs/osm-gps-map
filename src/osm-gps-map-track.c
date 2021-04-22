@@ -7,7 +7,7 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,8 +33,6 @@
 
 #include "converter.h"
 #include "osm-gps-map-track.h"
-
-G_DEFINE_TYPE (OsmGpsMapTrack, osm_gps_map_track, G_TYPE_OBJECT)
 
 enum
 {
@@ -67,6 +65,8 @@ struct _OsmGpsMapTrackPrivate
     GdkRGBA color;
     gboolean editable;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE(OsmGpsMapTrack, osm_gps_map_track, G_TYPE_OBJECT)
 
 #define DEFAULT_R   (0.6)
 #define DEFAULT_G   (0)
@@ -145,7 +145,7 @@ osm_gps_map_track_set_property (GObject      *object,
 static void
 osm_gps_map_track_dispose (GObject *object)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (object));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (object));
     OsmGpsMapTrackPrivate *priv = OSM_GPS_MAP_TRACK(object)->priv;
 
     if (priv->track) {
@@ -167,8 +167,6 @@ static void
 osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-    g_type_class_add_private (klass, sizeof (OsmGpsMapTrackPrivate));
 
     object_class->get_property = osm_gps_map_track_get_property;
     object_class->set_property = osm_gps_map_track_set_property;
@@ -282,7 +280,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 static void
 osm_gps_map_track_init (OsmGpsMapTrack *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE((self), OSM_TYPE_GPS_MAP_TRACK, OsmGpsMapTrackPrivate);
+    self->priv = osm_gps_map_track_get_instance_private(self);
 
     self->priv->color.red = DEFAULT_R;
     self->priv->color.green = DEFAULT_G;
@@ -292,7 +290,7 @@ osm_gps_map_track_init (OsmGpsMapTrack *self)
 void
 osm_gps_map_track_add_point (OsmGpsMapTrack *track, const OsmGpsMapPoint *point)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     OsmGpsMapTrackPrivate *priv = track->priv;
 
     OsmGpsMapPoint *p = g_boxed_copy (OSM_TYPE_GPS_MAP_POINT, point);
@@ -331,14 +329,14 @@ OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos)
 GSList *
 osm_gps_map_track_get_points (OsmGpsMapTrack *track)
 {
-    g_return_val_if_fail (OSM_IS_GPS_MAP_TRACK (track), NULL);
+    g_return_val_if_fail (OSM_GPS_MAP_IS_TRACK (track), NULL);
     return track->priv->track;
 }
 
-void                
+void
 osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     track->priv->color.red = color->red;
     track->priv->color.green = color->green;
     track->priv->color.blue = color->blue;
@@ -347,7 +345,7 @@ osm_gps_map_track_set_color (OsmGpsMapTrack *track, GdkRGBA *color)
 void
 osm_gps_map_track_get_color (OsmGpsMapTrack *track, GdkRGBA *color)
 {
-    g_return_if_fail (OSM_IS_GPS_MAP_TRACK (track));
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
     color->red = track->priv->color.red;
     color->green = track->priv->color.green;
     color->blue = track->priv->color.blue;
@@ -360,14 +358,14 @@ osm_gps_map_track_get_length(OsmGpsMapTrack* track)
     double ret = 0;
     OsmGpsMapPoint* point_a = NULL;
     OsmGpsMapPoint* point_b = NULL;
-       
+
     while(points)
     {
         point_a = point_b;
         point_b = points->data;
         if(point_a)
         {
-            ret += acos(sin(point_a->rlat)*sin(point_b->rlat) 
+            ret += acos(sin(point_a->rlat)*sin(point_b->rlat)
                     + cos(point_a->rlat)*cos(point_b->rlat)*cos(point_b->rlon-point_a->rlon)) * 6371109; //the mean raduis of earth
         }
         points = points->next;
