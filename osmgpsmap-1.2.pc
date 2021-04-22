@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: osm-gps-map
+Description: Moving map widget using openstreet map data
+Version: 1.2.0
+Requires: gtk+-3.0 libsoup-2.4
+Libs: -L${libdir} -losmgpsmap-1.2
+Cflags: -I${includedir}/osmgpsmap-1.2
