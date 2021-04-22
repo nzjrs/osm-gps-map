@@ -59,7 +59,7 @@ GTK_DOC_CHECK([1.12])
 GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([
-osmgpsmap-1.0.pc
+osmgpsmap-1.2.pc
 Makefile
 src/Makefile
 docs/Makefile

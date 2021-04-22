@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-lib_LTLIBRARIES = libosmgpsmap-1.0.la
+lib_LTLIBRARIES = libosmgpsmap-1.2.la
 
 OSMGPSMAP_CFLAGS =          \
 	$(GLIB_CFLAGS)          \
@@ -67,7 +67,7 @@ libosmgpsmap_1_0_la_SOURCES =   \
 	$(sources_private_h)    \
 	$(sources_c)
 
-libosmgpsmapincdir = $(includedir)/osmgpsmap-1.0
+libosmgpsmapincdir = $(includedir)/osmgpsmap-1.2
 libosmgpsmapinc_HEADERS = $(sources_public_h)
 
 ## Misc
@@ -82,13 +82,13 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir) --includedir=$(builddir)
 if HAVE_INTROSPECTION
 introspection_sources = $(sources_c) $(sources_public_h)
 
-OsmGpsMap-1.0.gir: libosmgpsmap-1.0.la
+OsmGpsMap-1.2.gir: libosmgpsmap-1.2.la
 OsmGpsMap_1_0_gir_INCLUDES = GObject-2.0 Gtk-3.0
 OsmGpsMap_1_0_gir_CFLAGS = $(OSMGPSMAP_CFLAGS) -I$(srcdir) -I$(builddir)
-OsmGpsMap_1_0_gir_LIBS = libosmgpsmap-1.0.la
+OsmGpsMap_1_0_gir_LIBS = libosmgpsmap-1.2.la
 OsmGpsMap_1_0_gir_FILES = $(introspection_sources)
 OsmGpsMap_1_0_gir_SCANNERFLAGS = --identifier-prefix=OsmGps --c-include "osm-gps-map.h"
-INTROSPECTION_GIRS += OsmGpsMap-1.0.gir
+INTROSPECTION_GIRS += OsmGpsMap-1.2.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
