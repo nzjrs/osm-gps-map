@@ -1,1 +1,0 @@
-dnl -*- mode: autoconf -*-
