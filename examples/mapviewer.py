@@ -32,7 +32,7 @@ Gdk.threads_init()
 from gi.repository import OsmGpsMap as osmgpsmap
 print "using library: %s (version %s)" % (osmgpsmap.__file__, osmgpsmap._version)
 
-assert osmgpsmap._version == "1.0"
+assert osmgpsmap._version == "1.2"
 
 class DummyMapNoGpsPoint(osmgpsmap.Map):
     def do_draw_gps_point(self, drawable):
