@@ -22,7 +22,7 @@ import gi
 
 gi.require_version("Gdk", "3.0")
 gi.require_version("Gtk", "3.0")
-gi.require_version("OsmGpsMap", "1.0")
+gi.require_version("OsmGpsMap", "1.2")
 
 from gi.repository import (
     Gdk,
@@ -35,6 +35,7 @@ from gi.repository import (
 
 print(f"using library: {osmgpsmap.__file__} (version {osmgpsmap._version})")
 
+assert osmgpsmap._version == "1.2"
 
 class DummyMapNoGpsPoint(osmgpsmap.Map):
     def do_draw_gps_point(self, drawable):

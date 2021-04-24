@@ -61,7 +61,7 @@ GOBJECT_INTROSPECTION_CHECK([$GOBJECT_INTROSPECTION_REQS])
 GTK_DOC_CHECK([1.12])
 
 AC_OUTPUT([
-osmgpsmap-1.0.pc
+osmgpsmap-1.2.pc
 Makefile
 src/Makefile
 docs/Makefile

@@ -14,7 +14,7 @@ doc_DATA =                                      \
 	NEWS
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = osmgpsmap-1.0.pc
+pkgconfig_DATA = osmgpsmap-1.2.pc
 
 DISTCLEANFILES = gtk-doc.make
 

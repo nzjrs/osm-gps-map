@@ -4,7 +4,7 @@ import cairo
 import io
 
 import gi
-gi.require_version('OsmGpsMap', '1.0')
+gi.require_version('OsmGpsMap', '1.2')
 
 from gi.repository import OsmGpsMap
 from gi.repository import Gdk, GdkPixbuf, Gtk
