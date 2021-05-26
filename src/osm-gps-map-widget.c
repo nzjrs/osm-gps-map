@@ -150,15 +150,6 @@
 #define MAX_DOWNLOAD_TILES          10000
 #define DOT_RADIUS                  4.0
 
-#ifndef SOUP_CHECK_VERSION
-// SOUP_CHECK_VERSION was introduced only in 2.42
-#define SOUP_CHECK_VERSION(x, y, z) false
-#endif
-
-#if !SOUP_CHECK_VERSION(2, 42, 0)
-#define SOUP_OLD_SESSION
-#endif
-
 struct _OsmGpsMapPrivate
 {
     GHashTable *tile_queue;
@@ -1680,18 +1671,11 @@ osm_gps_map_init (OsmGpsMap *object)
 
 
     /* set the user agent */
-#ifdef SOUP_OLD_SESSION
-    // libsoup pre 2.42.0 had explicit syn/async session
-    priv->soup_session =
-        soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
-                                            USER_AGENT, NULL);
-#else
     // lisoup since 2.42.0 has universal session, only methods can be sync/async
     // and we use async
     priv->soup_session =
         soup_session_new_with_options(SOUP_SESSION_USER_AGENT,
                                             USER_AGENT, NULL);
-#endif
 
     /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
        must free the key, the soup session unrefs the message */

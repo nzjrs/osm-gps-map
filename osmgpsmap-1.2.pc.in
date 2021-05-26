@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: @PACKAGE_NAME@
 Description: Moving map widget using openstreet map data
 Version: @PACKAGE_VERSION@
-Requires: gtk+-3.0 libsoup-2.4
+Requires: gtk+-3.0 libsoup-2.4 >= 2.42
 Libs: -L${libdir} -losmgpsmap-1.2
 Cflags: -I${includedir}/osmgpsmap-1.2

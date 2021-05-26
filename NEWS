@@ -1,6 +1,10 @@
 Changes in 1.2.1
   * Replace deprecated G_TYPE_INSTANCE_GET_PRIVATE and g_type_class_add_private (Patrick Salecker)
   * Add python unit tests (Patrick Salecker)
+  * Fix python example addressing requiring map source (Jochen Sprickerhof)
+  * Fix setting custom map source (Patrick Salecker)
+  * Update catalog files (Davide Gessa)
+  * Make libsoup minimum version 2.42 (Hubert Kowalski)
 
 Changes in 1.2.0
 ======================
