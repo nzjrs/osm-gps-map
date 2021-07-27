@@ -35,6 +35,8 @@ osm_gps_map_source_get_friendly_name(OsmGpsMapSource_t source)
             return "OpenAerialMap";
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
             return "OpenCycleMap";
+        case OSM_GPS_MAP_SOURCE_OPENTOPOMAP: 
+            return "OpenTopoMap";
         case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
             return "Public Transport";
         case OSM_GPS_MAP_SOURCE_OSMC_TRAILS:
@@ -75,6 +77,8 @@ osm_gps_map_source_get_copyright(OsmGpsMapSource_t source)
             return "Maps © ÖPNVKarte, Data © OpenStreetMap contributors";
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             return "Maps © Maps-For-Free";
+        case OSM_GPS_MAP_SOURCE_OPENTOPOMAP:
+            return "© OpenTopoMap (CC-BY-SA)";
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
             return "Map provided by Google";
         case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
@@ -124,6 +128,8 @@ osm_gps_map_source_get_repo_uri(OsmGpsMapSource_t source)
             return NULL;
         case OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE:
             return "https://maps-for-free.com/layer/relief/z#Z/row#Y/#Z_#X-#Y.jpg";
+        case OSM_GPS_MAP_SOURCE_OPENTOPOMAP:
+            return "https://a.tile.opentopomap.org/#Z/#X/#Y.png";
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
             return "http://mt#R.google.com/vt/lyrs=m&hl=en&x=#X&s=&y=#Y&z=#Z";
         case OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID:
@@ -153,6 +159,7 @@ osm_gps_map_source_get_image_format(OsmGpsMapSource_t source)
         case OSM_GPS_MAP_SOURCE_OPENCYCLEMAP:
         case OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT:
         case OSM_GPS_MAP_SOURCE_OSMC_TRAILS:
+        case OSM_GPS_MAP_SOURCE_OPENTOPOMAP:
             return "png";
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
@@ -191,6 +198,7 @@ osm_gps_map_source_get_max_zoom(OsmGpsMapSource_t source)
             return OSM_MAX_ZOOM;
         case OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER:
         case OSM_GPS_MAP_SOURCE_OPENAERIALMAP:
+        case OSM_GPS_MAP_SOURCE_OPENTOPOMAP:
             return 17;
         case OSM_GPS_MAP_SOURCE_GOOGLE_STREET:
         case OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE:
