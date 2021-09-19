@@ -1172,6 +1172,10 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
     map_y0 = priv->map_y - EXTRA_BORDER;
 
     int last_x = 0, last_y = 0;
+    int x_pi = lon2pixel(priv->map_zoom, M_PI) - map_x0;
+    int x_minus_pi = lon2pixel(priv->map_zoom, - M_PI) - map_x0;
+    int double_pi = x_pi - x_minus_pi;
+    float last_lon;
     for(pt = points; pt != NULL; pt = pt->next)
     {
         OsmGpsMapPoint *tp = pt->data;
@@ -1181,7 +1185,29 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
 
         /* first time through loop */
         if (pt == points)
+        {
             cairo_move_to(cr, x, y);
+        }
+        else if (fabs(tp->rlon - last_lon) > M_PI && x != last_x)
+        {
+            /* instead of drawing to (x, y), draw a first segment to the date change line,
+               and a second segment from the other date change line to (x, y) */
+            int interm_y = last_y + (y - last_y) / ((x + double_pi) - last_x) * (x_pi - last_x);
+            if (last_lon > 0)
+            {
+                cairo_line_to(cr, x_pi, interm_y);
+                cairo_stroke(cr);
+                cairo_move_to(cr, x_minus_pi, interm_y);
+            }
+            else
+            {
+                cairo_line_to(cr, x_minus_pi, interm_y);
+                cairo_stroke(cr);
+                cairo_move_to(cr, x_pi, interm_y);
+            }
+            max_x = x_pi;
+            min_x = x_minus_pi;
+        }
 
         cairo_line_to(cr, x, y);
         cairo_stroke(cr);
@@ -1208,6 +1234,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
 
         last_x = x;
         last_y = y;
+        last_lon = tp->rlon;
     }
 
     gtk_widget_queue_draw_area (
