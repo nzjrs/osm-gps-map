@@ -1192,15 +1192,19 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
         {
             /* instead of drawing to (x, y), draw a first segment to the date change line,
                and a second segment from the other date change line to (x, y) */
-            int interm_y = last_y + (y - last_y) / ((x + double_pi) - last_x) * (x_pi - last_x);
+            int interm_y;
             if (last_lon > 0)
             {
+                /* tp->rlon is < 0 */
+                interm_y = (int)(last_y + (float)(y - last_y) / (float)((x + double_pi) - last_x) * (float)(x_pi - last_x));
                 cairo_line_to(cr, x_pi, interm_y);
                 cairo_stroke(cr);
                 cairo_move_to(cr, x_minus_pi, interm_y);
             }
             else
             {
+                /* tp->rlon is > 0 */
+                interm_y = (int)(last_y + (float)(y - last_y) / (float)((x - double_pi) - last_x) * (float)(x_minus_pi - last_x));
                 cairo_line_to(cr, x_minus_pi, interm_y);
                 cairo_stroke(cr);
                 cairo_move_to(cr, x_pi, interm_y);
