@@ -56,6 +56,13 @@ static GOptionEntry debug_entries[] =
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 static FILE *points_file = NULL;
+static float home_lat = -43.5326, home_lon = 172.6362;
+
+static void set_home(float lat, float lon)
+{
+    home_lat = lat;
+    home_lon = lon;
+}
 
 static gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -86,12 +93,14 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                  lat,
                                  lon,
                                  g_random_double_range(0,360));
+            set_home(lat, lon);
         }
         if (middle_button) {
             g_last_image = osm_gps_map_image_add (map,
                                                   lat,
                                                   lon,
                                                   g_star_image);
+            set_home(lat, lon);
         }
         if (right_button) {
             osm_gps_map_track_add_point(othertrack, &coord);
@@ -140,7 +149,7 @@ static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    osm_gps_map_set_center_and_zoom(map, -43.5326,172.6362,12);
+    osm_gps_map_set_center_and_zoom(map, home_lat, home_lon, 12);
     return FALSE;
 }
 
@@ -233,6 +242,7 @@ add_points_from_file (OsmGpsMap *map)
         float lat, lon;
         if (sscanf(coords, "%f %f", &lat, &lon) == 2) {
             osm_gps_map_gps_add (map, lat, lon, 0);
+            set_home(lat, lon);
         }
     }
     free(coords);
