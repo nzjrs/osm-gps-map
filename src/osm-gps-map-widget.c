@@ -1994,9 +1994,6 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                priv->map_source >= OSM_GPS_MAP_SOURCE_NULL &&
                priv->map_source <= OSM_GPS_MAP_SOURCE_LAST) {
 
-                if (!priv->is_constructed)
-                    g_critical("Map source setup called twice");
-
                 /* we now have to switch the entire map */
                 osm_gps_map_setup(map);
 
