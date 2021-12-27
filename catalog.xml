@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glade-catalog name="osmgpsmap" library="osmgpsmap-1.2" depends="gtk+" book="osm-gps-map">
+<glade-catalog name="osmgpsmap" library="osmgpsmap-1.0" depends="gtk+" book="osm-gps-map">
     <glade-widget-classes>
         <glade-widget-class name="OsmGpsMap" generic-name="map" title="Map">
             <signals>

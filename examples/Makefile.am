@@ -28,7 +28,7 @@ mapviewer_CFLAGS =          \
 mapviewer_LDADD =           \
     $(OSMGPSMAP_LIBS)       \
     $(GTHREAD_LIBS)         \
-    $(top_builddir)/src/libosmgpsmap-1.2.la
+    $(top_builddir)/src/libosmgpsmap-1.0.la
 
 
 polygon_SOURCES =         \
@@ -44,7 +44,7 @@ polygon_CFLAGS =          \
 polygon_LDADD =           \
     $(OSMGPSMAP_LIBS)       \
     $(GTHREAD_LIBS)         \
-    $(top_builddir)/src/libosmgpsmap-1.2.la
+    $(top_builddir)/src/libosmgpsmap-1.0.la
 
 
 editable_track_SOURCES =         \
@@ -60,7 +60,7 @@ editable_track_CFLAGS =          \
 editable_track_LDADD =           \
     $(OSMGPSMAP_LIBS)       \
     $(GTHREAD_LIBS)         \
-    $(top_builddir)/src/libosmgpsmap-1.2.la
+    $(top_builddir)/src/libosmgpsmap-1.0.la
 
 ## Misc
 EXTRA_DIST = poi.png mapviewer.ui mapviewer.js README
