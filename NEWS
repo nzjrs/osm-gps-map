@@ -5,6 +5,8 @@ Changes in 1.2.1
   * Fix setting custom map source (Patrick Salecker)
   * Update catalog files (Davide Gessa)
   * Make libsoup minimum version 2.42 (Hubert Kowalski)
+  * Manage segments across date change line (Paolo Benve)
+  * Remove unnecessary warning about 2nd setup (Tormod Volden)
 
 Changes in 1.2.0
 ======================
