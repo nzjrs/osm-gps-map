@@ -196,6 +196,9 @@ struct _OsmGpsMapPrivate
     char *image_format;
     int uri_format;
 
+    //callback for map tiles
+    void (*map_tile_callback)(int zoom, int x, int y, void (*)(GdkPixbuf *, gpointer), gpointer);
+
     //gps tracking state
     GSList *trip_history;
     float gps_heading;
@@ -310,6 +313,7 @@ enum
     PROP_GPS_POINT_R1,
     PROP_GPS_POINT_R2,
     PROP_MAP_SOURCE,
+    PROP_MAP_TILE_CALLBACK,
     PROP_IMAGE_FORMAT,
     PROP_DRAG_LIMIT,
     PROP_AUTO_CENTER_THRESHOLD,
@@ -739,6 +743,88 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, cairo_t *cr, int offset
     }
 }
 
+static void
+osm_gps_map_tile_callback_complete (GdkPixbuf *pixbuf, gpointer user_data)
+{
+    OsmTileDownload *dl = (OsmTileDownload *)user_data;
+    OsmGpsMap *map = OSM_GPS_MAP(dl->map);
+    OsmGpsMapPrivate *priv = map->priv;
+
+    if (G_LIKELY (pixbuf)) {
+        /* save tile into cachedir if one has been specified */
+        if (priv->cache_dir) {
+            if (g_mkdir_with_parents(dl->folder,0700) == 0) {
+                char *extension = strrchr (dl->filename, '.');
+                gdk_pixbuf_save (pixbuf, dl->filename, extension+1, NULL, NULL);
+
+                g_debug("Wrote tile to %s", dl->filename);
+            } else {
+                g_warning("Error creating tile download directory: %s", dl->folder);
+            }
+        }
+
+        if (dl->redraw) {
+            /* Store the tile into the cache */
+            OsmCachedTile *tile = g_slice_new (OsmCachedTile);
+            tile->pixbuf = pixbuf;
+            tile->redraw_cycle = priv->redraw_cycle;
+            /* if the tile is already in the cache (it could be one
+             * rendered from another zoom level), it will be
+             * overwritten */
+            g_hash_table_insert (priv->tile_cache, dl->filename, tile);
+            /* NULL-ify dl->filename so that it won't be freed, as
+             * we are using it as a key in the hash table */
+            dl->filename = NULL;
+
+            osm_gps_map_map_redraw_idle (map);
+        }
+    }
+    g_hash_table_remove(priv->tile_queue, dl->uri);
+    g_object_notify(G_OBJECT(map), "tiles-queued");
+
+    g_free(dl->folder);
+    g_free(dl->filename);
+    g_free(dl);
+}
+
+static void
+osm_gps_map_callback_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw)
+{
+    OsmGpsMapPrivate *priv = map->priv;
+    OsmTileDownload *dl = g_new0(OsmTileDownload,1);
+
+    //calculate the uri to download
+    dl->uri = replace_map_uri(map, priv->repo_uri, zoom, x, y);
+
+    //check the tile has not already been queued for retrieval,
+    //or has been attempted, and its missing
+    if (g_hash_table_lookup_extended(priv->tile_queue, dl->uri, NULL, NULL) ||
+        g_hash_table_lookup_extended(priv->missing_tiles, dl->uri, NULL, NULL) )
+    {
+        g_debug("Tile already in progress (or missing)");
+        g_free(dl->uri);
+        g_free(dl);
+    } else {
+        dl->folder = g_strdup_printf("%s%c%d%c%d%c",
+                                     priv->cache_dir, G_DIR_SEPARATOR,
+                                     zoom, G_DIR_SEPARATOR,
+                                     x, G_DIR_SEPARATOR);
+        dl->filename = g_strdup_printf("%s%d.%s",
+                                       dl->folder,
+                                       y,
+                                       priv->image_format);
+        dl->map = map;
+        dl->redraw = redraw;
+
+        g_debug("retrieve tile: %d,%d z:%d\n\t%s --> %s", x, y, zoom, dl->uri, dl->filename);
+
+        g_hash_table_insert (priv->tile_queue, dl->uri, NULL);
+        g_object_notify (G_OBJECT (map), "tiles-queued");
+
+        (priv->map_tile_callback)(zoom, x, y, osm_gps_map_tile_callback_complete, dl);
+    }
+}
+
 #define MSG_RESPONSE_BODY(a)    ((a)->response_body->data)
 #define MSG_RESPONSE_LEN(a)     ((a)->response_body->length)
 #define MSG_RESPONSE_LEN_FORMAT "%"G_GOFFSET_FORMAT
@@ -1075,6 +1161,8 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
     } else {
         if (priv->map_auto_download_enabled) {
             osm_gps_map_download_tile(map, zoom, x, y, TRUE);
+        } else if (priv->map_tile_callback != NULL) {
+            osm_gps_map_callback_tile(map, zoom, x, y, TRUE);
         }
 
         /* try to render the tile by scaling cached tiles from other zoom
@@ -1719,6 +1807,8 @@ osm_gps_map_init (OsmGpsMap *object)
 
     priv->map_source = 0;
 
+    priv->map_tile_callback = NULL;
+
     priv->keybindings_enabled = FALSE;
     for (i = 0; i < OSM_GPS_MAP_KEY_MAX; i++)
         priv->keybindings[i] = 0;
@@ -2052,6 +2142,9 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 osm_gps_map_setup(map);
 
             } } break;
+        case PROP_MAP_TILE_CALLBACK:
+            priv->map_tile_callback = g_value_get_pointer (value);
+            break;
         case PROP_IMAGE_FORMAT:
             g_free(priv->image_format);
             priv->image_format = g_value_dup_string (value);
@@ -3001,6 +3094,13 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
                                                        G_MAXINT,    /* maximum property value */
                                                        0,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class,
+                                     PROP_MAP_TILE_CALLBACK,
+                                     g_param_spec_pointer ("map-tile-callback",
+                                                           "map tile callback",
+                                                           "The map tile callback function",
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class,
                                      PROP_IMAGE_FORMAT,
