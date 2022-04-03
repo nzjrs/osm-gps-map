@@ -313,7 +313,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            0,
 	                            NULL,
 	                            NULL,
-	                            g_cclosure_marshal_VOID__VOID,
+	                            g_cclosure_marshal_VOID__INT,
 	                            G_TYPE_NONE,
 	                            1,
 	                            G_TYPE_INT);
@@ -354,7 +354,7 @@ osm_gps_map_track_class_init (OsmGpsMapTrackClass *klass)
 	                            g_cclosure_marshal_VOID__POINTER,
 	                            G_TYPE_NONE,
 	                            1,
-	                            OSM_TYPE_GPS_MAP_POINT | G_SIGNAL_TYPE_STATIC_SCOPE);
+	                            G_TYPE_POINTER | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
