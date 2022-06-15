@@ -18,6 +18,7 @@ libosmgpsmap_1_0_la_CFLAGS =    \
     $(WARN_CFLAGS)          \
     $(DISABLE_DEPRECATED)   \
     $(OSMGPSMAP_CFLAGS)     \
+        -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED \
 	-DG_LOG_DOMAIN=\"OsmGpsMap\"
 
 if OS_WIN32

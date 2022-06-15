@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 OSMGPSMAP_CFLAGS =          \
+    -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED \
     $(GLIB_CFLAGS)          \
     $(GTK_CFLAGS)           \
     $(CAIRO_CFLAGS)         \
