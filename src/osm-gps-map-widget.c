@@ -644,11 +644,7 @@ osm_gps_map_print_images (OsmGpsMap *map, cairo_t *cr)
         min_y = MIN(loc.y - loc.height, min_y);
     }
 
-    gtk_widget_queue_draw_area (
-                                GTK_WIDGET(map),
-                                min_x + EXTRA_BORDER, min_y + EXTRA_BORDER,
-                                max_x + EXTRA_BORDER, max_y + EXTRA_BORDER);
-
+    gtk_widget_queue_draw (GTK_WIDGET(map));
 }
 
 static void
@@ -711,11 +707,7 @@ osm_gps_map_draw_gps_point (OsmGpsMap *map, cairo_t *cr)
         cairo_stroke(cr);
     }
 
-    gtk_widget_queue_draw_area (GTK_WIDGET(map),
-                                x-mr,
-                                y-mr,
-                                mr*2,
-                                mr*2);
+    gtk_widget_queue_draw (GTK_WIDGET(map));
 }
 
 static void
@@ -1350,12 +1342,7 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
         last_lon = tp->rlon;
     }
 
-    gtk_widget_queue_draw_area (
-        GTK_WIDGET(map),
-        min_x - lw,
-        min_y - lw,
-        max_x + (lw * 2),
-        max_y + (lw * 2));
+    gtk_widget_queue_draw (GTK_WIDGET(map));
 
     cairo_stroke(cr);
 }
@@ -1505,13 +1492,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
         cairo_fill(cr);
     }
 
-    gtk_widget_queue_draw_area (
-        GTK_WIDGET(map),
-        min_x - lw,
-        min_y - lw,
-        max_x + (lw * 2),
-        max_y + (lw * 2));
-
+    gtk_widget_queue_draw (GTK_WIDGET(map));
 }
 
 static void
