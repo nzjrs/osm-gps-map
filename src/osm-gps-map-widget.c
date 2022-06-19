@@ -2560,7 +2560,6 @@ osm_gps_map_idle_expose (GtkWidget *widget)
 static gboolean
 osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data)
 {
-    GdkModifierType state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER(self));
     OsmGpsMap *map = OSM_GPS_MAP(gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     OsmGpsMapPrivate *priv = map->priv;
 
@@ -2590,7 +2589,7 @@ osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y,
     }
 
     // are we being dragged
-    if (!(state & GDK_BUTTON1_MASK))
+    if (!(0 & GDK_BUTTON1_MASK))
         return FALSE;
 
     if (priv->drag_counter < 0)
