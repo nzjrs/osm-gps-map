@@ -2708,7 +2708,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->configure_event = osm_gps_map_configure;
     widget_class->button_press_event = osm_gps_map_button_press;
     widget_class->button_release_event = osm_gps_map_button_release;
-    widget_class->scroll_event = osm_gps_map_scroll_event;
     //widget_class->get_preferred_width = osm_gps_map_get_preferred_width;
     //widget_class->get_preferred_height = osm_gps_map_get_preferred_height;
 
