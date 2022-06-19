@@ -1837,7 +1837,7 @@ osm_gps_map_init (OsmGpsMap *object)
 
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
 
-	GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+    GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
 
     gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
