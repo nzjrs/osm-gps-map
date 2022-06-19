@@ -2275,11 +2275,11 @@ osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy
     c_lat = rad2deg(map->priv->center_rlat);
     c_lon = rad2deg(map->priv->center_rlon);
 
-    if ((dy > 0) && (map->priv->map_zoom < map->priv->max_zoom)) {
+    if ((dy < 0) && (map->priv->map_zoom < map->priv->max_zoom)) {
         lat = c_lat + ((lat - c_lat)/2.0);
         lon = c_lon + ((lon - c_lon)/2.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom+1);
-    } else if ((dy < 0) && (map->priv->map_zoom > map->priv->min_zoom)) {
+    } else if ((dy > 0) && (map->priv->map_zoom > map->priv->min_zoom)) {
         lat = c_lat + ((c_lat - lat)*1.0);
         lon = c_lon + ((c_lon - lon)*1.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom-1);
