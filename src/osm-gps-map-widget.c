@@ -1674,13 +1674,14 @@ maybe_autocenter_map (OsmGpsMap *map)
 }
 
 static gboolean
-on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *priv)
+on_window_key_press (GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, OsmGpsMap *map)
 {
     int i;
     int step;
     gboolean handled;
     GtkAllocation allocation;
-    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    GtkWidget *widget = GTK_WIDGET(map);
+    OsmGpsMapPrivate *priv = map->priv;
 
     /* if no keybindings are set, let the app handle them... */
     if (!priv->keybindings_enabled)
@@ -1693,7 +1694,7 @@ on_window_key_press(GtkWidget *widget, GdkEventKey *event, OsmGpsMapPrivate *pri
     /* the map handles some keys on its own */
     for (i = 0; i < OSM_GPS_MAP_KEY_MAX; i++) {
         /* not the key we have a binding for */
-        if (map->priv->keybindings[i] != event->keyval)
+        if (map->priv->keybindings[i] != keyval)
             continue;
 
         switch(i) {
@@ -1836,6 +1837,8 @@ osm_gps_map_init (OsmGpsMap *object)
     gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
 #endif
 
+       GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
+
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
 
     GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
@@ -1845,8 +1848,7 @@ osm_gps_map_init (OsmGpsMap *object)
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
 
     /* setup signal handlers */
-    g_signal_connect(object, "key_press_event",
-                    G_CALLBACK(on_window_key_press), priv);
+    g_signal_connect (controller_key, "key-pressed", G_CALLBACK (on_window_key_press), priv);
     g_signal_connect (controller_scroll, "scroll", G_CALLBACK (osm_gps_map_scroll_event), priv);
     g_signal_connect (controller_motion, "motion", G_CALLBACK (osm_gps_map_motion_notify), priv);
 }
