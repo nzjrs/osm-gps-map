@@ -108,7 +108,7 @@ G_DEFINE_TYPE_WITH_CODE (OsmGpsMapOsd, osm_gps_map_osd, G_TYPE_OBJECT,
 static void                 osm_gps_map_osd_render       (OsmGpsMapLayer *osd, OsmGpsMap *map);
 static void                 osm_gps_map_osd_draw         (OsmGpsMapLayer *osd, OsmGpsMap *map, cairo_t *cr);
 static gboolean             osm_gps_map_osd_busy         (OsmGpsMapLayer *osd);
-static gboolean             osm_gps_map_osd_button_press (OsmGpsMapLayer *osd, OsmGpsMap *map, GdkEventButton *event);
+static gboolean             osm_gps_map_osd_button_press (OsmGpsMapLayer *osd, OsmGpsMap *map, GtkGestureSingle *event, gint n_press, gdouble x_axis, gdouble y_axis, gpointer user_data);
 
 static void                 scale_render                         (OsmGpsMapOsd *self, OsmGpsMap *map);
 static void                 scale_draw                           (OsmGpsMapOsd *self, GtkAllocation *allocation, cairo_t *cr);
@@ -538,23 +538,25 @@ osm_gps_map_osd_busy (OsmGpsMapLayer *osd)
 static gboolean
 osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
                                       OsmGpsMap *map,
-                                      GdkEventButton *event)
+                                      GtkGestureSingle *event, gint n_press, gdouble x_axis, gdouble y_axis, gpointer user_data)
 {
     gboolean handled = FALSE;
     OsdControlPress_t but = OSD_NONE;
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
+    GdkModifierType state;
 
     g_return_val_if_fail(OSM_GPS_MAP_IS_OSD(osd), FALSE);
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
+    state = gtk_gesture_single_get_current_button (event);
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
-    if ((event->button == 1) && (event->type == GDK_BUTTON_PRESS)) {
-        gint mx = event->x - priv->osd_x;
-        gint my = event->y - priv->osd_y;
+    if (state == 1) {
+        gint mx = x_axis - priv->osd_x;
+        gint my = y_axis - priv->osd_y;
 
         if(priv->osd_x < 0)
             mx -= (allocation.width - priv->osd_w);

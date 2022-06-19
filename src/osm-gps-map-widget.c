@@ -330,6 +330,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  */
 static gboolean on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
 static gboolean osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy, gpointer user_data);
+static gboolean osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
+static gboolean osm_gps_map_button_release (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
 static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
 
 /*
@@ -1840,6 +1842,9 @@ osm_gps_map_init (OsmGpsMap *object)
 
     GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
 
+    GtkGesture* controller_button = gtk_gesture_multi_press_new (GTK_WIDGET (object));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller_button), 0);
+
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
 
     GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
@@ -1852,6 +1857,8 @@ osm_gps_map_init (OsmGpsMap *object)
     g_signal_connect (controller_key, "key-pressed", G_CALLBACK (on_window_key_press), priv);
     g_signal_connect (controller_scroll, "scroll", G_CALLBACK (osm_gps_map_scroll_event), priv);
     g_signal_connect (controller_motion, "motion", G_CALLBACK (osm_gps_map_motion_notify), priv);
+    g_signal_connect (controller_button, "pressed", G_CALLBACK (osm_gps_map_button_press), priv);
+    g_signal_connect (controller_button, "released", G_CALLBACK (osm_gps_map_button_release), priv);
 }
 
 static char*
@@ -2295,9 +2302,9 @@ osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy
 }
 
 static gboolean
-osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
+osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
 {
-    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
     OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->layers)
@@ -2306,16 +2313,17 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
         for(list = priv->layers; list != NULL; list = list->next)
         {
             OsmGpsMapLayer *layer = list->data;
-            if (osm_gps_map_layer_button_press(layer, map, event))
+			//printf ("call osm_gps_map_layer_button_press\n");
+            if (osm_gps_map_layer_button_press (layer, map, GTK_GESTURE_SINGLE (self), n_press, x, y, user_data))
                 return FALSE;
         }
     }
 
-    if(event->button == 1)
+    if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (self)) == 1)
     {
         GSList* tracks = priv->tracks;
-        priv->clicked_x = event->x;
-        priv->clicked_y = event->y;
+        priv->clicked_x = (int)x;
+        priv->clicked_y = (int)y;
         while(tracks)
         {
             OsmGpsMapTrack* track = tracks->data;
@@ -2336,7 +2344,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     OsmGpsMapPoint* point = (OsmGpsMapPoint*)points->data;
                     osm_gps_map_convert_geographic_to_screen(map, point, &cx, &cy);
 
-                    float dist_sqrd = (event->x - cx) * (event->x-cx) + (event->y-cy) * (event->y-cy);
+                    float dist_sqrd = (x - cx) * (x - cx) + (y - cy) * (y - cy);
                     if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                     {
                         priv->is_button_down = TRUE;
@@ -2369,7 +2377,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     {
                         int ptx = (last_x+cx)/2.0;
                         int pty = (last_y+cy)/2.0;
-                        dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
+                        dist_sqrd = (x - ptx) * (x - ptx) + (y - pty) * (y - pty);
                         if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
@@ -2421,7 +2429,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     OsmGpsMapPoint* point = (OsmGpsMapPoint*)points->data;
                     osm_gps_map_convert_geographic_to_screen(map, point, &cx, &cy);
 
-                    float dist_sqrd = (event->x - cx) * (event->x-cx) + (event->y-cy) * (event->y-cy);
+                    float dist_sqrd = (x - cx) * (x - cx) + (y - cy) * (y - cy);
                     if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                     {
                         priv->is_button_down = TRUE;
@@ -2454,7 +2462,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     {
                         int ptx = (last_x+cx)/2.0;
                         int pty = (last_y+cy)/2.0;
-                        dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
+                        dist_sqrd = (x - ptx) * (x - ptx) + (y - pty) * (y - pty);
                         if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
@@ -2484,7 +2492,7 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 
                 int ptx = (last_x+first_x)/2.0;
                 int pty = (last_y+first_y)/2.0;
-                float dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
+                float dist_sqrd = (x - ptx) * (x - ptx) + (y - pty) * (y - pty);
                 if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                 {
                     OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
@@ -2507,8 +2515,8 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 
     priv->is_button_down = TRUE;
     priv->drag_counter = 0;
-    priv->drag_start_mouse_x = (int) event->x;
-    priv->drag_start_mouse_y = (int) event->y;
+    priv->drag_start_mouse_x = (int) x;
+    priv->drag_start_mouse_y = (int) y;
     priv->drag_start_map_x = priv->map_x;
     priv->drag_start_map_y = priv->map_y;
 
@@ -2516,9 +2524,9 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
 }
 
 static gboolean
-osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
+osm_gps_map_button_release (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
 {
-    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
     OsmGpsMapPrivate *priv = map->priv;
 
     if(!priv->is_button_down)
@@ -2531,8 +2539,8 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
         priv->map_x = priv->drag_start_map_x;
         priv->map_y = priv->drag_start_map_y;
 
-        priv->map_x += (priv->drag_start_mouse_x - (int) event->x);
-        priv->map_y += (priv->drag_start_mouse_y - (int) event->y);
+        priv->map_x += (priv->drag_start_mouse_x - (int) x);
+        priv->map_y += (priv->drag_start_mouse_y - (int) y);
 
         center_coord_update(map);
 
@@ -2542,7 +2550,7 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
     if(priv->is_dragging_point)
     {
         priv->is_dragging_point = FALSE;
-        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, priv->drag_point);
+        osm_gps_map_convert_screen_to_geographic(map, x, y, priv->drag_point);
         g_signal_emit_by_name(priv->drag_track, "point-changed");
     }
 
@@ -2710,8 +2718,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class = GTK_WIDGET_CLASS (klass);
     widget_class->draw = osm_gps_map_draw;
     widget_class->configure_event = osm_gps_map_configure;
-    widget_class->button_press_event = osm_gps_map_button_press;
-    widget_class->button_release_event = osm_gps_map_button_release;
     //widget_class->get_preferred_width = osm_gps_map_get_preferred_width;
     //widget_class->get_preferred_height = osm_gps_map_get_preferred_height;
 
