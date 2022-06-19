@@ -323,6 +323,11 @@ enum
 G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 
 /*
+ * event handle function forward defintions
+ */
+static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
+
+/*
  * Drawing function forward defintions
  */
 static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
@@ -1818,11 +1823,15 @@ osm_gps_map_init (OsmGpsMap *object)
 
     gtk_widget_add_events (GTK_WIDGET (object),
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_POINTER_MOTION_MASK | GDK_SCROLL_MASK |
+                           GDK_SCROLL_MASK |
                            GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
 #ifdef HAVE_GDK_EVENT_GET_SCROLL_DELTAS
     gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
 #endif
+
+	GtkEventController* controller_motion = gtk_event_controller_motion_new ();
+	gtk_widget_add_controller (GTK_WIDGET (object), controller_motion);
+
     gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
     g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, my_log_handler, NULL);
@@ -1830,6 +1839,8 @@ osm_gps_map_init (OsmGpsMap *object)
     /* setup signal handlers */
     g_signal_connect(object, "key_press_event",
                     G_CALLBACK(on_window_key_press), priv);
+
+    g_signal_connect (controller_motion, "motion", G_CALLBACK (osm_gps_map_motion_notify), priv);
 }
 
 static char*
@@ -2548,12 +2559,11 @@ osm_gps_map_idle_expose (GtkWidget *widget)
 }
 
 static gboolean
-osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
+osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data)
 {
-    GdkModifierType state;
-    OsmGpsMap *map = OSM_GPS_MAP(widget);
+    GdkModifierType state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER(self));
+    OsmGpsMap *map = OSM_GPS_MAP(gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     OsmGpsMapPrivate *priv = map->priv;
-    gint x, y;
 
     if(!priv->is_button_down)
         return FALSE;
@@ -2566,7 +2576,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
          * If the track is also editable and the mouse is moved away from its
          * initial position, then mark this point as dragging.
          */
-        if(priv->is_clicked_point && path_editable && (priv->clicked_x != event->x || priv->clicked_y != event->y))
+        if(priv->is_clicked_point && path_editable && (priv->clicked_x != x || priv->clicked_y != y))
         {
             priv->is_dragging_point = TRUE;
             priv->is_clicked_point = FALSE;
@@ -2575,29 +2585,9 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 
     if(priv->is_dragging_point)
     {
-        osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, priv->drag_point);
+        osm_gps_map_convert_screen_to_geographic(map, x, y, priv->drag_point);
         osm_gps_map_map_redraw_idle(map);
         return FALSE;
-    }
-
-    if (event->is_hint)
-    {
-        // gdk_window_get_pointer (event->window, &x, &y, &state);
-
-#if GTK_CHECK_VERSION(3, 20, 0)
-        // TODO: check if we can use gtk_widget_get_display(widget) instead of default
-        GdkDevice* pointer = gdk_seat_get_pointer(gdk_display_get_default_seat(gdk_display_get_default()));
-#else
-        GdkDevice* pointer = gdk_device_manager_get_client_pointer(gdk_display_get_device_manager( gdk_display_get_default()));
-#endif
-
-        gdk_window_get_device_position( event->window, pointer, &x, &y, &state);
-    }
-    else
-    {
-        x = event->x;
-        y = event->y;
-        state = event->state;
     }
 
     // are we being dragged
@@ -2619,7 +2609,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     priv->is_dragging = TRUE;
 
     if (priv->map_auto_center_enabled)
-        g_object_set(G_OBJECT(widget), "auto-center", FALSE, NULL);
+        g_object_set(G_OBJECT(map), "auto-center", FALSE, NULL);
 
     priv->drag_mouse_dx = x - priv->drag_start_mouse_x;
     priv->drag_mouse_dy = y - priv->drag_start_mouse_y;
@@ -2627,7 +2617,7 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
     /* instead of redrawing directly just add an idle function */
     if (!priv->drag_expose_source)
         priv->drag_expose_source =
-            g_idle_add ((GSourceFunc)osm_gps_map_idle_expose, widget);
+            g_idle_add ((GSourceFunc)osm_gps_map_idle_expose, GTK_WIDGET(map));
 
     return FALSE;
 }
@@ -2712,7 +2702,6 @@ osm_gps_map_class_init (OsmGpsMapClass *klass)
     widget_class->configure_event = osm_gps_map_configure;
     widget_class->button_press_event = osm_gps_map_button_press;
     widget_class->button_release_event = osm_gps_map_button_release;
-    widget_class->motion_notify_event = osm_gps_map_motion_notify;
     widget_class->scroll_event = osm_gps_map_scroll_event;
     //widget_class->get_preferred_width = osm_gps_map_get_preferred_width;
     //widget_class->get_preferred_height = osm_gps_map_get_preferred_height;
