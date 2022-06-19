@@ -221,6 +221,9 @@ struct _OsmGpsMapPrivate
     //A list of OsmGpsMapLayer* layers, such as the OSD
     GSList *layers;
 
+    //Track the mouse movement
+    gdouble mouse_x;
+    gdouble mouse_y;
     //For tracking click and drag
     int drag_counter;
     int drag_mouse_dx;
@@ -325,6 +328,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 /*
  * event handle function forward defintions
  */
+static gboolean osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy, gpointer user_data);
 static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
 
 /*
@@ -1782,6 +1786,9 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->images = NULL;
     priv->layers = NULL;
 
+    priv->mouse_x = 0;
+    priv->mouse_y = 0;
+
     priv->drag_counter = 0;
     priv->drag_mouse_dx = 0;
     priv->drag_mouse_dy = 0;
@@ -1823,13 +1830,14 @@ osm_gps_map_init (OsmGpsMap *object)
 
     gtk_widget_add_events (GTK_WIDGET (object),
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_SCROLL_MASK |
                            GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
 #ifdef HAVE_GDK_EVENT_GET_SCROLL_DELTAS
     gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
 #endif
 
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
+
+	GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
 
     gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
@@ -1838,7 +1846,7 @@ osm_gps_map_init (OsmGpsMap *object)
     /* setup signal handlers */
     g_signal_connect(object, "key_press_event",
                     G_CALLBACK(on_window_key_press), priv);
-
+    g_signal_connect (controller_scroll, "scroll", G_CALLBACK (osm_gps_map_scroll_event), priv);
     g_signal_connect (controller_motion, "motion", G_CALLBACK (osm_gps_map_motion_notify), priv);
 }
 
@@ -2251,29 +2259,27 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
 }
 
 static gboolean
-osm_gps_map_scroll_event (GtkWidget *widget, GdkEventScroll  *event)
+osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy, gpointer user_data)
 {
     OsmGpsMap *map;
     OsmGpsMapPoint *pt;
     float lat, lon, c_lat, c_lon;
 
-    map = OSM_GPS_MAP(widget);
+    map = OSM_GPS_MAP(gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     pt = osm_gps_map_point_new_degrees(0.0,0.0);
     /* arguably we could use get_event_location here, but I'm not convinced it
     is forward compatible to cast between GdkEventScroll and GtkEventButton */
-    osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, pt);
+    osm_gps_map_convert_screen_to_geographic(map, map->priv->mouse_x, map->priv->mouse_y, pt);
     osm_gps_map_point_get_degrees (pt, &lat, &lon);
 
     c_lat = rad2deg(map->priv->center_rlat);
     c_lon = rad2deg(map->priv->center_rlon);
 
-
-
-    if ((event->direction == GDK_SCROLL_UP) && (map->priv->map_zoom < map->priv->max_zoom)) {
+    if ((dy > 0) && (map->priv->map_zoom < map->priv->max_zoom)) {
         lat = c_lat + ((lat - c_lat)/2.0);
         lon = c_lon + ((lon - c_lon)/2.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom+1);
-    } else if ((event->direction == GDK_SCROLL_DOWN) && (map->priv->map_zoom > map->priv->min_zoom)) {
+    } else if ((dy < 0) && (map->priv->map_zoom > map->priv->min_zoom)) {
         lat = c_lat + ((c_lat - lat)*1.0);
         lon = c_lon + ((c_lon - lon)*1.0);
         osm_gps_map_set_center_and_zoom(map, lat, lon, map->priv->map_zoom-1);
@@ -2562,6 +2568,8 @@ osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y,
 {
     OsmGpsMap *map = OSM_GPS_MAP(gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     OsmGpsMapPrivate *priv = map->priv;
+    priv->mouse_x = x;
+    priv->mouse_y = y;
 
     if(!priv->is_button_down)
         return FALSE;
