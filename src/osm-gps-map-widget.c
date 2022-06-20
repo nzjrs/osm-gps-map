@@ -1875,7 +1875,7 @@ osm_gps_map_get_cache_base_dir(OsmGpsMapPrivate *priv)
 }
 
 static void
-osm_gps_map_setup(OsmGpsMap *map)
+osm_gps_map_setup (OsmGpsMap *map)
 {
     const char *uri;
     OsmGpsMapPrivate *priv = map->priv;
