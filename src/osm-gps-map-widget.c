@@ -1526,7 +1526,7 @@ osm_gps_map_print_polygons (OsmGpsMap *map, cairo_t* cr)
 
 
 static gboolean
-osm_gps_map_purge_cache_check(gpointer key, gpointer value, gpointer user)
+osm_gps_map_purge_cache_check (gpointer key, gpointer value, gpointer user)
 {
    return (((OsmCachedTile*)value)->redraw_cycle != ((OsmGpsMapPrivate*)user)->redraw_cycle);
 }
@@ -1632,7 +1632,8 @@ osm_gps_map_map_redraw_idle (OsmGpsMap *map)
 /* call this to update center_rlat and center_rlon after
  * changin map_x or map_y */
 static void
-center_coord_update(OsmGpsMap *map) {
+center_coord_update(OsmGpsMap *map)
+{
 
     GtkWidget *widget = GTK_WIDGET(map);
     OsmGpsMapPrivate *priv = map->priv;
