@@ -551,10 +551,10 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
-    state = gtk_gesture_single_get_current_button (event);
+    state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (event));
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
-    if (state == 1) {
+    if (state == GDK_BUTTON1_MASK) {
         gint mx = x_axis - priv->osd_x;
         gint my = y_axis - priv->osd_y;
 
