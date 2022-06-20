@@ -1837,23 +1837,18 @@ osm_gps_map_init (OsmGpsMap *object)
                                               g_free, (GDestroyNotify)cached_tile_free);
     priv->max_tile_cache_size = 20;
 
-    gtk_widget_add_events (GTK_WIDGET (object),
-                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_POINTER_MOTION_MASK | GDK_SCROLL_MASK |
-                           GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK);
-#ifdef HAVE_GDK_EVENT_GET_SCROLL_DELTAS
-    gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
-#endif
-
-    GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
+    GtkEventController* controller_key = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET (object), controller_key);
 
     GtkGesture* controller_button = gtk_gesture_click_new ();
     gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller_button), 0);
     gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER(controller_button));
 
-	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
+    GtkEventController* controller_motion = gtk_event_controller_motion_new ();
+    gtk_widget_add_controller (GTK_WIDGET (object), controller_motion);
 
-    GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_WIDGET (object), GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+    GtkEventController* controller_scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+    gtk_widget_add_controller (GTK_WIDGET (object), controller_scroll);
 
     gtk_widget_set_can_focus (GTK_WIDGET (object), TRUE);
 
