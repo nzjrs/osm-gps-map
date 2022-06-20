@@ -1687,7 +1687,7 @@ on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, G
     int step;
     gboolean handled;
     GtkAllocation allocation;
-    OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
+    OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
     OsmGpsMapPrivate *priv = map->priv;
 
     /* if no keybindings are set, let the app handle them... */
@@ -2282,7 +2282,7 @@ osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy
     OsmGpsMapPoint *pt;
     float lat, lon, c_lat, c_lon;
 
-    map = OSM_GPS_MAP(gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
+    map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     pt = osm_gps_map_point_new_degrees(0.0,0.0);
     /* arguably we could use get_event_location here, but I'm not convinced it
     is forward compatible to cast between GdkEventScroll and GtkEventButton */
