@@ -328,6 +328,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
 /*
  * event handle function forward defintions
  */
+static gboolean on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
 static gboolean osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy, gpointer user_data);
 static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
 
@@ -1674,13 +1675,13 @@ maybe_autocenter_map (OsmGpsMap *map)
 }
 
 static gboolean
-on_window_key_press (GtkEventControllerKey *controller, guint keyval, guint keycode, GdkModifierType state, OsmGpsMap *map)
+on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, GdkModifierType state, gpointer user_data)
 {
     int i;
     int step;
     gboolean handled;
     GtkAllocation allocation;
-    GtkWidget *widget = GTK_WIDGET(map);
+    OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(self)));
     OsmGpsMapPrivate *priv = map->priv;
 
     /* if no keybindings are set, let the app handle them... */
@@ -1699,7 +1700,7 @@ on_window_key_press (GtkEventControllerKey *controller, guint keyval, guint keyc
 
         switch(i) {
             case OSM_GPS_MAP_KEY_FULLSCREEN: {
-                GtkWidget *toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
+                GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (map));
                 if(!priv->is_fullscreen)
                     gtk_window_fullscreen(GTK_WINDOW(toplevel));
                 else
