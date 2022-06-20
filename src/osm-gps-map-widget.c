@@ -333,7 +333,8 @@ static gboolean osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdoubl
 static gboolean osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
 static gboolean osm_gps_map_button_release (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
 static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
-static void osm_gps_map_configure (GObject* self, GParamSpec* pspec, gpointer user_data);
+static void osm_gps_map_configure_realize (GtkWidget* self, gpointer user_data);
+static void osm_gps_map_configure (GtkWidget* self, GtkAllocation* allocation, gpointer user_data);
 
 /*
  * Drawing function forward defintions
@@ -1860,9 +1861,8 @@ osm_gps_map_init (OsmGpsMap *object)
     g_signal_connect (controller_motion, "motion", G_CALLBACK (osm_gps_map_motion_notify), priv);
     g_signal_connect (controller_button, "pressed", G_CALLBACK (osm_gps_map_button_press), priv);
     g_signal_connect (controller_button, "released", G_CALLBACK (osm_gps_map_button_release), priv);
-    g_signal_connect (GTK_WIDGET (object), "notify::default-height", G_CALLBACK (osm_gps_map_configure), priv);
-    g_signal_connect (GTK_WIDGET (object), "notify::default-width", G_CALLBACK (osm_gps_map_configure), priv);
-    g_signal_connect (GTK_WIDGET (object), "notify::fullscreened", G_CALLBACK (osm_gps_map_configure), priv);
+    g_signal_connect (GTK_WIDGET (object), "realize", G_CALLBACK (osm_gps_map_configure_realize), priv);
+    g_signal_connect (GTK_WIDGET (object), "size-allocate", G_CALLBACK (osm_gps_map_configure), priv);
 }
 
 static char*
@@ -2645,11 +2645,17 @@ osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y,
 }
 
 static void
-osm_gps_map_configure (GObject* self, GParamSpec* pspec, gpointer user_data)
+osm_gps_map_configure_realize (GtkWidget* self, gpointer user_data)
+{
+	osm_gps_map_configure (self, NULL, user_data);
+}
+
+static void
+osm_gps_map_configure (GtkWidget* self, GtkAllocation* allocation, gpointer user_data)
 {
     int w, h;
     GdkWindow *window;
-    OsmGpsMap *map = OSM_GPS_MAP(self);
+    OsmGpsMap *map = OSM_GPS_MAP (self);
     OsmGpsMapPrivate *priv = map->priv;
 
     if (priv->pixmap)
@@ -2657,13 +2663,16 @@ osm_gps_map_configure (GObject* self, GParamSpec* pspec, gpointer user_data)
 
     w = gtk_widget_get_allocated_width (GTK_WIDGET(self));
     h = gtk_widget_get_allocated_height (GTK_WIDGET(self));
-    window = gtk_widget_get_window(GTK_WIDGET (map));
+    window = gtk_widget_get_window (self);
 
-    priv->pixmap = gdk_window_create_similar_surface (
+    if (window != NULL)
+    {
+        priv->pixmap = gdk_window_create_similar_surface (
                         window,
                         CAIRO_CONTENT_COLOR,
                         w + EXTRA_BORDER * 2,
                         h + EXTRA_BORDER * 2);
+    }
 
     // pixel_x,y, offsets
     gint pixel_x = lon2pixel(priv->map_zoom, priv->center_rlon);
