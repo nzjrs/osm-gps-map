@@ -1837,7 +1837,7 @@ osm_gps_map_init (OsmGpsMap *object)
     gtk_widget_add_events (GTK_WIDGET (object), GDK_SMOOTH_SCROLL_MASK)
 #endif
 
-       GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
+    GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
 
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
 
