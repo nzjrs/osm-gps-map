@@ -3970,7 +3970,8 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
 /**
  * osm_gps_map_get_event_location:
  * @map: a #OsmGpsMap widget
- * @event: A #GtkEventButton that occured on the map
+ * @x: X coordinate of the event
+ * @y: Y coordinate of the event
  *
  * A convenience function for getting the geographic location of events,
  * such as mouse clicks, on the map
@@ -3981,9 +3982,9 @@ osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gin
  * Since: 0.7.0
  **/
 OsmGpsMapPoint *
-osm_gps_map_get_event_location (OsmGpsMap *map, GdkEventButton *event)
+osm_gps_map_get_event_location (OsmGpsMap *map, gdouble x, gdouble y)
 {
     OsmGpsMapPoint *p = osm_gps_map_point_new_degrees(0.0,0.0);
-    osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, p);
+    osm_gps_map_convert_screen_to_geographic(map, x, y, p);
     return p;
 }

@@ -115,7 +115,7 @@ gboolean        osm_gps_map_layer_remove                (OsmGpsMap *map, OsmGpsM
 void            osm_gps_map_layer_remove_all            (OsmGpsMap *map);
 void            osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixel_y, OsmGpsMapPoint *pt);
 void            osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gint *pixel_x, gint *pixel_y);
-OsmGpsMapPoint *osm_gps_map_get_event_location          (OsmGpsMap *map, GdkEventButton *event);
+OsmGpsMapPoint *osm_gps_map_get_event_location          (OsmGpsMap *map, gdouble x, gdouble y);
 gboolean        osm_gps_map_map_redraw                  (OsmGpsMap *map);
 void            osm_gps_map_map_redraw_idle             (OsmGpsMap *map);
 
