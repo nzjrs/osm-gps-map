@@ -99,7 +99,7 @@ gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
  * osm_gps_map_layer_button_press:
  * @self: (in): a #OsmGpsMapLayer object
  * @map: (in): a #OsmGpsMap widget
- * @event: (in): a GtkGestureClick event
+ * @event: (in): a GtkGestureSingle event
  * @n_press: (in): How many touch/button presses happened with this one.
  * @x: (in): The X coordinate, in widget allocation coordinates.
  * @y: (in): The Y coordinate, in widget allocation coordinates.
