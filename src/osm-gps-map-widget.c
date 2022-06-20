@@ -330,8 +330,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  */
 static gboolean on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, GdkModifierType state, gpointer user_data);
 static gboolean osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy, gpointer user_data);
-static gboolean osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
-static gboolean osm_gps_map_button_release (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
+static gboolean osm_gps_map_button_press (GtkGestureClick* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
+static gboolean osm_gps_map_button_release (GtkGestureClick* self, gint n_press, gdouble x, gdouble y, gpointer user_data);
 static gboolean osm_gps_map_motion_notify (GtkEventControllerMotion* self, gdouble x, gdouble y, gpointer user_data);
 static void osm_gps_map_configure_realize (GtkWidget* self, gpointer user_data);
 static void osm_gps_map_configure (GtkWidget* self, GtkAllocation* allocation, gpointer user_data);
@@ -1705,12 +1705,14 @@ on_window_key_press (GtkEventControllerKey *self, guint keyval, guint keycode, G
 
         switch(i) {
             case OSM_GPS_MAP_KEY_FULLSCREEN: {
-                GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (map));
-                if(!priv->is_fullscreen)
-                    gtk_window_fullscreen(GTK_WINDOW(toplevel));
-                else
-                    gtk_window_unfullscreen(GTK_WINDOW(toplevel));
-
+                GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (map));
+                if (GTK_IS_WINDOW (root)) {
+                    GtkWindow *toplevel = GTK_WINDOW (root);
+                    if (!priv->is_fullscreen)
+                        gtk_window_fullscreen (toplevel);
+                    else
+                        gtk_window_unfullscreen (toplevel);
+                }
                 priv->is_fullscreen = !priv->is_fullscreen;
                 handled = TRUE;
                 } break;
@@ -1845,8 +1847,9 @@ osm_gps_map_init (OsmGpsMap *object)
 
     GtkEventController* controller_key = gtk_event_controller_key_new (GTK_WIDGET (object));
 
-    GtkGesture* controller_button = gtk_gesture_multi_press_new (GTK_WIDGET (object));
+    GtkGesture* controller_button = gtk_gesture_click_new ();
     gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller_button), 0);
+    gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER(controller_button));
 
 	GtkEventController* controller_motion = gtk_event_controller_motion_new (GTK_WIDGET (object));
 
@@ -2307,7 +2310,7 @@ osm_gps_map_scroll_event (GtkEventControllerScroll* self, gdouble dx, gdouble dy
 }
 
 static gboolean
-osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
+osm_gps_map_button_press (GtkGestureClick* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
     OsmGpsMapPrivate *priv = map->priv;
@@ -2318,7 +2321,6 @@ osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, g
         for(list = priv->layers; list != NULL; list = list->next)
         {
             OsmGpsMapLayer *layer = list->data;
-			//printf ("call osm_gps_map_layer_button_press\n");
             if (osm_gps_map_layer_button_press (layer, map, GTK_GESTURE_SINGLE (self), n_press, x, y, user_data))
                 return FALSE;
         }
@@ -2529,7 +2531,7 @@ osm_gps_map_button_press (GtkGestureMultiPress* self, gint n_press, gdouble x, g
 }
 
 static gboolean
-osm_gps_map_button_release (GtkGestureMultiPress* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
+osm_gps_map_button_release (GtkGestureClick* self, gint n_press, gdouble x, gdouble y, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self)));
     OsmGpsMapPrivate *priv = map->priv;
