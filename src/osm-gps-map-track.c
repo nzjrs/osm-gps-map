@@ -500,6 +500,14 @@ osm_gps_map_track_get_highlight_point(OsmGpsMapTrack* track)
     return track->priv->highlight_point;
 }
 
+OsmGpsMapTrack *
+osm_gps_map_track_new_with_data (GSList *list) {
+    OsmGpsMapTrack *track = osm_gps_map_track_new ();
+    OsmGpsMapTrackPrivate* priv = track->priv;
+    priv->track = list;
+
+    return track;
+}
 
 OsmGpsMapTrack *
 osm_gps_map_track_new (void)

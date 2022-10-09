@@ -70,6 +70,18 @@ GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
  * Since: 0.7.0
  **/
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
+
+/**
+ * osm_gps_map_track_new_with_data:
+ * @list: (in) (element-type OsmGpsMapPoint): list of #OsmGpsMapPoint
+ *
+ * Create new track with data as per given list
+ *
+ * Returns: (transfer full): New track
+ * Since: 1.2.1
+ **/
+OsmGpsMapTrack *    osm_gps_map_track_new_with_data (GSList *list);
+
 /**
  * osm_gps_map_track_add_point:
  * @track: (inout): a #OsmGpsMapTrack
