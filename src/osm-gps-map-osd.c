@@ -545,18 +545,18 @@ osm_gps_map_osd_button_press (OsmGpsMapLayer *osd,
     OsmGpsMapOsd *self;
     OsmGpsMapOsdPrivate *priv;
     GtkAllocation allocation;
-    GdkModifierType state;
+    guint state;
 
     g_return_val_if_fail(OSM_GPS_MAP_IS_OSD(osd), FALSE);
 
     self = OSM_GPS_MAP_OSD(osd);
     priv = self->priv;
-    state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (event));
+    state = gtk_gesture_single_get_current_button (event);
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
-    if (state == GDK_BUTTON1_MASK) {
-        gint mx = x_axis - priv->osd_x;
-        gint my = y_axis - priv->osd_y;
+    if (state == 1) {
+        gint mx = (int)(x_axis) - priv->osd_x;
+        gint my = (int)(y_axis) - priv->osd_y;
 
         if(priv->osd_x < 0)
             mx -= (allocation.width - priv->osd_w);
