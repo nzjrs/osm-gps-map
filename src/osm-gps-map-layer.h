@@ -48,7 +48,7 @@ struct _OsmGpsMapLayerIface {
     void (*render) (OsmGpsMapLayer *self, OsmGpsMap *map);
     void (*draw) (OsmGpsMapLayer *self, OsmGpsMap *map, cairo_t *cr);
     gboolean (*busy) (OsmGpsMapLayer *self);
-    gboolean (*button_press) (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
+    gboolean (*button_press) (OsmGpsMapLayer *self, OsmGpsMap *map, GtkGestureSingle *event, gint n_press, gdouble x, gdouble y, gpointer user_data);
 };
 
 /**
@@ -99,14 +99,18 @@ gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
  * osm_gps_map_layer_button_press:
  * @self: (in): a #OsmGpsMapLayer object
  * @map: (in): a #OsmGpsMap widget
- * @event: (in): a #GdkEventButton event
+ * @event: (in): a GtkGestureSingle event
+ * @n_press: (in): How many touch/button presses happened with this one.
+ * @x: (in): The X coordinate, in widget allocation coordinates.
+ * @y: (in): The Y coordinate, in widget allocation coordinates.
+ * @user_data: (in): pointer to user data
  *
  * Handle button event
  *
  * Returns: whether even had been handled
  * Since: 0.6.0
  **/
-gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);
+gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GtkGestureSingle *event, gint n_press, gdouble x, gdouble y, gpointer user_data);
 
 G_END_DECLS
 

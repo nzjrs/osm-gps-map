@@ -66,8 +66,8 @@ osm_gps_map_layer_busy (OsmGpsMapLayer *self)
 }
 
 gboolean
-osm_gps_map_layer_button_press (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event)
+osm_gps_map_layer_button_press (OsmGpsMapLayer *self, OsmGpsMap *map, GtkGestureSingle *event, gint n_press, gdouble x, gdouble y, gpointer user_data)
 {
-	return OSM_GPS_MAP_LAYER_GET_INTERFACE (self)->button_press (self, map, event);
+	return OSM_GPS_MAP_LAYER_GET_INTERFACE (self)->button_press (self, map, event, n_press, x, y, user_data);
 }
 

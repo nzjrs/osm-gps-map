@@ -70,6 +70,18 @@ GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
  * Since: 0.7.0
  **/
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
+
+/**
+ * osm_gps_map_track_new_with_data:
+ * @list: (in) (element-type OsmGpsMapPoint): list of #OsmGpsMapPoint
+ *
+ * Create new track with data as per given list
+ *
+ * Returns: (transfer full): New track
+ * Since: 1.2.1
+ **/
+OsmGpsMapTrack *    osm_gps_map_track_new_with_data (GSList *list);
+
 /**
  * osm_gps_map_track_add_point:
  * @track: (inout): a #OsmGpsMapTrack
@@ -110,6 +122,8 @@ void                osm_gps_map_track_set_color     (OsmGpsMapTrack *track, GdkR
  * Since: 0.7.0
  **/
 void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
+void                osm_gps_map_track_set_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color);
+void                osm_gps_map_track_get_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color);
 
 /**
  * osm_gps_map_track_remove_point:
@@ -168,6 +182,13 @@ OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
  **/
 double              osm_gps_map_track_get_length(OsmGpsMapTrack* track);
 
+/**
+ * osm_gps_map_track_set_highlight_point:
+ * Mark the given point as highlighted on this track.
+ * @note The point must match a point in the list of points associated with the given track.
+ */
+void                osm_gps_map_track_set_highlight_point(OsmGpsMapTrack* track, OsmGpsMapPoint *point);
+OsmGpsMapPoint *    osm_gps_map_track_get_highlight_point(OsmGpsMapTrack* track);
 
 G_END_DECLS
 

@@ -22,9 +22,9 @@ AM_PROG_LIBTOOL
 AM_SILENT_RULES([yes])
 
 # Library dependencies
-PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])
-PKG_CHECK_MODULES(GTK,      [gtk+-3.0 >= 3.0])
-PKG_CHECK_MODULES(CAIRO,    [cairo >= 1.8])
+PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.66])
+PKG_CHECK_MODULES(GTK,      [gtk4 >= 4.6])
+PKG_CHECK_MODULES(CAIRO,    [cairo >= 1.14])
 PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4 >= 2.42])
 
 # The mapviewer demo also calls g_thread_init, so it needs to link against

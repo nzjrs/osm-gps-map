@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 OSMGPSMAP_CFLAGS =          \
+    -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED \
     $(GLIB_CFLAGS)          \
     $(GTK_CFLAGS)           \
     $(CAIRO_CFLAGS)         \
@@ -13,7 +14,7 @@ OSMGPSMAP_LIBS =            \
     $(SOUP24_LIBS)
 
 ## Demo Application
-noinst_PROGRAMS = mapviewer polygon editable_track
+noinst_PROGRAMS = mapviewer polygon editable_track clickable_track editable_clickable_track
 
 mapviewer_SOURCES =         \
     mapviewer.c
@@ -58,6 +59,36 @@ editable_track_CFLAGS =          \
     $(GTHREAD_CFLAGS)
 
 editable_track_LDADD =           \
+    $(OSMGPSMAP_LIBS)       \
+    $(GTHREAD_LIBS)         \
+    $(top_builddir)/src/libosmgpsmap-1.0.la
+
+clickable_track_SOURCES =         \
+    clickable_track.c
+
+clickable_track_CFLAGS =          \
+    -I$(top_srcdir)/src     \
+    $(WARN_CFLAGS)          \
+    $(DISABLE_DEPRECATED)   \
+    $(OSMGPSMAP_CFLAGS)     \
+    $(GTHREAD_CFLAGS)
+
+clickable_track_LDADD =           \
+    $(OSMGPSMAP_LIBS)       \
+    $(GTHREAD_LIBS)         \
+    $(top_builddir)/src/libosmgpsmap-1.0.la
+
+editable_clickable_track_SOURCES =         \
+    editable_clickable_track.c
+
+editable_clickable_track_CFLAGS =          \
+    -I$(top_srcdir)/src     \
+    $(WARN_CFLAGS)          \
+    $(DISABLE_DEPRECATED)   \
+    $(OSMGPSMAP_CFLAGS)     \
+    $(GTHREAD_CFLAGS)
+
+editable_clickable_track_LDADD =           \
     $(OSMGPSMAP_LIBS)       \
     $(GTHREAD_LIBS)         \
     $(top_builddir)/src/libosmgpsmap-1.0.la
