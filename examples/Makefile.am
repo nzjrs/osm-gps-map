@@ -4,13 +4,13 @@ OSMGPSMAP_CFLAGS =          \
     $(GLIB_CFLAGS)          \
     $(GTK_CFLAGS)           \
     $(CAIRO_CFLAGS)         \
-    $(SOUP24_CFLAGS)
+    $(SOUP30_CFLAGS)
 
 OSMGPSMAP_LIBS =            \
     $(GLIB_LIBS)            \
     $(GTK_LIBS)             \
     $(CAIRO_LIBS)           \
-    $(SOUP24_LIBS)
+    $(SOUP30_LIBS)
 
 ## Demo Application
 noinst_PROGRAMS = mapviewer polygon editable_track

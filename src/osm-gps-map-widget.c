@@ -315,7 +315,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (OsmGpsMap, osm_gps_map, GTK_TYPE_DRAWING_AREA);
  */
 static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
 static gchar    *replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
-static void     osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data);
+static void     osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, gpointer user_data);
 static void     osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw);
 static GdkPixbuf* osm_gps_map_render_tile_upscaled (OsmGpsMap *map, GdkPixbuf *tile, int tile_zoom, int zoom, int x, int y);
 
@@ -731,12 +731,10 @@ osm_gps_map_blit_tile(OsmGpsMap *map, GdkPixbuf *pixbuf, cairo_t *cr, int offset
     }
 }
 
-#define MSG_RESPONSE_BODY(a)    ((a)->response_body->data)
-#define MSG_RESPONSE_LEN(a)     ((a)->response_body->length)
 #define MSG_RESPONSE_LEN_FORMAT "%"G_GOFFSET_FORMAT
 
 static void
-osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data)
+osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, gpointer user_data)
 {
     FILE *file;
     OsmTileDownload *dl = (OsmTileDownload *)user_data;
@@ -744,15 +742,23 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
     OsmGpsMapPrivate *priv = map->priv;
     gboolean file_saved = FALSE;
 
-    if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+    GError *error = NULL;
+    SoupMessage *msg = soup_session_get_async_result_message(session, result);
+    SoupStatus soup_status = soup_message_get_status(msg);
+    GBytes *body = soup_session_send_and_read_finish (session, result, &error);
+
+    GCancellable *cancellable = (GCancellable *)g_hash_table_lookup(priv->tile_queue, dl->uri);
+    g_object_unref (cancellable);
+
+    if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
         if (priv->cache_dir) {
             if (g_mkdir_with_parents(dl->folder,0700) == 0) {
                 file = g_fopen(dl->filename, "wb");
                 if (file != NULL) {
-                    fwrite (MSG_RESPONSE_BODY(msg), 1, MSG_RESPONSE_LEN(msg), file);
+                    fwrite (g_bytes_get_data(body, NULL), 1, g_bytes_get_size(body), file);
                     file_saved = TRUE;
-                    g_debug("Wrote "MSG_RESPONSE_LEN_FORMAT" bytes to %s", MSG_RESPONSE_LEN(msg), dl->filename);
+                    g_debug("Wrote "MSG_RESPONSE_LEN_FORMAT" bytes to %s", g_bytes_get_size(body), dl->filename);
                     fclose (file);
 
                 }
@@ -777,7 +783,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
                 /* parse file directly from memory */
                 if (extension) {
                     loader = gdk_pixbuf_loader_new_with_type (extension+1, NULL);
-                    if (!gdk_pixbuf_loader_write (loader, (unsigned char*)MSG_RESPONSE_BODY(msg), MSG_RESPONSE_LEN(msg), NULL))
+                    if (!gdk_pixbuf_loader_write (loader, (unsigned char*)g_bytes_get_data(body, NULL), g_bytes_get_size(body), NULL))
                     {
                         g_warning("Error: Decoding of image failed");
                     }
@@ -815,21 +821,21 @@ osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpoi
         g_free(dl->filename);
         g_free(dl);
     } else {
-        if ((msg->status_code == SOUP_STATUS_NOT_FOUND) || (msg->status_code == SOUP_STATUS_FORBIDDEN)) {
+        if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
-        } else if (msg->status_code == SOUP_STATUS_CANCELLED) {
+        } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
             /* called as application exit or after osm_gps_map_download_cancel_all */
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
         } else {
-            g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
-            dl->ttl--;
-            if (dl->ttl) {
-                soup_session_requeue_message(session, msg);
-                return;
-            }
+            g_warning("Error downloading tile: %d - %s", soup_status, soup_status_get_phrase(soup_status));
+            //dl->ttl--;
+            //if (dl->ttl) {
+            //    soup_session_requeue_message(session, msg);
+            //    return;
+            //}
 
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
@@ -879,21 +885,26 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
             if (priv->is_google) {
                 //Set maps.google.com as the referrer
                 g_debug("Setting Google Referrer");
-                soup_message_headers_append(msg->request_headers, "Referer", "http://maps.google.com/");
+                soup_message_headers_append(soup_message_get_request_headers(msg), "Referer", "http://maps.google.com/");
                 //For google satelite also set the appropriate cookie value
                 if (priv->uri_format & URI_HAS_Q) {
                     const char *cookie = g_getenv("GOOGLE_COOKIE");
                     if (cookie) {
                         g_debug("Adding Google Cookie");
-                        soup_message_headers_append(msg->request_headers, "Cookie", cookie);
+                        soup_message_headers_append(soup_message_get_request_headers(msg), "Cookie", cookie);
                     }
                 }
             }
 
-            g_hash_table_insert (priv->tile_queue, dl->uri, msg);
+            GCancellable *cancellable = g_cancellable_new ();
+            g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
             g_object_notify (G_OBJECT (map), "tiles-queued");
             /* the soup session unrefs the message when the download finishes */
-            soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
+            soup_session_send_and_read_async(priv->soup_session, msg,
+                                    G_PRIORITY_DEFAULT,
+                                    cancellable,
+                                    (GAsyncReadyCallback)osm_gps_map_tile_download_complete,
+                                    dl);
         } else {
             g_warning("Could not create soup message");
             g_free(dl->uri);
@@ -1702,11 +1713,8 @@ osm_gps_map_init (OsmGpsMap *object)
 
 
     /* set the user agent */
-    // lisoup since 2.42.0 has universal session, only methods can be sync/async
-    // and we use async
-    priv->soup_session =
-        soup_session_new_with_options(SOUP_SESSION_USER_AGENT,
-                                            USER_AGENT, NULL);
+    priv->soup_session = soup_session_new ();
+    soup_session_set_user_agent (priv->soup_session, USER_AGENT);
 
     /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
        must free the key, the soup session unrefs the message */
@@ -1937,10 +1945,10 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 g_debug("Setting proxy server: %s", priv->proxy_uri);
 
                 GValue val = {0};
-                SoupURI* uri = soup_uri_new(priv->proxy_uri);
-                g_value_init(&val, SOUP_TYPE_URI);
+                GUri* uri = g_uri_parse(priv->proxy_uri, SOUP_HTTP_URI_FLAGS, NULL);
+                g_value_init(&val, G_TYPE_URI);
                 g_value_take_boxed(&val, uri);
-                g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
+                g_object_set_property(G_OBJECT(priv->soup_session),"proxy-resolver",&val);
 
             } else {
                 g_free(priv->proxy_uri);
@@ -1960,7 +1968,7 @@ osm_gps_map_set_property (GObject *object, guint prop_id, const GValue *value, G
                 priv->user_agent = NULL;
                 g_value_set_string (&full_user_agent, USER_AGENT);
             }
-            g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_USER_AGENT, &full_user_agent);
+            g_object_set_property(G_OBJECT(priv->soup_session),"user-agent", &full_user_agent);
             break;
         case PROP_TILE_CACHE_DIR:
             if ( g_value_get_string(value) ) {
@@ -2997,9 +3005,9 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
 }
 
 static void
-cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
+cancel_message (char *key, GCancellable *cancellable, void *userdata)
 {
-    soup_session_cancel_message (user_data, value, SOUP_STATUS_CANCELLED);
+    g_cancellable_cancel(cancellable);
 }
 
 /**
@@ -3007,7 +3015,7 @@ cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
  * @map: a #OsmGpsMap widget
  *
  * Cancels all tiles currently being downloaded. Typically used if you wish to
- * cacel a large number of tiles queued using osm_gps_map_download_maps()
+ * cancel a large number of tiles queued using osm_gps_map_download_maps()
  *
  * Since: 0.7.0
  **/
@@ -3015,7 +3023,7 @@ void
 osm_gps_map_download_cancel_all (OsmGpsMap *map)
 {
     OsmGpsMapPrivate *priv = map->priv;
-    g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, priv->soup_session);
+    g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, NULL);
 }
 
 /**

@@ -22,7 +22,7 @@ jobs:
             gtk-doc-tools \
             libglib2.0-dev \
             libgtk-3-dev \
-            libsoup2.4-dev \
+            libsoup-3.0-dev \
             libgirepository1.0-dev
       - uses: actions/checkout@v2
       - name: autogen
