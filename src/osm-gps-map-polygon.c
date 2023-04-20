@@ -29,6 +29,7 @@ enum
 	PROP_SHADED,
     PROP_EDITABLE,
     PROP_SHADE_ALPHA,
+    PROP_CLICKABLE,
     PROP_BREAKABLE
 };
 
@@ -38,6 +39,7 @@ struct _OsmGpsMapPolygonPrivate
 	gboolean visible;
     gboolean editable;
 	gboolean shaded;
+    gboolean clickable;
     gfloat shade_alpha;
     gboolean breakable;
 };
@@ -74,6 +76,9 @@ osm_gps_map_polygon_get_property (GObject    *object,
         case PROP_SHADE_ALPHA:
             g_value_set_float(value, priv->shade_alpha);
             break;
+	case PROP_CLICKABLE:
+            g_value_set_boolean(value, priv->clickable);
+            break;
         case PROP_BREAKABLE:
             g_value_set_boolean(value, priv->breakable);
             break;
@@ -106,6 +111,9 @@ osm_gps_map_polygon_set_property (GObject      *object,
             break;
         case PROP_SHADE_ALPHA:
             priv->shade_alpha = g_value_get_float(value);
+            break;
+        case PROP_CLICKABLE:
+            priv->clickable = g_value_get_boolean(value);
             break;
         case PROP_BREAKABLE:
             priv->breakable = g_value_get_boolean(value);
@@ -191,6 +199,13 @@ osm_gps_map_polygon_class_init (OsmGpsMapPolygonClass *klass)
                                                         TRUE,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
+    g_object_class_install_property (object_class,
+                                     PROP_CLICKABLE,
+                                     g_param_spec_boolean ("clickable",
+                                                           "clickable",
+                                                           "should this polygon be clickable",
+                                                           FALSE,
+                                                           G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 
 static void

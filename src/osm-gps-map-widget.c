@@ -229,9 +229,16 @@ struct _OsmGpsMapPrivate
     int drag_limit;
     guint drag_expose_source;
 
-    /* Properties for dragging a point with right mouse button. */
+    /* Properties for dragging and clicking a point. */
     OsmGpsMapPoint* drag_point;
     OsmGpsMapTrack* drag_track;
+
+    /*
+     * Last location where a click is received, so a click and move can be
+     * distinguished from a click.
+     */
+    int clicked_x;
+    int clicked_y;
 
     /* for customizing the redering of the gps track */
     int ui_gps_point_inner_radius;
@@ -256,6 +263,7 @@ struct _OsmGpsMapPrivate
     guint is_fullscreen : 1;
     guint is_google : 1;
     guint is_dragging_point : 1;
+    guint is_clicked_point : 1;
 };
 
 typedef struct
@@ -1155,24 +1163,29 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
     OsmGpsMapPrivate *priv = map->priv;
 
     GSList *pt,*points;
+    OsmGpsMapPoint *highlight_point;
     int x,y;
     int min_x = 0,min_y = 0,max_x = 0,max_y = 0;
     gfloat lw, alpha;
     int map_x0, map_y0;
-    GdkRGBA color;
+    GdkRGBA color, highlight_color;
 
     g_object_get (track,
                   "track", &points,
                   "line-width", &lw,
                   "alpha", &alpha,
+                  "highlight_point", &highlight_point,
                   NULL);
     osm_gps_map_track_get_color(track, &color);
+    osm_gps_map_track_get_highlight_color(track, &highlight_color);
 
     if (points == NULL)
         return;
 
     gboolean path_editable = FALSE;
+    gboolean path_clickable = FALSE;
     g_object_get(track, "editable", &path_editable, NULL);
+    g_object_get(track, "clickable", &path_clickable, NULL);
 
     cairo_set_line_width (cr, lw);
     cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
@@ -1226,12 +1239,21 @@ osm_gps_map_print_track (OsmGpsMap *map, OsmGpsMapTrack *track, cairo_t *cr)
 
         cairo_line_to(cr, x, y);
         cairo_stroke(cr);
-        if(path_editable)
+        if(path_editable || path_clickable)
         {
-            cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
+            if(tp == highlight_point)
+            {
+                cairo_set_source_rgba (cr, highlight_color.red, highlight_color.green, highlight_color.blue, alpha);
+                cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
+                cairo_stroke(cr);
+                cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha);
+            }
+            else
+                cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
-            if(pt != points)
+            /* This draws the breaker point, do this only when the track is editable. */
+            if(pt != points && path_editable)
             {
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
                 cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
@@ -1310,9 +1332,11 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
         return;
 
     gboolean path_editable = FALSE;
+    gboolean path_clickable = FALSE;
     gboolean poly_shaded = FALSE;
     gboolean breakable = TRUE;
     g_object_get(poly, "editable", &path_editable, NULL);
+    g_object_get(poly, "clickable", &path_clickable, NULL);
     g_object_get(poly, "shaded", &poly_shaded, NULL);
     g_object_get(poly, "shade_alpha", &shade_alpha, NULL);
     g_object_get(poly, "breakable", &breakable, NULL);
@@ -1346,7 +1370,7 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
     cairo_line_to(cr, first_x, first_y);
     cairo_stroke(cr);
 
-    if(path_editable)
+    if(path_editable || path_clickable)
     {
         int last_x = 0, last_y = 0;
         for(pt = points; pt != NULL; pt = pt->next)
@@ -1359,7 +1383,8 @@ osm_gps_map_print_polygon (OsmGpsMap *map, OsmGpsMapPolygon *poly, cairo_t *cr)
             cairo_arc (cr, x, y, DOT_RADIUS, 0.0, 2 * M_PI);
             cairo_stroke(cr);
 
-            if((pt != points) && (breakable))
+            /* This draws the breaker point, do this only when the track is editable. */
+            if((pt != points) && (breakable || path_editable))
             {
                 cairo_set_source_rgba (cr, color.red, color.green, color.blue, alpha*0.75);
                 cairo_arc(cr, (last_x + x)/2.0, (last_y+y)/2.0, DOT_RADIUS, 0.0, 2*M_PI);
@@ -2205,12 +2230,16 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
     if(event->button == 1)
     {
         GSList* tracks = priv->tracks;
+        priv->clicked_x = event->x;
+        priv->clicked_y = event->y;
         while(tracks)
         {
             OsmGpsMapTrack* track = tracks->data;
             gboolean path_editable = FALSE;
+            gboolean path_clickable = FALSE;
             g_object_get(track, "editable", &path_editable, NULL);
-            if(path_editable)
+            g_object_get(track, "clickable", &path_clickable, NULL);
+            if(path_editable || path_clickable)
             {
                 GSList* points = osm_gps_map_track_get_points(track);
                 int ctr = 0;
@@ -2229,9 +2258,26 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         priv->is_button_down = TRUE;
                         priv->drag_point = point;
                         priv->drag_track = track;
-                        priv->is_dragging_point = TRUE;
+                        /*
+                         * If the track is clickable mark this point as clicked
+                         * and track if the mouse is not moved (too far). When
+                         * this track is only editable mark this point as
+                         * dragging right away.
+                         */
+                        if(path_clickable) priv->is_clicked_point = TRUE;
+                        else priv->is_dragging_point = TRUE;
                         osm_gps_map_map_redraw(map);
                         return FALSE;
+                    }
+
+                    /* When the path is not editable go to the next interation,
+                     * because the rest of this loop is only used in the case
+                     * the path is editable.
+                     */
+                    if(!path_editable)
+                    {
+                        points = points->next;
+                        continue;
                     }
 
                     //add a new point if a 'breaker' has been clicked
@@ -2245,6 +2291,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                             osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            /*
+                             * Also emit the point-clicked signal when a
+                             * breaker has been clicked, but after the new
+                             * point has been created.
+                             */
+                            if(path_clickable)
+                                g_signal_emit_by_name(track, "point-clicked", newpoint);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2265,10 +2318,12 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
             OsmGpsMapPolygon* poly = polys->data;
             gboolean path_editable = FALSE;
             gboolean breakable = TRUE;
+            gboolean path_clickable = FALSE;
             OsmGpsMapTrack* track = osm_gps_map_polygon_get_track(poly);
             g_object_get(poly, "editable", &path_editable, NULL);
             g_object_get(poly, "breakable", &breakable, NULL);
-            if(path_editable)
+            g_object_get(poly, "clickable", &path_clickable, NULL);
+            if(path_editable || path_clickable)
             {
                 GSList* points = osm_gps_map_track_get_points(track);
                 int ctr = 0;
@@ -2288,9 +2343,26 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         priv->is_button_down = TRUE;
                         priv->drag_point = point;
                         priv->drag_track = track;
-                        priv->is_dragging_point = TRUE;
+                        /*
+                         * If the polygon is clickable mark this point as
+                         * clicked and track if the mouse is not moved (too
+                         * far). When this track is only editable mark this
+                         * point as dragging right away.
+                         */
+                        if(path_clickable) priv->is_clicked_point = TRUE;
+                        else priv->is_dragging_point = TRUE;
                         osm_gps_map_map_redraw(map);
                         return FALSE;
+                    }
+
+                    /* When the path is not editable go to the next interation,
+                     * because the rest of this loop is only used in the case
+                     * the path is editable.
+                     */
+                    if(!path_editable)
+                    {
+                        points = points->next;
+                        continue;
                     }
 
                     //add a new point if a 'breaker' has been clicked
@@ -2304,6 +2376,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                             OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                             osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                             osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            /*
+                             * Also emit the point-clicked signal when a
+                             * breaker has been clicked, but after the new
+                             * point has been created.
+                             */
+                            if(path_clickable)
+                                g_signal_emit_by_name(track, "point-clicked", newpoint);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2327,6 +2406,13 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                     OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
                     osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
                     osm_gps_map_track_insert_point(track, newpoint, ctr);
+                    /*
+                     * Also emit the point-clicked signal when a
+                     * breaker has been clicked, but after the new
+                     * point has been created.
+                     */
+                    if(path_clickable)
+                        g_signal_emit_by_name(track, "point-clicked", newpoint);
                     osm_gps_map_map_redraw(map);
                     return FALSE;
                 }
@@ -2369,11 +2455,17 @@ osm_gps_map_button_release (GtkWidget *widget, GdkEventButton *event)
         osm_gps_map_map_redraw_idle(map);
     }
 
-    if( priv->is_dragging_point)
+    if(priv->is_dragging_point)
     {
         priv->is_dragging_point = FALSE;
         osm_gps_map_convert_screen_to_geographic(map, event->x, event->y, priv->drag_point);
         g_signal_emit_by_name(priv->drag_track, "point-changed");
+    }
+
+    if(priv->is_clicked_point)
+    {
+        priv->is_clicked_point = FALSE;
+        g_signal_emit_by_name(priv->drag_track, "point-clicked", priv->drag_point);
     }
 
     priv->drag_counter = -1;
@@ -2401,6 +2493,21 @@ osm_gps_map_motion_notify (GtkWidget *widget, GdkEventMotion  *event)
 
     if(!priv->is_button_down)
         return FALSE;
+
+    if(priv->is_clicked_point)
+    {
+        gboolean path_editable = FALSE;
+        g_object_get(priv->drag_track, "editable", &path_editable, NULL);
+        /*
+         * If the track is also editable and the mouse is moved away from its
+         * initial position, then mark this point as dragging.
+         */
+        if(priv->is_clicked_point && path_editable && (priv->clicked_x != event->x || priv->clicked_y != event->y))
+        {
+            priv->is_dragging_point = TRUE;
+            priv->is_clicked_point = FALSE;
+        }
+    }
 
     if(priv->is_dragging_point)
     {

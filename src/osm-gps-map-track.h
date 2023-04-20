@@ -110,6 +110,8 @@ void                osm_gps_map_track_set_color     (OsmGpsMapTrack *track, GdkR
  * Since: 0.7.0
  **/
 void                osm_gps_map_track_get_color     (OsmGpsMapTrack *track, GdkRGBA *color);
+void                osm_gps_map_track_set_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color);
+void                osm_gps_map_track_get_highlight_color (OsmGpsMapTrack *track, GdkRGBA *color);
 
 /**
  * osm_gps_map_track_remove_point:
@@ -168,6 +170,13 @@ OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
  **/
 double              osm_gps_map_track_get_length(OsmGpsMapTrack* track);
 
+/**
+ * osm_gps_map_track_set_highlight_point:
+ * Mark the given point as highlighted on this track.
+ * @note The point must match a point in the list of points associated with the given track.
+ */
+void                osm_gps_map_track_set_highlight_point(OsmGpsMapTrack* track, OsmGpsMapPoint *point);
+OsmGpsMapPoint *    osm_gps_map_track_get_highlight_point(OsmGpsMapTrack* track);
 
 G_END_DECLS
 
