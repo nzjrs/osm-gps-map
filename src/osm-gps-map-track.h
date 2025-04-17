@@ -72,7 +72,7 @@ GType osm_gps_map_track_get_type (void) G_GNUC_CONST;
 OsmGpsMapTrack *    osm_gps_map_track_new           (void);
 /**
  * osm_gps_map_track_add_point:
- * @track: (inout): a #OsmGpsMapTrack
+ * @track: (in): a #OsmGpsMapTrack
  * @point: (in): a #OsmGpsMapPoint point to add
  *
  * Add a point to track
