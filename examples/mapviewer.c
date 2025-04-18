@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <stdio.h>
 
 #include "osm-gps-map.h"
 
@@ -30,6 +31,7 @@ static gboolean opt_friendly_cache = FALSE;
 static gboolean opt_no_cache = FALSE;
 static char *opt_cache_base_dir = NULL;
 static gboolean opt_editable_tracks = FALSE;
+static char *opt_points_file = NULL;
 static GOptionEntry entries[] =
 {
   { "friendly-cache", 'f', 0, G_OPTION_ARG_NONE, &opt_friendly_cache, "Store maps using friendly cache style (source name)", NULL },
@@ -37,6 +39,7 @@ static GOptionEntry entries[] =
   { "cache-basedir", 'b', 0, G_OPTION_ARG_FILENAME, &opt_cache_base_dir, "Cache basedir", NULL },
   { "map", 'm', 0, G_OPTION_ARG_INT, &opt_map_provider, "Map source", "N" },
   { "editable-tracks", 'e', 0, G_OPTION_ARG_NONE, &opt_editable_tracks, "Make the tracks editable", NULL },
+  { "points-file", 'p', 0, G_OPTION_ARG_FILENAME, &opt_points_file, "Read GPS points from file", NULL },
   { NULL }
 };
 
@@ -52,6 +55,14 @@ static GOptionEntry debug_entries[] =
 
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
+static FILE *points_file = NULL;
+static float home_lat = -43.5326, home_lon = 172.6362;
+
+static void set_home(float lat, float lon)
+{
+    home_lat = lat;
+    home_lon = lon;
+}
 
 static gboolean
 on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
@@ -82,12 +93,14 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                  lat,
                                  lon,
                                  g_random_double_range(0,360));
+            set_home(lat, lon);
         }
         if (middle_button) {
             g_last_image = osm_gps_map_image_add (map,
                                                   lat,
                                                   lon,
                                                   g_star_image);
+            set_home(lat, lon);
         }
         if (right_button) {
             osm_gps_map_track_add_point(othertrack, &coord);
@@ -136,7 +149,7 @@ static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    osm_gps_map_set_center_and_zoom(map, -43.5326,172.6362,12);
+    osm_gps_map_set_center_and_zoom(map, home_lat, home_lon, 12);
     return FALSE;
 }
 
@@ -214,6 +227,26 @@ on_gps_color_changed (GtkColorButton *widget, gpointer user_data)
 }
 
 #endif
+
+static void
+add_points_from_file (OsmGpsMap *map)
+{
+    char *coords;
+    size_t len = 40;
+
+    if (!points_file)
+        return;
+
+    coords = malloc(len);
+    while (getline(&coords, &len, points_file) > 0) {
+        float lat, lon;
+        if (sscanf(coords, "%f %f", &lat, &lon) == 2) {
+            osm_gps_map_gps_add (map, lat, lon, 0);
+            set_home(lat, lon);
+        }
+    }
+    free(coords);
+}
 
 static void
 on_close (GtkWidget *widget, gpointer user_data)
@@ -426,6 +459,17 @@ main (int argc, char **argv)
     gtk_widget_show_all (widget);
 
     g_log_set_handler ("OsmGpsMap", G_LOG_LEVEL_MASK, g_log_default_handler, NULL);
+
+    if (opt_points_file) {
+        points_file = fopen(opt_points_file, "r");
+        if (!points_file) {
+            fprintf(stderr, "Could not open file %s\n", opt_points_file);
+            exit(1);
+        }
+        add_points_from_file(map);
+        fclose(points_file);
+    }
+
     gtk_main ();
 
     return 0;
