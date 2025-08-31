@@ -1122,8 +1122,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
     tiles_nx = (allocation.width  - offset_x) / TILESIZE + 1;
     tiles_ny = (allocation.height - offset_y) / TILESIZE + 1;
 
-    tile_x0 =  floorf((float)priv->map_x / (float)TILESIZE);
-    tile_y0 =  floorf((float)priv->map_y / (float)TILESIZE);
+    tile_x0 =  priv->map_x / TILESIZE;
+    tile_y0 =  priv->map_y / TILESIZE;
 
     for (i=tile_x0; i<(tile_x0+tiles_nx);i++)
     {
