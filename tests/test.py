@@ -84,8 +84,8 @@ class TestOsmGpsMap(unittest.TestCase):
 		loader = GdkPixbuf.PixbufLoader.new_with_type('png')
 		loader.write(buffer.getvalue())
 		buffer.close()
-		pixbuf = loader.get_pixbuf()
 		loader.close()
+		pixbuf = loader.get_pixbuf()
 		image = pixbuf.add_alpha(True , 255, 255, 255)
 		
 		for x in range(0, 5):
