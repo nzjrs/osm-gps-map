@@ -1,0 +1,61 @@
+name: Pages
+
+# Deploy gtk-doc HTML to the gh-pages branch on every published release
+# (RC or final). Landing page + screenshots on gh-pages are preserved.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release
+        uses: actions/checkout@v5
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v5
+        with:
+          ref: gh-pages
+          path: _gh-pages
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            autoconf \
+            autoconf-archive \
+            automake \
+            libtool \
+            gtk-doc-tools \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            libsoup-3.0-dev \
+            libgirepository1.0-dev
+
+      - name: Build documentation
+        run: |
+          ./autogen.sh --prefix=/usr --enable-gtk-doc
+          make -j"$(nproc)"
+
+      - name: Update API docs on gh-pages
+        run: |
+          set -e
+          test -d docs/reference/html
+          rm -rf _gh-pages/docs/reference/html
+          mkdir -p _gh-pages/docs/reference
+          cp -a docs/reference/html _gh-pages/docs/reference/
+          cd _gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/reference/html
+          if git diff --staged --quiet; then
+            echo "No docs changes"
+            exit 0
+          fi
+          git commit -m "docs: API reference for ${{ github.event.release.tag_name }}"
+          git push origin HEAD:gh-pages
