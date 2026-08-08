@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>OsmGpsMapImage: OsmGpsMap Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer">
 <link rel="next" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack">
-<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.34.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -107,22 +107,22 @@ justifications.
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gfloat</span></td>
+<td class="property_type"><span class="type">float</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--rotation" title="The “rotation” property">rotation</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gfloat</span></td>
+<td class="property_type"><span class="type">float</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--x-align" title="The “x-align” property">x-align</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gfloat</span></td>
+<td class="property_type"><span class="type">float</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--y-align" title="The “y-align” property">y-align</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gint</span></td>
+<td class="property_type"><span class="type">int</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapImage.html#OsmGpsMapImage--z-order" title="The “z-order” property">z-order</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
@@ -170,8 +170,8 @@ justifications.
 <a name="osm-gps-map-image-draw"></a><h3>osm_gps_map_image_draw ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_image_draw (<em class="parameter"><code><a class="link" href="OsmGpsMapImage.html" title="OsmGpsMapImage"><span class="type">OsmGpsMapImage</span></a> *object</code></em>,
-                        <em class="parameter"><code><a href="/usr/share/gtk-doc/html/cairo/cairo-cairo-t.html#cairo-t"><span class="type">cairo_t</span></a> *cr</code></em>,
-                        <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Points-Rectangles-and-Regions.html#GdkRectangle"><span class="type">GdkRectangle</span></a> *rect</code></em>);</pre>
+                        <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>,
+                        <em class="parameter"><code><span class="type">GdkRectangle</span> *rect</code></em>);</pre>
 <p>Draw image to given cairo context</p>
 <div class="refsect3">
 <a name="osm-gps-map-image-draw.parameters"></a><h4>Parameters</h4>
@@ -226,7 +226,7 @@ osm_gps_map_image_get_point (<em class="parameter"><code><a class="link" href="O
 <div class="refsect3">
 <a name="osm-gps-map-image-get-point.returns"></a><h4>Returns</h4>
 <p>location point. </p>
-<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+<p><span class="annotation">[<acronym title="The data is owned by the callee, which is responsible of freeing it."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 <p class="since">Since: 0.7.0</p>
 </div>
@@ -252,7 +252,7 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 <div class="refsect3">
 <a name="osm-gps-map-image-new.returns"></a><h4>Returns</h4>
 <p>New image. </p>
-<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+<p><span class="annotation">[<acronym title="The caller owns the data, and is responsible for free it."><span class="acronym">transfer full</span></acronym>]</span></p>
 </div>
 <p class="since">Since: 0.7.0</p>
 </div>
@@ -292,7 +292,7 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapImage--rotation"></a><h3>The <code class="literal">“rotation”</code> property</h3>
-<pre class="programlisting">  “rotation”                 <span class="type">gfloat</span></pre>
+<pre class="programlisting">  “rotation”                 <span class="type">float</span></pre>
 <p>image rotation.</p>
 <p>Owner: OsmGpsMapImage</p>
 <p>Flags: Read / Write / Construct</p>
@@ -302,7 +302,7 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapImage--x-align"></a><h3>The <code class="literal">“x-align”</code> property</h3>
-<pre class="programlisting">  “x-align”                  <span class="type">gfloat</span></pre>
+<pre class="programlisting">  “x-align”                  <span class="type">float</span></pre>
 <p>image x-alignment.</p>
 <p>Owner: OsmGpsMapImage</p>
 <p>Flags: Read / Write / Construct</p>
@@ -312,7 +312,7 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapImage--y-align"></a><h3>The <code class="literal">“y-align”</code> property</h3>
-<pre class="programlisting">  “y-align”                  <span class="type">gfloat</span></pre>
+<pre class="programlisting">  “y-align”                  <span class="type">float</span></pre>
 <p>image y-alignment.</p>
 <p>Owner: OsmGpsMapImage</p>
 <p>Flags: Read / Write / Construct</p>
@@ -322,7 +322,7 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapImage--z-order"></a><h3>The <code class="literal">“z-order”</code> property</h3>
-<pre class="programlisting">  “z-order”                  <span class="type">gint</span></pre>
+<pre class="programlisting">  “z-order”                  <span class="type">int</span></pre>
 <p>image z-order.</p>
 <p>Owner: OsmGpsMapImage</p>
 <p>Flags: Read / Write / Construct</p>
@@ -332,6 +332,6 @@ osm_gps_map_image_new (<em class="parameter"><code><span class="type">void</span
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.32</div>
+<hr>Generated by GTK-Doc V1.34.0</div>
 </body>
 </html>

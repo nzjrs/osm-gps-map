@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>OsmGpsMapTrack: OsmGpsMap Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMapImage.html" title="OsmGpsMapImage">
 <link rel="next" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint">
-<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.34.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -145,13 +145,13 @@ justifications.
 </colgroup>
 <tbody>
 <tr>
-<td class="property_type"><span class="type">gfloat</span></td>
+<td class="property_type"><span class="type">float</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--alpha" title="The “alpha” property">alpha</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
 <td class="property_type">
-<a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *</td>
+<span class="type">GdkRGBA</span> *</td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--color" title="The “color” property">color</a></td>
 <td class="property_flags">Read / Write</td>
 </tr>
@@ -161,7 +161,7 @@ justifications.
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gfloat</span></td>
+<td class="property_type"><span class="type">float</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapTrack.html#OsmGpsMapTrack--line-width" title="The “line-width” property">line-width</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
@@ -266,7 +266,7 @@ osm_gps_map_track_add_point (<em class="parameter"><code><a class="link" href="O
 <tr>
 <td class="parameter_name"><p>track</p></td>
 <td class="parameter_description"><p>a <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a>. </p></td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input and for returning results. Default is transfer full."><span class="acronym">inout</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>point</p></td>
@@ -283,7 +283,7 @@ osm_gps_map_track_add_point (<em class="parameter"><code><a class="link" href="O
 <a name="osm-gps-map-track-get-color"></a><h3>osm_gps_map_track_get_color ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_track_get_color (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
-                             <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *color</code></em>);</pre>
+                             <em class="parameter"><code><span class="type">GdkRGBA</span> *color</code></em>);</pre>
 <p>Get track color</p>
 <div class="refsect3">
 <a name="osm-gps-map-track-get-color.parameters"></a><h4>Parameters</h4>
@@ -333,7 +333,7 @@ osm_gps_map_track_get_points (<em class="parameter"><code><a class="link" href="
 <div class="refsect3">
 <a name="osm-gps-map-track-get-points.returns"></a><h4>Returns</h4>
 <p>list of <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>. </p>
-<p><span class="annotation">[<acronym title="Generics and defining elements of containers and arrays."><span class="acronym">element-type</span></acronym> OsmGpsMapPoint][<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+<p><span class="annotation">[<acronym title="Generics and defining elements of containers and arrays."><span class="acronym">element-type</span></acronym> OsmGpsMapPoint][<acronym title="The data is owned by the callee, which is responsible of freeing it."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 <p class="since">Since: 0.7.0</p>
 </div>
@@ -397,7 +397,7 @@ osm_gps_map_track_get_point (<em class="parameter"><code><a class="link" href="O
 <div class="refsect3">
 <a name="osm-gps-map-track-get-point.returns"></a><h4>Returns</h4>
 <p>a <a class="link" href="OsmGpsMapPoint.html" title="OsmGpsMapPoint"><span class="type">OsmGpsMapPoint</span></a>. </p>
-<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+<p><span class="annotation">[<acronym title="The data is owned by the callee, which is responsible of freeing it."><span class="acronym">transfer none</span></acronym>]</span></p>
 </div>
 <p class="since">Since: 1.1.0</p>
 </div>
@@ -504,7 +504,7 @@ osm_gps_map_track_remove_point (<em class="parameter"><code><a class="link" href
 <a name="osm-gps-map-track-set-color"></a><h3>osm_gps_map_track_set_color ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_track_set_color (<em class="parameter"><code><a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *track</code></em>,
-                             <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *color</code></em>);</pre>
+                             <em class="parameter"><code><span class="type">GdkRGBA</span> *color</code></em>);</pre>
 <p>Set track color</p>
 <div class="refsect3">
 <a name="osm-gps-map-track-set-color.parameters"></a><h4>Parameters</h4>
@@ -539,7 +539,7 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <div class="refsect3">
 <a name="osm-gps-map-track-new.returns"></a><h4>Returns</h4>
 <p>New track. </p>
-<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+<p><span class="annotation">[<acronym title="The caller owns the data, and is responsible for free it."><span class="acronym">transfer full</span></acronym>]</span></p>
 </div>
 <p class="since">Since: 0.7.0</p>
 </div>
@@ -563,7 +563,7 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <a name="OsmGpsMapTrack.property-details"></a><h2>Property Details</h2>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--alpha"></a><h3>The <code class="literal">“alpha”</code> property</h3>
-<pre class="programlisting">  “alpha”                    <span class="type">gfloat</span></pre>
+<pre class="programlisting">  “alpha”                    <span class="type">float</span></pre>
 <p>alpha transparency of the track.</p>
 <p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
@@ -573,7 +573,7 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--color"></a><h3>The <code class="literal">“color”</code> property</h3>
-<pre class="programlisting">  “color”                    <a href="/usr/share/gtk-doc/html/gdk3/gdk3-RGBA-Colors.html#GdkRGBA"><span class="type">GdkRGBA</span></a> *</pre>
+<pre class="programlisting">  “color”                    <span class="type">GdkRGBA</span> *</pre>
 <p>color of the track.</p>
 <p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write</p>
@@ -590,7 +590,7 @@ osm_gps_map_track_new (<em class="parameter"><code><span class="type">void</span
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapTrack--line-width"></a><h3>The <code class="literal">“line-width”</code> property</h3>
-<pre class="programlisting">  “line-width”               <span class="type">gfloat</span></pre>
+<pre class="programlisting">  “line-width”               <span class="type">float</span></pre>
 <p>width of the lines drawn for the track.</p>
 <p>Owner: OsmGpsMapTrack</p>
 <p>Flags: Read / Write / Construct</p>
@@ -659,7 +659,7 @@ is added to the <a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack
 <a name="OsmGpsMapTrack-point-changed"></a><h3>The <code class="literal">“point-changed”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <span class="type">gint</span>            arg1,
+               <span class="type">int</span>             arg1,
                <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
@@ -668,7 +668,7 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <a name="OsmGpsMapTrack-point-inserted"></a><h3>The <code class="literal">“point-inserted”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <span class="type">gint</span>            arg1,
+               <span class="type">int</span>             arg1,
                <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
@@ -677,13 +677,13 @@ user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"
 <a name="OsmGpsMapTrack-point-removed"></a><h3>The <code class="literal">“point-removed”</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 user_function (<a class="link" href="OsmGpsMapTrack.html" title="OsmGpsMapTrack"><span class="type">OsmGpsMapTrack</span></a> *osmgpsmaptrack,
-               <span class="type">gint</span>            arg1,
+               <span class="type">int</span>             arg1,
                <span class="type">gpointer</span>        user_data)</pre>
 <p>Flags: Run First</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.32</div>
+<hr>Generated by GTK-Doc V1.34.0</div>
 </body>
 </html>

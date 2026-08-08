@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>OsmGpsMapLayer: OsmGpsMap Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="OsmGpsMap Reference Manual">
 <link rel="up" href="api-reference.html" title="API Reference">
 <link rel="prev" href="OsmGpsMap.html" title="OsmGpsMap">
 <link rel="next" href="OsmGpsMapImage.html" title="OsmGpsMapImage">
-<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.34.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -111,12 +111,12 @@ justifications.
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gint</span></td>
+<td class="property_type"><span class="type">int</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-x" title="The “osd-x” property">osd-x</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
 <tr>
-<td class="property_type"><span class="type">gint</span></td>
+<td class="property_type"><span class="type">int</span></td>
 <td class="property_name"><a class="link" href="OsmGpsMapLayer.html#OsmGpsMapOsd--osd-y" title="The “osd-y” property">osd-y</a></td>
 <td class="property_flags">Read / Write / Construct</td>
 </tr>
@@ -255,7 +255,7 @@ osm_gps_map_layer_render (<em class="parameter"><code><a class="link" href="OsmG
 <pre class="programlisting"><span class="returnvalue">void</span>
 osm_gps_map_layer_draw (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
                         <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                        <em class="parameter"><code><a href="/usr/share/gtk-doc/html/cairo/cairo-cairo-t.html#cairo-t"><span class="type">cairo_t</span></a> *cr</code></em>);</pre>
+                        <em class="parameter"><code><span class="type">cairo_t</span> *cr</code></em>);</pre>
 <p>Draw layer on map</p>
 <div class="refsect3">
 <a name="osm-gps-map-layer-draw.parameters"></a><h4>Parameters</h4>
@@ -319,7 +319,7 @@ osm_gps_map_layer_busy (<em class="parameter"><code><a class="link" href="OsmGps
 <pre class="programlisting"><span class="returnvalue">gboolean</span>
 osm_gps_map_layer_button_press (<em class="parameter"><code><a class="link" href="OsmGpsMapLayer.html" title="OsmGpsMapLayer"><span class="type">OsmGpsMapLayer</span></a> *self</code></em>,
                                 <em class="parameter"><code><a class="link" href="OsmGpsMap.html" title="OsmGpsMap"><span class="type">OsmGpsMap</span></a> *map</code></em>,
-                                <em class="parameter"><code><a href="/usr/share/gtk-doc/html/gdk3/gdk3-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> *event</code></em>);</pre>
+                                <em class="parameter"><code><span class="type">GdkEventButton</span> *event</code></em>);</pre>
 <p>Handle button event</p>
 <div class="refsect3">
 <a name="osm-gps-map-layer-button-press.parameters"></a><h4>Parameters</h4>
@@ -342,7 +342,7 @@ osm_gps_map_layer_button_press (<em class="parameter"><code><a class="link" href
 </tr>
 <tr>
 <td class="parameter_name"><p>event</p></td>
-<td class="parameter_description"><p>a <a href="/usr/share/gtk-doc/html/gdk3/gdk3-Event-Structures.html#GdkEventButton"><span class="type">GdkEventButton</span></a> event. </p></td>
+<td class="parameter_description"><p>a <span class="type">GdkEventButton</span> event. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
 </tr>
 </tbody>
@@ -401,7 +401,7 @@ osm_gps_map_osd_new (<em class="parameter"><code><span class="type">void</span><
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapOsd--osd-x"></a><h3>The <code class="literal">“osd-x”</code> property</h3>
-<pre class="programlisting">  “osd-x”                    <span class="type">gint</span></pre>
+<pre class="programlisting">  “osd-x”                    <span class="type">int</span></pre>
 <p>The osd x property.</p>
 <p>Owner: OsmGpsMapOsd</p>
 <p>Flags: Read / Write / Construct</p>
@@ -410,7 +410,7 @@ osm_gps_map_osd_new (<em class="parameter"><code><span class="type">void</span><
 <hr>
 <div class="refsect2">
 <a name="OsmGpsMapOsd--osd-y"></a><h3>The <code class="literal">“osd-y”</code> property</h3>
-<pre class="programlisting">  “osd-y”                    <span class="type">gint</span></pre>
+<pre class="programlisting">  “osd-y”                    <span class="type">int</span></pre>
 <p>The osd y property.</p>
 <p>Owner: OsmGpsMapOsd</p>
 <p>Flags: Read / Write / Construct</p>
@@ -492,6 +492,6 @@ osm_gps_map_osd_new (<em class="parameter"><code><span class="type">void</span><
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.32</div>
+<hr>Generated by GTK-Doc V1.34.0</div>
 </body>
 </html>

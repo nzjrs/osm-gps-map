@@ -157,6 +157,7 @@
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_OPENAERIALMAP" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-OPENAERIALMAP:CAPS"/>
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-MAPS-FOR-FREE:CAPS"/>
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_OPENCYCLEMAP" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-OPENCYCLEMAP:CAPS"/>
+    <keyword type="constant" name="OSM_GPS_MAP_SOURCE_OPENTOPOMAP" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-OPENTOPOMAP:CAPS"/>
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-OSM-PUBLIC-TRANSPORT:CAPS"/>
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_GOOGLE_STREET" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-GOOGLE-STREET:CAPS"/>
     <keyword type="constant" name="OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE" link="OsmGpsMap.html#OSM-GPS-MAP-SOURCE-GOOGLE-SATELLITE:CAPS"/>
