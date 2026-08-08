@@ -7,6 +7,12 @@ Changes in 1.2.1
   * Make libsoup minimum version 2.42 (Hubert Kowalski)
   * Manage segments across date change line (Paolo Benve)
   * Remove unnecessary warning about 2nd setup (Tormod Volden)
+  * Add OpenTopoMap map source (Philipe Weyland)
+  * Port to libsoup-3 (Sébastien Noel)
+  * Fix pkg-config file (Sébastien Noel)
+  * Move libsoup-3.0 to Requires.private in pkg-config (Grimmauld)
+  * Make add_point a GObject Introspection method (loqs)
+  * Close PixbufLoader before get_pixbuf in unit tests; fixes Glycin test failure (loqs)
 
 Changes in 1.2.0
 ======================
