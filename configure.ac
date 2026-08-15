@@ -21,6 +21,8 @@ AM_PROG_LIBTOOL
 
 AM_SILENT_RULES([yes])
 
+AC_SYS_LARGEFILE
+
 # Library dependencies
 PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])
 PKG_CHECK_MODULES(GTK,      [gtk+-3.0 >= 3.0])
