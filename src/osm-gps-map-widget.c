@@ -1493,7 +1493,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
 
     /* clear white background */
     w = gtk_widget_get_allocated_width (widget);
-    h = gtk_widget_get_allocated_width (widget);
+    h = gtk_widget_get_allocated_height (widget);
     draw_white_rectangle(cr, 0, 0, w + EXTRA_BORDER * 2, h + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map, cr);
