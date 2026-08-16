@@ -22,6 +22,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <float.h>
+#include <limits.h>
 
 #include "private.h"
 #include "converter.h"
@@ -126,7 +127,14 @@ latlon2zoom(int pix_height,
 {
     float lat1_m = atanh(sin(lat1));
     float lat2_m = atanh(sin(lat2));
-    int zoom_lon = LOG2((double)(2 * pix_width * M_PI) / (TILESIZE * (lon2 - lon1)));
-    int zoom_lat = LOG2((double)(2 * pix_height * M_PI) / (TILESIZE * (lat2_m - lat1_m)));
+    float d_lon = lon2 - lon1;
+    float d_lat = lat2_m - lat1_m;
+    int zoom_lon = INT_MAX;
+    int zoom_lat = INT_MAX;
+
+    if (d_lon != 0.0f)
+        zoom_lon = LOG2((double)(2 * pix_width * M_PI) / (TILESIZE * d_lon));
+    if (d_lat != 0.0f)
+        zoom_lat = LOG2((double)(2 * pix_height * M_PI) / (TILESIZE * d_lat));
     return MIN(zoom_lon, zoom_lat);
 }
