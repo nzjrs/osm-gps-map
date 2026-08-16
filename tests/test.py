@@ -122,5 +122,12 @@ class TestOsmGpsMap(unittest.TestCase):
 		
 		self.osm.track_remove(track)
 
+	def test_insert_point(self):
+		# Issue #45: check insert_point does not double-free.
+		track = OsmGpsMap.MapTrack()
+		point = OsmGpsMap.MapPoint.new_degrees(self.lat, self.lon)
+		track.insert_point(point, 0)
+		self.assertEqual(track.n_points(), 1)
+
 if __name__ == "__main__":
 	unittest.main()
