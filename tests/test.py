@@ -129,5 +129,11 @@ class TestOsmGpsMap(unittest.TestCase):
 		track.insert_point(point, 0)
 		self.assertEqual(track.n_points(), 1)
 
+	def test_zoom_fit_bbox_point(self):
+		# Degenerate bbox (one geotag). Must not crash; zoom clamps to max.
+		self.osm.zoom_fit_bbox(self.lat, self.lat, self.lon, self.lon)
+		self.assertEqual(self.osm.get_property('zoom'),
+				 self.osm.get_property('max-zoom'))
+
 if __name__ == "__main__":
 	unittest.main()
