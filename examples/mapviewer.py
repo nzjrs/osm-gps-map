@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
 
+import math
 import random
 import gi
 
@@ -50,8 +51,11 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         GObject.GObject.__init__(self)
 
     def do_draw(self, gpsmap, cr):
-        # TODO: DummyLayer claims a custom overlay but still draws nothing
-        pass
+        pt = osmgpsmap.point_new_degrees(-44.39, 171.25)
+        x, y = gpsmap.convert_geographic_to_screen(pt)
+        cr.set_source_rgba(1.0, 0.0, 0.0, 0.6)
+        cr.arc(x, y, 12, 0, 2 * math.pi)
+        cr.fill()
 
     def do_render(self, gpsmap):
         pass
