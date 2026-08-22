@@ -51,7 +51,8 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         GObject.GObject.__init__(self)
 
     def do_draw(self, gpsmap, cr):
-        pt = osmgpsmap.point_new_degrees(-44.39, 171.25)
+        # TODO: default view is 0,0 so this circle is off-screen until Home
+        pt = osmgpsmap.MapPoint.new_degrees(-44.39, 171.25)
         x, y = gpsmap.convert_geographic_to_screen(pt)
         cr.set_source_rgba(1.0, 0.0, 0.0, 0.6)
         cr.arc(x, y, 12, 0, 2 * math.pi)
@@ -245,6 +246,7 @@ from in the box below. Special metacharacters may be included in this url
             return False
 
         if self.show_tooltips:
+            # TODO: same GI name as DummyLayer; convert arity untested
             p = osmgpsmap.point_new_degrees(0.0, 0.0)
             self.osm.convert_screen_to_geographic(x, y, p)
             lat, lon = p.get_degrees()
