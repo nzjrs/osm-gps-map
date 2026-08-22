@@ -21,6 +21,7 @@ main (int   argc,
 	OsmGpsMapTrack* track = osm_gps_map_track_new();
 
 	OsmGpsMapPoint* p1, *p2;
+	/* TODO: same unexplained radians as polygon.c */
 	p1 = osm_gps_map_point_new_radians(1.25663706, -0.488692191);
 	p2 = osm_gps_map_point_new_radians(1.06465084, -0.750491578);
 
