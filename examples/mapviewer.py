@@ -38,7 +38,7 @@ print(f"using library: {osmgpsmap.__file__} (version {osmgpsmap._version})")
 assert osmgpsmap._version == "1.0"
 
 class DummyMapNoGpsPoint(osmgpsmap.Map):
-    def do_draw_gps_point(self, drawable):
+    def do_draw_gps_point(self, cr):
         pass
 
 
@@ -49,7 +49,8 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
     def __init__(self):
         GObject.GObject.__init__(self)
 
-    def do_draw(self, gpsmap, gdkdrawable):
+    def do_draw(self, gpsmap, cr):
+        # TODO: DummyLayer claims a custom overlay but still draws nothing
         pass
 
     def do_render(self, gpsmap):
@@ -58,7 +59,7 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
     def do_busy(self):
         return False
 
-    def do_button_press(self, gpsmap, gdkeventbutton):
+    def do_button_press(self, gpsmap, event):
         return False
 
 
