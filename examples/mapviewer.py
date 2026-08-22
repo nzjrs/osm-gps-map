@@ -53,6 +53,12 @@ GObject.type_register(DummyMapNoGpsPoint)
 
 
 class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
+    """Cairo overlay. The map passes its cairo_t; do not create a surface.
+
+    For paths use track_add, for markers image_add. This class is the
+    live-cairo case: draw in widget pixels after convert_geographic_to_screen.
+    """
+
     def __init__(self):
         GObject.GObject.__init__(self)
 
@@ -64,6 +70,7 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         cr.fill()
 
     def do_render(self, gpsmap):
+        # OSD caches bitmaps here. Geo overlays paint in do_draw instead.
         pass
 
     def do_busy(self):
