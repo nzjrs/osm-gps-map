@@ -34,7 +34,7 @@ from gi.repository import (
     OsmGpsMap as osmgpsmap,
 )  # noqa
 
-print(f"using library: {osmgpsmap.__file__} (version {osmgpsmap._version})")
+print(f"using {osmgpsmap} (version {osmgpsmap._version})")
 
 assert osmgpsmap._version == "1.0"
 
