@@ -1,17 +1,39 @@
 osm-gps-map example applications
+================================
+
+All demos must be run from this directory so they find mapviewer.ui and poi.png.
+
+If running uninstalled, you probably need to tell GObject introspection
+where to find the bindings. From this directory:
+
+    export LD_LIBRARY_PATH=../src/.libs/
+    export GI_TYPELIB_PATH=../src/
+
+Applications
+------------
  * ./mapviewer
-   C based demo app with many options. See '--help' for a list. Note, this
-   must be executed from the examples directory so it can find the mapviewer.ui
-   file.
+   C based demo app with many options. See '--help' for a list.
+   --editable-tracks makes the right-click track draggable.
  * ./polygon
-   This example demonstrates editable polygons. Vertex points can be dragged. 
+   Editable polygons. Vertex points can be dragged.
    Clicking mid-points divides the line and creates another vertex.
+ * ./editable_track
+   One editable track. Uses osm_gps_map_point_new_degrees like polygon.
  * ./mapviewer.py
-   Python version of the C demo app, with examples showing how to do custom
-   layers.
+   Python version of the C demo. DummyLayer shows a cairo overlay.
  * ./mapviewer.js
-   Javascript example using seed + gobject-introspection. If running uninstalled,
-   you probbably need to tell GObject introspection where to find the
-   bindings. Do the following from the example directory
-    # export LD_LIBRARY_PATH=../src/.libs/
-    # export GI_TYPELIB_PATH=../src/
+   Javascript example using seed + gobject-introspection.
+
+Drawing on the map
+------------------
+Do not create a cairo ImageSurface matching the map. The widget already
+has a cairo_t and passes it to OsmGpsMapLayer.do_draw.
+
+ * Live cairo: DummyLayer in mapviewer.py paints a red circle at Home
+   (Timaru) via convert_geographic_to_screen.
+ * Paths: double-right-click (or Ctrl+double-left) uses track_add.
+   Triple-right clears the track. C currently does not put a new track
+   back on the map after remove.
+ * Images: double-middle-click (or Shift+double-left) uses image_add.
+   Python paints a cairo circle into a GdkPixbuf; C loads poi.png.
+ * GPS: double-left-click calls gps_add (blue ball + random heading).
