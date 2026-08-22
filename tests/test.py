@@ -122,6 +122,13 @@ class TestOsmGpsMap(unittest.TestCase):
 		
 		self.osm.track_remove(track)
 
+	def test_insert_point(self):
+		# Issue #45: check insert_point does not double-free.
+		track = OsmGpsMap.MapTrack()
+		point = OsmGpsMap.MapPoint.new_degrees(self.lat, self.lon)
+		track.insert_point(point, 0)
+		self.assertEqual(track.n_points(), 1)
+
 	def test_zoom_fit_bbox_point(self):
 		# Degenerate bbox (one geotag). Must not crash; zoom clamps to max.
 		self.osm.zoom_fit_bbox(self.lat, self.lat, self.lon, self.lon)

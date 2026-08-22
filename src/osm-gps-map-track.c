@@ -312,11 +312,16 @@ int osm_gps_map_track_n_points(OsmGpsMapTrack* track)
     return g_slist_length(track->priv->track);
 }
 
-void osm_gps_map_track_insert_point(OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos)
+void
+osm_gps_map_track_insert_point (OsmGpsMapTrack* track, OsmGpsMapPoint* np, int pos)
 {
-    OsmGpsMapTrackPrivate* priv = track->priv;
-    priv->track = g_slist_insert(priv->track, np, pos);
-    g_signal_emit(track, signals[POINT_INSERTED], 0, pos);
+    // TODO: const OsmGpsMapPoint * like add_point (1.3)
+    g_return_if_fail (OSM_GPS_MAP_IS_TRACK (track));
+    OsmGpsMapTrackPrivate *priv = track->priv;
+
+    OsmGpsMapPoint *p = g_boxed_copy (OSM_TYPE_GPS_MAP_POINT, np);
+    priv->track = g_slist_insert (priv->track, p, pos);
+    g_signal_emit (track, signals[POINT_INSERTED], 0, pos);
 }
 
 OsmGpsMapPoint* osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos)

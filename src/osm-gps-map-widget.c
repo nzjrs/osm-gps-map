@@ -2242,9 +2242,9 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
                         if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
-                            OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
-                            osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
-                            osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            OsmGpsMapPoint newpoint;
+                            osm_gps_map_convert_screen_to_geographic(map, ptx, pty, &newpoint);
+                            osm_gps_map_track_insert_point(track, &newpoint, ctr);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2301,9 +2301,9 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                         dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
                         if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                         {
-                            OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
-                            osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
-                            osm_gps_map_track_insert_point(track, newpoint, ctr);
+                            OsmGpsMapPoint newpoint;
+                            osm_gps_map_convert_screen_to_geographic(map, ptx, pty, &newpoint);
+                            osm_gps_map_track_insert_point(track, &newpoint, ctr);
                             osm_gps_map_map_redraw(map);
                             return FALSE;
                         }
@@ -2324,9 +2324,9 @@ osm_gps_map_button_press (GtkWidget *widget, GdkEventButton *event)
                 float dist_sqrd = (event->x - ptx) * (event->x-ptx) + (event->y-pty) * (event->y-pty);
                 if(dist_sqrd <= ((DOT_RADIUS + 1) * (DOT_RADIUS + 1)))
                 {
-                    OsmGpsMapPoint* newpoint = malloc(sizeof(OsmGpsMapPoint));
-                    osm_gps_map_convert_screen_to_geographic(map, ptx, pty, newpoint);
-                    osm_gps_map_track_insert_point(track, newpoint, ctr);
+                    OsmGpsMapPoint newpoint;
+                    osm_gps_map_convert_screen_to_geographic(map, ptx, pty, &newpoint);
+                    osm_gps_map_track_insert_point(track, &newpoint, ctr);
                     osm_gps_map_map_redraw(map);
                     return FALSE;
                 }
