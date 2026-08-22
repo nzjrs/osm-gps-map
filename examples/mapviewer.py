@@ -19,6 +19,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 import math
 import random
+
+import cairo
 import gi
 
 gi.require_version("Gdk", "3.0")
@@ -315,11 +317,22 @@ from in the box below. Special metacharacters may be included in this url
             if left:
                 self.osm.gps_add(lat, lon, heading=random.random() * 360)
             if middle:
-                pb = GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
-                self.last_image = self.osm.image_add(lat, lon, pb)
+                self.last_image = self.osm.image_add(
+                    lat, lon, self._marker_pixbuf()
+                )
             if right:
                 pt = osmgpsmap.MapPoint.new_degrees(lat, lon)
                 self.click_track.add_point(pt)
+
+    def _marker_pixbuf(self):
+        # TODO: poi.png unused; this is the programmatic image_add path
+        size = 24
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
+        cr = cairo.Context(surface)
+        cr.set_source_rgba(0.1, 0.4, 0.9, 0.9)
+        cr.arc(size / 2, size / 2, size / 2 - 2, 0, 2 * math.pi)
+        cr.fill()
+        return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
 
 if __name__ == "__main__":
