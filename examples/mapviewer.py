@@ -38,6 +38,12 @@ print(f"using library: {osmgpsmap.__file__} (version {osmgpsmap._version})")
 
 assert osmgpsmap._version == "1.0"
 
+# Timaru. DummyLayer draws here; click Home or start here to see it.
+HOME_LAT = -44.39
+HOME_LON = 171.25
+HOME_ZOOM = 12
+
+
 class DummyMapNoGpsPoint(osmgpsmap.Map):
     def do_draw_gps_point(self, cr):
         pass
@@ -51,8 +57,7 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         GObject.GObject.__init__(self)
 
     def do_draw(self, gpsmap, cr):
-        # TODO: default view is 0,0 so this circle is off-screen until Home
-        pt = osmgpsmap.MapPoint.new_degrees(-44.39, 171.25)
+        pt = osmgpsmap.MapPoint.new_degrees(HOME_LAT, HOME_LON)
         x, y = gpsmap.convert_geographic_to_screen(pt)
         cr.set_source_rgba(1.0, 0.0, 0.0, 0.6)
         cr.arc(x, y, 12, 0, 2 * math.pi)
@@ -93,6 +98,7 @@ class UI(Gtk.Window):
         )
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
         self.osm.layer_add(DummyLayer())
+        self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
 
         self.last_image = None
 
@@ -239,7 +245,7 @@ from in the box below. Special metacharacters may be included in this url
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
     def home_clicked(self, button):
-        self.osm.set_center_and_zoom(-44.39, 171.25, 12)
+        self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
 
     def on_query_tooltip(self, widget, x, y, keyboard_tip, tooltip, data=None):
         if keyboard_tip:
@@ -297,6 +303,7 @@ from in the box below. Special metacharacters may be included in this url
                 pb = GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
                 self.last_image = self.osm.image_add(lat, lon, pb)
             if right:
+                # TODO: C mapviewer uses track_add here; Python still no-ops
                 pass
 
 
