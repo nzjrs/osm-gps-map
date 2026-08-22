@@ -75,6 +75,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
         }
         if (right_button) {
             osm_gps_map_track_remove(map, othertrack);
+            /* TODO: track is gone; later add_point writes to an undrawn object */
         }
     } else if (event->type == GDK_2BUTTON_PRESS) {
         if (left_button) {

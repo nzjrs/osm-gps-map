@@ -107,6 +107,8 @@ class UI(Gtk.Window):
         self.osm.layer_add(DummyLayer())
         self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
 
+        self.click_track = osmgpsmap.MapTrack()
+        self.osm.track_add(self.click_track)
         self.last_image = None
 
         self.osm.connect("button_press_event", self.on_button_press)
@@ -283,6 +285,8 @@ from in the box below. Special metacharacters may be included in this url
         )
 
     def on_button_press(self, osm, event):
+        # Double-click: left GPS, middle image_add, right track_add.
+        # Triple-click: middle remove last image, right clear the track.
         state = event.get_state()
         lat, lon = self.osm.get_event_location(event).get_degrees()
 
@@ -303,6 +307,10 @@ from in the box below. Special metacharacters may be included in this url
                 if self.last_image is not None:
                     self.osm.image_remove(self.last_image)
                     self.last_image = None
+            if right:
+                self.osm.track_remove(self.click_track)
+                self.click_track = osmgpsmap.MapTrack()
+                self.osm.track_add(self.click_track)
         elif event.type == GDK_2BUTTON_PRESS:
             if left:
                 self.osm.gps_add(lat, lon, heading=random.random() * 360)
@@ -310,8 +318,8 @@ from in the box below. Special metacharacters may be included in this url
                 pb = GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
                 self.last_image = self.osm.image_add(lat, lon, pb)
             if right:
-                # TODO: C mapviewer uses track_add here; Python still no-ops
-                pass
+                pt = osmgpsmap.MapPoint.new_degrees(lat, lon)
+                self.click_track.add_point(pt)
 
 
 if __name__ == "__main__":
