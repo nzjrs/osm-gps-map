@@ -263,9 +263,8 @@ from in the box below. Special metacharacters may be included in this url
             return False
 
         if self.show_tooltips:
-            # TODO: same GI name as DummyLayer; convert arity untested
-            p = osmgpsmap.point_new_degrees(0.0, 0.0)
-            self.osm.convert_screen_to_geographic(x, y, p)
+            # GI treats the MapPoint as an out-arg, so it is returned.
+            p = self.osm.convert_screen_to_geographic(x, y)
             lat, lon = p.get_degrees()
             tooltip.set_markup(f"{lat:+.4f}, {lon:+.4f}")
             return True
