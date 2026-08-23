@@ -69,9 +69,10 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
     OsmGpsMapPoint coord;
     float lat, lon;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
+    /* 2BUTTON_PRESS often has BUTTONn_MASK set; ignore those, keep Shift/Ctrl. */
+    GdkModifierType mods = event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK);
 
-    int left_button =   (event->button == 1) && (event->state == 0);
-    /* TODO: 2BUTTON_PRESS often has BUTTON1_MASK so left gps_add never runs */
+    int left_button =   (event->button == 1) && (mods == 0);
     int middle_button = (event->button == 2) || ((event->button == 1) && (event->state & GDK_SHIFT_MASK));
     int right_button =  (event->button == 3) || ((event->button == 1) && (event->state & GDK_CONTROL_MASK));
 
@@ -329,6 +330,8 @@ main (int argc, char **argv)
                         NULL);
     osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
+
+    /* TODO: auto-center jumps gps_add under the OSD crosshair */
 
     g_click_track = click_track_new ();
     osm_gps_map_track_add (OSM_GPS_MAP (map), g_click_track);

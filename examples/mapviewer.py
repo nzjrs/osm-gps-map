@@ -108,6 +108,7 @@ class UI(Gtk.Window):
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
         self.osm.layer_add(DummyLayer())
         self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
+        # TODO: auto-center jumps gps_add under the OSD crosshair
 
         self.click_track = osmgpsmap.MapTrack()
         self.osm.track_add(self.click_track)
@@ -291,8 +292,13 @@ from in the box below. Special metacharacters may be included in this url
         state = event.get_state()
         lat, lon = self.osm.get_event_location(event).get_degrees()
 
-        # TODO: 2BUTTON_PRESS often has BUTTON1_MASK so gps_add never runs
-        left = event.button == 1 and state == 0
+        # 2BUTTON_PRESS often has BUTTONn_MASK set; ignore those, keep Shift/Ctrl.
+        mods = state & (
+            Gdk.ModifierType.SHIFT_MASK
+            | Gdk.ModifierType.CONTROL_MASK
+            | Gdk.ModifierType.MOD1_MASK
+        )
+        left = event.button == 1 and mods == 0
         middle = event.button == 2 or (
             event.button == 1 and state & Gdk.ModifierType.SHIFT_MASK
         )
