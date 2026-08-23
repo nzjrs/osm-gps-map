@@ -108,7 +108,8 @@ class UI(Gtk.Window):
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
         self.osm.layer_add(DummyLayer())
         self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
-        # TODO: auto-center jumps gps_add under the OSD crosshair
+        # Stay put on gps_add so the blue blob is not under the OSD crosshair.
+        self.osm.props.auto_center = False
 
         self.click_track = osmgpsmap.MapTrack()
         self.osm.track_add(self.click_track)

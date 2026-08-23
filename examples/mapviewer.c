@@ -331,7 +331,8 @@ main (int argc, char **argv)
     osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
-    /* TODO: auto-center jumps gps_add under the OSD crosshair */
+    /* Stay put on gps_add so the blue blob is not under the OSD crosshair. */
+    g_object_set (map, "auto-center", FALSE, NULL);
 
     g_click_track = click_track_new ();
     osm_gps_map_track_add (OSM_GPS_MAP (map), g_click_track);
