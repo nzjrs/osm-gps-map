@@ -177,6 +177,14 @@ class TestOsmGpsMap(unittest.TestCase):
 		track.insert_point(point, 0)
 		self.assertEqual(track.n_points(), 1)
 
+	def test_convert_screen_to_geographic(self):
+		# GI returns the MapPoint; do not pass one in.
+		pt = self.osm.convert_screen_to_geographic(0, 0)
+		self.assertEqual(type(pt), OsmGpsMap.MapPoint)
+		lat, lon = pt.get_degrees()
+		self.assertTrue(-90.0 <= lat <= 90.0)
+		self.assertTrue(-180.0 <= lon <= 180.0)
+
 	def test_zoom_fit_bbox_point(self):
 		# Degenerate bbox (one geotag). Must not crash; zoom clamps to max.
 		self.osm.zoom_fit_bbox(self.lat, self.lat, self.lon, self.lon)
