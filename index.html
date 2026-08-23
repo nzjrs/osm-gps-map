@@ -52,15 +52,15 @@
     <p>A Gtk+ widget (and Python bindings) that when given GPS co-ordinates, draws a GPS track, and points of interest on a moving map display.
     Downloads map data from a number of websites, including openstreetmap.org. The library has excellent performance and is currently used in a number of Gtk+ applications.</p>
     <p><img src="screenshot.png" alt="osm-gps-map showing an OpenStreetMap track in Christchurch"/><br/><img src="screenshot-osd.png" alt="osm-gps-map with on-screen display over satellite imagery"/></p>
-    <p>Currently supports a number of different mapping sources<br/>
+    <p>Currently supports a number of different mapping sources:</p>
     <ul>
         <li>OpenStreetMap (default)</li>
         <li>OpenTopoMap</li>
         <li>OpenCycleMap</li>
         <li>Maps-For-Free</li>
         <li>Google Maps / Satellite and Bing Maps (Virtual Earth)</li>
-    </ul></p>
-    <p>It also has the following features<br/>
+    </ul>
+    <p>It also has the following features:</p>
     <ul>
         <li>Intelligent, flexible and customizable caching of maps, including the ability to request a specific area of the map to be cached ahead of time</li>
         <li>Recording of points of interest on the map (and the ability to add arbitrary pixmaps at those points)</li>
@@ -77,19 +77,20 @@
     </ul>
 
     <h2>Documentation</h2>
-    <p><ul>
+    <ul>
         <li><a href="docs/reference/html/index.html">API Documentation</a></li>
-        <li>Code examples</li>
-        <ul>
-            <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.c">mapviewer.c</a></li>
-            <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.py">mapviewer.py</a></li>
-            <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.js">mapviewer.js</a> (JavaScript example using GObject Introspection)</li>
-            <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/polygon.c">polygon.c</a> (small polygon-on-map drawing example)</li>
-            <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/editable_track.c">editable_track.c</a> (small example of an editable track feature)</li>
-        </ul>
+        <li>Code examples
+            <ul>
+                <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.c">mapviewer.c</a></li>
+                <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.py">mapviewer.py</a></li>
+                <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/mapviewer.js">mapviewer.js</a> (JavaScript example using GObject Introspection)</li>
+                <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/polygon.c">polygon.c</a> (small polygon-on-map drawing example)</li>
+                <li><a href="https://github.com/nzjrs/osm-gps-map/blob/master/examples/editable_track.c">editable_track.c</a> (small example of an editable track feature)</li>
+            </ul>
+        </li>
         <li>Please e-mail the <a href="https://groups.google.com/group/osm-gps-map">mailing list</a> for all questions.</li>
         <li>Report issues using <a href="https://github.com/nzjrs/osm-gps-map/issues">issue tracker</a></li>
-    </ul></p>
+    </ul>
 
     <h2>Install Instructions</h2>
     <p>osm-gps-map should be packaged by your distribution. On Debian, Ubuntu or
@@ -101,51 +102,50 @@
     </p>
 
     <h3>Installing From Source</h3>
-    <p>To build from source on Linux you will need to install the following dependencies:
+    <p>To build from source on Linux you will need to install the following dependencies:</p>
     <ul>
         <li>libsoup-3.0</li>
         <li>gtk+-3.0</li>
         <li>cairo</li>
         <li>gobject-introspection</li>
-    </ul></p>
+    </ul>
 
     <p>Once the dependencies have been installed you can build osm-gps-map. On Linux perform the following:
 <pre>./autogen.sh; make; make install #C library</pre>
     </p>
 
     <h2>Download</h2>
-    <p>You may download any of the following archives
+    <p>You may download any of the following archives:</p>
     <ul>
       <li><a href="https://github.com/nzjrs/osm-gps-map/releases/tag/1.2.1">1.2.1</a></li>
       <li><a href="https://github.com/nzjrs/osm-gps-map/releases/tag/1.2.0">1.2.0</a></li>
         <li><a href="https://github.com/nzjrs/osm-gps-map/releases/tag/1.1.0">1.1.0</a></li>
         <li>unstable snapshot <a href="https://github.com/nzjrs/osm-gps-map/archive/refs/heads/master.tar.gz">(tar)</a> <a href="https://github.com/nzjrs/osm-gps-map/archive/refs/heads/master.zip">(zip)</a></li>
     </ul>
-    </p>
     <p>You can also clone the project with <a href="https://git-scm.com">Git</a>
       by running:
       <pre>$ git clone https://github.com/nzjrs/osm-gps-map.git</pre>
     </p>
 
     <h2>License</h2>
-    <p><ul>
+    <ul>
         <li>GPLv2+</li>
-    </ul></p>
+    </ul>
 
     <h2>Authors</h2>
-    <p><ul>
+    <ul>
         <li>John Stowers</li>
         <li>Till Harbaum</li>
         <li>Alberto Mardegan</li>
         <li>Mark Cottrell</li>
         <li>Originally based on tangoGPS by Marcus Bauer</li>
-    </ul></p>
+    </ul>
 
     <h2>Contact</h2>
-    <p><ul>
+    <ul>
         <li>osm-gps-map <a href="https://groups.google.com/group/osm-gps-map">mailing list</a></li>
         <li>osm-gps-map <a href="https://github.com/nzjrs/osm-gps-map/issues">issue tracker</a></li>
-    </ul></p>
+    </ul>
 
     <div class="footer">
       get the source code on GitHub : <a href="https://github.com/nzjrs/osm-gps-map">nzjrs/osm-gps-map</a>
