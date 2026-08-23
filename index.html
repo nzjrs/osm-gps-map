@@ -101,17 +101,11 @@
 <pre>sudo apt install libosmgpsmap-1.0-dev</pre>
 
     <h3>Installing From Source</h3>
-    <p>To build from source on Linux you will need to install the following dependencies:</p>
-    <ul>
-        <li>libsoup-3.0</li>
-        <li>gtk+-3.0</li>
-        <li>cairo</li>
-        <li>gobject-introspection</li>
-    </ul>
-
-    <p>Once the dependencies have been installed you can build osm-gps-map. On Linux perform the following:
-<pre>./autogen.sh; make; make install #C library</pre>
-    </p>
+    <p>To build from source on Debian or Ubuntu you will need:</p>
+<pre>sudo apt install build-essential autoconf automake libtool \
+  libgtk-3-dev libsoup-3.0-dev libgirepository1.0-dev</pre>
+    <p>Then:</p>
+<pre>./autogen.sh &amp;&amp; make &amp;&amp; sudo make install</pre>
 
     <h2>Download</h2>
     <p>You may download any of the following archives:</p>
