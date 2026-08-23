@@ -52,16 +52,26 @@ static GOptionEntry debug_entries[] =
 
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
+static OsmGpsMapTrack *g_click_track = NULL;
+
+static OsmGpsMapTrack *
+click_track_new (void)
+{
+    OsmGpsMapTrack *track = osm_gps_map_track_new ();
+    if (opt_editable_tracks)
+        g_object_set (track, "editable", TRUE, NULL);
+    return track;
+}
 
 static gboolean
-on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data G_GNUC_UNUSED)
 {
     OsmGpsMapPoint coord;
     float lat, lon;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
-    OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
 
     int left_button =   (event->button == 1) && (event->state == 0);
+    /* TODO: 2BUTTON_PRESS often has BUTTON1_MASK so left gps_add never runs */
     int middle_button = (event->button == 2) || ((event->button == 1) && (event->state & GDK_SHIFT_MASK));
     int right_button =  (event->button == 3) || ((event->button == 1) && (event->state & GDK_CONTROL_MASK));
 
@@ -74,8 +84,10 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                 osm_gps_map_image_remove (map, g_last_image);
         }
         if (right_button) {
-            osm_gps_map_track_remove(map, othertrack);
-            /* TODO: track is gone; later add_point writes to an undrawn object */
+            osm_gps_map_track_remove (map, g_click_track);
+            g_object_unref (g_click_track);
+            g_click_track = click_track_new ();
+            osm_gps_map_track_add (map, g_click_track);
         }
     } else if (event->type == GDK_2BUTTON_PRESS) {
         if (left_button) {
@@ -91,7 +103,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                                   g_star_image);
         }
         if (right_button) {
-            osm_gps_map_track_add_point(othertrack, &coord);
+            osm_gps_map_track_add_point(g_click_track, &coord);
         }
     }
 
@@ -248,7 +260,6 @@ main (int argc, char **argv)
     GtkAccelGroup *ag;
     OsmGpsMap *map;
     OsmGpsMapLayer *osd;
-    OsmGpsMapTrack *rightclicktrack;
     const char *repo_uri;
     char *cachedir, *cachebasedir;
     GError *error = NULL;
@@ -319,12 +330,8 @@ main (int argc, char **argv)
     osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
-    //Add a second track for right clicks
-    rightclicktrack = osm_gps_map_track_new();
-
-    if(opt_editable_tracks)
-        g_object_set(rightclicktrack, "editable", TRUE, NULL);
-    osm_gps_map_track_add(OSM_GPS_MAP(map), rightclicktrack);
+    g_click_track = click_track_new ();
+    osm_gps_map_track_add (OSM_GPS_MAP (map), g_click_track);
 
     g_free(cachedir);
     g_free(cachebasedir);
@@ -405,7 +412,7 @@ main (int argc, char **argv)
                 gtk_builder_get_object(builder, "star_yalign_adjustment"), "value-changed",
                 G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
     g_signal_connect (G_OBJECT (map), "button-press-event",
-                G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
+                G_CALLBACK (on_button_press_event), NULL);
     g_signal_connect (G_OBJECT (map), "changed",
                 G_CALLBACK (on_map_changed_event),
                 (gpointer) gtk_builder_get_object(builder, "text_entry"));

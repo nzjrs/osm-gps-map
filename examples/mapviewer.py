@@ -291,6 +291,7 @@ from in the box below. Special metacharacters may be included in this url
         state = event.get_state()
         lat, lon = self.osm.get_event_location(event).get_degrees()
 
+        # TODO: 2BUTTON_PRESS often has BUTTON1_MASK so gps_add never runs
         left = event.button == 1 and state == 0
         middle = event.button == 2 or (
             event.button == 1 and state & Gdk.ModifierType.SHIFT_MASK
