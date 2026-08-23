@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>osm-gps-map by nzjrs</title>
 
@@ -16,8 +17,10 @@
     }
     #container {
       margin: 0 auto;
-      width: 700px;
+      max-width: 700px;
+      padding: 0 16px;
     }
+    img { max-width: 100%; height: auto; }
 		h1 { font-size: 3.8em; color: #cccccc; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
 		h1 a { text-decoration: none }
@@ -26,7 +29,7 @@
     a { color: #cccccc; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
+		pre { background: #000; color: #fff; padding: 15px; overflow-x: auto;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style>
