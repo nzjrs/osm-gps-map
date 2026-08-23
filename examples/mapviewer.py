@@ -114,6 +114,7 @@ class UI(Gtk.Window):
         self.click_track = osmgpsmap.MapTrack()
         self.osm.track_add(self.click_track)
         self.last_image = None
+        self.use_poi_png = True
 
         self.osm.connect("button_press_event", self.on_button_press)
         self.osm.connect("changed", self.on_map_change)
@@ -210,6 +211,11 @@ from in the box below. Special metacharacters may be included in this url
         cb.connect("toggled", self.on_show_tooltips_toggled)
         self.vbox.pack_end(cb, False, True, 0)
 
+        cb = Gtk.CheckButton(label="Use poi.png for markers")
+        cb.props.active = self.use_poi_png
+        cb.connect("toggled", self.on_use_poi_png_toggled)
+        self.vbox.pack_end(cb, False, True, 0)
+
         cb = Gtk.CheckButton(label="Disable Cache")
         cb.props.active = False
         cb.connect("toggled", self.disable_cache_toggled)
@@ -229,6 +235,9 @@ from in the box below. Special metacharacters may be included in this url
 
     def on_show_tooltips_toggled(self, btn):
         self.show_tooltips = btn.props.active
+
+    def on_use_poi_png_toggled(self, btn):
+        self.use_poi_png = btn.props.active
 
     def load_map_clicked(self, button):
         uri = self.repouri_entry.get_text()
@@ -332,13 +341,35 @@ from in the box below. Special metacharacters may be included in this url
                 self.click_track.add_point(pt)
 
     def _marker_pixbuf(self):
-        # TODO: poi.png unused; this is the programmatic image_add path
-        size = 24
+        if self.use_poi_png:
+            try:
+                return GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
+            except GLib.Error as err:
+                print("poi.png:", err)
+        return self._star_pixbuf()
+
+    def _star_pixbuf(self, size=24):
+        # Programmatic image: cairo star -> pixbuf -> image_add.
+        # Live cairo on the map is DummyLayer, not this.
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
         cr = cairo.Context(surface)
-        cr.set_source_rgba(0.1, 0.4, 0.9, 0.9)
-        cr.arc(size / 2, size / 2, size / 2 - 2, 0, 2 * math.pi)
-        cr.fill()
+        cx = cy = size / 2.0
+        outer, inner = size / 2.0 - 1.0, size / 5.0
+        for i in range(10):
+            r = outer if i % 2 == 0 else inner
+            ang = -math.pi / 2.0 + i * math.pi / 5.0
+            x = cx + r * math.cos(ang)
+            y = cy + r * math.sin(ang)
+            if i == 0:
+                cr.move_to(x, y)
+            else:
+                cr.line_to(x, y)
+        cr.close_path()
+        cr.set_source_rgb(1.0, 0.85, 0.0)
+        cr.fill_preserve()
+        cr.set_source_rgb(0.75, 0.45, 0.0)
+        cr.set_line_width(1)
+        cr.stroke()
         return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
 
