@@ -1,6 +1,6 @@
 #!/usr/bin/seed
 
-// You probbably need to tell GObject introspection where to find the bindings
+// You probably need to tell GObject introspection where to find the bindings
 // export LD_LIBRARY_PATH=../src/.libs/
 // export GI_TYPELIB_PATH=../src/
 

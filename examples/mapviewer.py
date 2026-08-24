@@ -181,7 +181,7 @@ from in the box below. Special metacharacters may be included in this url
 \t#S\tInverse zoom (max-zoom - #Z)
 \t#Q\tQuadtree encoded tile (qrts)
 \t#W\tQuadtree encoded tile (1234)
-\t#U\tEncoding not implemeted
+\t#U\tEncoding not implemented
 \t#R\tRandom integer, 0-4"""
         )
         lbl.props.xalign = 0

@@ -3,7 +3,7 @@ osm-gps-map example applications
 Run C and Python demos from this directory (examples) so they find mapviewer.ui
 and poi.png. 
 
-If running uninstalled, you probbably need to tell GObject introspection where 
+If running uninstalled, you probably need to tell GObject introspection where 
 to find the bindings. Do the following from the example directory:
 
     export LD_LIBRARY_PATH=../src/.libs/

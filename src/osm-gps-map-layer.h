@@ -109,7 +109,7 @@ gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
  *
  * Handle button event
  *
- * Returns: whether even had been handled
+ * Returns: whether the event had been handled
  * Since: 0.6.0
  **/
 gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);

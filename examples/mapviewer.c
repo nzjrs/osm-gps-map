@@ -119,7 +119,7 @@ on_map_changed_event (GtkWidget *widget, gpointer user_data)
     OsmGpsMap *map = OSM_GPS_MAP(widget);
 
     g_object_get(map, "latitude", &lat, "longitude", &lon, NULL);
-    gchar *msg = g_strdup_printf("Map Centre: lattitude %f longitude %f",lat,lon);
+    gchar *msg = g_strdup_printf("Map Centre: latitude %f longitude %f",lat,lon);
     gtk_entry_set_text(entry, msg);
     g_free(msg);
 
