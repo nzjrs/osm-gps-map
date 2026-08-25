@@ -50,6 +50,11 @@ static GOptionEntry debug_entries[] =
 };
 #endif
 
+/* Shared with mapviewer.py DummyLayer Home (Timaru). */
+#define HOME_LAT  -44.39
+#define HOME_LON  171.25
+#define HOME_ZOOM 12
+
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 static OsmGpsMapTrack *g_click_track = NULL;
@@ -150,7 +155,7 @@ static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    osm_gps_map_set_center_and_zoom(map, -43.5326,172.6362,12);
+    osm_gps_map_set_center_and_zoom(map, HOME_LAT, HOME_LON, HOME_ZOOM);
     return FALSE;
 }
 
@@ -336,6 +341,7 @@ main (int argc, char **argv)
 
     g_click_track = click_track_new ();
     osm_gps_map_track_add (OSM_GPS_MAP (map), g_click_track);
+    osm_gps_map_set_center_and_zoom (map, HOME_LAT, HOME_LON, HOME_ZOOM);
 
     g_free(cachedir);
     g_free(cachebasedir);
