@@ -99,7 +99,7 @@ class UI(Gtk.Window):
         if 0:
             self.osm = DummyMapNoGpsPoint()
         else:
-            self.osm = osmgpsmap.Map()
+            self.osm = osmgpsmap.Map(user_agent="mapviewer.py")
         self.osm.layer_add(
             osmgpsmap.MapOsd(show_dpad=True,
                              show_zoom=True,
@@ -247,10 +247,12 @@ from in the box below. Special metacharacters may be included in this url
                 # remove old map
                 self.vbox.remove(self.osm)
             try:
-                self.osm = osmgpsmap.Map(repo_uri=uri, image_format=format)
+                self.osm = osmgpsmap.Map(
+                    repo_uri=uri, image_format=format, user_agent="mapviewer.py"
+                )
             except Exception as e:
                 print("ERROR:", e)
-                self.osm = osmgpsmap.Map()
+                self.osm = osmgpsmap.Map(user_agent="mapviewer.py")
 
             self.vbox.pack_start(self.osm, True, True, 0)
             self.osm.show()
