@@ -40,7 +40,7 @@ print(f"using {osmgpsmap} (version {osmgpsmap._version})")
 
 assert osmgpsmap._version == "1.0"
 
-# Timaru. DummyLayer draws here; click Home or start here to see it.
+# Timaru. DrawLayer paints a house here; click Home or start here to see it.
 HOME_LAT = -44.39
 HOME_LON = 171.25
 HOME_ZOOM = 12
@@ -54,7 +54,7 @@ class DummyMapNoGpsPoint(osmgpsmap.Map):
 GObject.type_register(DummyMapNoGpsPoint)
 
 
-class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
+class DrawLayer(GObject.GObject, osmgpsmap.MapLayer):
     """Cairo overlay. The map passes its cairo_t; do not create a surface.
 
     For paths use track_add, for markers image_add. This class is the
@@ -68,7 +68,12 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         pt = osmgpsmap.MapPoint.new_degrees(HOME_LAT, HOME_LON)
         x, y = gpsmap.convert_geographic_to_screen(pt)
         cr.set_source_rgba(1.0, 0.0, 0.0, 0.6)
-        cr.arc(x, y, 12, 0, 2 * math.pi)
+        cr.move_to(x, y)
+        cr.line_to(x + 12, y + 10)
+        cr.line_to(x + 12, y + 24)
+        cr.line_to(x - 12, y + 24)
+        cr.line_to(x - 12, y + 10)
+        cr.close_path()
         cr.fill()
 
     def do_render(self, gpsmap):
@@ -82,7 +87,7 @@ class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
         return False
 
 
-GObject.type_register(DummyLayer)
+GObject.type_register(DrawLayer)
 
 
 class UI(Gtk.Window):
@@ -106,7 +111,7 @@ class UI(Gtk.Window):
                              show_crosshair=True)
         )
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
-        self.osm.layer_add(DummyLayer())
+        self.osm.layer_add(DrawLayer())
         self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
         # Stay put on gps_add so the blue blob is not under the OSD crosshair.
         self.osm.props.auto_center = False
@@ -352,7 +357,7 @@ from in the box below. Special metacharacters may be included in this url
 
     def _star_pixbuf(self, size=24):
         # Programmatic image: cairo star -> pixbuf -> image_add.
-        # Live cairo on the map is DummyLayer, not this.
+        # Live cairo on the map is DrawLayer, not this.
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
         cr = cairo.Context(surface)
         cx = cy = size / 2.0

@@ -19,7 +19,7 @@ to find the bindings. Do the following from the example directory:
    One editable track. Same degree constructor as polygon.
  * ./mapviewer.py
    Python version of the C demo app, with examples showing how to do custom
-   layers: DummyLayer class for cairo overlay, GPS, programmatic image_add,
+   layers: DrawLayer class for cairo overlay, GPS, programmatic image_add,
    and track_add.
  * ./mapviewer.js
    Javascript example using seed + gobject-introspection.
@@ -27,8 +27,9 @@ to find the bindings. Do the following from the example directory:
 Examples for drawing on the map:
 
  * Double-left-click places a GPS point (blue ball+random heading).
- * DummyLayer in mapviewer.py uses live cairo to draw red circle
-   at Home location (Timaru)
+ * DrawLayer in mapviewer.py uses live cairo to draw a red house
+   at Home location (Timaru). Peak of the roof is at the lat/lon of
+   Home location.
  * Double-right-click (or Ctrl+double-left) adds points to tracks.
    Triple right click clears the track (a new empty track stays on the map).
    This shows the use of track_add, add_point and track_remove
