@@ -27,7 +27,7 @@ to find the bindings. Do the following from the example directory:
 Examples for drawing on the map:
 
  * Double-left-click places a GPS point (blue ball+random heading).
- * DrawLayer in mapviewer.py uses live cairo to draw a red house
+ * DrawLayer in mapviewer and mapviewer.py uses live cairo to draw a red house
    at Home location (Timaru). Peak of the roof is at the lat/lon of
    Home location.
  * Double-right-click (or Ctrl+double-left) adds points to tracks.

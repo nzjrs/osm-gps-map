@@ -29,9 +29,10 @@
  *
  * The map already provides a cairo context in osm_gps_map_layer_draw().
  * Convert lat/lon to widget pixels with
- * osm_gps_map_convert_geographic_to_screen(). See DummyLayer in
- * examples/mapviewer.py. For tracks and images use osm_gps_map_track_add()
- * and osm_gps_map_image_add() instead of a custom layer.
+ * osm_gps_map_convert_geographic_to_screen(). See DrawLayer in
+ * examples/mapviewer.py and examples/mapviewer.c. For tracks and images
+ * use osm_gps_map_track_add() and osm_gps_map_image_add() instead of a
+ * custom layer.
  **/
 
 #include "osm-gps-map-layer.h"

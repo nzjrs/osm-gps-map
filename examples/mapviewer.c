@@ -50,10 +50,84 @@ static GOptionEntry debug_entries[] =
 };
 #endif
 
-/* Shared with mapviewer.py DummyLayer Home (Timaru). */
+/* Shared with mapviewer.py DrawLayer Home (Timaru). */
 #define HOME_LAT  -44.39
 #define HOME_LON  171.25
 #define HOME_ZOOM 12
+
+typedef struct _DrawLayer {
+    GObject parent;
+} DrawLayer;
+
+typedef struct _DrawLayerClass {
+    GObjectClass parent_class;
+} DrawLayerClass;
+
+static void draw_layer_interface_init (OsmGpsMapLayerIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (DrawLayer, draw_layer, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
+                                                draw_layer_interface_init));
+
+static void
+draw_layer_draw (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                 OsmGpsMap *map, cairo_t *cr)
+{
+    OsmGpsMapPoint *pt;
+    gint x, y;
+
+    pt = osm_gps_map_point_new_degrees (HOME_LAT, HOME_LON);
+    osm_gps_map_convert_geographic_to_screen (map, pt, &x, &y);
+    osm_gps_map_point_free (pt);
+
+    cairo_set_source_rgba (cr, 1.0, 0.0, 0.0, 0.6);
+    cairo_move_to (cr, x, y);
+    cairo_line_to (cr, x + 12, y + 10);
+    cairo_line_to (cr, x + 12, y + 24);
+    cairo_line_to (cr, x - 12, y + 24);
+    cairo_line_to (cr, x - 12, y + 10);
+    cairo_close_path (cr);
+    cairo_fill (cr);
+}
+
+static void
+draw_layer_render (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                   OsmGpsMap *map G_GNUC_UNUSED)
+{
+}
+
+static gboolean
+draw_layer_busy (OsmGpsMapLayer *layer G_GNUC_UNUSED)
+{
+    return FALSE;
+}
+
+static gboolean
+draw_layer_button_press (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                         OsmGpsMap *map G_GNUC_UNUSED,
+                         GdkEventButton *event G_GNUC_UNUSED)
+{
+    return FALSE;
+}
+
+static void
+draw_layer_interface_init (OsmGpsMapLayerIface *iface)
+{
+    iface->render = draw_layer_render;
+    iface->draw = draw_layer_draw;
+    iface->busy = draw_layer_busy;
+    iface->button_press = draw_layer_button_press;
+}
+
+static void
+draw_layer_class_init (DrawLayerClass *klass G_GNUC_UNUSED)
+{
+}
+
+static void
+draw_layer_init (DrawLayer *self G_GNUC_UNUSED)
+{
+}
 
 static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
@@ -267,7 +341,7 @@ main (int argc, char **argv)
     GtkWidget *widget;
     GtkAccelGroup *ag;
     OsmGpsMap *map;
-    OsmGpsMapLayer *osd;
+    OsmGpsMapLayer *osd, *draw;
     const char *repo_uri;
     char *cachedir, *cachebasedir;
     GError *error = NULL;
@@ -337,6 +411,10 @@ main (int argc, char **argv)
                         NULL);
     osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
+
+    draw = g_object_new (draw_layer_get_type (), NULL);
+    osm_gps_map_layer_add (OSM_GPS_MAP (map), draw);
+    g_object_unref (draw);
 
     /* Stay put on gps_add so the blue blob is not under the OSD crosshair. */
     g_object_set (map, "auto-center", FALSE, NULL);
