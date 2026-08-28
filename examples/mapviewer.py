@@ -105,45 +105,9 @@ class UI(Gtk.Window):
             self.osm = DummyMapNoGpsPoint()
         else:
             self.osm = osmgpsmap.Map(user_agent="mapviewer.py")
-        self.osm.layer_add(
-            osmgpsmap.MapOsd(show_dpad=True,
-                             show_zoom=True,
-                             show_crosshair=True)
-        )
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
-        self.osm.layer_add(DrawLayer())
-        self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
-        # Stay put on gps_add so the blue blob is not under the OSD crosshair.
-        self.osm.props.auto_center = False
-
-        self.click_track = osmgpsmap.MapTrack()
-        self.osm.track_add(self.click_track)
-        self.last_image = None
         self.use_poi_png = True
-
-        self.osm.connect("button_press_event", self.on_button_press)
-        self.osm.connect("changed", self.on_map_change)
-
-        # connect keyboard shortcuts
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.UP, Gdk.keyval_from_name("Up")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.DOWN, Gdk.keyval_from_name("Down")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.LEFT, Gdk.keyval_from_name("Left")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.RIGHT, Gdk.keyval_from_name("Right")
-        )
-
-        # connect to tooltip
-        self.osm.props.has_tooltip = True
-        self.osm.connect("query-tooltip", self.on_query_tooltip)
+        self._wire_map(self.osm)
 
         self.latlon_entry = Gtk.Entry()
 
@@ -232,6 +196,44 @@ from in the box below. Special metacharacters may be included in this url
 
         GLib.timeout_add(500, self.print_tiles)
 
+    def _wire_map(self, osm):
+        self.osm = osm
+        osm.layer_add(
+            osmgpsmap.MapOsd(show_dpad=True,
+                             show_zoom=True,
+                             show_crosshair=True)
+        )
+        osm.layer_add(DrawLayer())
+        osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
+        # Stay put on gps_add so the blue blob is not under the OSD crosshair.
+        osm.props.auto_center = False
+
+        self.click_track = osmgpsmap.MapTrack()
+        osm.track_add(self.click_track)
+        self.last_image = None
+
+        osm.connect("button_press_event", self.on_button_press)
+        osm.connect("changed", self.on_map_change)
+
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.UP, Gdk.keyval_from_name("Up")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.DOWN, Gdk.keyval_from_name("Down")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.LEFT, Gdk.keyval_from_name("Left")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.RIGHT, Gdk.keyval_from_name("Right")
+        )
+
+        osm.props.has_tooltip = True
+        osm.connect("query-tooltip", self.on_query_tooltip)
+
     def disable_cache_toggled(self, btn):
         if btn.props.active:
             self.osm.props.tile_cache = osmgpsmap.MAP_CACHE_DISABLED
@@ -249,16 +251,15 @@ from in the box below. Special metacharacters may be included in this url
         format = self.image_format_entry.get_text()
         if uri and format:
             if self.osm:
-                # remove old map
                 self.vbox.remove(self.osm)
             try:
-                self.osm = osmgpsmap.Map(
+                osm = osmgpsmap.Map(
                     repo_uri=uri, image_format=format, user_agent="mapviewer.py"
                 )
             except Exception as e:
                 print("ERROR:", e)
-                self.osm = osmgpsmap.Map(user_agent="mapviewer.py")
-
+                osm = osmgpsmap.Map(user_agent="mapviewer.py")
+            self._wire_map(osm)
             self.vbox.pack_start(self.osm, True, True, 0)
             self.osm.show()
 
