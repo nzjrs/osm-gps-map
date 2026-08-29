@@ -23,9 +23,9 @@ main (int   argc,
 	OsmGpsMapTrack* polytrack = osm_gps_map_track_new();
 
 	OsmGpsMapPoint* p1, *p2, *p3;
-	p1 = osm_gps_map_point_new_radians(1.25663706, -0.488692191);
-	p2 = osm_gps_map_point_new_radians(1.06465084, -0.750491578);
-	p3 = osm_gps_map_point_new_radians(1.064650849, -0.191986218);
+	p1 = osm_gps_map_point_new_degrees(72.0, -28.0);
+	p2 = osm_gps_map_point_new_degrees(61.0, -43.0);
+	p3 = osm_gps_map_point_new_degrees(61.0, -11.0);
 
 	osm_gps_map_track_add_point(polytrack, p1);
 	osm_gps_map_track_add_point(polytrack, p2);

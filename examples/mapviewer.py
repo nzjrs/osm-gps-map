@@ -17,7 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
 
+import math
 import random
+
+import cairo
 import gi
 
 gi.require_version("Gdk", "3.0")
@@ -33,36 +36,58 @@ from gi.repository import (
     OsmGpsMap as osmgpsmap,
 )  # noqa
 
-print(f"using library: {osmgpsmap.__file__} (version {osmgpsmap._version})")
+print(f"using {osmgpsmap} (version {osmgpsmap._version})")
 
 assert osmgpsmap._version == "1.0"
 
+# Timaru. DrawLayer paints a house here; click Home or start here to see it.
+HOME_LAT = -44.39
+HOME_LON = 171.25
+HOME_ZOOM = 12
+
+
 class DummyMapNoGpsPoint(osmgpsmap.Map):
-    def do_draw_gps_point(self, drawable):
+    def do_draw_gps_point(self, cr):
         pass
 
 
 GObject.type_register(DummyMapNoGpsPoint)
 
 
-class DummyLayer(GObject.GObject, osmgpsmap.MapLayer):
+class DrawLayer(GObject.GObject, osmgpsmap.MapLayer):
+    """Cairo overlay. The map passes its cairo_t; do not create a surface.
+
+    For paths use track_add, for markers image_add. This class is the
+    live-cairo case: draw in widget pixels after convert_geographic_to_screen.
+    """
+
     def __init__(self):
         GObject.GObject.__init__(self)
 
-    def do_draw(self, gpsmap, gdkdrawable):
-        pass
+    def do_draw(self, gpsmap, cr):
+        pt = osmgpsmap.MapPoint.new_degrees(HOME_LAT, HOME_LON)
+        x, y = gpsmap.convert_geographic_to_screen(pt)
+        cr.set_source_rgba(1.0, 0.0, 0.0, 0.6)
+        cr.move_to(x, y)
+        cr.line_to(x + 12, y + 10)
+        cr.line_to(x + 12, y + 24)
+        cr.line_to(x - 12, y + 24)
+        cr.line_to(x - 12, y + 10)
+        cr.close_path()
+        cr.fill()
 
     def do_render(self, gpsmap):
+        # OSD caches bitmaps here. Geo overlays paint in do_draw instead.
         pass
 
     def do_busy(self):
         return False
 
-    def do_button_press(self, gpsmap, gdkeventbutton):
+    def do_button_press(self, gpsmap, event):
         return False
 
 
-GObject.type_register(DummyLayer)
+GObject.type_register(DrawLayer)
 
 
 class UI(Gtk.Window):
@@ -79,40 +104,10 @@ class UI(Gtk.Window):
         if 0:
             self.osm = DummyMapNoGpsPoint()
         else:
-            self.osm = osmgpsmap.Map()
-        self.osm.layer_add(
-            osmgpsmap.MapOsd(show_dpad=True,
-                             show_zoom=True,
-                             show_crosshair=True)
-        )
+            self.osm = osmgpsmap.Map(user_agent="mapviewer.py")
         self.osm.set_property("map-source", osmgpsmap.MapSource_t.OPENSTREETMAP)
-        self.osm.layer_add(DummyLayer())
-
-        self.last_image = None
-
-        self.osm.connect("button_press_event", self.on_button_press)
-        self.osm.connect("changed", self.on_map_change)
-
-        # connect keyboard shortcuts
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.UP, Gdk.keyval_from_name("Up")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.DOWN, Gdk.keyval_from_name("Down")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.LEFT, Gdk.keyval_from_name("Left")
-        )
-        self.osm.set_keyboard_shortcut(
-            osmgpsmap.MapKey_t.RIGHT, Gdk.keyval_from_name("Right")
-        )
-
-        # connect to tooltip
-        self.osm.props.has_tooltip = True
-        self.osm.connect("query-tooltip", self.on_query_tooltip)
+        self.use_poi_png = True
+        self._wire_map(self.osm)
 
         self.latlon_entry = Gtk.Entry()
 
@@ -155,7 +150,7 @@ from in the box below. Special metacharacters may be included in this url
 \t#S\tInverse zoom (max-zoom - #Z)
 \t#Q\tQuadtree encoded tile (qrts)
 \t#W\tQuadtree encoded tile (1234)
-\t#U\tEncoding not implemeted
+\t#U\tEncoding not implemented
 \t#R\tRandom integer, 0-4"""
         )
         lbl.props.xalign = 0
@@ -185,6 +180,11 @@ from in the box below. Special metacharacters may be included in this url
         cb.connect("toggled", self.on_show_tooltips_toggled)
         self.vbox.pack_end(cb, False, True, 0)
 
+        cb = Gtk.CheckButton(label="Use poi.png for markers")
+        cb.props.active = self.use_poi_png
+        cb.connect("toggled", self.on_use_poi_png_toggled)
+        self.vbox.pack_end(cb, False, True, 0)
+
         cb = Gtk.CheckButton(label="Disable Cache")
         cb.props.active = False
         cb.connect("toggled", self.disable_cache_toggled)
@@ -196,6 +196,44 @@ from in the box below. Special metacharacters may be included in this url
 
         GLib.timeout_add(500, self.print_tiles)
 
+    def _wire_map(self, osm):
+        self.osm = osm
+        osm.layer_add(
+            osmgpsmap.MapOsd(show_dpad=True,
+                             show_zoom=True,
+                             show_crosshair=True)
+        )
+        osm.layer_add(DrawLayer())
+        osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
+        # Stay put on gps_add so the blue blob is not under the OSD crosshair.
+        osm.props.auto_center = False
+
+        self.click_track = osmgpsmap.MapTrack()
+        osm.track_add(self.click_track)
+        self.last_image = None
+
+        osm.connect("button_press_event", self.on_button_press)
+        osm.connect("changed", self.on_map_change)
+
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.FULLSCREEN, Gdk.keyval_from_name("F11")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.UP, Gdk.keyval_from_name("Up")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.DOWN, Gdk.keyval_from_name("Down")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.LEFT, Gdk.keyval_from_name("Left")
+        )
+        osm.set_keyboard_shortcut(
+            osmgpsmap.MapKey_t.RIGHT, Gdk.keyval_from_name("Right")
+        )
+
+        osm.props.has_tooltip = True
+        osm.connect("query-tooltip", self.on_query_tooltip)
+
     def disable_cache_toggled(self, btn):
         if btn.props.active:
             self.osm.props.tile_cache = osmgpsmap.MAP_CACHE_DISABLED
@@ -205,19 +243,23 @@ from in the box below. Special metacharacters may be included in this url
     def on_show_tooltips_toggled(self, btn):
         self.show_tooltips = btn.props.active
 
+    def on_use_poi_png_toggled(self, btn):
+        self.use_poi_png = btn.props.active
+
     def load_map_clicked(self, button):
         uri = self.repouri_entry.get_text()
         format = self.image_format_entry.get_text()
         if uri and format:
             if self.osm:
-                # remove old map
                 self.vbox.remove(self.osm)
             try:
-                self.osm = osmgpsmap.Map(repo_uri=uri, image_format=format)
+                osm = osmgpsmap.Map(
+                    repo_uri=uri, image_format=format, user_agent="mapviewer.py"
+                )
             except Exception as e:
                 print("ERROR:", e)
-                self.osm = osmgpsmap.Map()
-
+                osm = osmgpsmap.Map(user_agent="mapviewer.py")
+            self._wire_map(osm)
             self.vbox.pack_start(self.osm, True, True, 0)
             self.osm.show()
 
@@ -233,15 +275,15 @@ from in the box below. Special metacharacters may be included in this url
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
     def home_clicked(self, button):
-        self.osm.set_center_and_zoom(-44.39, 171.25, 12)
+        self.osm.set_center_and_zoom(HOME_LAT, HOME_LON, HOME_ZOOM)
 
     def on_query_tooltip(self, widget, x, y, keyboard_tip, tooltip, data=None):
         if keyboard_tip:
             return False
 
         if self.show_tooltips:
-            p = osmgpsmap.point_new_degrees(0.0, 0.0)
-            self.osm.convert_screen_to_geographic(x, y, p)
+            # GI treats the MapPoint as an out-arg, so it is returned.
+            p = self.osm.convert_screen_to_geographic(x, y)
             lat, lon = p.get_degrees()
             tooltip.set_markup(f"{lat:+.4f}, {lon:+.4f}")
             return True
@@ -263,10 +305,18 @@ from in the box below. Special metacharacters may be included in this url
         )
 
     def on_button_press(self, osm, event):
+        # Double-click: left GPS, middle image_add, right track_add.
+        # Triple-click: middle remove last image, right clear the track.
         state = event.get_state()
         lat, lon = self.osm.get_event_location(event).get_degrees()
 
-        left = event.button == 1 and state == 0
+        # 2BUTTON_PRESS often has BUTTONn_MASK set; ignore those, keep Shift/Ctrl.
+        mods = state & (
+            Gdk.ModifierType.SHIFT_MASK
+            | Gdk.ModifierType.CONTROL_MASK
+            | Gdk.ModifierType.MOD1_MASK
+        )
+        left = event.button == 1 and mods == 0
         middle = event.button == 2 or (
             event.button == 1 and state & Gdk.ModifierType.SHIFT_MASK
         )
@@ -283,14 +333,52 @@ from in the box below. Special metacharacters may be included in this url
                 if self.last_image is not None:
                     self.osm.image_remove(self.last_image)
                     self.last_image = None
+            if right:
+                self.osm.track_remove(self.click_track)
+                self.click_track = osmgpsmap.MapTrack()
+                self.osm.track_add(self.click_track)
         elif event.type == GDK_2BUTTON_PRESS:
             if left:
                 self.osm.gps_add(lat, lon, heading=random.random() * 360)
             if middle:
-                pb = GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
-                self.last_image = self.osm.image_add(lat, lon, pb)
+                self.last_image = self.osm.image_add(
+                    lat, lon, self._marker_pixbuf()
+                )
             if right:
-                pass
+                pt = osmgpsmap.MapPoint.new_degrees(lat, lon)
+                self.click_track.add_point(pt)
+
+    def _marker_pixbuf(self):
+        if self.use_poi_png:
+            try:
+                return GdkPixbuf.Pixbuf.new_from_file_at_size("poi.png", 24, 24)
+            except GLib.Error as err:
+                print("poi.png:", err)
+        return self._star_pixbuf()
+
+    def _star_pixbuf(self, size=24):
+        # Programmatic image: cairo star -> pixbuf -> image_add.
+        # Live cairo on the map is DrawLayer, not this.
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
+        cr = cairo.Context(surface)
+        cx = cy = size / 2.0
+        outer, inner = size / 2.0 - 1.0, size / 5.0
+        for i in range(10):
+            r = outer if i % 2 == 0 else inner
+            ang = -math.pi / 2.0 + i * math.pi / 5.0
+            x = cx + r * math.cos(ang)
+            y = cy + r * math.sin(ang)
+            if i == 0:
+                cr.move_to(x, y)
+            else:
+                cr.line_to(x, y)
+        cr.close_path()
+        cr.set_source_rgb(1.0, 0.85, 0.0)
+        cr.fill_preserve()
+        cr.set_source_rgb(0.75, 0.45, 0.0)
+        cr.set_line_width(1)
+        cr.stroke()
+        return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
 
 
 if __name__ == "__main__":

@@ -5,9 +5,10 @@ import io
 
 import gi
 gi.require_version('OsmGpsMap', '1.0')
+gi.require_foreign('cairo')
 
 from gi.repository import OsmGpsMap
-from gi.repository import Gdk, GdkPixbuf, Gtk
+from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk
 
 class TestOsmGpsMap(unittest.TestCase):
 	def setUp(self):
@@ -62,6 +63,54 @@ class TestOsmGpsMap(unittest.TestCase):
 		osd = OsmGpsMap.MapOsd(show_zoom=True, show_coordinates=False, show_scale=False, show_dpad=True, show_gps_in_dpad=True)
 		self.osm.layer_add(osd)
 		self.osm.layer_remove(osd)
+
+	def test_custom_layer_draw(self):
+		# MapLayer.do_draw gets the widget cairo_t; convert lat/lon in pixels.
+		class Layer(GObject.GObject, OsmGpsMap.MapLayer):
+			def __init__(self):
+				GObject.GObject.__init__(self)
+				self.drew = False
+				self.xy = None
+
+			def do_draw(self, gpsmap, cr):
+				pt = OsmGpsMap.MapPoint.new_degrees(50.0, 13.0)
+				x, y = gpsmap.convert_geographic_to_screen(pt)
+				cr.set_source_rgba(1, 0, 0, 1)
+				cr.arc(x, y, 4, 0, 6.28)
+				cr.fill()
+				self.xy = (x, y)
+				self.drew = True
+
+			def do_render(self, gpsmap):
+				pass
+
+			def do_busy(self):
+				return False
+
+			def do_button_press(self, gpsmap, event):
+				return False
+
+		GObject.type_register(Layer)
+		layer = Layer()
+		window = Gtk.Window()
+		window.set_size_request(320, 240)
+		window.add(self.osm)
+		self.osm.layer_add(layer)
+		self.osm.set_center_and_zoom(50.0, 13.0, 10)
+		window.show_all()
+
+		deadline = GLib.get_monotonic_time() + 500000
+		while GLib.get_monotonic_time() < deadline and not layer.drew:
+			Gtk.main_iteration_do(False)
+
+		self.assertTrue(layer.drew)
+		self.assertIsNotNone(layer.xy)
+		alloc = self.osm.get_allocation()
+		self.assertAlmostEqual(layer.xy[0], alloc.width / 2, delta=40)
+		self.assertAlmostEqual(layer.xy[1], alloc.height / 2, delta=40)
+		self.osm.layer_remove(layer)
+		window.remove(self.osm)
+		window.destroy()
 		
 	def test_image(self):
 		size = 16
@@ -128,6 +177,14 @@ class TestOsmGpsMap(unittest.TestCase):
 		point = OsmGpsMap.MapPoint.new_degrees(self.lat, self.lon)
 		track.insert_point(point, 0)
 		self.assertEqual(track.n_points(), 1)
+
+	def test_convert_screen_to_geographic(self):
+		# GI returns the MapPoint; do not pass one in.
+		pt = self.osm.convert_screen_to_geographic(0, 0)
+		self.assertEqual(type(pt), OsmGpsMap.MapPoint)
+		lat, lon = pt.get_degrees()
+		self.assertTrue(-90.0 <= lat <= 90.0)
+		self.assertTrue(-180.0 <= lon <= 180.0)
 
 	def test_zoom_fit_bbox_point(self):
 		# Degenerate bbox (one geotag). Must not crash; zoom clamps to max.

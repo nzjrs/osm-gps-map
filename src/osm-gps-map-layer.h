@@ -66,7 +66,9 @@ GType osm_gps_map_layer_get_type (void);
  * @self: (in): a #OsmGpsMapLayer object
  * @map: (in): a #OsmGpsMap widget
  *
- * Render layer on map
+ * Called when the offscreen map pixmap is rebuilt. Use this to update
+ * cached drawing (as #OsmGpsMapOsd does). Geographic overlays can leave
+ * this empty and paint in osm_gps_map_layer_draw() instead.
  *
  * Since: 0.6.0
  **/
@@ -78,7 +80,11 @@ void        osm_gps_map_layer_render            (OsmGpsMapLayer *self, OsmGpsMap
  * @map: (in): a #OsmGpsMap widget
  * @cr: (in): a cairo context to draw to
  *
- * Draw layer on map
+ * During #GtkWidget::draw the map passes its cairo context here. Draw in
+ * widget pixel coordinates. Convert geographic positions with
+ * osm_gps_map_convert_geographic_to_screen(). Do not create your own
+ * cairo surface; the map already has one. For GPS tracks and markers
+ * prefer osm_gps_map_track_add() and osm_gps_map_image_add().
  *
  * Since: 0.6.0
  **/
@@ -103,7 +109,7 @@ gboolean    osm_gps_map_layer_busy              (OsmGpsMapLayer *self);
  *
  * Handle button event
  *
- * Returns: whether even had been handled
+ * Returns: whether the event had been handled
  * Since: 0.6.0
  **/
 gboolean    osm_gps_map_layer_button_press      (OsmGpsMapLayer *self, OsmGpsMap *map, GdkEventButton *event);

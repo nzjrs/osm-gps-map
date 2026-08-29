@@ -63,5 +63,5 @@ editable_track_LDADD =           \
     $(top_builddir)/src/libosmgpsmap-1.0.la
 
 ## Misc
-EXTRA_DIST = poi.png mapviewer.ui mapviewer.js README
+EXTRA_DIST = poi.png mapviewer.ui mapviewer.py mapviewer.js README
 

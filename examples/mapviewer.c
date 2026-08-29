@@ -18,10 +18,10 @@
  */
 
 #include <stdlib.h>
-#include <math.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <cairo.h>
 
 #include "osm-gps-map.h"
 
@@ -50,18 +50,141 @@ static GOptionEntry debug_entries[] =
 };
 #endif
 
-static GdkPixbuf *g_star_image = NULL;
-static OsmGpsMapImage *g_last_image = NULL;
+/* Shared with mapviewer.py DrawLayer Home (Timaru). */
+#define HOME_LAT  -44.39
+#define HOME_LON  171.25
+#define HOME_ZOOM 12
+
+typedef struct _DrawLayer {
+    GObject parent;
+} DrawLayer;
+
+typedef struct _DrawLayerClass {
+    GObjectClass parent_class;
+} DrawLayerClass;
+
+static void draw_layer_interface_init (OsmGpsMapLayerIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (DrawLayer, draw_layer, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (OSM_TYPE_GPS_MAP_LAYER,
+                                                draw_layer_interface_init));
+
+static void
+draw_layer_draw (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                 OsmGpsMap *map, cairo_t *cr)
+{
+    OsmGpsMapPoint *pt;
+    gint x, y;
+
+    pt = osm_gps_map_point_new_degrees (HOME_LAT, HOME_LON);
+    osm_gps_map_convert_geographic_to_screen (map, pt, &x, &y);
+    osm_gps_map_point_free (pt);
+
+    cairo_set_source_rgba (cr, 1.0, 0.0, 0.0, 0.6);
+    cairo_move_to (cr, x, y);
+    cairo_line_to (cr, x + 12, y + 10);
+    cairo_line_to (cr, x + 12, y + 24);
+    cairo_line_to (cr, x - 12, y + 24);
+    cairo_line_to (cr, x - 12, y + 10);
+    cairo_close_path (cr);
+    cairo_fill (cr);
+}
+
+static void
+draw_layer_render (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                   OsmGpsMap *map G_GNUC_UNUSED)
+{
+}
 
 static gboolean
-on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+draw_layer_busy (OsmGpsMapLayer *layer G_GNUC_UNUSED)
+{
+    return FALSE;
+}
+
+static gboolean
+draw_layer_button_press (OsmGpsMapLayer *layer G_GNUC_UNUSED,
+                         OsmGpsMap *map G_GNUC_UNUSED,
+                         GdkEventButton *event G_GNUC_UNUSED)
+{
+    return FALSE;
+}
+
+static void
+draw_layer_interface_init (OsmGpsMapLayerIface *iface)
+{
+    iface->render = draw_layer_render;
+    iface->draw = draw_layer_draw;
+    iface->busy = draw_layer_busy;
+    iface->button_press = draw_layer_button_press;
+}
+
+static void
+draw_layer_class_init (DrawLayerClass *klass G_GNUC_UNUSED)
+{
+}
+
+static void
+draw_layer_init (DrawLayer *self G_GNUC_UNUSED)
+{
+}
+
+static GdkPixbuf *g_star_image = NULL;
+static OsmGpsMapImage *g_last_image = NULL;
+static OsmGpsMapTrack *g_click_track = NULL;
+
+/* Programmatic marker if poi.png is missing. Live cairo overlay is DrawLayer. */
+static GdkPixbuf *
+star_pixbuf_new (int size)
+{
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    GdkPixbuf *pixbuf;
+    int i;
+    double outer = size / 2.0 - 1.0;
+    double inner = size / 5.0;
+
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
+    cr = cairo_create (surface);
+
+    cairo_translate (cr, size / 2.0, size / 2.0);
+    cairo_move_to (cr, 0, -outer);
+    for (i = 1; i < 10; i++) {
+        cairo_rotate (cr, G_PI / 5.0);
+        cairo_line_to (cr, 0, (i % 2 == 0) ? -outer : -inner);
+    }
+    cairo_close_path (cr);
+    cairo_set_source_rgb (cr, 1.0, 0.85, 0.0);
+    cairo_fill_preserve (cr);
+    cairo_set_source_rgb (cr, 0.75, 0.45, 0.0);
+    cairo_set_line_width (cr, 1);
+    cairo_stroke (cr);
+
+    pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, size, size);
+    cairo_destroy (cr);
+    cairo_surface_destroy (surface);
+    return pixbuf;
+}
+
+static OsmGpsMapTrack *
+click_track_new (void)
+{
+    OsmGpsMapTrack *track = osm_gps_map_track_new ();
+    if (opt_editable_tracks)
+        g_object_set (track, "editable", TRUE, NULL);
+    return track;
+}
+
+static gboolean
+on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data G_GNUC_UNUSED)
 {
     OsmGpsMapPoint coord;
     float lat, lon;
     OsmGpsMap *map = OSM_GPS_MAP(widget);
-    OsmGpsMapTrack *othertrack = OSM_GPS_MAP_TRACK(user_data);
+    /* 2BUTTON_PRESS often has BUTTONn_MASK set; ignore those, keep Shift/Ctrl. */
+    GdkModifierType mods = event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK);
 
-    int left_button =   (event->button == 1) && (event->state == 0);
+    int left_button =   (event->button == 1) && (mods == 0);
     int middle_button = (event->button == 2) || ((event->button == 1) && (event->state & GDK_SHIFT_MASK));
     int right_button =  (event->button == 3) || ((event->button == 1) && (event->state & GDK_CONTROL_MASK));
 
@@ -70,11 +193,16 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
 
     if (event->type == GDK_3BUTTON_PRESS) {
         if (middle_button) {
-            if (g_last_image)
+            if (g_last_image) {
                 osm_gps_map_image_remove (map, g_last_image);
+                g_last_image = NULL;
+            }
         }
         if (right_button) {
-            osm_gps_map_track_remove(map, othertrack);
+            osm_gps_map_track_remove (map, g_click_track);
+            g_object_unref (g_click_track);
+            g_click_track = click_track_new ();
+            osm_gps_map_track_add (map, g_click_track);
         }
     } else if (event->type == GDK_2BUTTON_PRESS) {
         if (left_button) {
@@ -83,14 +211,14 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                  lon,
                                  g_random_double_range(0,360));
         }
-        if (middle_button) {
+        if (middle_button && g_star_image) {
             g_last_image = osm_gps_map_image_add (map,
                                                   lat,
                                                   lon,
                                                   g_star_image);
         }
         if (right_button) {
-            osm_gps_map_track_add_point(othertrack, &coord);
+            osm_gps_map_track_add_point(g_click_track, &coord);
         }
     }
 
@@ -105,7 +233,7 @@ on_map_changed_event (GtkWidget *widget, gpointer user_data)
     OsmGpsMap *map = OSM_GPS_MAP(widget);
 
     g_object_get(map, "latitude", &lat, "longitude", &lon, NULL);
-    gchar *msg = g_strdup_printf("Map Centre: lattitude %f longitude %f",lat,lon);
+    gchar *msg = g_strdup_printf("Map Centre: latitude %f longitude %f",lat,lon);
     gtk_entry_set_text(entry, msg);
     g_free(msg);
 
@@ -136,7 +264,7 @@ static gboolean
 on_home_clicked_event (GtkWidget *widget, gpointer user_data)
 {
     OsmGpsMap *map = OSM_GPS_MAP(user_data);
-    osm_gps_map_set_center_and_zoom(map, -43.5326,172.6362,12);
+    osm_gps_map_set_center_and_zoom(map, HOME_LAT, HOME_LON, HOME_ZOOM);
     return FALSE;
 }
 
@@ -246,8 +374,7 @@ main (int argc, char **argv)
     GtkWidget *widget;
     GtkAccelGroup *ag;
     OsmGpsMap *map;
-    OsmGpsMapLayer *osd;
-    OsmGpsMapTrack *rightclicktrack;
+    OsmGpsMapLayer *osd, *draw;
     const char *repo_uri;
     char *cachedir, *cachebasedir;
     GError *error = NULL;
@@ -318,12 +445,16 @@ main (int argc, char **argv)
     osm_gps_map_layer_add(OSM_GPS_MAP(map), osd);
     g_object_unref(G_OBJECT(osd));
 
-    //Add a second track for right clicks
-    rightclicktrack = osm_gps_map_track_new();
+    draw = g_object_new (draw_layer_get_type (), NULL);
+    osm_gps_map_layer_add (OSM_GPS_MAP (map), draw);
+    g_object_unref (draw);
 
-    if(opt_editable_tracks)
-        g_object_set(rightclicktrack, "editable", TRUE, NULL);
-    osm_gps_map_track_add(OSM_GPS_MAP(map), rightclicktrack);
+    /* Stay put on gps_add so the blue blob is not under the OSD crosshair. */
+    g_object_set (map, "auto-center", FALSE, NULL);
+
+    g_click_track = click_track_new ();
+    osm_gps_map_track_add (OSM_GPS_MAP (map), g_click_track);
+    osm_gps_map_set_center_and_zoom (map, HOME_LAT, HOME_LON, HOME_ZOOM);
 
     g_free(cachedir);
     g_free(cachebasedir);
@@ -336,7 +467,15 @@ main (int argc, char **argv)
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_KEY_Right);
 
     //Build the UI
-    g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
+    {
+        GError *pixbuf_err = NULL;
+        g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24, 24, &pixbuf_err);
+        if (!g_star_image) {
+            g_printerr ("poi.png: %s\n", pixbuf_err ? pixbuf_err->message : "missing");
+            g_clear_error (&pixbuf_err);
+            g_star_image = star_pixbuf_new (24);
+        }
+    }
 
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "mapviewer.ui", &error);
@@ -404,7 +543,7 @@ main (int argc, char **argv)
                 gtk_builder_get_object(builder, "star_yalign_adjustment"), "value-changed",
                 G_CALLBACK (on_star_align_changed), (gpointer) "y-align");
     g_signal_connect (G_OBJECT (map), "button-press-event",
-                G_CALLBACK (on_button_press_event), (gpointer) rightclicktrack);
+                G_CALLBACK (on_button_press_event), NULL);
     g_signal_connect (G_OBJECT (map), "changed",
                 G_CALLBACK (on_map_changed_event),
                 (gpointer) gtk_builder_get_object(builder, "text_entry"));

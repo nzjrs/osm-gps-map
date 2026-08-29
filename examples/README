@@ -1,17 +1,39 @@
 osm-gps-map example applications
+
+Run C and Python demos from this directory (examples) so they find mapviewer.ui
+and poi.png. 
+
+If running uninstalled, you probably need to tell GObject introspection where 
+to find the bindings. Do the following from the example directory:
+
+    export LD_LIBRARY_PATH=../src/.libs/
+    export GI_TYPELIB_PATH=../src/
+
  * ./mapviewer
-   C based demo app with many options. See '--help' for a list. Note, this
-   must be executed from the examples directory so it can find the mapviewer.ui
-   file.
+   C based demo app with many options. See '--help' for a list of options.
+   --editable-tracks makes the right-click track draggable.
  * ./polygon
-   This example demonstrates editable polygons. Vertex points can be dragged. 
+   This example demonstrates editable polygons. Vertices can be dragged. 
    Clicking mid-points divides the line and creates another vertex.
+ * ./editable_track
+   One editable track. Same degree constructor as polygon.
  * ./mapviewer.py
    Python version of the C demo app, with examples showing how to do custom
-   layers.
+   layers: DrawLayer class for cairo overlay, GPS, programmatic image_add,
+   and track_add.
  * ./mapviewer.js
-   Javascript example using seed + gobject-introspection. If running uninstalled,
-   you probbably need to tell GObject introspection where to find the
-   bindings. Do the following from the example directory
-    # export LD_LIBRARY_PATH=../src/.libs/
-    # export GI_TYPELIB_PATH=../src/
+   Javascript example using seed + gobject-introspection.
+
+Examples for drawing on the map:
+
+ * Double-left-click places a GPS point (blue ball+random heading).
+ * Double-right-click (or Ctrl+double-left) adds points to tracks.
+   Triple right click clears the track (a new empty track stays on the map).
+   This shows the use of track_add, add_point and track_remove
+ * Double-middle-click (or Shift+double-left) adds a marker via image_add.
+   Python: poi.png by default, or uncheck "Use poi.png for markers" to
+   paint a cairo star (programmatic pixbuf). C: poi.png, or a cairo star
+   if that file is missing. Triple middle click removes the last image.
+ * DrawLayer in mapviewer and mapviewer.py uses live cairo to draw a red house
+   at Home location (Timaru). Peak of the roof is at the lat/lon of
+   Home location.
