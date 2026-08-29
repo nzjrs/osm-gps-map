@@ -5,6 +5,7 @@ import io
 
 import gi
 gi.require_version('OsmGpsMap', '1.0')
+gi.require_foreign('cairo')
 
 from gi.repository import OsmGpsMap
 from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk
