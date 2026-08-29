@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <math.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -142,22 +141,17 @@ star_pixbuf_new (int size)
     cairo_t *cr;
     GdkPixbuf *pixbuf;
     int i;
-    double cx, cy, outer, inner;
+    double outer = size / 2.0 - 1.0;
+    double inner = size / 5.0;
 
     surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
     cr = cairo_create (surface);
-    cx = cy = size / 2.0;
-    outer = size / 2.0 - 1.0;
-    inner = size / 5.0;
-    for (i = 0; i < 10; i++) {
-        double r = (i % 2 == 0) ? outer : inner;
-        double ang = -G_PI / 2.0 + i * G_PI / 5.0;
-        double x = cx + r * cos (ang);
-        double y = cy + r * sin (ang);
-        if (i == 0)
-            cairo_move_to (cr, x, y);
-        else
-            cairo_line_to (cr, x, y);
+
+    cairo_translate (cr, size / 2.0, size / 2.0);
+    cairo_move_to (cr, 0, -outer);
+    for (i = 1; i < 10; i++) {
+        cairo_rotate (cr, G_PI / 5.0);
+        cairo_line_to (cr, 0, (i % 2 == 0) ? -outer : -inner);
     }
     cairo_close_path (cr);
     cairo_set_source_rgb (cr, 1.0, 0.85, 0.0);
@@ -165,6 +159,7 @@ star_pixbuf_new (int size)
     cairo_set_source_rgb (cr, 0.75, 0.45, 0.0);
     cairo_set_line_width (cr, 1);
     cairo_stroke (cr);
+
     pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, size, size);
     cairo_destroy (cr);
     cairo_surface_destroy (surface);
