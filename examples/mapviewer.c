@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <cairo.h>
 
 #include "osm-gps-map.h"
 
@@ -133,6 +134,43 @@ static GdkPixbuf *g_star_image = NULL;
 static OsmGpsMapImage *g_last_image = NULL;
 static OsmGpsMapTrack *g_click_track = NULL;
 
+/* Programmatic marker if poi.png is missing. Live cairo overlay is DrawLayer. */
+static GdkPixbuf *
+star_pixbuf_new (int size)
+{
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    GdkPixbuf *pixbuf;
+    int i;
+    double cx, cy, outer, inner;
+
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
+    cr = cairo_create (surface);
+    cx = cy = size / 2.0;
+    outer = size / 2.0 - 1.0;
+    inner = size / 5.0;
+    for (i = 0; i < 10; i++) {
+        double r = (i % 2 == 0) ? outer : inner;
+        double ang = -G_PI / 2.0 + i * G_PI / 5.0;
+        double x = cx + r * cos (ang);
+        double y = cy + r * sin (ang);
+        if (i == 0)
+            cairo_move_to (cr, x, y);
+        else
+            cairo_line_to (cr, x, y);
+    }
+    cairo_close_path (cr);
+    cairo_set_source_rgb (cr, 1.0, 0.85, 0.0);
+    cairo_fill_preserve (cr);
+    cairo_set_source_rgb (cr, 0.75, 0.45, 0.0);
+    cairo_set_line_width (cr, 1);
+    cairo_stroke (cr);
+    pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, size, size);
+    cairo_destroy (cr);
+    cairo_surface_destroy (surface);
+    return pixbuf;
+}
+
 static OsmGpsMapTrack *
 click_track_new (void)
 {
@@ -178,7 +216,7 @@ on_button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer user_d
                                  lon,
                                  g_random_double_range(0,360));
         }
-        if (middle_button) {
+        if (middle_button && g_star_image) {
             g_last_image = osm_gps_map_image_add (map,
                                                   lat,
                                                   lon,
@@ -434,7 +472,15 @@ main (int argc, char **argv)
     osm_gps_map_set_keyboard_shortcut(map, OSM_GPS_MAP_KEY_RIGHT, GDK_KEY_Right);
 
     //Build the UI
-    g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24,24,NULL);
+    {
+        GError *pixbuf_err = NULL;
+        g_star_image = gdk_pixbuf_new_from_file_at_size ("poi.png", 24, 24, &pixbuf_err);
+        if (!g_star_image) {
+            g_printerr ("poi.png: %s\n", pixbuf_err ? pixbuf_err->message : "missing");
+            g_clear_error (&pixbuf_err);
+            g_star_image = star_pixbuf_new (24);
+        }
+    }
 
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "mapviewer.ui", &error);
