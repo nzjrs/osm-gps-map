@@ -46,9 +46,15 @@ AC_ARG_WITH([glade-catalogdir],
                             [Glade catalog directory (default=DATADIR/glade/catalogs)])],
             [gladecatalogdir=$withval],
             [gladecatalogdir='${datadir}/glade/catalogs'])
-if test "${with_glade_catalogdir+set}" = set && \
-   test "x$enable_glade_catalog" != xyes; then
-  AC_MSG_ERROR([--with-glade-catalogdir requires --enable-glade-catalog])
+if test "${with_glade_catalogdir+set}" = set; then
+  case "$with_glade_catalogdir" in
+    yes|no|'')
+      AC_MSG_ERROR([--with-glade-catalogdir requires a directory path])
+      ;;
+  esac
+  if test "x$enable_glade_catalog" != xyes; then
+    AC_MSG_ERROR([--with-glade-catalogdir requires --enable-glade-catalog])
+  fi
 fi
 AC_SUBST([gladecatalogdir])
 
