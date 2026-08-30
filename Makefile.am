@@ -16,6 +16,9 @@ doc_DATA =                                      \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap-1.0.pc
 
+gladecatalogdir = $(datadir)/glade/catalogs
+dist_gladecatalog_DATA = osmgpsmap.xml
+
 # Unit tests ship in the tarball (CI/git also run them in-tree).
 EXTRA_DIST = tests/test.py
 
