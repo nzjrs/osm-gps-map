@@ -2,7 +2,8 @@
 
 SUBDIRS = src examples docs
 AM_DISTCHECK_CONFIGURE_FLAGS =                  \
-    --enable-gtk-doc
+    --enable-gtk-doc                            \
+    --enable-glade-catalog
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 

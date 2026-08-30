@@ -46,6 +46,10 @@ AC_ARG_WITH([glade-catalogdir],
                             [Glade catalog directory (default=DATADIR/glade/catalogs)])],
             [gladecatalogdir=$withval],
             [gladecatalogdir='${datadir}/glade/catalogs'])
+if test "${with_glade_catalogdir+set}" = set && \
+   test "x$enable_glade_catalog" != xyes; then
+  AC_MSG_ERROR([--with-glade-catalogdir requires --enable-glade-catalog])
+fi
 AC_SUBST([gladecatalogdir])
 
 AC_CHECK_FUNCS(gdk_event_get_scroll_deltas)
@@ -93,4 +97,8 @@ echo
 echo Prefix............... : $prefix
 echo Introspection support : ${found_introspection}
 echo gtk-doc documentation : ${enable_gtk_doc}
+echo Glade catalog........ : ${enable_glade_catalog}
+if test "x$enable_glade_catalog" = xyes; then
+  echo Glade catalog dir.... : ${gladecatalogdir}
+fi
 echo
