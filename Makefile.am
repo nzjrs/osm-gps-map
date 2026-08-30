@@ -21,7 +21,7 @@ if ENABLE_GLADE_CATALOG
 gladecatalog_DATA = osmgpsmap.xml
 endif
 
-# Unit tests ship in the tarball (CI/git also run them in-tree).
+# tests/test.py and osmgpsmap.xml ship in the tarball even if not installed.
 EXTRA_DIST = tests/test.py osmgpsmap.xml
 
 DISTCLEANFILES = gtk-doc.make

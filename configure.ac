@@ -38,6 +38,10 @@ AC_ARG_ENABLE([glade-catalog],
                               [install the Glade catalog (default=no)])],
               [enable_glade_catalog=$enableval],
               [enable_glade_catalog=no])
+case "$enable_glade_catalog" in
+  yes|no) ;;
+  *) AC_MSG_ERROR([--enable-glade-catalog accepts only yes or no]) ;;
+esac
 AM_CONDITIONAL([ENABLE_GLADE_CATALOG],
                [test "x$enable_glade_catalog" = xyes])
 
