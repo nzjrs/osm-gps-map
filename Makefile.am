@@ -16,11 +16,12 @@ doc_DATA =                                      \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap-1.0.pc
 
-gladecatalogdir = $(datadir)/glade/catalogs
-dist_gladecatalog_DATA = osmgpsmap.xml
+if ENABLE_GLADE_CATALOG
+gladecatalog_DATA = osmgpsmap.xml
+endif
 
 # Unit tests ship in the tarball (CI/git also run them in-tree).
-EXTRA_DIST = tests/test.py
+EXTRA_DIST = tests/test.py osmgpsmap.xml
 
 DISTCLEANFILES = gtk-doc.make
 
