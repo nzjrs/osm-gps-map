@@ -33,6 +33,35 @@ PKG_CHECK_MODULES(SOUP30,   [libsoup-3.0])
 # libgthread-2.0.
 PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 
+AC_ARG_ENABLE([glade-catalog],
+              [AS_HELP_STRING([--enable-glade-catalog],
+                              [install the Glade catalog (default=no)])],
+              [enable_glade_catalog=$enableval],
+              [enable_glade_catalog=no])
+case "$enable_glade_catalog" in
+  yes|no) ;;
+  *) AC_MSG_ERROR([--enable-glade-catalog accepts only yes or no]) ;;
+esac
+AM_CONDITIONAL([ENABLE_GLADE_CATALOG],
+               [test "x$enable_glade_catalog" = xyes])
+
+AC_ARG_WITH([glade-catalogdir],
+            [AS_HELP_STRING([--with-glade-catalogdir=PATH],
+                            [Glade catalog directory (default=DATADIR/glade/catalogs)])],
+            [gladecatalogdir=$withval],
+            [gladecatalogdir='${datadir}/glade/catalogs'])
+if test "${with_glade_catalogdir+set}" = set; then
+  case "$with_glade_catalogdir" in
+    yes|no|'')
+      AC_MSG_ERROR([--with-glade-catalogdir requires a directory path])
+      ;;
+  esac
+  if test "x$enable_glade_catalog" != xyes; then
+    AC_MSG_ERROR([--with-glade-catalogdir requires --enable-glade-catalog])
+  fi
+fi
+AC_SUBST([gladecatalogdir])
+
 AC_CHECK_FUNCS(gdk_event_get_scroll_deltas)
 
 AC_MSG_CHECKING([for Win32])
@@ -78,4 +107,8 @@ echo
 echo Prefix............... : $prefix
 echo Introspection support : ${found_introspection}
 echo gtk-doc documentation : ${enable_gtk_doc}
+echo Glade catalog........ : ${enable_glade_catalog}
+if test "x$enable_glade_catalog" = xyes; then
+  echo Glade catalog dir.... : ${gladecatalogdir}
+fi
 echo

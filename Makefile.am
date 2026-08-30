@@ -2,7 +2,8 @@
 
 SUBDIRS = src examples docs
 AM_DISTCHECK_CONFIGURE_FLAGS =                  \
-    --enable-gtk-doc
+    --enable-gtk-doc                            \
+    --enable-glade-catalog
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
@@ -16,8 +17,12 @@ doc_DATA =                                      \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmgpsmap-1.0.pc
 
-# Unit tests ship in the tarball (CI/git also run them in-tree).
-EXTRA_DIST = tests/test.py
+if ENABLE_GLADE_CATALOG
+gladecatalog_DATA = osmgpsmap.xml
+endif
+
+# tests/test.py and osmgpsmap.xml ship in the tarball even if not installed.
+EXTRA_DIST = tests/test.py osmgpsmap.xml
 
 DISTCLEANFILES = gtk-doc.make
 
