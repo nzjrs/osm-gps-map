@@ -1111,19 +1111,23 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
 
     gtk_widget_get_allocation(GTK_WIDGET(map), &allocation);
 
-    offset_x = - priv->map_x % TILESIZE;
-    offset_y = - priv->map_y % TILESIZE;
-    if (offset_x > 0) offset_x -= TILESIZE;
-    if (offset_y > 0) offset_y -= TILESIZE;
+    /* C / truncates toward 0; tile index must floor so negative map_x/map_y
+     * stay aligned with overlays. Integer math keeps zoom 17-19 exact. */
+    tile_x0 = priv->map_x / TILESIZE;
+    tile_y0 = priv->map_y / TILESIZE;
+    if (priv->map_x < 0 && (priv->map_x % TILESIZE) != 0)
+        tile_x0--;
+    if (priv->map_y < 0 && (priv->map_y % TILESIZE) != 0)
+        tile_y0--;
+
+    offset_x = tile_x0 * TILESIZE - priv->map_x;
+    offset_y = tile_y0 * TILESIZE - priv->map_y;
 
     offset_xn = offset_x + EXTRA_BORDER;
     offset_yn = offset_y + EXTRA_BORDER;
 
     tiles_nx = (allocation.width  - offset_x) / TILESIZE + 1;
     tiles_ny = (allocation.height - offset_y) / TILESIZE + 1;
-
-    tile_x0 =  priv->map_x / TILESIZE;
-    tile_y0 =  priv->map_y / TILESIZE;
 
     for (i=tile_x0; i<(tile_x0+tiles_nx);i++)
     {
