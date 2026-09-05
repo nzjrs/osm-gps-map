@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import os
+import tempfile
 import unittest
 import cairo
 import io
@@ -191,6 +193,65 @@ class TestOsmGpsMap(unittest.TestCase):
 		self.osm.zoom_fit_bbox(self.lat, self.lat, self.lon, self.lon)
 		self.assertEqual(self.osm.get_property('zoom'),
 				 self.osm.get_property('max-zoom'))
+
+	def test_negative_map_origin_tiles_align_with_overlay(self):
+		# Issue #119: C / truncates toward 0. Negative map-x must floor so
+		# tiles stay locked to overlays. Zoom 1, 800px window, center 0,0
+		# makes map-x negative. Red cached tiles vs white outside the world.
+		cache = tempfile.mkdtemp(prefix="osm-gps-map-tiles-")
+		tile = cairo.ImageSurface(cairo.FORMAT_RGB24, 256, 256)
+		cr = cairo.Context(tile)
+		cr.set_source_rgb(1, 0, 0)
+		cr.paint()
+		for x in (0, 1):
+			for y in (0, 1):
+				path = os.path.join(cache, "1", str(x), "%d.png" % y)
+				os.makedirs(os.path.dirname(path), exist_ok=True)
+				tile.write_to_png(path)
+
+		osm = OsmGpsMap.Map(user_agent="test/0.1",
+				    tile_cache=cache,
+				    auto_download=False)
+		window = Gtk.OffscreenWindow()
+		window.set_default_size(800, 256)
+		window.add(osm)
+		window.show_all()
+		osm.set_center_and_zoom(0.0, 0.0, 1)
+
+		deadline = GLib.get_monotonic_time() + 1000000
+		r = g = b = None
+		while GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+			if osm.get_property("map-x") >= 0:
+				continue
+			pixbuf = window.get_pixbuf()
+			if pixbuf is None or pixbuf.get_width() < 800:
+				continue
+			pt = OsmGpsMap.MapPoint.new_degrees(0.0, 0.0)
+			sx, sy = osm.convert_geographic_to_screen(pt)
+			pixels = pixbuf.get_pixels()
+			nch = pixbuf.get_n_channels()
+			row = pixbuf.get_rowstride()
+			i = int(sy) * row + int(sx) * nch
+			r, g, b = pixels[i], pixels[i + 1], pixels[i + 2]
+			if r + g + b > 0:
+				break
+
+		self.assertLess(osm.get_property("map-x"), 0)
+		self.assertNotEqual(osm.get_property("map-x") % 256, 0)
+		self.assertIsNotNone(r)
+		self.assertGreater(r, 200)
+		self.assertLess(g, 50)
+		self.assertLess(b, 50)
+
+		window.remove(osm)
+		window.destroy()
+		for root, dirs, files in os.walk(cache, topdown=False):
+			for name in files:
+				os.remove(os.path.join(root, name))
+			for name in dirs:
+				os.rmdir(os.path.join(root, name))
+		os.rmdir(cache)
 
 if __name__ == "__main__":
 	unittest.main()
