@@ -195,10 +195,12 @@ class TestOsmGpsMap(unittest.TestCase):
 				 self.osm.get_property('max-zoom'))
 
 	def test_negative_map_origin_tiles_align_with_overlay(self):
-		# Issue #119: C / truncates toward 0. Negative map-x must floor so
-		# tiles stay locked to overlays. Zoom 1, 800px window, center 0,0
-		# makes map-x negative. Red cached tiles vs white outside the world.
-		cache = tempfile.mkdtemp(prefix="osm-gps-map-tiles-")
+		# Issue #119: C / truncates toward 0. Negative map-x/map-y must floor so
+		# tiles stay locked to overlays. Zoom 1, 800x800 window, center 0,0
+		# makes both origins negative. Red cached tiles vs white outside the world.
+		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-tiles-")
+		self.addCleanup(cache_dir.cleanup)
+		cache = cache_dir.name
 		tile = cairo.ImageSurface(cairo.FORMAT_RGB24, 256, 256)
 		cr = cairo.Context(tile)
 		cr.set_source_rgb(1, 0, 0)
@@ -213,8 +215,10 @@ class TestOsmGpsMap(unittest.TestCase):
 				    tile_cache=cache,
 				    auto_download=False)
 		window = Gtk.OffscreenWindow()
-		window.set_default_size(800, 256)
+		self.addCleanup(window.destroy)
+		window.set_default_size(800, 800)
 		window.add(osm)
+		self.addCleanup(window.remove, osm)
 		window.show_all()
 		osm.set_center_and_zoom(0.0, 0.0, 1)
 
@@ -222,10 +226,10 @@ class TestOsmGpsMap(unittest.TestCase):
 		r = g = b = None
 		while GLib.get_monotonic_time() < deadline:
 			Gtk.main_iteration_do(False)
-			if osm.get_property("map-x") >= 0:
+			if osm.get_property("map-x") >= 0 or osm.get_property("map-y") >= 0:
 				continue
 			pixbuf = window.get_pixbuf()
-			if pixbuf is None or pixbuf.get_width() < 800:
+			if pixbuf is None or pixbuf.get_width() < 800 or pixbuf.get_height() < 800:
 				continue
 			pt = OsmGpsMap.MapPoint.new_degrees(0.0, 0.0)
 			sx, sy = osm.convert_geographic_to_screen(pt)
@@ -239,19 +243,12 @@ class TestOsmGpsMap(unittest.TestCase):
 
 		self.assertLess(osm.get_property("map-x"), 0)
 		self.assertNotEqual(osm.get_property("map-x") % 256, 0)
+		self.assertLess(osm.get_property("map-y"), 0)
+		self.assertNotEqual(osm.get_property("map-y") % 256, 0)
 		self.assertIsNotNone(r)
 		self.assertGreater(r, 200)
 		self.assertLess(g, 50)
 		self.assertLess(b, 50)
-
-		window.remove(osm)
-		window.destroy()
-		for root, dirs, files in os.walk(cache, topdown=False):
-			for name in files:
-				os.remove(os.path.join(root, name))
-			for name in dirs:
-				os.rmdir(os.path.join(root, name))
-		os.rmdir(cache)
 
 if __name__ == "__main__":
 	unittest.main()
