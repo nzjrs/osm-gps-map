@@ -1,0 +1,19 @@
+title: osm-gps-map
+tagline: A Gtk+ Widget for Displaying OpenStreetMap tiles.
+description: A Gtk+ widget (and Python bindings) for displaying OpenStreetMap tiles.
+theme: jekyll-theme-midnight
+url: https://nzjrs.github.io
+baseurl: /osm-gps-map
+show_downloads: true
+plugins:
+  - jekyll-seo-tag
+github:
+  repository_url: https://github.com/nzjrs/osm-gps-map
+  owner_url: https://github.com/nzjrs
+  owner_name: nzjrs
+  zip_url: https://github.com/nzjrs/osm-gps-map/archive/refs/heads/master.zip
+  tar_url: https://github.com/nzjrs/osm-gps-map/archive/refs/heads/master.tar.gz
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
