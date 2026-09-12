@@ -1,6 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 SUBDIRS = src examples docs
+# website/ is GitHub Pages (Jekyll). Not in SUBDIRS or EXTRA_DIST so
+# release tarballs stay the library (src, examples, gtk-doc).
 AM_DISTCHECK_CONFIGURE_FLAGS =                  \
     --enable-gtk-doc                            \
     --enable-glade-catalog
