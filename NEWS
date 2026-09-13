@@ -1,4 +1,16 @@
+Changes in master
+======================
+  * Don't use floats for division because of rounding errors; fixes center hopping (znuh)
+  * Avoid div-by-zero in latlon2zoom when a latitude or longitude distance is zero (Hubert Kowalski)
+  * Floor tile origin for negative map-x so overlays stay aligned (Hubert Kowalski)
+  * Fix insert_point double-free (Hubert Kowalski)
+  * Fix map redraw using width as height (Hubert Kowalski)
+  * Show drawing on the map in the examples (Hubert Kowalski)
+  * Add optional Glade catalog installation (Hubert Kowalski)
+  * Correctly support LFS (David Paleino, Bas Couwenberg)
+
 Changes in 1.2.1
+======================
   * Replace deprecated G_TYPE_INSTANCE_GET_PRIVATE and g_type_class_add_private (Patrick Salecker)
   * Add python unit tests (Patrick Salecker)
   * Fix python example addressing requiring map source (Jochen Sprickerhof)
