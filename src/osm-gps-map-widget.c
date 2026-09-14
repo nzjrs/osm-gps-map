@@ -326,6 +326,13 @@ cached_tile_free (OsmCachedTile *tile)
     g_slice_free (OsmCachedTile, tile);
 }
 
+static gboolean
+unref_in_idle (gpointer data)
+{
+    g_object_unref (data);
+    return G_SOURCE_REMOVE;
+}
+
 /*
  * Description:
  *   Find and replace text within a string.
@@ -747,7 +754,9 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
     SoupStatus soup_status = soup_message_get_status(msg);
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
-    GCancellable *cancellable = (GCancellable *)g_hash_table_lookup(priv->tile_queue, dl->uri);
+    GCancellable *cancellable = NULL;
+    if (priv->tile_queue)
+        cancellable = g_hash_table_lookup(priv->tile_queue, dl->uri);
     if (cancellable)
         g_object_unref (cancellable);
 
@@ -815,7 +824,8 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             }
             osm_gps_map_map_redraw_idle (map);
         }
-        g_hash_table_remove(priv->tile_queue, dl->uri);
+        if (priv->tile_queue)
+            g_hash_table_remove(priv->tile_queue, dl->uri);
         g_object_notify(G_OBJECT(map), "tiles-queued");
 
         g_free(dl->folder);
@@ -823,12 +833,15 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
         g_free(dl);
     } else {
         if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
-            g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
-            g_hash_table_remove(priv->tile_queue, dl->uri);
+            if (priv->missing_tiles)
+                g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
+            if (priv->tile_queue)
+                g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
         } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
             /* called as application exit or after osm_gps_map_download_cancel_all */
-            g_hash_table_remove(priv->tile_queue, dl->uri);
+            if (priv->tile_queue)
+                g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
         } else {
             g_warning("Error downloading tile: %d - %s", soup_status, soup_status_get_phrase(soup_status));
@@ -838,12 +851,15 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             //    return;
             //}
 
-            g_hash_table_remove(priv->tile_queue, dl->uri);
+            if (priv->tile_queue)
+                g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
         }
     }
 
-    g_object_unref (map);
+    /* Drop the download ref after this Soup callback returns. Unref from
+     * here disposes the session on the callback stack. */
+    g_idle_add (unref_in_idle, map);
 }
 
 static void
@@ -1869,8 +1885,11 @@ osm_gps_map_dispose (GObject *object)
     g_object_unref(priv->gps_track);
 
     g_hash_table_destroy(priv->tile_queue);
+    priv->tile_queue = NULL;
     g_hash_table_destroy(priv->missing_tiles);
+    priv->missing_tiles = NULL;
     g_hash_table_destroy(priv->tile_cache);
+    priv->tile_cache = NULL;
 
     /* images and layers contain GObjects which need unreffing, so free here */
     gslist_of_gobjects_free(&priv->images);
