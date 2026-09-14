@@ -1534,8 +1534,10 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     draw_white_rectangle(cr, 0, 0, w + EXTRA_BORDER * 2, h + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map, cr);
-    if (priv->is_disposed)
-        goto out;
+    if (priv->is_disposed) {
+        cairo_destroy (cr);
+        return FALSE;
+    }
 
     osm_gps_map_print_tracks(map, cr);
     osm_gps_map_print_polygons(map, cr);
@@ -1559,7 +1561,6 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_purge_cache(map);
     gtk_widget_queue_draw (GTK_WIDGET (map));
 
-out:
     cairo_destroy (cr);
 
     return FALSE;
