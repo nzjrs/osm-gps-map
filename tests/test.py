@@ -2,16 +2,16 @@
 import os
 import tempfile
 import unittest
-import warnings
 import cairo
 import io
 
 import gi
 gi.require_version('OsmGpsMap', '1.0')
+gi.require_version('Soup', '3.0')
 gi.require_foreign('cairo')
 
 from gi.repository import OsmGpsMap
-from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk
+from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk, Soup
 
 class TestOsmGpsMap(unittest.TestCase):
 	def setUp(self):
@@ -193,6 +193,7 @@ class TestOsmGpsMap(unittest.TestCase):
 		osm = OsmGpsMap.Map(user_agent="test/0.1",
 				    tile_cache=cache_dir.name,
 				    auto_download=True)
+		criticals = self.capture_criticals()
 		window = Gtk.OffscreenWindow()
 		window.set_default_size(256, 256)
 		window.add(osm)
@@ -205,16 +206,58 @@ class TestOsmGpsMap(unittest.TestCase):
 			if queued:
 				break
 		self.assertGreater(queued, 0)
+		finished = []
+		osm.weak_ref(lambda: finished.append(True))
+		osm.download_cancel_all()
 		window.remove(osm)
 		window.destroy()
 		del osm
-		with warnings.catch_warnings(record=True) as caught:
-			warnings.simplefilter("always")
-			deadline = GLib.get_monotonic_time() + 1000000
-			while GLib.get_monotonic_time() < deadline:
-				Gtk.main_iteration_do(False)
-			for item in caught:
-				self.assertNotIn("g_object_unref", str(item.message))
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not finished and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(finished, "Download callbacks did not release the map")
+		self.assertEqual(criticals, [])
+
+	def capture_criticals(self):
+		criticals = []
+		for domain in ("GLib", "GLib-GObject", "Gtk", "OsmGpsMap"):
+			handler = GLib.log_set_handler(domain, GLib.LogLevelFlags.LEVEL_CRITICAL,
+				lambda domain, level, message, data: criticals.append(message), None)
+			self.addCleanup(GLib.log_remove_handler, domain, handler)
+		return criticals
+
+	def test_redraw_stops_after_tiles_queued_dispose(self):
+		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-redraw-")
+		self.addCleanup(cache_dir.cleanup)
+		osm = OsmGpsMap.Map(user_agent="test/0.1", tile_cache=cache_dir.name,
+						auto_download=False)
+		criticals = self.capture_criticals()
+		seen = []
+		released = []
+		def on_queued(map, _pspec):
+			seen.append(True)
+			map.run_dispose()
+			map.weak_ref(lambda: released.append(True))
+		window = Gtk.OffscreenWindow()
+		self.addCleanup(window.destroy)
+		window.set_default_size(256, 256)
+		window.add(osm)
+		window.show_all()
+		while Gtk.events_pending():
+			Gtk.main_iteration_do(False)
+		osm.connect("notify::tiles-queued", on_queued)
+		osm.set_property("auto-download", True)
+		osm.set_center(50.0, 13.0)
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not seen and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(seen)
+		del osm
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not released and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(released, "Download callbacks did not release the disposed map")
+		self.assertEqual(criticals, [])
 
 	def test_disposed_tiles_queued_notify_allows_property_access(self):
 		osm = OsmGpsMap.Map(user_agent="test/0.1", auto_download=False)
@@ -226,6 +269,48 @@ class TestOsmGpsMap(unittest.TestCase):
 		osm.connect("notify::tiles-queued", on_queued)
 		osm.notify("tiles-queued")
 		self.assertTrue(seen)
+
+	def test_successful_tile_completion_after_dispose(self):
+		# A local response makes the successful-completion race deterministic.
+		png = io.BytesIO()
+		cairo.ImageSurface(cairo.FORMAT_RGB24, 256, 256).write_to_png(png)
+		server = Soup.Server()
+		def serve(_server, message, _path, _query):
+			message.set_status(200, None)
+			message.set_response("image/png", Soup.MemoryUse.COPY, png.getvalue())
+		server.add_handler(None, serve)
+		server.listen_local(0, Soup.ServerListenOptions.IPV4_ONLY)
+		self.addCleanup(server.disconnect)
+		uri = server.get_uris()[0].to_string()
+		osm = OsmGpsMap.Map(user_agent="test/0.1",
+						repo_uri=uri + "#Z/#X/#Y.png", tile_cache="none://")
+		criticals = self.capture_criticals()
+		finished = []
+		released = []
+		def on_finished(message):
+			if not finished and message.get_uri().to_string().startswith(uri):
+				finished.append(message.get_status())
+				osm.run_dispose()
+				osm.weak_ref(lambda: released.append(True))
+			return True
+		Soup.Message.new("GET", uri)
+		hook = GObject.add_emission_hook(Soup.Message, "finished", on_finished)
+		self.addCleanup(GObject.remove_emission_hook, Soup.Message, "finished", hook)
+		window = Gtk.OffscreenWindow()
+		self.addCleanup(window.destroy)
+		window.set_default_size(256, 256)
+		window.add(osm)
+		window.show_all()
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not finished and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertEqual(finished, [200])
+		del osm
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not released and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(released, "Download callbacks did not release the disposed map")
+		self.assertEqual(criticals, [])
 
 	def test_download_owns_map_before_tiles_queued_notify(self):
 		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-notify-")

@@ -779,7 +779,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             }
         }
 
-        if (dl->redraw) {
+        if (dl->redraw && !priv->is_disposed) {
             GdkPixbuf *pixbuf = NULL;
 
             /* if the file was actually stored on disk, we can simply */
@@ -1103,10 +1103,6 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
                               zoom, target_x, target_y);
         g_object_unref (pixbuf);
     } else {
-        if (priv->map_auto_download_enabled) {
-            osm_gps_map_download_tile(map, zoom, x, y, TRUE);
-        }
-
         /* try to render the tile by scaling cached tiles from other zoom
          * levels */
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
@@ -1119,6 +1115,9 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
             g_warning ("Error getting missing tile"); /* FIXME: is this a warning? */
             draw_white_rectangle (cr, offset_x, offset_y, TILESIZE, TILESIZE);
         }
+        /* Notify handlers may dispose the map, so finish drawing first. */
+        if (priv->map_auto_download_enabled)
+            osm_gps_map_download_tile(map, zoom, x, y, TRUE);
     }
     g_free(filename);
 }
@@ -1172,6 +1171,8 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
                                       priv->map_zoom,
                                       i,j,
                                       offset_xn - EXTRA_BORDER,offset_yn - EXTRA_BORDER);
+                if (priv->is_disposed)
+                    return;
             }
             offset_yn += TILESIZE;
         }
@@ -1533,6 +1534,8 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     draw_white_rectangle(cr, 0, 0, w + EXTRA_BORDER * 2, h + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map, cr);
+    if (priv->is_disposed)
+        goto out;
 
     osm_gps_map_print_tracks(map, cr);
     osm_gps_map_print_polygons(map, cr);
@@ -1556,6 +1559,7 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     osm_gps_map_purge_cache(map);
     gtk_widget_queue_draw (GTK_WIDGET (map));
 
+out:
     cairo_destroy (cr);
 
     return FALSE;
@@ -1926,11 +1930,6 @@ osm_gps_map_dispose (GObject *object)
     if (priv->null_tile) {
         g_object_unref (priv->null_tile);
         priv->null_tile = NULL;
-    }
-
-    if (priv->idle_map_redraw != 0) {
-        g_source_remove (priv->idle_map_redraw);
-        priv->idle_map_redraw = 0;
     }
 
     g_free(priv->gps);
