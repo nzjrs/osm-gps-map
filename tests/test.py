@@ -216,6 +216,32 @@ class TestOsmGpsMap(unittest.TestCase):
 			for item in caught:
 				self.assertNotIn("g_object_unref", str(item.message))
 
+	def test_disposed_tiles_queued_notify_allows_property_access(self):
+		osm = OsmGpsMap.Map(user_agent="test/0.1", auto_download=False)
+		seen = []
+		def on_queued(map, _pspec):
+			seen.append(True)
+			map.run_dispose()
+			map.get_property("tiles-queued")
+		osm.connect("notify::tiles-queued", on_queued)
+		osm.notify("tiles-queued")
+		self.assertTrue(seen)
+
+	def test_download_owns_map_before_tiles_queued_notify(self):
+		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-notify-")
+		self.addCleanup(cache_dir.cleanup)
+		osm = OsmGpsMap.Map(user_agent="test/0.1", tile_cache=cache_dir.name,
+						auto_download=False)
+		seen = []
+		def on_queued(map, _pspec):
+			seen.append(True)
+			map.run_dispose()
+		osm.connect("notify::tiles-queued", on_queued)
+		nw = OsmGpsMap.MapPoint.new_degrees(80, -170)
+		se = OsmGpsMap.MapPoint.new_degrees(-80, 170)
+		osm.download_maps(nw, se, 1, 1)
+		self.assertTrue(seen)
+
 	def test_convert_screen_to_geographic(self):
 		# GI returns the MapPoint; do not pass one in.
 		pt = self.osm.convert_screen_to_geographic(0, 0)

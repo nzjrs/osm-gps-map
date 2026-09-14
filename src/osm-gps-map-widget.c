@@ -332,7 +332,8 @@ unref_in_idle (gpointer data)
     OsmGpsMap *map = data;
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (priv->idle_map_redraw != 0) {
+    if (priv->idle_map_redraw != 0 &&
+        (priv->is_disposed || !gtk_widget_get_parent (GTK_WIDGET (map)))) {
         g_source_remove (priv->idle_map_redraw);
         priv->idle_map_redraw = 0;
     }
@@ -761,12 +762,6 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
     SoupStatus soup_status = soup_message_get_status(msg);
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
-    GCancellable *cancellable = NULL;
-    if (priv->tile_queue)
-        cancellable = g_hash_table_lookup(priv->tile_queue, dl->uri);
-    if (cancellable)
-        g_object_unref (cancellable);
-
     if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
         if (priv->cache_dir) {
@@ -832,9 +827,10 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             if (!priv->is_disposed && gtk_widget_get_parent (GTK_WIDGET (map)))
                 osm_gps_map_map_redraw_idle (map);
         }
-        if (priv->tile_queue)
+        if (priv->tile_queue) {
             g_hash_table_remove(priv->tile_queue, dl->uri);
-        g_object_notify(G_OBJECT(map), "tiles-queued");
+            g_object_notify(G_OBJECT(map), "tiles-queued");
+        }
 
         g_free(dl->folder);
         g_free(dl->filename);
@@ -843,14 +839,16 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
         if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
             if (priv->missing_tiles)
                 g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
-            if (priv->tile_queue)
+            if (priv->tile_queue) {
                 g_hash_table_remove(priv->tile_queue, dl->uri);
-            g_object_notify(G_OBJECT(map), "tiles-queued");
+                g_object_notify(G_OBJECT(map), "tiles-queued");
+            }
         } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
             /* called as application exit or after osm_gps_map_download_cancel_all */
-            if (priv->tile_queue)
+            if (priv->tile_queue) {
                 g_hash_table_remove(priv->tile_queue, dl->uri);
-            g_object_notify(G_OBJECT(map), "tiles-queued");
+                g_object_notify(G_OBJECT(map), "tiles-queued");
+            }
         } else {
             g_warning("Error downloading tile: %d - %s", soup_status, soup_status_get_phrase(soup_status));
             //dl->ttl--;
@@ -859,9 +857,10 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             //    return;
             //}
 
-            if (priv->tile_queue)
+            if (priv->tile_queue) {
                 g_hash_table_remove(priv->tile_queue, dl->uri);
-            g_object_notify(G_OBJECT(map), "tiles-queued");
+                g_object_notify(G_OBJECT(map), "tiles-queued");
+            }
         }
     }
 
@@ -923,7 +922,6 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 
             GCancellable *cancellable = g_cancellable_new ();
             g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
-            g_object_notify (G_OBJECT (map), "tiles-queued");
             /* keep the map alive until osm_gps_map_tile_download_complete */
             dl->map = g_object_ref (map);
             /* the soup session unrefs the message when the download finishes */
@@ -932,6 +930,8 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
                                     cancellable,
                                     (GAsyncReadyCallback)osm_gps_map_tile_download_complete,
                                     dl);
+            /* submit before notifying: handlers may dispose the map reentrantly */
+            g_object_notify (G_OBJECT (map), "tiles-queued");
         } else {
             g_warning("Could not create soup message");
             g_free(dl->uri);
@@ -1752,10 +1752,9 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->soup_session = soup_session_new ();
     soup_session_set_user_agent (priv->soup_session, USER_AGENT);
 
-    /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
-       must free the key, the soup session unrefs the message */
+    /* hash table maps tile download URIs to cancellables and owns both */
     priv->tile_queue = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                              g_free, NULL);
+                                              g_free, g_object_unref);
 
     //Some mapping providers (Google) have varying degrees of tiles at multiple
     //zoom levels
@@ -2169,7 +2168,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             g_value_set_int(value, priv->map_y);
             break;
         case PROP_TILES_QUEUED:
-            g_value_set_int(value, g_hash_table_size(priv->tile_queue));
+            g_value_set_int(value, priv->tile_queue ? g_hash_table_size(priv->tile_queue) : 0);
             break;
         case PROP_GPS_TRACK_WIDTH: {
             gfloat f;
@@ -3049,6 +3048,8 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
                         num_tiles++;
                     }
                     g_free(filename);
+                    if (priv->is_disposed)
+                        return;
                 }
             }
             g_debug("DL @Z:%d = %d tiles", zoom, num_tiles);
