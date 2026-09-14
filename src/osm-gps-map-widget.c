@@ -748,7 +748,8 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
     GCancellable *cancellable = (GCancellable *)g_hash_table_lookup(priv->tile_queue, dl->uri);
-    g_object_unref (cancellable);
+    if (cancellable)
+        g_object_unref (cancellable);
 
     if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
@@ -842,7 +843,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
         }
     }
 
-
+    g_object_unref (map);
 }
 
 static void
@@ -899,6 +900,8 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
             GCancellable *cancellable = g_cancellable_new ();
             g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
             g_object_notify (G_OBJECT (map), "tiles-queued");
+            /* keep the map alive until osm_gps_map_tile_download_complete */
+            dl->map = g_object_ref (map);
             /* the soup session unrefs the message when the download finishes */
             soup_session_send_and_read_async(priv->soup_session, msg,
                                     G_PRIORITY_DEFAULT,

@@ -2,6 +2,7 @@
 import os
 import tempfile
 import unittest
+import warnings
 import cairo
 import io
 
@@ -174,11 +175,46 @@ class TestOsmGpsMap(unittest.TestCase):
 		self.osm.track_remove(track)
 
 	def test_insert_point(self):
-		# Issue #45: check insert_point does not double-free.
+		# Issue #45: insert_point copies np; caller keeps the original.
 		track = OsmGpsMap.MapTrack()
 		point = OsmGpsMap.MapPoint.new_degrees(self.lat, self.lon)
 		track.insert_point(point, 0)
 		self.assertEqual(track.n_points(), 1)
+		point.set_degrees(self.lat + 1, self.lon + 1)
+		stored = track.get_point(0)
+		lat, lon = stored.get_degrees()
+		self.assertAlmostEqual(lat, self.lat)
+		self.assertAlmostEqual(lon, self.lon)
+
+	def test_pending_tile_download_survives_map_teardown(self):
+		# Soup callbacks must not unref a NULL cancellable after dispose.
+		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-empty-")
+		self.addCleanup(cache_dir.cleanup)
+		osm = OsmGpsMap.Map(user_agent="test/0.1",
+				    tile_cache=cache_dir.name,
+				    auto_download=True)
+		window = Gtk.OffscreenWindow()
+		window.set_default_size(256, 256)
+		window.add(osm)
+		window.show_all()
+		queued = 0
+		deadline = GLib.get_monotonic_time() + 1000000
+		while GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+			queued = osm.get_property("tiles-queued")
+			if queued:
+				break
+		self.assertGreater(queued, 0)
+		window.remove(osm)
+		window.destroy()
+		del osm
+		with warnings.catch_warnings(record=True) as caught:
+			warnings.simplefilter("always")
+			deadline = GLib.get_monotonic_time() + 1000000
+			while GLib.get_monotonic_time() < deadline:
+				Gtk.main_iteration_do(False)
+			for item in caught:
+				self.assertNotIn("g_object_unref", str(item.message))
 
 	def test_convert_screen_to_geographic(self):
 		# GI returns the MapPoint; do not pass one in.

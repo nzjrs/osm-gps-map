@@ -136,10 +136,11 @@ int                 osm_gps_map_track_n_points(OsmGpsMapTrack* track);
 /**
  * osm_gps_map_track_insert_point:
  * @track: a #OsmGpsMapTrack
- * @np: a #OsmGpsMapPoint
+ * @np: (in): a #OsmGpsMapPoint. Copied; the caller retains ownership.
  * @pos: Position for the point
  *
- * Instert point @np at given postition @pos
+ * Insert a copy of @np at @pos, matching osm_gps_map_track_add_point().
+ * The caller retains ownership of @np.
  *
  * Since: 1.1.0
  **/
