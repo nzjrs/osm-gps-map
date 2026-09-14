@@ -329,7 +329,14 @@ cached_tile_free (OsmCachedTile *tile)
 static gboolean
 unref_in_idle (gpointer data)
 {
-    g_object_unref (data);
+    OsmGpsMap *map = data;
+    OsmGpsMapPrivate *priv = map->priv;
+
+    if (priv->idle_map_redraw != 0) {
+        g_source_remove (priv->idle_map_redraw);
+        priv->idle_map_redraw = 0;
+    }
+    g_object_unref (map);
     return G_SOURCE_REMOVE;
 }
 
@@ -822,7 +829,8 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
                  * we are using it as a key in the hash table */
                 dl->filename = NULL;
             }
-            osm_gps_map_map_redraw_idle (map);
+            if (!priv->is_disposed && gtk_widget_get_parent (GTK_WIDGET (map)))
+                osm_gps_map_map_redraw_idle (map);
         }
         if (priv->tile_queue)
             g_hash_table_remove(priv->tile_queue, dl->uri);
@@ -1292,7 +1300,7 @@ osm_gps_map_print_tracks (OsmGpsMap *map, cairo_t *cr)
     GSList *tmp;
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (priv->trip_history_show_enabled) {
+    if (priv->trip_history_show_enabled && priv->gps_track) {
         osm_gps_map_print_track (map, priv->gps_track, cr);
     }
 
@@ -1478,9 +1486,14 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     cairo_t *cr;
     int w, h;
     OsmGpsMapPrivate *priv = map->priv;
-    GtkWidget *widget = GTK_WIDGET(map);
+    GtkWidget *widget;
 
     priv->idle_map_redraw = 0;
+
+    if (priv->is_disposed)
+        return FALSE;
+
+    widget = GTK_WIDGET(map);
 
     /* dont't redraw if we have not been shown yet */
     if (!priv->pixmap)
@@ -1879,10 +1892,20 @@ osm_gps_map_dispose (GObject *object)
 
     priv->is_disposed = TRUE;
 
+    if (priv->idle_map_redraw != 0) {
+        g_source_remove (priv->idle_map_redraw);
+        priv->idle_map_redraw = 0;
+    }
+    if (priv->drag_expose_source != 0) {
+        g_source_remove (priv->drag_expose_source);
+        priv->drag_expose_source = 0;
+    }
+
     soup_session_abort(priv->soup_session);
     g_object_unref(priv->soup_session);
 
     g_object_unref(priv->gps_track);
+    priv->gps_track = NULL;
 
     g_hash_table_destroy(priv->tile_queue);
     priv->tile_queue = NULL;
@@ -1896,17 +1919,20 @@ osm_gps_map_dispose (GObject *object)
     gslist_of_gobjects_free(&priv->layers);
     gslist_of_gobjects_free(&priv->tracks);
 
-    if(priv->pixmap)
+    if(priv->pixmap) {
         cairo_surface_destroy (priv->pixmap);
+        priv->pixmap = NULL;
+    }
 
-    if (priv->null_tile)
+    if (priv->null_tile) {
         g_object_unref (priv->null_tile);
+        priv->null_tile = NULL;
+    }
 
-    if (priv->idle_map_redraw != 0)
+    if (priv->idle_map_redraw != 0) {
         g_source_remove (priv->idle_map_redraw);
-
-    if (priv->drag_expose_source != 0)
-        g_source_remove (priv->drag_expose_source);
+        priv->idle_map_redraw = 0;
+    }
 
     g_free(priv->gps);
 
