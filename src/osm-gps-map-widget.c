@@ -762,7 +762,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
     SoupStatus soup_status = soup_message_get_status(msg);
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
-    if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
+    if (body && SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
         if (priv->cache_dir) {
             if (g_mkdir_with_parents(dl->folder,0700) == 0) {

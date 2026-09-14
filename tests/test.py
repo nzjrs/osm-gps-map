@@ -187,28 +187,42 @@ class TestOsmGpsMap(unittest.TestCase):
 		self.assertAlmostEqual(lon, self.lon)
 
 	def test_pending_tile_download_survives_map_teardown(self):
-		# Soup callbacks must not unref a NULL cancellable after dispose.
+		# libsoup cancellation after a 200 response must not read a NULL body.
+		server = Soup.Server()
+		def serve(_server, message, _path, _query):
+			message.set_status(200, None)
+			message.set_response("application/octet-stream", Soup.MemoryUse.COPY,
+						b"x" * 1048576)
+		server.add_handler(None, serve)
+		server.listen_local(0, Soup.ServerListenOptions.IPV4_ONLY)
+		self.addCleanup(server.disconnect)
+		uri = server.get_uris()[0].to_string()
 		cache_dir = tempfile.TemporaryDirectory(prefix="osm-gps-map-empty-")
 		self.addCleanup(cache_dir.cleanup)
 		osm = OsmGpsMap.Map(user_agent="test/0.1",
 				    tile_cache=cache_dir.name,
+				    repo_uri=uri + "#Z/#X/#Y.png",
 				    auto_download=True)
 		criticals = self.capture_criticals()
+		headers = []
+		def on_headers(message):
+			if not headers and message.get_uri().to_string().startswith(uri):
+				headers.append(message.get_status())
+				osm.download_cancel_all()
+			return True
+		Soup.Message.new("GET", uri)
+		hook = GObject.add_emission_hook(Soup.Message, "got-headers", on_headers)
+		self.addCleanup(GObject.remove_emission_hook, Soup.Message, "got-headers", hook)
 		window = Gtk.OffscreenWindow()
 		window.set_default_size(256, 256)
 		window.add(osm)
 		window.show_all()
-		queued = 0
 		deadline = GLib.get_monotonic_time() + 1000000
-		while GLib.get_monotonic_time() < deadline:
+		while not headers and GLib.get_monotonic_time() < deadline:
 			Gtk.main_iteration_do(False)
-			queued = osm.get_property("tiles-queued")
-			if queued:
-				break
-		self.assertGreater(queued, 0)
+		self.assertEqual(headers, [200])
 		finished = []
 		osm.weak_ref(lambda: finished.append(True))
-		osm.download_cancel_all()
 		window.remove(osm)
 		window.destroy()
 		del osm
