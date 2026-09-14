@@ -4,6 +4,7 @@ Changes in master
   * Avoid div-by-zero in latlon2zoom when a latitude or longitude distance is zero (Hubert Kowalski)
   * Floor tile origin for negative map-x so overlays stay aligned (Hubert Kowalski)
   * Fix insert_point double-free (Hubert Kowalski)
+  * Hold the map until tile downloads complete so leftover Soup callbacks cannot touch freed tile state (Hubert Kowalski)
   * Fix map redraw using width as height (Hubert Kowalski)
   * Show drawing on the map in the examples (Hubert Kowalski)
   * Add optional Glade catalog installation (Hubert Kowalski)

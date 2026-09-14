@@ -326,6 +326,13 @@ cached_tile_free (OsmCachedTile *tile)
     g_slice_free (OsmCachedTile, tile);
 }
 
+static gboolean
+unref_in_idle (gpointer data)
+{
+    g_object_unref (data);
+    return FALSE;
+}
+
 /*
  * Description:
  *   Find and replace text within a string.
@@ -744,13 +751,10 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
 
     GError *error = NULL;
     SoupMessage *msg = soup_session_get_async_result_message(session, result);
-    SoupStatus soup_status = soup_message_get_status(msg);
+    SoupStatus soup_status = msg ? soup_message_get_status(msg) : 0;
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
-    GCancellable *cancellable = (GCancellable *)g_hash_table_lookup(priv->tile_queue, dl->uri);
-    g_object_unref (cancellable);
-
-    if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
+    if (!priv->is_disposed && body && SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
         if (priv->cache_dir) {
             if (g_mkdir_with_parents(dl->folder,0700) == 0) {
@@ -816,11 +820,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
         }
         g_hash_table_remove(priv->tile_queue, dl->uri);
         g_object_notify(G_OBJECT(map), "tiles-queued");
-
-        g_free(dl->folder);
-        g_free(dl->filename);
-        g_free(dl);
-    } else {
+    } else if (!priv->is_disposed) {
         if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
@@ -842,7 +842,15 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
         }
     }
 
-
+    if (body)
+        g_bytes_unref (body);
+    g_clear_error (&error);
+    g_free(dl->folder);
+    g_free(dl->filename);
+    g_free(dl);
+    /* Drop the download ref after this Soup callback returns. Unref from
+     * here disposes the session on the callback stack. */
+    g_idle_add (unref_in_idle, map);
 }
 
 static void
@@ -898,13 +906,14 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 
             GCancellable *cancellable = g_cancellable_new ();
             g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
-            g_object_notify (G_OBJECT (map), "tiles-queued");
+            dl->map = g_object_ref (map);
             /* the soup session unrefs the message when the download finishes */
             soup_session_send_and_read_async(priv->soup_session, msg,
                                     G_PRIORITY_DEFAULT,
                                     cancellable,
                                     (GAsyncReadyCallback)osm_gps_map_tile_download_complete,
                                     dl);
+            g_object_notify (G_OBJECT (map), "tiles-queued");
         } else {
             g_warning("Could not create soup message");
             g_free(dl->uri);
@@ -1720,10 +1729,9 @@ osm_gps_map_init (OsmGpsMap *object)
     priv->soup_session = soup_session_new ();
     soup_session_set_user_agent (priv->soup_session, USER_AGENT);
 
-    /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
-       must free the key, the soup session unrefs the message */
+    /* hash table maps tile download URIs to cancellables and owns both */
     priv->tile_queue = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                              g_free, NULL);
+                                              g_free, g_object_unref);
 
     //Some mapping providers (Google) have varying degrees of tiles at multiple
     //zoom levels
