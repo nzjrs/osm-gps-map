@@ -329,16 +329,8 @@ cached_tile_free (OsmCachedTile *tile)
 static gboolean
 unref_in_idle (gpointer data)
 {
-    OsmGpsMap *map = data;
-    OsmGpsMapPrivate *priv = map->priv;
-
-    if (priv->idle_map_redraw != 0 &&
-        (priv->is_disposed || !gtk_widget_get_parent (GTK_WIDGET (map)))) {
-        g_source_remove (priv->idle_map_redraw);
-        priv->idle_map_redraw = 0;
-    }
-    g_object_unref (map);
-    return G_SOURCE_REMOVE;
+    g_object_unref (data);
+    return FALSE;
 }
 
 /*
@@ -759,10 +751,10 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
 
     GError *error = NULL;
     SoupMessage *msg = soup_session_get_async_result_message(session, result);
-    SoupStatus soup_status = soup_message_get_status(msg);
+    SoupStatus soup_status = msg ? soup_message_get_status(msg) : 0;
     GBytes *body = soup_session_send_and_read_finish (session, result, &error);
 
-    if (body && SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
+    if (!priv->is_disposed && body && SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
         /* save tile into cachedir if one has been specified */
         if (priv->cache_dir) {
             if (g_mkdir_with_parents(dl->folder,0700) == 0) {
@@ -779,7 +771,7 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             }
         }
 
-        if (dl->redraw && !priv->is_disposed) {
+        if (dl->redraw) {
             GdkPixbuf *pixbuf = NULL;
 
             /* if the file was actually stored on disk, we can simply */
@@ -824,31 +816,19 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
                  * we are using it as a key in the hash table */
                 dl->filename = NULL;
             }
-            if (!priv->is_disposed && gtk_widget_get_parent (GTK_WIDGET (map)))
-                osm_gps_map_map_redraw_idle (map);
+            osm_gps_map_map_redraw_idle (map);
         }
-        if (priv->tile_queue) {
+        g_hash_table_remove(priv->tile_queue, dl->uri);
+        g_object_notify(G_OBJECT(map), "tiles-queued");
+    } else if (!priv->is_disposed) {
+        if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
+            g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
             g_hash_table_remove(priv->tile_queue, dl->uri);
             g_object_notify(G_OBJECT(map), "tiles-queued");
-        }
-
-        g_free(dl->folder);
-        g_free(dl->filename);
-        g_free(dl);
-    } else {
-        if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
-            if (priv->missing_tiles)
-                g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
-            if (priv->tile_queue) {
-                g_hash_table_remove(priv->tile_queue, dl->uri);
-                g_object_notify(G_OBJECT(map), "tiles-queued");
-            }
         } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
             /* called as application exit or after osm_gps_map_download_cancel_all */
-            if (priv->tile_queue) {
-                g_hash_table_remove(priv->tile_queue, dl->uri);
-                g_object_notify(G_OBJECT(map), "tiles-queued");
-            }
+            g_hash_table_remove(priv->tile_queue, dl->uri);
+            g_object_notify(G_OBJECT(map), "tiles-queued");
         } else {
             g_warning("Error downloading tile: %d - %s", soup_status, soup_status_get_phrase(soup_status));
             //dl->ttl--;
@@ -857,13 +837,17 @@ osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, 
             //    return;
             //}
 
-            if (priv->tile_queue) {
-                g_hash_table_remove(priv->tile_queue, dl->uri);
-                g_object_notify(G_OBJECT(map), "tiles-queued");
-            }
+            g_hash_table_remove(priv->tile_queue, dl->uri);
+            g_object_notify(G_OBJECT(map), "tiles-queued");
         }
     }
 
+    if (body)
+        g_bytes_unref (body);
+    g_clear_error (&error);
+    g_free(dl->folder);
+    g_free(dl->filename);
+    g_free(dl);
     /* Drop the download ref after this Soup callback returns. Unref from
      * here disposes the session on the callback stack. */
     g_idle_add (unref_in_idle, map);
@@ -922,7 +906,6 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
 
             GCancellable *cancellable = g_cancellable_new ();
             g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
-            /* keep the map alive until osm_gps_map_tile_download_complete */
             dl->map = g_object_ref (map);
             /* the soup session unrefs the message when the download finishes */
             soup_session_send_and_read_async(priv->soup_session, msg,
@@ -930,7 +913,6 @@ osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redr
                                     cancellable,
                                     (GAsyncReadyCallback)osm_gps_map_tile_download_complete,
                                     dl);
-            /* submit before notifying: handlers may dispose the map reentrantly */
             g_object_notify (G_OBJECT (map), "tiles-queued");
         } else {
             g_warning("Could not create soup message");
@@ -1103,6 +1085,10 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
                               zoom, target_x, target_y);
         g_object_unref (pixbuf);
     } else {
+        if (priv->map_auto_download_enabled) {
+            osm_gps_map_download_tile(map, zoom, x, y, TRUE);
+        }
+
         /* try to render the tile by scaling cached tiles from other zoom
          * levels */
         pixbuf = osm_gps_map_render_missing_tile (map, zoom, x, y);
@@ -1115,9 +1101,6 @@ osm_gps_map_load_tile (OsmGpsMap *map, cairo_t *cr, int zoom, int x, int y, int 
             g_warning ("Error getting missing tile"); /* FIXME: is this a warning? */
             draw_white_rectangle (cr, offset_x, offset_y, TILESIZE, TILESIZE);
         }
-        /* Notify handlers may dispose the map, so finish drawing first. */
-        if (priv->map_auto_download_enabled)
-            osm_gps_map_download_tile(map, zoom, x, y, TRUE);
     }
     g_free(filename);
 }
@@ -1171,8 +1154,6 @@ osm_gps_map_fill_tiles_pixel (OsmGpsMap *map, cairo_t *cr)
                                       priv->map_zoom,
                                       i,j,
                                       offset_xn - EXTRA_BORDER,offset_yn - EXTRA_BORDER);
-                if (priv->is_disposed)
-                    return;
             }
             offset_yn += TILESIZE;
         }
@@ -1301,7 +1282,7 @@ osm_gps_map_print_tracks (OsmGpsMap *map, cairo_t *cr)
     GSList *tmp;
     OsmGpsMapPrivate *priv = map->priv;
 
-    if (priv->trip_history_show_enabled && priv->gps_track) {
+    if (priv->trip_history_show_enabled) {
         osm_gps_map_print_track (map, priv->gps_track, cr);
     }
 
@@ -1487,14 +1468,9 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     cairo_t *cr;
     int w, h;
     OsmGpsMapPrivate *priv = map->priv;
-    GtkWidget *widget;
+    GtkWidget *widget = GTK_WIDGET(map);
 
     priv->idle_map_redraw = 0;
-
-    if (priv->is_disposed)
-        return FALSE;
-
-    widget = GTK_WIDGET(map);
 
     /* dont't redraw if we have not been shown yet */
     if (!priv->pixmap)
@@ -1534,10 +1510,6 @@ osm_gps_map_map_redraw (OsmGpsMap *map)
     draw_white_rectangle(cr, 0, 0, w + EXTRA_BORDER * 2, h + EXTRA_BORDER * 2);
 
     osm_gps_map_fill_tiles_pixel(map, cr);
-    if (priv->is_disposed) {
-        cairo_destroy (cr);
-        return FALSE;
-    }
 
     osm_gps_map_print_tracks(map, cr);
     osm_gps_map_print_polygons(map, cr);
@@ -1896,42 +1868,31 @@ osm_gps_map_dispose (GObject *object)
 
     priv->is_disposed = TRUE;
 
-    if (priv->idle_map_redraw != 0) {
-        g_source_remove (priv->idle_map_redraw);
-        priv->idle_map_redraw = 0;
-    }
-    if (priv->drag_expose_source != 0) {
-        g_source_remove (priv->drag_expose_source);
-        priv->drag_expose_source = 0;
-    }
-
     soup_session_abort(priv->soup_session);
     g_object_unref(priv->soup_session);
 
     g_object_unref(priv->gps_track);
-    priv->gps_track = NULL;
 
     g_hash_table_destroy(priv->tile_queue);
-    priv->tile_queue = NULL;
     g_hash_table_destroy(priv->missing_tiles);
-    priv->missing_tiles = NULL;
     g_hash_table_destroy(priv->tile_cache);
-    priv->tile_cache = NULL;
 
     /* images and layers contain GObjects which need unreffing, so free here */
     gslist_of_gobjects_free(&priv->images);
     gslist_of_gobjects_free(&priv->layers);
     gslist_of_gobjects_free(&priv->tracks);
 
-    if(priv->pixmap) {
+    if(priv->pixmap)
         cairo_surface_destroy (priv->pixmap);
-        priv->pixmap = NULL;
-    }
 
-    if (priv->null_tile) {
+    if (priv->null_tile)
         g_object_unref (priv->null_tile);
-        priv->null_tile = NULL;
-    }
+
+    if (priv->idle_map_redraw != 0)
+        g_source_remove (priv->idle_map_redraw);
+
+    if (priv->drag_expose_source != 0)
+        g_source_remove (priv->drag_expose_source);
 
     g_free(priv->gps);
 
@@ -2168,7 +2129,7 @@ osm_gps_map_get_property (GObject *object, guint prop_id, GValue *value, GParamS
             g_value_set_int(value, priv->map_y);
             break;
         case PROP_TILES_QUEUED:
-            g_value_set_int(value, priv->tile_queue ? g_hash_table_size(priv->tile_queue) : 0);
+            g_value_set_int(value, g_hash_table_size(priv->tile_queue));
             break;
         case PROP_GPS_TRACK_WIDTH: {
             gfloat f;
@@ -3048,8 +3009,6 @@ osm_gps_map_download_maps (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *
                         num_tiles++;
                     }
                     g_free(filename);
-                    if (priv->is_disposed)
-                        return;
                 }
             }
             g_debug("DL @Z:%d = %d tiles", zoom, num_tiles);
