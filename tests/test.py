@@ -7,10 +7,11 @@ import io
 
 import gi
 gi.require_version('OsmGpsMap', '1.0')
+gi.require_version('Soup', '3.0')
 gi.require_foreign('cairo')
 
 from gi.repository import OsmGpsMap
-from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk
+from gi.repository import Gdk, GdkPixbuf, GLib, GObject, Gtk, Soup
 
 class TestOsmGpsMap(unittest.TestCase):
 	def setUp(self):
@@ -179,6 +180,44 @@ class TestOsmGpsMap(unittest.TestCase):
 		point = OsmGpsMap.MapPoint.new_degrees(self.lat, self.lon)
 		track.insert_point(point, 0)
 		self.assertEqual(track.n_points(), 1)
+
+	def test_pending_tile_download_survives_map_teardown(self):
+		server = Soup.Server()
+		def serve(_server, message, _path, _query):
+			message.pause()
+		server.add_handler(None, serve)
+		server.listen_local(0, Soup.ServerListenOptions.IPV4_ONLY)
+		self.addCleanup(server.disconnect)
+		uri = server.get_uris()[0].to_string()
+		osm = OsmGpsMap.Map(user_agent="test/0.1",
+				    repo_uri=uri + "#Z/#X/#Y.png",
+				    tile_cache="none://")
+		criticals = []
+		def on_critical(_domain, _level, message, _data):
+			criticals.append(message)
+		for domain in ("GLib", "GLib-GObject", "Gtk", "OsmGpsMap"):
+			hid = GLib.log_set_handler(domain, GLib.LogLevelFlags.LEVEL_CRITICAL,
+						   on_critical, None)
+			self.addCleanup(GLib.log_remove_handler, domain, hid)
+		window = Gtk.OffscreenWindow()
+		window.set_default_size(256, 256)
+		queued = []
+		osm.connect("notify::tiles-queued", lambda m, _p: queued.append(m.get_property("tiles-queued")))
+		window.add(osm)
+		window.show_all()
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not queued and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(queued)
+		released = []
+		osm.weak_ref(lambda: released.append(True))
+		window.destroy()
+		del osm
+		deadline = GLib.get_monotonic_time() + 1000000
+		while not released and GLib.get_monotonic_time() < deadline:
+			Gtk.main_iteration_do(False)
+		self.assertTrue(released, "Download callbacks did not release the map")
+		self.assertEqual(criticals, [])
 
 	def test_convert_screen_to_geographic(self):
 		# GI returns the MapPoint; do not pass one in.
