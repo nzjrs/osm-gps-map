@@ -1,5 +1,8 @@
 Changes in master
-======================
+=================
+
+Changes in 1.2.2
+================
   * Don't use floats for division because of rounding errors; fixes center hopping (znuh)
   * Avoid div-by-zero in latlon2zoom when a latitude or longitude distance is zero (Hubert Kowalski)
   * Floor tile origin for negative map-x so overlays stay aligned (Hubert Kowalski)
